@@ -1,0 +1,492 @@
+html {
+    font-family: Bahnschrift;
+    zoom: 85%;
+    max-width: 100%;
+    overflow-x: hidden;
+    max-height: 100%;
+}
+
+.golova {
+    width: 1800%;
+    background-color: white;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wordhead {
+    padding: 0;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: gray;
+    user-select: none;
+}
+
+#sun {
+    left: 92.5%;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+
+}
+
+.avatarka {
+    left: 96.5%;
+    position: fixed;
+    margin-top: -77.5px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+
+}
+
+.chatik {
+    left: 94.5%;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+#spis {
+    padding-top: 50px;
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+
+}
+
+
+.spisok li {
+    margin-bottom: 75px;
+}
+
+li::marker {
+    content: '';
+}
+
+#mainpage {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultat {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#history {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#datesimg {
+    position: fixed;
+    left: 25px;
+}
+
+#dates {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+
+#setting {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#spis:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.exitbutton {
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+}
+
+.main {
+    position: fixed;
+    background-color: #FBF7F4;
+    width: 100%;
+    height: 100%;
+    margin-left: 400px;
+    border-radius: 10px;
+    padding-left: 23px;
+    margin-top: -250px;
+}
+
+#maintext {
+    margin-left: 30px;
+    user-select: none;
+}
+
+.newsolympiad {
+    padding-left: 200px;
+    background-color: #4880FF;
+    width: 1549px;
+    height: 400px;
+    border-radius: 20px;
+    color: white;
+    margin-top: 150px;
+    position: fixed;
+}
+
+#newsdate {
+    padding-top: 70px;
+    font-size: 22px;
+    padding-left: 3px;
+}
+
+#newsolympiad {
+    margin-top: -10px;
+    font-size: 53px;
+}
+
+#newsogran {
+    margin-top: -20px;
+    font-size: 16px;
+    padding-left: 3px;
+}
+
+.registerbut {
+    height: 55px;
+    width: 300px;
+}
+
+.registerbutton {
+    margin-top: 60px;
+    height: 55px;
+    width: 300px;
+    background-color: white;
+    border-radius: 15px;
+    border: none;
+    font-family: Bahnschrift;
+    font-weight: bold;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+}
+
+.registerbutton:hover {
+    cursor: pointer;
+}
+
+#circleleft {
+    position: fixed;
+    top: 245px;
+    left: 450px;
+}
+
+.round-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #F4F4F4;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    opacity: 73%;
+}
+
+.line {
+    opacity: 100%;
+    position: absolute;
+    width: 10px;
+    height: 2px;
+    background-color: #363636; /* Белый цвет для контраста с серым фоном кнопки */
+    top: 49%;
+    left: 40%; /* Положение по вертикали в центре */
+    transform-origin: left center; /* Определение начала поворота линии */
+    transform: rotate(-45deg); /* Поворот линии на 45 градусов влево */
+}
+
+.line:nth-child(2) {
+    transform: rotate(45deg); /* Вторая линия повернута на 45 градусов влево */
+}
+
+.round-button:hover {
+    cursor: pointer;
+}
+
+#circleright {
+    position: fixed;
+    top: 245px;
+    left: 2110px;
+}
+
+.custom-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #F4F4F4;
+    opacity: 73%;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-right-angle .custom-line {
+    position: absolute;
+    opacity: 100%;
+    width: 10px;
+    height: 2px;
+    background-color: #363636; /* Белый цвет для контраста с серым фоном кнопки */
+    top: 49%; /* Положение по вертикали в центре */
+    left: 39%; /* Начало линии с левого края */
+    transform-origin: right center; /* Определение начала поворота линии */
+    transform: rotate(45deg); /* Поворот линии на 45 градусов вправо */
+}
+
+.custom-right-angle .custom-line:nth-child(2) {
+    /* Начало второй линии с левого края */
+    transform: rotate(-45deg); /* Вторая линия повернута на -45 градусов вправо */
+}
+
+.custom-right-angle .custom-line:hover {
+    cursor: pointer;
+}
+
+.custom-button:hover {
+    cursor: pointer;
+}
+
+.newsimg {
+
+    position: fixed;
+    top: 168px;
+    left: 430px;
+    width: 1749px;
+    height: 400px;
+}
+
+.olympiads {
+    margin-top: 620px;
+}
+
+.firstolympiad {
+    margin-left: -40px;
+    margin-top: 30px;
+    position: relative;
+    background-color: white;
+    padding-left: 15px;
+    width: 534px;
+    height: 250px;
+    border-radius: 20px;
+}
+
+.secondolympiad {
+    position: fixed;
+    background-color: white;
+    padding-left: 15px;
+    width: 534px;
+    height: 250px;
+    margin-left: 600px;
+    border-radius: 20px;
+}
+
+.thirdolympiad {
+    position: fixed;
+    background-color: white;
+    padding-left: 15px;
+    width: 534px;
+    height: 250px;
+    margin-left: 1200px;
+    border-radius: 20px;
+}
+
+.fourtholympiad {
+
+    position: fixed;
+    background-color: white;
+    padding-left: 15px;
+    width: 534px;
+    height: 250px;
+    margin-top: 270px;
+    border-radius: 20px;
+
+}
+
+.fiftholympiad {
+    position: fixed;
+    background-color: white;
+    padding-left: 15px;
+    width: 534px;
+    height: 250px;
+    margin-top: 270px;
+    margin-left: 600px;
+    border-radius: 20px;
+}
+
+.sixtholympiad {
+    position: fixed;
+    background-color: white;
+    padding-left: 15px;
+    width: 534px;
+    height: 250px;
+    margin-top: 270px;
+    margin-left: 1200px;
+    border-radius: 20px;
+}
+
+#olympiadtext {
+    font-size: 24px;
+    user-select: none;
+}
+
+#nameolympiad {
+    margin-top: -20px;
+    user-select: none;
+}
+
+#openreg {
+    margin-top: -5px;
+    color: #4880FF;
+    font-size: 21px;
+    user-select: none;
+}
+
+#datesreg {
+    margin-top: -15px;
+    color: #4880FF;
+    font-size: 21px;
+    user-select: none;
+}
+
+#regknopka {
+    color: #202224;
+    margin-top: 13px;
+    height: 50px;
+    width: 200px;
+    background-color: #E2EAF8;
+    border-radius: 15px;
+    border: none;
+    font-family: Bahnschrift;
+    font-weight: bold;
+    margin-left: 30px;
+    font-size: 23px;
+    text-decoration: none;
+}
+
+#regknopka:hover {
+    cursor: pointer;
+}

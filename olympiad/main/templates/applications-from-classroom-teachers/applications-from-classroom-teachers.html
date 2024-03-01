@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
+    <link rel="shortcut-icon" href="{% static 'applications-from-classroom-teachers/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
+</head>
+<header>
+    <div class="golova">
+        <img class="logo" id="l-tip" src="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
+        <p class="logoword">Olimp</p>
+        <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
+        <div id="sun">
+            <button class="solnce"><img class="sun" id="sunw" src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
+            </button>
+        </div>
+        <div id="yourlogo">
+            <button class="avatarka"><img class="sun" id="avatarka"
+                                          src="{% static 'applications-from-classroom-teachers/img/avatarka.png' %}"></button>
+        </div>
+        <div id="chat">
+            <button class="chatik"><img class="sun" id="chatblack"
+                                        src="{% static 'applications-from-classroom-teachers/img/chatblack.png' %}"></button>
+        </div>
+    </div>
+</header>
+<body>
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+
+{% endblock %}
+
+<div class="main">
+    <div class="toptext">
+        <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>
+    </div>
+    <div class="blockfilter">
+        <div class="filterimgdiv"><img src="{% static 'applications-from-classroom-teachers/img/Filter icon.png' %}" alt="" id="filterimgdiv"></div>
+        <div class="filtertextzag"><p>Фильтровать по</p></div>
+        <div class="filterdate">
+            <select name="date" id="spisdate">
+                <option selected="selected" id="selected">Дата</option>
+                <option value="1">12.12.2024</option>
+                <option value="2">13.13.13</option>
+                <option value="3">14.14.14</option>
+            </select>
+        </div>
+        <div class="filtercategory">
+            <select name="category" id="spiscategory">
+                <option selected="selected" id="selected">Категория</option>
+                <option value="1">Школьный</option>
+                <option value="2">Муниципальный</option>
+                <option value="3">Всероссийский</option>
+            </select>
+        </div>
+        <div class="filterstage">
+            <select name="category" id="spisstage">
+                <option selected="selected" id="selected">Этап</option>
+                <option value="1">Школьный</option>
+                <option value="2">Муниципальный</option>
+                <option value="3">Всероссийский</option>
+            </select>
+        </div>
+        <div class="deletefilter">
+            <a href="">
+                <img src="{% static 'applications-from-classroom-teachers/img/ic-replay-24px.png' %}" alt="" id="deletefilterimg">
+                <p id="deletefiltertext">Сбросить фильтр</p>
+            </a>
+        </div>
+    </div>
+    <div class="mainblock">
+        <div class="tablespisok">
+            <div class="zagolovok">
+                <table class="mainspisokpoepletable">
+                    <th>
+                        <div id="textid">ID</div>
+                    </th>
+                    <th>
+                        <div id="textteacher">Информация об учителе</div>
+                    </th>
+                    <th>
+                        <div id="textklass">Класс</div>
+                    </th>
+                    <th>
+                        <div id="textsendz">Дата отправки заявки</div>
+                    </th>
+                    <th>
+                        <div id="textinfoolimp">Информация об олимпиаде</div>
+                    </th>
+                    <th>
+                        <div id="textstatus">Статус</div>
+                    </th>
+
+                </table>
+
+            </div>
+            <div class="mainspisokpoeple">
+
+                <ul>
+                    <li id="utka">
+                        <div class="stroka">
+                            <div class="nameid">00001</div>
+                            <div class="namefio">Проценко Константин Сергеевич</div>
+                            <div class="olimps">
+                                <div class="nameolimp1">11а</div>
+                            </div>
+                            <div class="namestage">19.01.2024</div>
+                            <div class="namegender">ВСОШ Информатика</div>
+                            <input class="buttonedittrue" type="submit" value="Добавлено"/>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="stroka">
+                            <div class="nameid">00002</div>
+                            <div class="namefio">Арефьева Ирина Николаевна</div>
+                            <div class="olimps">
+                                <div class="nameolimp1">10д</div>
+                            </div>
+                            <div class="namestage">19.01.2024</div>
+                            <div class="namegender">ВСОШ ОБЖ</div>
+                            <input class="buttoneditfalse" type="submit" value="Не добавлено"/>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

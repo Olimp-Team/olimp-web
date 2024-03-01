@@ -1,0 +1,469 @@
+html {
+    overflow: hidden;
+    font-family: Bahnschrift;
+    zoom: 85%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.golova {
+    width: 1800%;
+    background-color: white;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wordhead {
+    padding: 0;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: gray;
+}
+
+#sun {
+    left: 97%;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+
+
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+}
+
+#spis {
+    padding-top: 50px;
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok li {
+    margin-bottom: 75px;
+}
+li::marker {
+    content: '';
+}
+#mainpage {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+#rezultat{
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+        position: fixed;
+        left: 25px;
+
+}
+#history {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#datesimg{
+    position: fixed;
+    left: 25px;
+}
+#dates{
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+#setting {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+#spis:after {
+        content: "";
+        position: absolute;
+       top: 100%;
+       left: 50px;
+       border-top: 50px solid green;
+       border-top-color: inherit;
+       border-left: 50px solid transparent;
+       border-right: 50px solid transparent;
+    }
+.exitbutton {
+    width: 183.822px;
+    height: 20px;
+
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+}
+
+#textexit {
+    position: relative;
+    font-size: 20px;
+}
+
+.main {
+    position: fixed;
+    background-color: #FBF7F4;
+    width: 100%;
+    height: 100%;
+    margin-left: 400px;
+    border-radius: 10px;
+    padding-left: 100px;
+}
+
+.textprofile {
+    margin-bottom: 20px;
+    margin-top: 60px;
+    text-align: center;
+    height: 40px;
+    width: 150px;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 1px solid rgb(184, 183, 183);
+
+}
+
+.info {
+    width: 1300px;
+    padding-top: 50px;
+    height: 100px;
+    border-bottom: 1px solid rgb(184, 183, 183);
+}
+
+.imgpers {
+    margin-top: 20px;
+    position: absolute;
+    max-width: 90px;
+    max-height: 110px;
+    height: 90px;
+    border-radius: 50%;
+    z-index: 2;
+    margin-left: 20px;
+}
+
+.imgocontovka {
+    position: absolute;
+    height: 130px;
+    width: 130px;
+    z-index: 3;
+}
+
+.textinfo {
+    position: fixed;
+    margin-left: 160px;
+    margin-top: -250px;
+}
+
+.fioinfo {
+    margin-top: 200px;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 0;
+}
+
+.classinfo {
+    font-size: 20px;
+    margin-top: -15px;
+}
+
+.teach {
+    margin-top: -10px;
+}
+
+.teacherinfo {
+    margin-top: -13px;
+}
+
+
+.newphoto {
+    position: relative;
+    background-color: black;
+    color: white;
+    height: 50px;
+    width: 180px;
+    margin-left: 1120px;
+    top: -70px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    font-family: Bahnschrift;
+
+}
+
+.newphoto:hover {
+    cursor: pointer;
+}
+
+
+.editname {
+    width: 1300px;
+    height: 130px;
+    border-bottom: 1px solid rgb(184, 183, 183);
+}
+
+.texteditname {
+    font-size: 18px;
+    font-weight: bold;
+
+}
+
+#nameedit {
+    font-family: Bahnschrift;
+    height: 45px;
+    border: 1px solid rgb(206, 206, 206);
+    border-radius: 7px;
+    width: 1290px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.editemailphone {
+    width: 1300px;
+    height: 130px;
+    border-bottom: 1px solid rgb(184, 183, 183);
+}
+
+.editemail {
+    position: relative;
+}
+
+#emailedit {
+    font-family: Bahnschrift;
+    height: 45px;
+    border: 1px solid rgb(206, 206, 206);
+    border-radius: 7px;
+    width: 550px;
+    padding-left: 50px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.editphone {
+    position: relative;
+    left: 700px;
+    top: -107px;
+}
+
+#phoneedit {
+    font-family: Bahnschrift;
+    height: 45px;
+    border: 1px solid rgb(206, 206, 206);
+    border-radius: 7px;
+    width: 550px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    padding-left: 50px;
+}
+
+.photoeditpe {
+    position: fixed;
+    margin-top: 47px;
+    margin-left: 5px;
+}
+
+.editpass {
+    margin-top: 30px;
+    height: 250px;
+    scroll-behavior: auto;
+}
+
+#stariypassedit {
+    font-family: Bahnschrift;
+    height: 45px;
+    border: 1px solid rgb(206, 206, 206);
+    border-radius: 7px;
+    width: 1250px;
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    padding-left: 50px;
+}
+
+.zamokimg {
+    position: fixed;
+    margin-top: 45px;
+    margin-left: 10px;
+}
+
+.zamok1 {
+    position: fixed;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+
+.buttons {
+    margin-left: 915px;
+}
+
+/* .otmenabutton {
+width: 183.822px;
+height: 56px;
+padding: 8px 0px;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+border-radius: 8px;
+border: 1.5px solid #000;
+
+background: #FFF;
+
+    bottom: 10px;
+    font-family: Bahnschrift;
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+.otmenabutton:hover {
+    cursor: pointer;
+} */
+.savebutton {
+    margin-top: 50px;
+    margin-left: 100px;
+    width: 183.822px;
+    padding-top: 17px;
+    padding-bottom: 17px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+
+    background: #FFF;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.savebutton:hover {
+    cursor: pointer;
+}
+.editpassbut {
+    margin-left: -100px;
+    text-decoration: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    color: #000;
+    width: 183.822px;
+    padding-top: 17px;
+    padding-bottom: 17px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+
+    background: #FFF;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+}
+editpassbut:hover {
+    cursor: pointer;
+}

@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="{% static 'register-olympiad/style.css' %}">
+    <link rel="shortcut-icon" href="{% static 'register-olympiad/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'register-olympiad/img/logoolimp.jpg' %}">
+</head>
+
+<header>
+    <div class="golova">
+        <img class="logo" src="{% static 'register-olympiad/img/logoolimp.jpg' %}" alt="">
+        <p class="logoword">Olimp</p>
+        <p class="wordhead">Регистрация на олимпиаду</p>
+        <div id="sun">
+            <button class="solnce"><img class="sun" src="{% static 'register-olympiad/img/sun.png' %}"></button>
+        </div>
+         <div id="yourlogo"><button class="avatarka"><img class="sun" id="avatarka" src="{% static 'register-olympiad/img/avatarka.png' %}"></button></div>
+        <div id="chat"><button class="chatik"><img class="sun" id="chatblack" src="{% static 'register-olympiad/img/Chatblack.png' %}"></button></div>
+    </div>
+</header>
+
+<body>
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
+<div class="main">
+    <h1 id="maintext">Регистрация на олимпиаду</h1>
+
+
+    <div class="newsolympiad">
+        <img src="{% static 'register-olympiad/img/linii.png' %}" alt="" class="newsimg">
+        <p id="newsdate">{{ olympiad.date_olympiad }}</p>
+        <h1 id="newsolympiad">Открыта регистрация на {{ olympiad.name }}</h1>
+        <p id="newsogran">Поторопись количество, участников ограничено!</p>
+        <div class="registerbut">
+            {#            <a class="registerbutton" href="{% url 'main:register_add' olympiad.id %}">Зарегестрироваться</a>#}
+            <input class="registerbutton" type="button" value="Зарегистрироваться" id="newsknopka"/>
+        </div>
+        <div id="circleleft">
+            <button class="round-button">
+                <div class="line"></div>
+                <div class="line"></div>
+            </button>
+        </div>
+
+        <div id="circleright">
+            <button class="custom-button custom-right-angle">
+                <div class="custom-line"></div>
+                <div class="custom-line"></div>
+            </button>
+        </div>
+
+    </div>
+    <div class="olympiads">
+<ul>
+        {% for olympiad in olympiads %}
+
+
+            <div class="firstolympiad">
+            <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
+            <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
+            <h3 id="openreg">Регистрация открыта!</h3>
+            <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
+            <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Зарегистрироваться</a>
+</div>
+
+
+        {% endfor %}
+</ul>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

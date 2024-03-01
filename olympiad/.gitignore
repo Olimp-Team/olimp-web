@@ -1,0 +1,39 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+/olympiad/main/migrations/desktop.ini
+/olympiad/main/templates/homepage/desktop.ini
+/olympiad/main/templates/register/desktop.ini
+/olympiad/main/templates/desktop.ini
+/olympiad/main/desktop.ini
+/olympiad/media/users_images/desktop.ini
+/olympiad/media/desktop.ini
+/olympiad/olympiad/desktop.ini
+/olympiad/static/auth/img/desktop.ini
+/olympiad/static/auth/desktop.ini
+/olympiad/static/profile/img/desktop.ini
+/olympiad/static/profile/desktop.ini
+/olympiad/static/register/img/desktop.ini
+/olympiad/static/register/desktop.ini
+/olympiad/static/desktop.ini
+/olympiad/users/migrations/desktop.ini
+/olympiad/users/templates/auth/desktop.ini
+/olympiad/users/templates/profile/desktop.ini
+/olympiad/users/templates/desktop.ini
+/olympiad/users/desktop.ini
+/olympiad/desktop.ini
+/desktop.ini
+/.idea/vcs.xml
+/inspectionProfiles/profiles_settings.xml
+/misc.xml
+/modules.xml
+/olimp.iml
+/inspectionProfiles/Project_Default.xml
+/Users/zef1n/Documents/olimp-site/.idea
+/olimp-site.iml
+/vcs.xml
