@@ -333,8 +333,13 @@ body {
     opacity: 0.5;
     color: #FFF;
 }
-
+#href{
+    color: #FFFFFF;
+    text-decoration: none;
+}
 #ctrelka {
+    background-color: #272626;
+    border-radius: 50%;
     width: 90px;
     height: 90px;
     flex-shrink: 0;
@@ -344,4 +349,13 @@ body {
 
 #ctrelka:hover {
     cursor: pointer;
+}
+#knopka{
+    border-radius: 50%;
+    background-color: #272626;
+}
+#buutt-strelka{
+    background-color: rgb(29, 29, 29);
+    border: none;
+    opacity: 120%;
 }
