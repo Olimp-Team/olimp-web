@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from users.models import Users
+from users.models import User
 from main.admin import ClassroomAdmin, PostAdmin
 
 
-@admin.register(Users)
-class UsersAdmin(admin.ModelAdmin):
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
     # Модель пользователей в панеле администратора
     list_display = ['id',
                     'username',
@@ -15,7 +15,8 @@ class UsersAdmin(admin.ModelAdmin):
                     'surname',
                     'email',
                     'is_staff',
-                    'is_active', ]
+                    'is_active',
+                    ]
     list_editable = [
         'username',
         'password',
@@ -27,3 +28,4 @@ class UsersAdmin(admin.ModelAdmin):
         'is_active', ]
     ordering = ['id']
     search_fields = ['last_name', 'first_name', ]
+

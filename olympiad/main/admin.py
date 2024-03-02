@@ -1,11 +1,13 @@
 from django.contrib import admin
 from main.models import *
 
+from main.models import Register_send
+
 
 @admin.register(Classroom)
 class ClassroomAdmin(admin.ModelAdmin):
     """Модель учебных классов в панеле администратора"""
-    list_display = ['id', 'number', 'letter', ]
+    list_display = ['id', 'number', 'letter', 'teacher']
     list_editable = ['number', 'letter']
     search_fields = ['letter', 'number']
 
@@ -50,101 +52,21 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(Teacher)
-class TeacherAdmin(admin.ModelAdmin):
-    """Модель учителей в панеле администратора"""
-    list_display = ['id',
-                    'username',
-                    'password',
-                    'first_name',
-                    'last_name',
-                    'surname',
-                    'email',
-                    'is_staff',
-                    'is_active',
-                    'classroom_guide', ]
-    list_editable = [
-        'username',
-        'password',
-        'first_name',
-        'last_name',
-        'surname',
-        'email',
-        'is_staff',
-        'is_active',
-        'classroom_guide', ]
-    ordering = ['id']
-    search_fields = ['last_name', 'first_name', ]
-
-
-@admin.register(Child)
-class ChildAdmin(admin.ModelAdmin):
-    """Модель учеников в панеле администратора"""
-    list_display = ['id',
-                    'username',
-                    'password',
-                    'first_name',
-                    'last_name',
-                    'surname',
-                    'email',
-                    'is_staff',
-                    'is_active',
-                    'classroom', ]
-    list_editable = [
-        'username',
-        'password',
-        'first_name',
-        'last_name',
-        'surname',
-        'email',
-        'is_staff',
-        'is_active',
-        'classroom', ]
-    ordering = ['id']
-    search_fields = ['last_name', 'first_name', ]
-
-
-@admin.register(Admin)
-class AdminAdmin(admin.ModelAdmin):
-    """Модель администраторов в панеле администратора"""
-    list_display = ['id',
-                    'username',
-                    'password',
-                    'first_name',
-                    'last_name',
-                    'surname',
-                    'email',
-                    'is_staff',
-                    'is_active', ]
-    list_editable = [
-        'username',
-        'password',
-        'first_name',
-        'last_name',
-        'surname',
-        'email',
-        'is_staff',
-        'is_active',
-    ]
-    ordering = ['id']
-    search_fields = ['last_name', 'first_name', ]
-
-
 @admin.register(Olympiad)
 class OlympiadAdmin(admin.ModelAdmin):
     """Модель олимпиад в панеле администратора"""
     list_display = (
-        'id', 'name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad', 'date_olympiad')
-    list_editable = ['name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad', 'date_olympiad']
-    search_fields = ['name', 'class_olympiad', 'category', 'level', 'stage', 'subject', 'date_olympiad']
+        'id', 'name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad')
+    list_editable = ['name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad']
+    search_fields = ['name', 'class_olympiad', 'category', 'level', 'stage', 'subject']
 
 
 @admin.register(Register)
 class RegisterAdmin(admin.ModelAdmin):
     """Модель регистрации на олимпиаду в панеле администратора"""
-    list_display = ('id', 'user', 'Olympiad')
-    list_editable = ['user', 'Olympiad']
-    search_fields = ['user', 'Olympiad']
+    list_display = ('id', 'teacher', 'child', 'Olympiad')
+    list_editable = ['teacher', 'child', 'Olympiad']
+    search_fields = ['id', 'teacher', 'child', 'Olympiad']
 
 
 @admin.register(Result)
@@ -155,4 +77,6 @@ class ResultAdmin(admin.ModelAdmin):
     search_fields = ['status_result', 'points', 'info_olympiad', 'info_children']
 
 
-
+@admin.register(Register_send)
+class Register_sendAdmin(admin.ModelAdmin):
+    pass

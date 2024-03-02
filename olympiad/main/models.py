@@ -1,31 +1,27 @@
-import uuid
 from django.db import models
-from users.models import Users
+from users.models import User
 
 
 class Classroom(models.Model):
     """Модель учебных классов
     Пример: 10 А - Иваницкий Илья Олегович"""
-
     class Meta:
         verbose_name_plural = "Учебные классы"
         verbose_name = 'Учебный класс'
 
     number = models.IntegerField('Цифра', blank=True, null=True)
     letter = models.CharField('Буква', max_length=1, blank=True, null=True)
-    info_teacher = models.ForeignKey(to='main.Teacher', blank=True, null=True, on_delete=models.CASCADE,
-                                     related_name='info_teacher')
-    info_child = models.ForeignKey(to='main.Child', blank=True, null=True, on_delete=models.CASCADE,
-                                   related_name='info_child')
+    teacher = models.ForeignKey(to='users.User', blank=True, null=True, on_delete=models.CASCADE,
+                                related_name='teacher')
+    child = models.ManyToManyField(to='users.User', blank=True, related_name='Child')
 
     def __str__(self):
-        return f'{self.number} {self.letter} - {self.info_teacher} - {self.info_child}'
+        return f'{self.number} {self.letter} - {self.teacher}'
 
 
 class Subject(models.Model):
     """Модель учебных предметов
     Пример: Информатика"""
-
     class Meta:
         verbose_name_plural = "Школьные предметы"
         verbose_name = 'Школьный предмет'
@@ -39,7 +35,6 @@ class Subject(models.Model):
 class Сategory(models.Model):
     """Модель категорий олимпиад
     Пример: ВСОШ"""
-
     class Meta:
         verbose_name_plural = "Категории олимпиад"
         verbose_name = 'Категория олимпиад'
@@ -53,7 +48,6 @@ class Сategory(models.Model):
 class Level_olympiad(models.Model):
     """Модель уровней олимпиад
     Пример: Муницыпальный"""
-
     class Meta:
         verbose_name_plural = "Уровень олимпиад"
         verbose_name = 'Уровень олимпиад'
@@ -67,7 +61,6 @@ class Level_olympiad(models.Model):
 class Stage(models.Model):
     """Модель этапов олимпиад
     Пример: Школьный"""
-
     class Meta:
         verbose_name_plural = "Этапы олимпиад"
         verbose_name = 'Этап олимпиады'
@@ -92,65 +85,6 @@ class Post(models.Model):
         return self.name
 
 
-class Teacher(Users):
-    """Модель учителей
-    Пример: teacher:732301papa
-    Иваницкий Илья Олегович
-    icw20@mail.ru
-    Работает
-    В сети
-    Классное руководствое: 10 А"""
-
-    class Meta:
-        verbose_name_plural = "Учителя"
-        verbose_name = 'Учитель'
-
-    classroom_guide = models.ForeignKey(to="Classroom", on_delete=models.CASCADE, blank=True, null=True,
-                                        verbose_name="Классное руководство")
-    subject = models.ManyToManyField(to="Subject", verbose_name="Какой предмет ведёт учитель", blank=True)
-    post_job_teacher = models.ManyToManyField(to="Post", verbose_name="Должность учителя")
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="USER_TEACHER")
-
-    def __str__(self):
-        return f'{self.last_name} {self.first_name} {self.surname}'
-
-
-class Child(Users):
-    """Модель учеников
-        Пример: children:732301papa
-        Иваницкий Илья Олегович
-        icw20@mail.ru
-        Учится
-        В сети
-        Учебный класс: 10 А"""
-
-    class Meta:
-        verbose_name_plural = "Ученики"
-        verbose_name = 'Ученик'
-
-    classroom = models.ForeignKey(to='Classroom', on_delete=models.CASCADE, verbose_name='Класс ученика',
-                                  blank=True, null=True)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="USER_CHILD")
-
-    def __str__(self):
-        return f'{self.last_name} {self.first_name} {self.surname}'
-
-
-class Admin(Users):
-    """Модель администратора
-        Пример: admin:732301papa
-        Иваницкий Илья Олегович
-        icw20@mail.ru
-        Работает
-        В сети"""
-
-    class Meta:
-        verbose_name_plural = "Администраторы"
-        verbose_name = 'Администратор'
-
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="USER_ADMIN")
-
-
 class Olympiad(models.Model):
     """Модель олимпиады
         Пример:
@@ -162,7 +96,6 @@ class Olympiad(models.Model):
         10 класс
         29.02.2024 - 13:40
         Карла Маркса 153, Школа №53"""
-
     class Meta:
         verbose_name_plural = "Олимпиады"
         verbose_name = 'Олимпиада'
@@ -176,11 +109,10 @@ class Olympiad(models.Model):
     stage = models.ForeignKey(to='Stage', on_delete=models.CASCADE, verbose_name='Название этапа', max_length=256)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Название школьного предмета')
     class_olympiad = models.IntegerField('Класс олимпиады')
-    date_olympiad = models.DateTimeField('Дата проведения олимпиады')
 
     # locations = models.CharField(verbose_name='Место проведения олимпиады')
     def __str__(self):
-        return f'{self.name} {self.category} {self.level} {self.stage} {self.subject} {self.class_olympiad} {self.date_olympiad}'
+        return f'{self.name} {self.category} {self.level} {self.stage} {self.subject} {self.class_olympiad}'
 
 
 class Register(models.Model):
@@ -188,44 +120,21 @@ class Register(models.Model):
         Иваницкий Илья Олегович - 10 А
         ВСОШ по информатике
         Дата создания заявки - 29.02.24 - 10:15"""
-
     class Meta:
         verbose_name_plural = 'Заявки регистрации на олимпиады'
         verbose_name = 'Заявка регистрации на олимпиаду'
 
-    user = models.ForeignKey(to="users.Users", on_delete=models.CASCADE)
+    teacher = models.ForeignKey(to='users.User', on_delete=models.CASCADE, verbose_name='', blank=True, null=True, )
+    child = models.ForeignKey(to="users.User", on_delete=models.CASCADE, related_name='Ученик')
     Olympiad = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE)
-    created_time = models.DateTimeField(auto_now_add=True)
-    teacher = models.ForeignKey(to='Teacher', on_delete=models.CASCADE, verbose_name='Учитель предмета',
-                                blank=True, null=True)
-    child = models.ForeignKey(to='Child', on_delete=models.CASCADE, verbose_name='Ученик',
-                              blank=True, null=True)
 
     def __str__(self):
-        return (f'ID {self.id}  ФИО {self.user.last_name} {self.user.first_name} {self.user.surname}'
+        return (f'ID {self.id}  ФИО {self.child.last_name} {self.child.first_name} {self.child.surname}'
                 f' | Олимпиада: {self.Olympiad.name}')
 
 
-class Register_classroom(models.Model):
-    """Модель заявки учебных класов"""
-
-    class Meta:
-        verbose_name_plural = 'Заявки регистрации учебных классов'
-        verbose_name = 'Заявка регистрации учебных классов'
-
-    teacher = models.ForeignKey(to='Teacher', on_delete=models.CASCADE, verbose_name='Учитель предмета',
-                                blank=True, null=True)
-    classroom = models.ForeignKey(to='Clasroom', on_delete=models.CASCADE, verbose_name='Наименование класса',
-                                  blank=True, null=True)
-    register = models.ForeignKey(to='Register', on_delete=models.CASCADE, verbose_name='Заявки учеников',
-                                 blank=True, null=True)
-    user = models.ForeignKey(to="users.Users", on_delete=models.CASCADE)
-    Olympiad = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE)
-    created_time = models.DateTimeField(auto_now_add=True)
-    child = models.ForeignKey(to='Child', on_delete=models.CASCADE, verbose_name='Ученик',
-                              blank=True, null=True)
-    status = models.BooleanField("Статус", default=False,
-                                 null=True)
+class Register_send(models.Model):
+    Register = models.ForeignKey(to='Register', on_delete=models.CASCADE, related_name='Register')
 
 
 class Result(models.Model):
@@ -235,7 +144,6 @@ class Result(models.Model):
         50/100 баллов
         Участник
         1.03.24"""
-
     class Meta:
         verbose_name_plural = 'Резльтаты олимпиад'
         verbose_name = 'Результат олимпиады'
@@ -249,10 +157,9 @@ class Result(models.Model):
         (WINNER, 'Победитель')
 
     ]
-    info_children = models.ForeignKey(to="Child", on_delete=models.CASCADE,
+    info_children = models.ForeignKey(to="users.User", on_delete=models.CASCADE,
                                       verbose_name='Информация об ученике')
     info_olympiad = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE, verbose_name='Информация об олимпиаде')
     points = models.IntegerField(verbose_name='Количество намбранных очков')
     status_result = models.CharField(verbose_name='Статус результата', max_length=256, choices=STATUSRES,
                                      default=PARTICIPANT)
-    date_results = models.DateTimeField()
