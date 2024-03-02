@@ -4,7 +4,7 @@ from django.shortcuts import render, reverse, redirect
 from main.models import *
 from users.models import *
 from rest_framework.views import APIView
-from users.models import Users
+from users.models import User
 from django.http import HttpResponse
 from django.views.generic import View
 from django.utils.translation import gettext as _
@@ -35,10 +35,10 @@ def register(request):
 @is_child
 def register_add(request, Olympiad_id):
     olympiad = Olympiad.objects.get(id=Olympiad_id)
-    registers = Register.objects.filter(user=request.user, Olympiad=olympiad)
+    registers = Register.objects.filter(child=request.user, Olympiad=olympiad)
 
     if not registers.exists():
-        Register.objects.create(user=request.user, Olympiad=olympiad)
+        Register.objects.create(child=request.user, Olympiad=olympiad)
     else:
         basket = registers.first()
         basket.save()
@@ -58,23 +58,36 @@ def register_remove(request, Register_id):
 @is_child
 def register_spis(request):
     context = {
-        'register': Register.objects.all()
+        'register': Register.objects.filter(child=request.user)
     }
     return render(request, 'basket-student-applications/basket-student-applications.html', context)
+
+
+@login_required
+@is_child
+def register_send(request):
+    Register_send.objects.create(Register_id=request.user.id)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 # Страницы учителей
 @login_required
 @is_teacher
 def student_applications(request):
+    if request.user.classroom_guide:
+        reg = Register.objects.filter(child__classroom__exact=request.user.classroom_guide)
+        context = {
+            'register': reg
+        }
+        return render(request, 'student-applications/student-applications.html', context)
 
-    child = Child.classroom
-    teach1 = request.user.classroom_guide
-    reg = Register.objects.filter()
-    context = {
-        'register': reg
-    }
-    return render(request, 'student-applications/student-applications.html', context)
+
+@login_required
+@is_teacher
+def register_remove_teacher(request, Register_id):
+    register_basket = Register.objects.get(id=Register_id)
+    register_basket.delete()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 # Страницы администратора
@@ -107,5 +120,5 @@ class ExportToExcelView(View):
 
 
 class UsersAPIView(generics.ListAPIView):
-    queryset = Users.objects.all()
+    queryset = User.objects.all()
     serializer_class = UsersSerializer
