@@ -7,6 +7,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
+
 class Users(AbstractUser):
     # Модель пользователей
     """Пример: Иваницкий Илья Олегович
@@ -14,6 +15,7 @@ class Users(AbstractUser):
     29.11.2007
     Ученик
     Пол мужской"""
+
     class Meta:
         verbose_name_plural = "Пользователи"
         verbose_name = "Пользователь"
@@ -33,6 +35,6 @@ class Users(AbstractUser):
                                    null=True)  # null ИЗМЕНИТЬ НА FALSE когда будет страница регистрации
     is_admin = models.BooleanField("Администратор",
                                    default=False, null=True)  # null ИЗМЕНИТЬ НА FALSE когда будет страница регистрации
-
+    classroom_guide = models.ManyToManyField('main.Child', related_name='classroom_teachers')
     def __str__(self):
         return f"{self.last_name} {self.first_name} {self.surname}"

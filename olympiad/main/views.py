@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, reverse, redirect
 from main.models import *
+from users.models import *
 from rest_framework.views import APIView
 from users.models import Users
 from django.http import HttpResponse
@@ -25,7 +26,7 @@ def home(request):
 @is_child
 def register(request):
     context = {
-        'olympiads': Olympiad.objects.all()
+        'olympiads': Olympiad.objects.filter()
     }
     return render(request, 'register-olympiad/register-olympiad.html', context)
 
@@ -57,7 +58,7 @@ def register_remove(request, Register_id):
 @is_child
 def register_spis(request):
     context = {
-        'register-olympiad-olympiad': Register.objects.all()
+        'register': Register.objects.all()
     }
     return render(request, 'basket-student-applications/basket-student-applications.html', context)
 
@@ -65,12 +66,16 @@ def register_spis(request):
 # Страницы учителей
 @login_required
 @is_teacher
-def register_list(request):
-    reg = Register.objects.all()
+def student_applications(request):
+
+    child = Child.classroom
+    teach1 = request.user.classroom_guide
+    reg = Register.objects.filter()
     context = {
-        'register-olympiad-olympiad': reg
+        'register': reg
     }
     return render(request, 'student-applications/student-applications.html', context)
+
 
 # Страницы администратора
 @login_required

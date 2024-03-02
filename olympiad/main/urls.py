@@ -12,7 +12,7 @@ urlpatterns = [
     path('olympiad/delete/<int:Register_id>/', register_remove, name='register_remove'),
     path('basket-student-applications/', register_spis, name='basket-student-applications'),
     # Страницы учителей
-    path('student-applications/', register_list, name='student-applications'),
+    path('student-applications/', student_applications, name='student-applications'),
     # Страницы администратора
     path('applications-from-classroom-teachers/', register_list_classroom, name='applications-from-classroom-teachers'),
     path('export-excel/', ExportToExcelView.as_view(), name='export_excel'),

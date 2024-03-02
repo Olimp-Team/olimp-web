@@ -62,7 +62,7 @@ class TeacherAdmin(admin.ModelAdmin):
                     'email',
                     'is_staff',
                     'is_active',
-                    'classroom_guide', ]
+                    ]
     list_editable = [
         'username',
         'password',
@@ -72,7 +72,7 @@ class TeacherAdmin(admin.ModelAdmin):
         'email',
         'is_staff',
         'is_active',
-        'classroom_guide', ]
+        ]
     ordering = ['id']
     search_fields = ['last_name', 'first_name', ]
 
