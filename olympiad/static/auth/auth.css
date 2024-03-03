@@ -318,7 +318,7 @@ html {
 
 #zabul {
     user-select: none;
-
+    text-decoration: none;
     margin-top: 10px;
     margin-left: 385px;
     color: #000;
@@ -327,10 +327,12 @@ html {
     font-weight: 400;
     line-height: 20px;
     opacity: 0.5;
-    text-decoration: none;
 
 }
-
+#href{
+    color: #000000;
+    text-decoration: none;
+}
 #ctrelka {
     width: 90px;
     height: 90px;
@@ -345,5 +347,8 @@ html {
 }
 
 #buutt-strelka {
+    background-color: #FFFFFF;
+}
+#knopka{
     background-color: #FFFFFF;
 }
