@@ -66,7 +66,8 @@ def register_spis(request):
 @login_required
 @is_child
 def register_send(request):
-    Register_send.objects.create(Register_id=request.user.id)
+    reg_create = Register_send.objects.bulk_create()
+    reg_create.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
