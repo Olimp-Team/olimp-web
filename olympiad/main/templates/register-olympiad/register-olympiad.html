@@ -40,6 +40,7 @@
         <div class="registerbut">
             {#            <a class="registerbutton" href="{% url 'main:register_add' olympiad.id %}">Зарегестрироваться</a>#}
             <input class="registerbutton" type="button" value="Зарегистрироваться" id="newsknopka"/>
+
         </div>
         <div id="circleleft">
             <button class="round-button">
@@ -66,7 +67,17 @@
             <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
             <h3 id="openreg">Регистрация открыта!</h3>
             <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-            <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Зарегистрироваться</a>
+            <button id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Зарегистрироваться</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="kj">Заявка на {olympiad} успешно зарегистрирована, но не отправлена классному руководителю. </p>
+        <button id="hk"  href="#">Ваша корзина заявок</button>
+    </div>
 </div>
 
 
@@ -76,5 +87,29 @@
     </div>
 
 </div>
+<script>var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("regknopka");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}</script>
 </body>
 </html>
