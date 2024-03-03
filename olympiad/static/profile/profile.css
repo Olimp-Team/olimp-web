@@ -426,6 +426,8 @@ line-height: normal;
     flex-shrink: 0;
     border-radius: 8px;
     border: 1.5px solid #000;
+    padding-left: 10px;
+    padding-right: 10px;
 
     background: #FFF;
     text-align: center;
@@ -441,27 +443,28 @@ line-height: normal;
     cursor: pointer;
 }
 .editpassbut {
-    margin-left: -100px;
-    text-decoration: none;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: #000;
-    width: 122px;
-    padding-top: 17px;
-    padding-bottom: 17px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+    margin-top: 50px;
+    margin-left: -100px;
+    width: 183.822px;
+    padding-top: 17.7px;
+    padding-bottom: 19.7px;
     border-radius: 8px;
     border: 1.5px solid #000;
+    padding-left: 10px;
+    padding-right: 10px;
     background: #FFF;
     text-align: center;
     position: relative;
     bottom: 10px;
     font-family: Bahnschrift;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 400;
     line-height: normal;
+    text-decoration: none;
+    color: black
 }
 editpassbut:hover {
     cursor: pointer;
