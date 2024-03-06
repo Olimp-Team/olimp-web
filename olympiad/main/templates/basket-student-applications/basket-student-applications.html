@@ -35,8 +35,8 @@
 
 <div class="main">
     <div class="toptext">
-        <h1 class="toptext1">Заявки учеников</h1>
-        <h2 class="toptext2">Класс {{ user.classroom }}</h2>
+        <h1 class="toptext1">Ваши заявки</h1>
+        <h2 class="toptext2">Ваш класс: {{ user.classroom.number }}{{ user.classroom.letter }}</h2>
     </div>
     <div class="topbuttons">
         <input class="buttonspispeople" type="submit" value="Список участников"/>
@@ -71,28 +71,28 @@
 
         <div class="mainspisokpoeple">
             <ul>
-                {% for register in register %}
-                    <li>
-                        <div class="nameid">{{ register.id }}</div>
-                        <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
-                        <div class="olimps">
-                            <table class="tableolimps">
-                                <td>
-                                <th>
-                                    <div class="nameolimp1">{{ register.Olympiad.name }}</div>
-                                </th>
-                                </td>
-                            </table>
-                        </div>
-                        <div class="namestage">{{ register.Olympiad.stage }}</div>
-                        <div class="namegender">{{ register.child.gender }}</div>
-                        <div class="namedate">{{ register.child.birth_date }}</div>
-                        <a class="buttonedit" type="submit" value="Изменить"
-                           href="{% url 'main:register_remove' register.id %}">Удалить</a>
-                    </li>
+                    {% for register in register %}
+                        <li>
+                            <div class="nameid">{{ register.id }}</div>
+                            <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
+                            <div class="olimps">
+                                <table class="tableolimps">
+                                    <td>
+                                    <th>
+                                        <div class="nameolimp1">{{ register.Olympiad.name }}</div>
+                                    </th>
+                                    </td>
+                                </table>
+                            </div>
+                            <div class="namestage">{{ register.Olympiad.stage }}</div>
+                            <div class="namegender">{{ register.child.gender }}</div>
+                            <div class="namedate">{{ register.child.birth_date }}</div>
+                            <a class="buttonedit" type="submit" value="Изменить"
+                               href="{% url 'main:register_remove' register.id %}">Удалить</a>
+                        </li>
 
 
-                {% endfor %}
+                    {% endfor %}
             </ul>
         </div>
 

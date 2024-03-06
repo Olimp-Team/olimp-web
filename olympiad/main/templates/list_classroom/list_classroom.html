@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список учебных классов</title>
+    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
+    <link rel="shortcut-icon" href="{% static 'list_classroom/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
+</head>
+<header>
+    <div class="golova">
+        <img class="logo" src="{% static 'list_classroom/img/logoolimp.jpg' %}" alt="">
+        <p class="logoword">Olimp</p>
+        <p class="wordhead">Страница списков учебных классов</p>
+        <div id="sun">
+            <button class="solnce"><img class="sun" src="{% static 'list_classroom/img/sun.png' %}"></button>
+        </div>
+        <div id="yourlogo">
+            <button class="avatarka"><img class="sun" id="avatarka"
+                                          src="{% static 'list_classroom/img/avatarka.png' %}"></button>
+        </div>
+        <div id="chat">
+            <button class="chatik"><img class="sun" id="chatblack"
+                                        src="{% static 'list_classroom/img/Chatblack.png' %}"></button>
+        </div>
+    </div>
+</header>
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
+<body>
+<div class="main">
+    <div class="classes">Классы</div>
+    <input class="addclass" href="#" type="button" value="Добавить класс">
+    <div class="search-form">
+        <input type="text" class="search-form__txt" placeholder="Поиск...">
+    </div>
+    <div class="sha">Текущие классы</div>
+    <div class="do">Выпустившиеся классы</div>
+
+    {% for classroom in classroom %}
+        <div class="pole">
+            <div class="class">{{ classroom.number }}{{ classroom.letter }}</div>
+            <div class="clasruk">
+                <div class="classruk">Классный руководитель:</div>
+                <div class="rukovoditel">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}</div>
+            </div>
+            <div class="kolvo">Класс: {{ classroom.child.count }}/30 учеников</div>
+            <a href="{% url 'main:student-applications-admin' classroom.id %}" class="watchinfo" type="button">Посмотреть
+                участников</a>
+            {#            <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}
+        </div>
+    {% endfor %}
+
+
+</div>
+</body>
+</html>

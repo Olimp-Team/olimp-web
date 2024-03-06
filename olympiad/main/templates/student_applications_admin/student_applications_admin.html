@@ -4,26 +4,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'student-applications/student-applications.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'student_applications_admin/student_applications_admin.css' %}" id="them">
     <title>Olimp | Заявки вашего класса</title>
 </head>
 <header>
     <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'student-applications/img/logoolimp.jpg' %}">
+        <img class="logo" id="l-tip" src="{% static 'student_applications_admin/img/logoolimp.jpg' %}">
         <p class="logoword">Olimp</p>
-        <p class="wordhead">Заявки учеников</p>
+        <p class="wordhead">Список учеников</p>
         <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw" src="{% static 'student-applications/img/sun.png' %}">
+            <button class="solnce"><img class="sun" id="sunw"
+                                        src="{% static 'student_applications_admin/img/sun.png' %}">
             </button>
         </div>
         <div id="yourlogo">
             <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'student-applications/img/avatarka.png' %}">
+                                          src="{% static 'student_applications_admin/img/avatarka.png' %}">
             </button>
         </div>
         <div id="chat">
             <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'student-applications/img/chatblack.png' %}">
+                                        src="{% static 'student_applications_admin/img/chatblack.png' %}">
             </button>
         </div>
     </div>
@@ -31,18 +32,19 @@
 <body>
 {% include 'navbar/navbar.html' %}
 {% block content %}
+
 {% endblock %}
 
 
 <div class="main">
     <div class="toptext">
-        <h1 class="toptext1">Заявки учеников</h1>
-        <h2 class="toptext2">Класс: {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }}</h2>
+        <h1 class="toptext1">Список учеников</h1>
+        <h2 class="toptext2">Класс: {{ classroom.number }}{{ classroom.letter }}</h2>
     </div>
-    <div class="topbuttons">
+     <div class="topbuttons">
         <input class="buttonspispeople" type="submit" value="Список участников"/>
         <a class="buttonsend" href="{% url 'main:register_send_teacher' %}">Отправить заявку</a>
-        <a class="buttonadd" href="/admin/main/register/add/">Добавить ученика</a>
+        <a class="buttonadd" href="/admin/users/user/add/">Добавить ученика</a>
     </div>
     <div class="tablespisok">
         <div class="zagolovok">
@@ -71,26 +73,26 @@
             </table>
 
         </div>
-        {% for register in register %}
+        {% for child in child %}
             <div class="mainspisokpoeple">
 
 
-                <div class="nameid">{{ register.id }}</div>
-                <div class="namefio">{{ register.Register_send_str.child.last_name }} {{ register.Register_send_str.child.first_name }} {{ register.Register_send_str.child.surname }}</div>
+                <div class="nameid">{{ child.id }}</div>
+                <div class="namefio">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
                 <div class="olimps">
-                    <table class="tableolimps">
-                        <td>
-                        <th>
-                            <div class="nameolimp1">{{ register.Register_send_str.Olympiad.name }}</div>
-                        </th>
-                        </td>
-                    </table>
+                    {#                    <table class="tableolimps">#}
+                    {#                        <td>#}
+                    {#                        <th>#}
+                    {#                            <div class="nameolimp1">{{ register.Register_send_str.Olympiad.name }}</div>#}
+                    {#                        </th>#}
+                    {#                        </td>#}
+                    {#                    </table>#}
                 </div>
                 <div class="namestage">{{ register.Register_send_str.Olympiad.stage }}</div>
-                <div class="namegender">{{ register.Register_send_str.child.gender }}</div>
-                <div class="namedate">{{ register.Register_send_str.child.birth_date }}</div>
+                <div class="namegender">{{ child.gender }}</div>
+                <div class="namedate">{{ child.birth_date }}</div>
                 <a class="buttonedit" type="submit" value="Изменить"
-                   href="{% url 'main:register_remove_teacher' register.id %}">Удалить</a>
+                   href="{% url 'main:child_remove_admin' child.id %}">Удалить</a>
 
             </div>
         {% endfor %}

@@ -17,15 +17,11 @@
                         </div>
                     </li>
                 {% endif %}
-                {#    <li><div class="mainpage">#}
-                {#        <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="#" id="rezultat">Результаты олимпиад</a>#}
-                {#    </div></li>#}
+
                 {#    <li><div class="mainpage">#}
                 {#        <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="#" id="rezultat">Олимпиады</a>#}
                 {#    </div></li>#}
-                {#    <li><div class="mainpage">#}
-                {#        <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="#" id="rezultat">Заявки на регистрацию</a>#}
-                {#    </div></li>#}
+
                 {#    <li><div class="mainpage">#}
                 {#        <img id="historyimg" src="{% static 'profile/img/ClockClockwise.png' %}"><a href="#" id="history">История олимпиад</a>#}
                 {#    </div></li>#}
@@ -55,6 +51,19 @@
                             <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a
                                 href="{% url 'main:export_excel' %}" id="dates">Скачать
                             excel файл</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="mainpage">
+                            <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a
+                                href="{% url 'main:list_classroom' %}" id="rezultat">Список
+                            классов</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="mainpage">
+                            <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="{% url 'main:applications-from-classroom-teachers' %}" id="rezultat">Заявки
+                            на регистрацию</a>
                         </div>
                     </li>
                 {% endif %}

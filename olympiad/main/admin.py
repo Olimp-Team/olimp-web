@@ -1,8 +1,6 @@
 from django.contrib import admin
 from main.models import *
 
-from main.models import Register_send
-
 
 @admin.register(Classroom)
 class ClassroomAdmin(admin.ModelAdmin):
@@ -79,4 +77,9 @@ class ResultAdmin(admin.ModelAdmin):
 
 @admin.register(Register_send)
 class Register_sendAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Register_admin)
+class Register_adminAdmin(admin.ModelAdmin):
     pass

@@ -18,8 +18,14 @@
         <div id="sun">
             <button class="solnce"><img class="sun" src="{% static 'register-olympiad/img/sun.png' %}"></button>
         </div>
-         <div id="yourlogo"><button class="avatarka"><img class="sun" id="avatarka" src="{% static 'register-olympiad/img/avatarka.png' %}"></button></div>
-        <div id="chat"><button class="chatik"><img class="sun" id="chatblack" src="{% static 'register-olympiad/img/Chatblack.png' %}"></button></div>
+        <div id="yourlogo">
+            <button class="avatarka"><img class="sun" id="avatarka"
+                                          src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
+        </div>
+        <div id="chat">
+            <button class="chatik"><img class="sun" id="chatblack"
+                                        src="{% static 'register-olympiad/img/Chatblack.png' %}"></button>
+        </div>
     </div>
 </header>
 
@@ -38,9 +44,8 @@
         <h1 id="newsolympiad">Открыта регистрация на {{ olympiad.name }}</h1>
         <p id="newsogran">Поторопись количество, участников ограничено!</p>
         <div class="registerbut">
-            {#            <a class="registerbutton" href="{% url 'main:register_add' olympiad.id %}">Зарегестрироваться</a>#}
+            {#            <a class="registerbutton" href="{% url 'main:register_add' Olympiad.id %}">Зарегестрироваться</a>#}
             <input class="registerbutton" type="button" value="Зарегистрироваться" id="newsknopka"/>
-
         </div>
         <div id="circleleft">
             <button class="round-button">
@@ -58,33 +63,35 @@
 
     </div>
     <div class="olympiads">
-<ul>
-        {% for olympiad in olympiads %}
+        <ul>
+            {% for olympiad in olympiads %}
 
 
-            <div class="firstolympiad">
-            <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
-            <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
-            <h3 id="openreg">Регистрация открыта!</h3>
-            <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-            <button id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Зарегистрироваться</button>
+                <div class="firstolympiad">
+                <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
+                <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
+                <h3 id="openreg">Регистрация открыта!</h3>
+                <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
+                <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Зарегистрироваться</a>
+                {% if register.status_send == True %}
+                    <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
+                {% endif %}
+                
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p id="kj">Заявка на {{ register.olympiad }} успешно зарегистрирована, но не отправлена
+                            классному
+                            руководителю. </p>
+                        <button id="hk" href="#">Ваша корзина заявок</button>
+                    </div>
+                </div>
 
-<!-- The Modal -->
-<div id="myModal" class="modal">
 
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <p id="kj">Заявка на {olympiad} успешно зарегистрирована, но не отправлена классному руководителю. </p>
-        <button id="hk"  href="#">Ваша корзина заявок</button>
+            {% endfor %}
+        </ul>
     </div>
 </div>
-
-
-        {% endfor %}
-</ul>
-        </div>
-    </div>
 
 </div>
 <script>var modal = document.getElementById("myModal");
@@ -96,17 +103,17 @@ var btn = document.getElementById("regknopka");
 var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal
-btn.onclick = function() {
+btn.onclick = function () {
     modal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
     modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
