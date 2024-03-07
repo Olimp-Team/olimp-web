@@ -20,7 +20,7 @@ def home(request):
 def register_olympiad(request):
     context = {
         'olympiads': Olympiad.objects.filter(class_olympiad=request.user.classroom.number),
-        'register': Register.objects.filter(child=request.user)
+        'olympiads_last': Olympiad.objects.filter(class_olympiad=request.user.classroom.number).last()
     }
     return render(request, 'register-olympiad/register-olympiad.html', context)
 
@@ -59,14 +59,11 @@ def basket_student_applications(request):
 @login_required
 @is_child
 def register_send(request):
-    if Register_send.objects.exists():
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    else:
-        reg_create = Register_send.objects.create(
-            Register_send_str=Register.objects.get(child=request.user, status_send=False))
-        Register.objects.filter(child=request.user).update(status_send=True)
-        reg_create.save()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    reg_create = Register_send.objects.create(
+        Register_send_str=Register.objects.get(child=request.user, status_send=False))
+    Register.objects.filter(child=request.user).update(status_send=True)
+    reg_create.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 # Страницы учителей
@@ -92,14 +89,12 @@ def register_remove_teacher(request, Register_id):
 @login_required
 @is_teacher
 def register_send_teacher(request):
-    if Register_send.objects.exists():
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-    else:
-        reg_create_teacher = Register_admin.objects.create(Register_admin_str=Register_send.objects.get(
-            Register_send_str__child__classroom__exact=request.user.classroom_guide, status_teacher=False))
-        Register_send.objects.filter(Register_send_str__teacher=request.user).update(status_teacher=True)
-        reg_create_teacher.save()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    reg_create_teacher = Register_admin.objects.create(Register_admin_str=Register_send.objects.get(
+        Register_send_str__child__classroom__exact=request.user.classroom_guide, status_teacher=False))
+
+    Register_send.objects.filter(Register_send_str__child__classroom__teacher=request.user).update(status_teacher=True)
+    reg_create_teacher.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 # Страницы администратора
@@ -141,7 +136,7 @@ def list_classroom(request):
 
 def excel_classroom(request, Classroom_id):
     queryset = Register_admin.objects.filter(
-        Register_admin_str__Register_send_str__teacher__classroom_guide__id=Classroom_id)
+        Register_admin_str__Register_send_str__child__classroom__id=Classroom_id)
 
     data_classroom = [
         [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
@@ -185,8 +180,9 @@ class ExportToExcelView(View):
     def get(self, request):
         queryset = Register_admin.objects.all()  # Получаем данные из нашей модели
         data = [
-            [_("№"), _("Фамилия"), _("Имя"), _("Отчество"),
-             _("Пол"), _("Дата рождения"), _("Олимпиада"), ],
+            [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
+         _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
+         _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),],
             # Заголовки столбцов
         ]
         for obj in queryset:
@@ -197,7 +193,11 @@ class ExportToExcelView(View):
                 obj.Register_admin_str.Register_send_str.child.surname,
                 obj.Register_admin_str.Register_send_str.child.gender,
                 obj.Register_admin_str.Register_send_str.child.birth_date,
-                obj.Register_admin_str.Register_send_str.Olympiad.name,
+                'РФ',
+                '',
+                'МАОУ «МЛ № 1»',
+                obj.Register_admin_str.Register_send_str.child.classroom.number,
+                obj.Register_admin_str.Register_send_str.child.classroom.letter,
             ])
 
         return ExcelResponse(data, 'Регистрация')  # - имя файла Excel

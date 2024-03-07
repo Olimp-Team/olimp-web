@@ -39,6 +39,9 @@
             <img class="imgpers" src="
 
 
+
+                    
+                    
                     {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/Group 289710.png' %}{% endif %}"
                  alt="">
         </div>
@@ -46,54 +49,21 @@
 
             <div class="textinfo">
                 <p class="fioinfo">{{ user.last_name }} {{ user.first_name }} {{ user.surname }}</p>
-                {% if user.status_user == 'У' %}
-                    <p class="classinfo">Класс: {{ user.child.classroom }}</p>
+                {% if user.is_child %}
+                    <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
                 {% endif %}
-                {% if user.status_user == 'У' %}
-                    <p class="teach">Классный руководитель: {{ user.child.classroom.info_teacher }} </p>
+                {% if user.is_child %}
+                    <p class="teach">Классный руководитель:
+                        {{ user.classroom.teacher.last_name }} {{ user.classroom.teacher.first_name }} {{ user.classroom.teacher.surname }} </p>
                 {% endif %}
-                {% if user.status_user == 'Уч' %}
-                    <p class="teach">Классный руководитель {{ user.teacher.classroom_guide }} класса</p>
+                {% if user.is_teacher %}
+                    <p class="teach">Классный руководитель
+                        {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
                 {% endif %}
-                {% if user.status_user == 'А' %}
-                    <p class="teach">Должность {{ user.status_user }} класса</p>
+                {% if user.is_admin %}
+                    <p class="teach">Администратор системы</p>
                 {% endif %}
-
-
-                <p class="teacherinfo">{{ user.classroom.info_teacher }}</p>
             </div>
-
-
-            {#            <div class="boxlevel">#}
-            {#                <div class="levelmainkrug">#}
-            {#                    <p id="textmainkrug">1</p>#}
-            {##}
-            {#                </div>#}
-            {#                <p id="textlevel">Уровень</p>#}
-            {#                <p id="textxp">500 опыта до следующего уровня</p>#}
-            {#                <div class="polosochka">#}
-            {#                    <div class="putpolosa">#}
-            {#                        <div class="xpstart"><p>300</p></div>#}
-            {#                        <div class="xpslesh"><p>/</p></div>#}
-            {#                        <div class="xpend"><p>500</p></div>#}
-            {#                        <svg id="zvezda" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11"#}
-            {#                             fill="none">#}
-            {#                            <path opacity="0.6"#}
-            {#                                  d="M5.0949 8.53366L7.56586 10.0974C8.01837 10.384 8.5721 9.96035 8.45302 9.42456L7.79807 6.48396L9.98323 4.50279C10.3822 4.14145 10.1678 3.45614 9.64384 3.41253L6.76801 3.1571L5.64268 0.378478C5.44024 -0.126159 4.74957 -0.126159 4.54713 0.378478L3.4218 3.15087L0.545966 3.4063C0.0220049 3.44991 -0.192343 4.13522 0.206582 4.49656L2.39174 6.47773L1.73679 9.41833C1.61771 9.95412 2.17144 10.3778 2.62395 10.0912L5.0949 8.53366Z"#}
-            {#                                  fill="black"></path>#}
-            {#                        </svg>#}
-            {#                    </div>#}
-            {#                    <div class="levelpolosa"></div>#}
-            {#                    <div class="krugpolosa1">#}
-            {#                        <p id="textpolosa1">1</p>#}
-            {##}
-            {#                    </div>#}
-            {#                    <div class="krugpolosa2">#}
-            {#                        <p id="textpolosa2">2</p>#}
-            {#                    </div>#}
-            {##}
-            {#                </div>#}
-            {#            </div>#}
             {{ form.image }}
         </div>
         <div class="editname">

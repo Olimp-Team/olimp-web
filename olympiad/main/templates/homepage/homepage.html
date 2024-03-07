@@ -1,16 +1,31 @@
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Django Tailwind</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% tailwind_css %}
 </head>
-<body>
-Homepage
-{% include 'navbar/navbar.html' %}
-{% block content %}
 
-{% endblock %}
-<a href="{% url 'users:profile' %}">Профиль</a>
-<div>Cjc</div>
+<body class="bg-gray-50 font-serif leading-normal tracking-normal">
+<div class="container mx-auto">
+    <section class="flex items-center justify-center h-screen">
+        <h1 class="text-5xl">Django + Tailwind = ❤️</h1>
+    </section>
+</div>
+<div class="card w-96 bg-base-100 shadow-xl">
+    <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes"/></figure>
+    <div class="card-body">
+        <h2 class="card-title">Shoes!</h2>
+        <p>If a dog chews shoes whose shoes does he choose?</p>
+        <div class="card-actions justify-end">
+            <button class="btn btn-primary">Buy Now</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>

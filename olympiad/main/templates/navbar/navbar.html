@@ -48,13 +48,6 @@
                 {% if user.is_admin %}
                     <li>
                         <div class="mainpage">
-                            <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a
-                                href="{% url 'main:export_excel' %}" id="dates">Скачать
-                            excel файл</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="mainpage">
                             <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a
                                 href="{% url 'main:list_classroom' %}" id="rezultat">Список
                             классов</a>
@@ -62,7 +55,8 @@
                     </li>
                     <li>
                         <div class="mainpage">
-                            <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="{% url 'main:applications-from-classroom-teachers' %}" id="rezultat">Заявки
+                            <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a
+                                href="{% url 'main:applications-from-classroom-teachers' %}" id="rezultat">Заявки
                             на регистрацию</a>
                         </div>
                     </li>

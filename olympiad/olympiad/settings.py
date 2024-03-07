@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # My apps
     'main',
-    'users'
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -106,13 +106,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-RU'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
+
+DATE_INPUT_FORMATS = '%d-%m-%Y'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -133,3 +135,8 @@ LOGIN_URL = '/auth/login/'
 # Медиа файлы
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
+
+

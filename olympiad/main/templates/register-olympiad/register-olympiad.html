@@ -39,13 +39,14 @@
 
 
     <div class="newsolympiad">
-        <img src="{% static 'register-olympiad/img/linii.png' %}" alt="" class="newsimg">
-        <p id="newsdate">{{ olympiad.date_olympiad }}</p>
-        <h1 id="newsolympiad">Открыта регистрация на {{ olympiad.name }}</h1>
-        <p id="newsogran">Поторопись количество, участников ограничено!</p>
-        <div class="registerbut">
-            {#            <a class="registerbutton" href="{% url 'main:register_add' Olympiad.id %}">Зарегестрироваться</a>#}
-            <input class="registerbutton" type="button" value="Зарегистрироваться" id="newsknopka"/>
+            <img src="{% static 'register-olympiad/img/linii.png' %}" alt="" class="newsimg">
+            <p id="newsdate">{{ olympiad.date_olympiad }}</p>
+            <h1 id="newsolympiad">Открыта регистрация на {{ olympiads_last.name }}</h1>
+            <p id="newsogran">Поторопись количество, участников ограничено!</p>
+            <div class="registerbut">
+            <a id="newsknopka" class="registerbutton" type="button"
+               href="{% url 'main:register_add' olympiads_last.id %}">Зарегестрироваться</a>
+            {#            <input class="registerbutton" type="button" value="Зарегистрироваться" id="newsknopka"/>#}
         </div>
         <div id="circleleft">
             <button class="round-button">
@@ -76,7 +77,7 @@
                 {% if register.status_send == True %}
                     <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
                 {% endif %}
-                
+
                 <div id="myModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
