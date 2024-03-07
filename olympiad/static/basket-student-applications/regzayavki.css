@@ -272,40 +272,74 @@ li::marker {
 .savebutton:hover {
     cursor: pointer;
 }
+#buttons{
+     margin-top: 50px;
+    margin-left: 1300px;
+}
 .buttonsend {
-    border: none;
+    border: 2px solid #3D70F5;
+    color: #FFFFFF;
+    transition-property: background;
+    transition-duration: 0.3s ;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 20px;
+    margin-top: 30px;
     height: 50px;
     width: 190px;
-    background-color: #3D70F5;
-    margin-left: 1340px;
-    margin-top: 30px;
-    border-radius: 10px;
-    border-color: #3D70F5;
-    color: white;
+    padding-top: 17.7px;
+    padding-bottom: 19.7px;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #3D70F5;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
     font-family: Bahnschrift;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
 }
 .buttonsend:hover {
+    font-weight: bold;
+    border: 2px solid #3D70F5;
     cursor: pointer;
-}
+    color: #3D70F5;
+    background-color: #FFFFFF;}
+
 .buttonadd {
-    padding-left: 10px;
-    margin-top: -100px;
+    border: 2px solid black ;
+    color: #272626;
+    transition-property: background;
+    transition-duration: 0.3s ;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 40px;
     height: 50px;
     width: 190px;
-    background-color: #ebecec;
-    margin-left: 35px;
-    border-radius: 10px;
-    border: none;
-    color: black;
+    padding-top: 17px;
+    padding-bottom: 19.7px;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+ background-color: #FFFFFF;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
     font-family: Bahnschrift;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
     text-decoration: none;
-
 }
 .buttonadd:hover {
-    cursor: pointer;
+ cursor: pointer;
+    color: #FFFFFF;
+    background-color: #272626;
 }
 .tablespisok {
     margin-top: 60px;
