@@ -97,9 +97,11 @@
         </div>
 
     </div>
-
+<div id = "buttons">
     <a class="buttonsend" type="submit" href="{% url 'main:register_send' %}">Отправить заявку</a>
-    <a href='{% url 'main:register-olympiad' %}' class="buttonadd" type="submit" value="Добавить олимпиаду">Добавить
+    <a href="{% url 'main:register-olympiad'%}" class="buttonadd" type="submit" value="Добавить олимпиаду">Добавить
         олимпиаду</a>
+    </div>
+</div>
 </body>
 </html>

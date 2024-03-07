@@ -390,7 +390,8 @@ li::marker {
 }
 
 .buttons {
-    margin-left: 1015px;
+    margin-top: 50px;
+    margin-left: 990px;
 }
 
 /* .otmenabutton {
@@ -416,18 +417,20 @@ line-height: normal;
     cursor: pointer;
 } */
 .savebutton {
+    transition-property: background;
+    transition-duration: 0.3s ;
     margin-top: 50px;
     margin-left: 50px;
     width: 183.822px;
-    padding-top: 17px;
-    padding-bottom: 17px;
+    padding-top: 18.5px;
+    padding-bottom: 18.5px;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
     border-radius: 8px;
     border: 1.5px solid #000;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 38px;
+    padding-right: 38px;
 
     background: #FFF;
     text-align: center;
@@ -440,9 +443,13 @@ line-height: normal;
 }
 
 .savebutton:hover {
+    color: #FFFFFF;
+    background-color: #272626;
     cursor: pointer;
 }
 .editpassbut {
+    transition-property: background;
+    transition-duration: 0.3s ;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -464,8 +471,10 @@ line-height: normal;
     font-weight: 400;
     line-height: normal;
     text-decoration: none;
-    color: black
+    color: black;
 }
-editpassbut:hover {
+.editpassbut:hover {
     cursor: pointer;
+    color: #FFFFFF;
+    background-color: #272626;
 }
