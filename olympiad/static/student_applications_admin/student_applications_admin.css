@@ -36,7 +36,7 @@ html {
 }
 
 #sun {
-    right: 170px;
+    right: 135px;
     position: fixed;
     margin-top: -65px;
     border: none;
@@ -76,7 +76,7 @@ html {
 }
 
 .chatik {
-    right: 100px;
+    right: 85px;
     position: fixed;
     margin-top: -65px;
     border: none;
@@ -90,16 +90,6 @@ html {
     cursor: pointer;
 }
 
-#spis {
-    padding-top: 50px;
-    padding-left: 20px;
-    text-align: left;
-    position: fixed;
-    float: left;
-    width: 200px;
-    height: 100%;
-    background-color: white;
-}
 
 .spisok li {
     margin-bottom: 75px;
@@ -215,7 +205,6 @@ li::marker {
 .exitbutton {
     width: 183.822px;
     height: 20px;
-
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -235,6 +224,7 @@ li::marker {
     text-align: center;
     padding-top: 17px;
     padding-bottom: 17px;
+
 }
 
 .exitbutton:hover {
@@ -242,6 +232,7 @@ li::marker {
 }
 
 .main {
+    margin-top: -240px;
     position: fixed;
     background-color: #FBF7F4;
     width: 100%;
@@ -253,142 +244,106 @@ li::marker {
 .toptext {
     font-family: Bahnschrift;
     padding-left: 20px;
-    padding-top: 0px;
+    padding-top: 60px;
 }
 
 .toptext1 {
     font-family: Bahnschrift;
-    color: #202224;
-    font-size: 38px;
+    color: #474747;
 }
 
-.blockfilter {
-    margin-top: 80px;
-    margin-left: 20px;
-    padding-top: 10px;
-    padding-left: 25px;
-    width: 960px;
-    height: 42px;
-    background-color: #ececec;
-    border-radius: 20px;
-    border: 1px solid #bebebe;
-}
-
-.filterimgdiv {
-    border: none;
-
-}
-
-#filterimgdiv {
-    height: 27px;
-    width: 25px;
-    position: absolute;
-}
-
-.filtertextzag {
-    position: absolute;
-    margin-left: 50px;
-    margin-top: -10px;
-    width: 140px;
-    padding-left: 10px;
-    border-left: 1px solid #bebebe;
-    font-weight: 600;
-}
-
-.filterdate {
-    margin-left: 200px;
-
-}
-
-#spisdate {
-    margin-top: -10px;
-    background-color: #ececec;
-    height: 52px;
-    width: 140px;
-    padding-left: 25px;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-left: 1px solid #bebebe;
-    border-right: 1px solid #bebebe;
+.toptext2 {
     font-family: Bahnschrift;
-
+    opacity: 30%;
 }
 
-.filtercategory {
-    position: absolute;
-    margin-left: 340px;
-    margin-top: -52px;
-
+.topbuttons {
+    padding-top: 50px;
+    padding-left: 20px;
 }
 
-#spiscategory {
-    width: 178px;
-    height: 51px;
-    border: none;
-    background-color: #ececec;
-    border-right: 1px solid #bebebe;
-    font-size: 16px;
-    font-weight: 600;
+.buttonspispeople {
+    height: 50px;
+    width: 220px;
+    background-color: #000;
+    border-radius: 10px;
+    color: white;
     font-family: Bahnschrift;
-    padding-left: 25px;
-}
-
-.filterstage {
-    position: absolute;
-    margin-left: 518px;
-    margin-top: -52px;
-}
-
-#spisstage {
-    width: 178px;
-    height: 51px;
+    font-size: 18px;
     border: none;
-    background-color: #ececec;
-    border-right: 1px solid #bebebe;
-    font-size: 16px;
-    font-weight: 600;
-    font-family: Bahnschrift;
-    padding-left: 25px;
 }
 
-.deletefilter {
-    position: absolute;
-    margin-top: -50px;
+.buttonspispeople:hover {
+    cursor: pointer;
+}
+
+.savebutton {
+    height: 50px;
+    width: 220px;
+    background-color: #3D70F5;
     margin-left: 780px;
+    border-radius: 10px;
+    border-color: #3D70F5;
+    color: white;
+    font-family: Bahnschrift;
+    font-size: 18px;
+    border: none;
 }
 
-#deletefilterimg {
-    position: absolute;
-    height: 32px;
-    width: 28px;
-    margin-left: -5px;
+.savebutton:hover {
+    cursor: pointer;
 }
 
-#deletefiltertext {
-    position: absolute;
-    width: 130px;
+.buttonsend {
+    border: none;
+    background-color: #3D70F5;
+    margin-left: 1000px;
+    border-radius: 10px;
+    border-color: #3D70F5;
+    color: white;
+    font-family: Bahnschrift;
+    font-size: 18px;
     text-decoration: none;
-    color: #EA0234;
-    margin-left: 30px;
+    padding: 16px;
+}
+
+.buttonsend:hover {
+    cursor: pointer;
+}
+
+.buttonadd {
+    margin-top: 0px;
+    background-color: #ebecec;
+    margin-left: 60px;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    font-family: Bahnschrift;
+    font-size: 18px;
     font-weight: bold;
+    text-decoration: none;
+    padding: 16px;
+}
 
-
+.buttonadd:hover {
+    cursor: pointer;
 }
 
 .tablespisok {
     margin-top: 60px;
-    border: 1px solid #D9D9D9;
+    height: 212px;
+    width: 1750px;
     margin-left: 20px;
-
+    border-radius: 5px;
+    margin-bottom: 30px;
 }
 
 .zagolovok {
     height: 55px;
     width: 100%;
     background-color: #F1F1F1;
-    font-size: 24px;
-
+    border-bottom: 1px solid #D9D9D9;
+    border: 1px solid #D9D9D9;
 }
 
 .mainzagolovoktext tr th {
@@ -403,63 +358,78 @@ li::marker {
     font-size: 18px;
 }
 
-.stroka {
-    margin-top: -16px;
-    padding-top: 35px;
-    height: 50px;
-    border-top: 1px solid #D9D9D9;
-    padding-bottom: 35px;
-
+.mainspisokpoeple {
+    padding-top: 20px;
+    height: 57px;
+    border-bottom: 1px solid #D9D9D9;
+    border-right: 1px solid #D9D9D9;
+    border-left: 1px solid #D9D9D9;
 }
 
-#textid {
-    margin-left: 20px;
+#textychenik {
+
+    margin-left: 110px;
 }
 
-#textteacher {
-    width: 210px;
-    margin-left: 180px;
+#textolimp {
+    margin-left: 160px;
+    width: 100px;
 }
 
-#textklass {
-    margin-left: 220px;
+#textstage {
+    margin-left: 550px;
 }
 
-#textsendz {
-    margin-left: 170px;
-}
-
-#textinfoolimp {
+#textgender {
     margin-left: 100px;
 }
 
-#textstatus {
+#textdate {
+    margin-left: 100px;
+}
+
+#textdeistie {
     margin-left: 160px;
 }
 
+.namedate {
+    text-align: center;
+    position: absolute;
+    margin-top: -88px;
+    margin-left: 1320px;
+    font-family: Bahnschrift;
+    font-size: 17px;
+    padding: 6px;
+    background-color: #ffff;
+    border: 1px solid #434343;
+    border-radius: 5px;
+
+
+}
 
 .namegender {
     text-align: center;
     position: absolute;
-    margin-top: -80px;
+    margin-top: -88px;
     margin-left: 1170px;
     font-family: Bahnschrift;
-    font-size: 18px;
+    font-size: 17px;
     padding: 6px;
-
+    background-color: #ffff;
+    border: 1px solid #434343;
     border-radius: 5px;
-
 }
 
 .namestage {
     text-align: center;
     position: absolute;
-    margin-top: -80px;
-    margin-left: 940px;
+    margin-top: -88px;
+    margin-left: 995px;
     font-family: Bahnschrift;
-    font-size: 18px;
+    font-size: 17px;
     padding: 6px;
-
+    background-color: #ffff;
+    border: 1px solid #434343;
     border-radius: 5px;
 }
 
@@ -471,20 +441,35 @@ li::marker {
 }
 
 .tableolimps td th {
-    margin-left: 100px;
+    margin-left: 50px;
+}
+
+.nameolimp1 {
+    width: 285px;
+    text-align: center;
+    position: absolute;
+    margin-top: -13px;
+    font-family: Bahnschrift;
+    font-size: 17px;
+    font-weight: 400;
+    padding: 6px;
+    background-color: #ffff;
+    border: 1px solid #434343;
+    border-radius: 5px;
 }
 
 .namefio {
     text-align: center;
     position: absolute;
-    margin-top: 0px;
+    margin-top: -10px;
     font-weight: 400;
     font-family: Bahnschrift;
-    font-size: 18px;
-    margin-left: 190px;
+    font-size: 17px;
+    margin-left: 90px;
     padding: 6px;
-
-
+    max-width: 210px;
+    background-color: #ffff;
+    border: 1px solid #434343;
     border-radius: 5px;
 }
 
@@ -500,71 +485,15 @@ li::marker {
     margin-top: 0px;
     font-weight: 400;
     font-family: Bahnschrift;
-    font-size: 18px;
+    font-size: 17px;
     margin-left: 20px;
     padding: 6px;
     max-width: 210px;
-    font-weight: bold;
+    background-color: #ffff;
+    border: 1px solid #434343;
     border-radius: 5px;
 }
 
-.nameolimp1 {
-    text-align: center;
-    position: absolute;
-
-    margin-left: 340px;
-    font-family: Bahnschrift;
-    font-size: 18px;
-    padding: 6px;
-
-    border-radius: 5px;
-
-}
-
-.buttonedittrue {
-    position: absolute;
-    margin-left: 1560px;
-    margin-top: -80px;
-    height: 35px;
-    width: 150px;
-    border-radius: 5px;
-    background-color: #00b69b41;
-    color: #00B69B;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: Bahnschrift;
-    border: none;
-
-}
-
-.buttonedittrue:hover {
-    cursor: pointer;
-}
-
-.buttoneditfalse {
-    position: absolute;
-    margin-left: 1560px;
-    margin-top: -80px;
-    height: 35px;
-    width: 150px;
-    border-radius: 5px;
-    background-color: #ef37263b;
-    color: #EF3826;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: Bahnschrift;
-    border: none;
-}
-
-.buttonedittruefalse:hover {
-    cursor: pointer;
-}
-
-.mainspisokpoeple ul li {
-    margin-top: -10px;
-    margin-left: -40px;
-
-}
 .buttonedit {
     position: absolute;
     margin-left: 1600px;

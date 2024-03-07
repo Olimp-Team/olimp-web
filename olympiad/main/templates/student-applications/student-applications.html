@@ -13,14 +13,17 @@
         <p class="logoword">Olimp</p>
         <p class="wordhead">Заявки учеников</p>
         <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw" src="{% static 'student-applications/img/sun.png' %}"></button>
+            <button class="solnce"><img class="sun" id="sunw" src="{% static 'student-applications/img/sun.png' %}">
+            </button>
         </div>
         <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka" src="{% static 'student-applications/img/avatarka.png' %}">
+            <button class="avatarka"><img class="sun" id="avatarka"
+                                          src="{% static 'student-applications/img/avatarka.png' %}">
             </button>
         </div>
         <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack" src="{% static 'student-applications/img/chatblack.png' %}">
+            <button class="chatik"><img class="sun" id="chatblack"
+                                        src="{% static 'student-applications/img/chatblack.png' %}">
             </button>
         </div>
     </div>
@@ -28,7 +31,6 @@
 <body>
 {% include 'navbar/navbar.html' %}
 {% block content %}
-
 {% endblock %}
 
 
@@ -38,6 +40,8 @@
         <h2 class="toptext2">Класс {{ user.classroom_guide }}</h2>
     </div>
     <div class="topbuttons">
+
+        <a class="buttonsend" href="{% url 'main:register_send_teacher' %}">Отправить заявку</a>
         <a class="buttonspispeople" type="submit">Список участников</a>
         <a class="buttonsend" href="">Отправить заявку</a>
         <a class="buttonadd" href="/admin/main/register/add/">Добавить ученика</a>
@@ -69,29 +73,28 @@
             </table>
 
         </div>
-        {% for register in register %}
-            <div class="mainspisokpoeple">
 
-
+        <div class="mainspisokpoeple">
+            {% for register in register %}
                 <div class="nameid">{{ register.id }}</div>
-                <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
+                <div class="namefio">{{ register.Register_send_str.child.last_name }} {{ register.Register_send_str.child.first_name }} {{ register.Register_send_str.child.surname }}</div>
                 <div class="olimps">
                     <table class="tableolimps">
                         <td>
                         <th>
-                            <div class="nameolimp1">{{ register.Olympiad.name }}</div>
+                            <div class="nameolimp1">{{ register.Register_send_str.Olympiad.name }}</div>
                         </th>
                         </td>
                     </table>
                 </div>
-                <div class="namestage">{{ register.Olympiad.stage }}</div>
-                <div class="namegender">{{ register.child.gender }}</div>
-                <div class="namedate">{{ register.child.birth_date }}</div>
+                <div class="namestage">{{ register.Register_send_str.Olympiad.stage }}</div>
+                <div class="namegender">{{ register.Register_send_str.child.gender }}</div>
+                <div class="namedate">{{ register.Register_send_str.child.birth_date }}</div>
                 <a class="buttonedit" type="submit" value="Изменить"
                    href="{% url 'main:register_remove_teacher' register.id %}">Удалить</a>
+            {% endfor %}
+        </div>
 
-            </div>
-        {% endfor %}
 
     </div>
 </div>

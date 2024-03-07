@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль</title>
-    <link rel="stylesheet" href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
+    <link rel="stylesheet"
+          href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
     <link rel="shortcut-icon" href="{% static 'applications-from-classroom-teachers/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
+
 </head>
 <header>
     <div class="golova">
@@ -15,16 +17,19 @@
         <p class="logoword">Olimp</p>
         <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
         <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw" src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
+            <button class="solnce"><img class="sun" id="sunw"
+                                        src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
             </button>
         </div>
         <div id="yourlogo">
             <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'applications-from-classroom-teachers/img/avatarka.png' %}"></button>
+                                          src="{% static 'applications-from-classroom-teachers/img/avatarka.png' %}">
+            </button>
         </div>
         <div id="chat">
             <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'applications-from-classroom-teachers/img/chatblack.png' %}"></button>
+                                        src="{% static 'applications-from-classroom-teachers/img/chatblack.png' %}">
+            </button>
         </div>
     </div>
 </header>
@@ -40,7 +45,8 @@
         <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>
     </div>
     <div class="blockfilter">
-        <div class="filterimgdiv"><img src="{% static 'applications-from-classroom-teachers/img/Filter icon.png' %}" alt="" id="filterimgdiv"></div>
+        <div class="filterimgdiv"><img src="{% static 'applications-from-classroom-teachers/img/Filter icon.png' %}"
+                                       alt="" id="filterimgdiv"></div>
         <div class="filtertextzag"><p>Фильтровать по</p></div>
         <div class="filterdate">
             <select name="date" id="spisdate">
@@ -68,14 +74,18 @@
         </div>
         <div class="deletefilter">
             <a href="">
-                <img src="{% static 'applications-from-classroom-teachers/img/ic-replay-24px.png' %}" alt="" id="deletefilterimg">
+                <img src="{% static 'applications-from-classroom-teachers/img/ic-replay-24px.png' %}" alt=""
+                     id="deletefilterimg">
                 <p id="deletefiltertext">Сбросить фильтр</p>
             </a>
         </div>
     </div>
+    <a class="buttonedit" type="submit" value="Изменить"
+       href="{% url 'main:export_excel' %}">Скачать все заявки</a>
     <div class="mainblock">
         <div class="tablespisok">
             <div class="zagolovok">
+
                 <table class="mainspisokpoepletable">
                     <th>
                         <div id="textid">ID</div>
@@ -93,40 +103,37 @@
                         <div id="textinfoolimp">Информация об олимпиаде</div>
                     </th>
                     <th>
-                        <div id="textstatus">Статус</div>
+                        <div id="textstatus">Файл</div>
                     </th>
 
                 </table>
 
             </div>
+
             <div class="mainspisokpoeple">
 
                 <ul>
                     <li id="utka">
-                        <div class="stroka">
-                            <div class="nameid">00001</div>
-                            <div class="namefio">Проценко Константин Сергеевич</div>
-                            <div class="olimps">
-                                <div class="nameolimp1">11а</div>
-                            </div>
-                            <div class="namestage">19.01.2024</div>
-                            <div class="namegender">ВСОШ Информатика</div>
-                            <input class="buttonedittrue" type="submit" value="Добавлено"/>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="stroka">
-                            <div class="nameid">00002</div>
-                            <div class="namefio">Арефьева Ирина Николаевна</div>
-                            <div class="olimps">
-                                <div class="nameolimp1">10д</div>
-                            </div>
-                            <div class="namestage">19.01.2024</div>
-                            <div class="namegender">ВСОШ ОБЖ</div>
-                            <input class="buttoneditfalse" type="submit" value="Не добавлено"/>
-                    </li>
+                        {% for register in register %}
+                            <div class="stroka">
+                                <div class="nameid">{{ register.id }}</div>
+                                <div class="namefio">
+                                    {{ register.Register_admin_str.Register_send_str.teacher.last_name }} {{ register.Register_admin_str.Register_send_str.teacher.first_name }} {{ register.Register_admin_str.Register_send_str.teacher.surname }}</div>
+                                <div class="olimps">
+                                    <div class="nameolimp1">
+                                        {{ register.Register_admin_str.Register_send_str.teacher.classroom_guide.number }}{{ register.Register_admin_str.Register_send_str.teacher.classroom_guide.letter }}</div>
+                                </div>
+                                <div class="namestage">19.01.2024</div>
 
-                </ul>
+                                <div class="namegender">{{ register.Register_admin_str.Register_send_str.Olympiad.name }}</div>
+                                {#                            <input class="buttonedittrue" type="submit" value="Добавлено"/>#}
+
+                                <a class="buttonedittrue" type="submit"
+                                   href="{% url 'main:excel_classroom' register.Register_admin_str.Register_send_str.child.classroom.id %}">Скачать
+                                    excel файл</a>
+                            </div>
+                        {% endfor %}
+                    </li>
             </div>
         </div>
     </div>

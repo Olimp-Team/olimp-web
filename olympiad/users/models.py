@@ -41,7 +41,8 @@ class User(AbstractUser):
                                    null=True)  # null ИЗМЕНИТЬ НА FALSE когда будет страница регистрации
 
     # Сведения для учителей
-    classroom_guide = models.ForeignKey('main.Classroom', related_name='classroom_teachers', blank=True, on_delete=models.CASCADE, null=True)
+    classroom_guide = models.ForeignKey('main.Classroom', related_name='classroom_teachers', blank=True,
+                                        on_delete=models.CASCADE, null=True)
     subject = models.ManyToManyField(to="main.Subject", verbose_name="Какой предмет ведёт учитель", blank=True)
     post_job_teacher = models.ManyToManyField(to="main.Post", verbose_name="Должность учителя", blank=True)
 
@@ -51,10 +52,10 @@ class User(AbstractUser):
 
     def __str__(self):
         if self.is_teacher:
-            return f"Учитель: {self.last_name} {self.first_name} {self.surname}"
+            return f"Учитель: {self.last_name} {self.first_name} {self.surname} | Классное руководство: {self.classroom_guide.number}{self.classroom_guide.letter}"
         elif self.is_admin:
             return f"Администратор: {self.last_name} {self.first_name} {self.surname}"
         elif self.is_child:
-            return f"Ученик: {self.last_name} {self.first_name} {self.surname}"
+            return f"Ученик: {self.last_name} {self.first_name} {self.surname} | Класс: {self.classroom.number}{self.classroom.letter}"
         else:
             return f"Неизвстная роль: {self.last_name} {self.first_name} {self.surname}"

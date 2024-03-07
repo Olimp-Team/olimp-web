@@ -127,14 +127,27 @@ class Register(models.Model):
     teacher = models.ForeignKey(to='users.User', on_delete=models.CASCADE, verbose_name='', blank=True, null=True, )
     child = models.ForeignKey(to="users.User", on_delete=models.CASCADE, related_name='Ученик')
     Olympiad = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE)
+    status_send = models.BooleanField(default=False)
 
     def __str__(self):
         return (f'ID {self.id}  ФИО {self.child.last_name} {self.child.first_name} {self.child.surname}'
-                f' | Олимпиада: {self.Olympiad.name}')
+                f' | Олимпиада: {self.Olympiad.name} Статус Ученик: {self.status_send}')
 
 
 class Register_send(models.Model):
-    Register = models.ForeignKey(to='Register', on_delete=models.CASCADE, related_name='Register')
+    Register_send_str = models.ForeignKey(to='Register', on_delete=models.CASCADE, related_name='Register')
+    status_teacher = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.Register_send_str} | Статус Учитель: {self.status_teacher}'
+
+
+class Register_admin(models.Model):
+    Register_admin_str = models.ForeignKey(to='Register_send', on_delete=models.CASCADE, related_name='Register_admin')
+    status_admin = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.Register_admin_str} | Статус Админ: {self.status_admin}'
 
 
 class Result(models.Model):
