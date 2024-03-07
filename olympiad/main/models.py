@@ -5,7 +5,6 @@ from users.models import User
 class Classroom(models.Model):
     """Модель учебных классов
     Пример: 10 А - Иваницкий Илья Олегович"""
-
     class Meta:
         verbose_name_plural = "Учебные классы"
         verbose_name = 'Учебный класс'
@@ -23,7 +22,6 @@ class Classroom(models.Model):
 class Subject(models.Model):
     """Модель учебных предметов
     Пример: Информатика"""
-
     class Meta:
         verbose_name_plural = "Школьные предметы"
         verbose_name = 'Школьный предмет'
@@ -37,7 +35,6 @@ class Subject(models.Model):
 class Сategory(models.Model):
     """Модель категорий олимпиад
     Пример: ВСОШ"""
-
     class Meta:
         verbose_name_plural = "Категории олимпиад"
         verbose_name = 'Категория олимпиад'
@@ -51,7 +48,6 @@ class Сategory(models.Model):
 class Level_olympiad(models.Model):
     """Модель уровней олимпиад
     Пример: Муницыпальный"""
-
     class Meta:
         verbose_name_plural = "Уровень олимпиад"
         verbose_name = 'Уровень олимпиад'
@@ -65,7 +61,6 @@ class Level_olympiad(models.Model):
 class Stage(models.Model):
     """Модель этапов олимпиад
     Пример: Школьный"""
-
     class Meta:
         verbose_name_plural = "Этапы олимпиад"
         verbose_name = 'Этап олимпиады'
@@ -101,7 +96,6 @@ class Olympiad(models.Model):
         10 класс
         29.02.2024 - 13:40
         Карла Маркса 153, Школа №53"""
-
     class Meta:
         verbose_name_plural = "Олимпиады"
         verbose_name = 'Олимпиада'
@@ -126,7 +120,6 @@ class Register(models.Model):
         Иваницкий Илья Олегович - 10 А
         ВСОШ по информатике
         Дата создания заявки - 29.02.24 - 10:15"""
-
     class Meta:
         verbose_name_plural = 'Заявки регистрации на олимпиады'
         verbose_name = 'Заявка регистрации на олимпиаду'
@@ -164,7 +157,6 @@ class Result(models.Model):
         50/100 баллов
         Участник
         1.03.24"""
-
     class Meta:
         verbose_name_plural = 'Резльтаты олимпиад'
         verbose_name = 'Результат олимпиады'

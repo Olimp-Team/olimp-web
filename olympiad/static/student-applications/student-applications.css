@@ -263,7 +263,7 @@ li::marker {
 }
 
 .buttonspispeople {
-    height: 50px;
+    height: 100px;
     width: 220px;
     background-color: #000;
     border-radius: 10px;
@@ -271,6 +271,7 @@ li::marker {
     font-family: Bahnschrift;
     font-size: 18px;
     border: none;
+    padding: 16px;
 }
 
 .buttonspispeople:hover {
@@ -281,7 +282,7 @@ li::marker {
     height: 50px;
     width: 220px;
     background-color: #3D70F5;
-    margin-left: 780px;
+    margin-left: 750px;
     border-radius: 10px;
     border-color: #3D70F5;
     color: white;
@@ -295,9 +296,11 @@ li::marker {
 }
 
 .buttonsend {
+    transition-property: background;
+    transition-duration: 0.3s ;
     border: none;
     background-color: #3D70F5;
-    margin-left: 1000px;
+    margin-left: 1070px;
     border-radius: 10px;
     border-color: #3D70F5;
     color: white;
@@ -313,8 +316,10 @@ li::marker {
 
 .buttonadd {
     margin-top: 0px;
+    transition-property: background;
+    transition-duration: 0.3s ;
     background-color: #ebecec;
-    margin-left: 60px;
+    margin-left: 120px;
     border-radius: 10px;
     border: none;
     color: black;
@@ -327,6 +332,7 @@ li::marker {
 
 .buttonadd:hover {
     cursor: pointer;
+    background-color: #949393;
 }
 
 .tablespisok {
@@ -495,8 +501,10 @@ li::marker {
 }
 
 .buttonedit {
+    transition-property: background;
+    transition-duration: 0.3s ;
     position: absolute;
-    margin-left: 1600px;
+    margin-left: 1580px;
     margin-top: -90px;
     height: 20px;
     width: 100px;
@@ -514,4 +522,13 @@ li::marker {
 
 .buttonedit:hover {
     cursor: pointer;
+    background-color: #aba6a6;
+    cursor: pointer;
+    color: #000000;
 }
+.buttonsend:hover {
+    background-color: #425fc4;
+    cursor: pointer;
+    color: #ffffff;
+}
+
