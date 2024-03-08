@@ -198,6 +198,8 @@ li::marker {
 }
 
 .exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s ;
     width: 183.822px;
     height: 20px;
     justify-content: center;
@@ -223,6 +225,8 @@ li::marker {
 
 .exitbutton:hover {
     cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
 }
 
 .main {

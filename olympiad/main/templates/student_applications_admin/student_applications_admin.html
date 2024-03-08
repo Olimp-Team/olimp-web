@@ -50,25 +50,28 @@
         <div class="zagolovok">
             <table class="mainspisokpoepletable">
                 <th>
-                    <div id="textid">ID</div>
+                    <div id="textsurname">Фамилия</div>
                 </th>
                 <th>
-                    <div id="textychenik">Ученик</div>
+                    <div id="textname">Имя</div>
                 </th>
                 <th>
-                    <div id="textolimp">Олимпиада</div>
-                </th>
-                <th>
-                    <div id="textstage">Этап</div>
+                    <div id="textpatronymic">Отчество</div>
                 </th>
                 <th>
                     <div id="textgender">Пол</div>
                 </th>
                 <th>
-                    <div id="textdate">Дата рождения</div>
+                    <div id="textbirth">Дата рождения</div>
                 </th>
                 <th>
-                    <div id="textdeistie">Действие</div>
+                    <div id="textgrajdanstvo">Статус наличия гражданства</div>
+                </th>
+                <th>
+                    <div id="textOVZ">Участник с ОВЗ</div>
+                </th>
+                <th>
+                    <div id="textuchrezdenie"> Краткое наименование ОУ</div>
                 </th>
             </table>
 
@@ -77,20 +80,14 @@
             <div class="mainspisokpoeple">
 
 
-                <div class="nameid">{{ child.id }}</div>
-                <div class="namefio">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
-                <div class="olimps">
-                    {#                    <table class="tableolimps">#}
-                    {#                        <td>#}
-                    {#                        <th>#}
-                    {#                            <div class="nameolimp1">{{ register.Register_send_str.Olympiad.name }}</div>#}
-                    {#                        </th>#}
-                    {#                        </td>#}
-                    {#                    </table>#}
-                </div>
-                <div class="namestage">{{ register.Register_send_str.Olympiad.stage }}</div>
-                <div class="namegender">{{ child.gender }}</div>
-                <div class="namedate">{{ child.birth_date }}</div>
+                <div class="surname">{{ child.id }}</div>
+                <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
+                <div class="patronymic">fdxas{{ register.Register_send_str.Olympiad.stage }}</div>
+                <div class="gender">{{ child.gender }}</div>
+                <div class="birth">{{ child.birth_date }}</div>
+                <div class="grajdanstvo">есть</div>
+                <div class="OVZ">da</div>
+                <div class="ucherezhdenie">МАОУ МЛ№1</div>
                 <a class="buttonedit" type="submit" value="Изменить"
                    href="{% url 'main:child_remove_admin' child.id %}">Удалить</a>
 
