@@ -1,4 +1,4 @@
-html {
+    html {
     font-family: Bahnschrift;
     overflow: hidden;
     max-width: 100%;
@@ -80,7 +80,6 @@ html {
     cursor: pointer;
 }
 #spis {
-    padding-top: 50px;
     padding-left: 20px;
     text-align: left;
     position: fixed;
@@ -256,9 +255,6 @@ li::marker {
     font-family: Bahnschrift;
     font-size: 18px;
     border: none;
-}
-.buttonspispeople:hover {
-    cursor: pointer;
 }
 .savebutton {
     height: 50px;

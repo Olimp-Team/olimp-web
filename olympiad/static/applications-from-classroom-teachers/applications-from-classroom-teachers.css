@@ -91,7 +91,6 @@ html {
 }
 
 #spis {
-    padding-top: 50px;
     padding-left: 20px;
     text-align: left;
     position: fixed;
@@ -382,6 +381,7 @@ li::marker {
     margin-top: 60px;
     border: 1px solid #D9D9D9;
     margin-left: 20px;
+    width: 1700px;
 
 }
 
@@ -569,12 +569,12 @@ li::marker {
 }
 .buttonedit {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     position: absolute;
-    margin-left: 1600px;
-    margin-top: -90px;
-    height: 20px;
-    width: 100px;
+    margin-left: 1425px;
+    margin-top: -57px;
+    height: 0px;
+    width: 166px;
     border-radius: 5px;
     background-color: #d9d9d9;
     color: #2C62EE;

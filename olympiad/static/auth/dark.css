@@ -351,11 +351,13 @@ body {
     cursor: pointer;
 }
 #knopka{
-    border-radius: 50%;
-    background-color: #272626;
+    cursor: pointer;
 }
 #buutt-strelka{
     background-color: rgb(29, 29, 29);
     border: none;
     opacity: 120%;
+}
+#buutt-strelka:hover {
+    cursor: pointer;
 }
