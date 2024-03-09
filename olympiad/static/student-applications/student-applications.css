@@ -85,6 +85,10 @@ html {
     padding-right: 10px;
     background-color: white;
 }
+#spis {
+    padding-top: 50px;
+    padding-left: 20px;
+}
 
 .chatik:hover {
     cursor: pointer;
@@ -192,7 +196,7 @@ li::marker {
 }
 
 #spis:after {
-    content: "";
+     content: "";
     position: absolute;
     top: 100%;
     left: 50px;
@@ -235,7 +239,7 @@ li::marker {
 }
 
 .main {
-    margin-top: -240px;
+    margin-top: -310px;
     position: fixed;
     background-color: #FBF7F4;
     width: 100%;
