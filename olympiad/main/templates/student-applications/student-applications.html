@@ -37,13 +37,11 @@
 <div class="main">
     <div class="toptext">
         <h1 class="toptext1">Заявки учеников</h1>
-        <h2 class="toptext2">Класс {{ user.classroom_guide }}</h2>
+        <h2 class="toptext2">Класс {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }}</h2>
     </div>
     <div class="topbuttons">
-
-        <a class="buttonsend" href="{% url 'main:register_send_teacher' %}">Отправить заявку</a>
         <a class="buttonspispeople" type="submit">Список участников</a>
-        <a class="buttonsend" href="">Отправить заявку</a>
+        <a class="buttonsend" href="{% url 'main:register_send_teacher' %}">Отправить заявку</a>
         <a class="buttonadd" href="/admin/main/register/add/">Добавить ученика</a>
     </div>
     <div class="tablespisok">

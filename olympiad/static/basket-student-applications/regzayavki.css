@@ -55,7 +55,7 @@ html {
 .avatarka {
     right: 10px;
     position: fixed;
-    margin-top: -77.5px;
+    margin-top: -51px;
     border:none;
     text-align: right;
     float: right;
@@ -69,7 +69,7 @@ html {
 .chatik{
     right: 85px;
     position: fixed;
-    margin-top: -65px;
+    margin-top: -39.5px;
     border:none;
     text-align: right;
     float: right;
@@ -191,9 +191,10 @@ li::marker {
        border-right: 50px solid transparent;
     }
 .exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s ;
     width: 183.822px;
     height: 20px;
-
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -217,6 +218,8 @@ li::marker {
 
 .exitbutton:hover {
     cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
 }
 .main{
     position: fixed;

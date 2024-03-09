@@ -10,13 +10,11 @@ html {
     width: 1800%;
     background-color: white;
 }
-
 .logo {
     width: 75px;
     height: 75px;
     padding: 0;
 }
-
 .logoword {
     padding: 0;
     position: fixed;
@@ -25,8 +23,7 @@ html {
     font-weight: bold;
     font-size: 22px;
 }
-
-.wordhead {
+.wordhead{
     padding: 0;
     position: fixed;
     left: 450px;
@@ -34,24 +31,55 @@ html {
     font-size: 18px;
     color: gray;
 }
-
 #sun {
-    left: 97%;
+    right: 135px;
     position: fixed;
     margin-top: -65px;
-    border: none;
+    border:none;
     text-align: right;
     float: right;
-    padding-right: 10px;
-
-
+    padding-right:10px;
+}
+#sun:hover {
+    cursor: pointer;
 }
 
-.solnce {
-    border: none;
+.solnce{
+    border:none;
+    background-color: white;
+
+}
+.solnce:hover {
+    cursor: pointer;
+}
+
+.avatarka {
+    right: 10px;
+    position: fixed;
+    margin-top: -77.5px;
+    border:none;
+    text-align: right;
+    float: right;
+    padding-right:10px;
+    background-color: white;
+
+}
+.avatarka:hover {
+    cursor: pointer;
+}
+.chatik{
+    right: 85px;
+    position: fixed;
+    margin-top: -65px;
+    border:none;
+    text-align: right;
+    float: right;
+    padding-right:10px;
     background-color: white;
 }
-
+.chatik:hover {
+    cursor: pointer;
+}
 #spis {
     padding-top: 50px;
     padding-left: 20px;
@@ -165,9 +193,10 @@ li::marker {
        border-right: 50px solid transparent;
     }
 .exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s ;
     width: 183.822px;
     height: 20px;
-
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -191,8 +220,9 @@ li::marker {
 
 .exitbutton:hover {
     cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
 }
-
 #textexit {
     position: relative;
     font-size: 20px;

@@ -85,6 +85,10 @@ html {
     padding-right: 10px;
     background-color: white;
 }
+#spis {
+    padding-top: 50px;
+    padding-left: 20px;
+}
 
 .chatik:hover {
     cursor: pointer;
@@ -192,7 +196,7 @@ li::marker {
 }
 
 #spis:after {
-    content: "";
+     content: "";
     position: absolute;
     top: 100%;
     left: 50px;
@@ -203,6 +207,8 @@ li::marker {
 }
 
 .exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s ;
     width: 183.822px;
     height: 20px;
     justify-content: center;
@@ -224,15 +230,16 @@ li::marker {
     text-align: center;
     padding-top: 17px;
     padding-bottom: 17px;
-
 }
 
 .exitbutton:hover {
     cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
 }
 
 .main {
-    margin-top: -240px;
+    margin-top: -310px;
     position: fixed;
     background-color: #FBF7F4;
     width: 100%;
@@ -312,6 +319,8 @@ li::marker {
 
 .buttonsend:hover {
     cursor: pointer;
+    color: #3D70F5;
+    background:white;
 }
 
 .buttonadd {
@@ -332,7 +341,8 @@ li::marker {
 
 .buttonadd:hover {
     cursor: pointer;
-    background-color: #949393;
+    color: #ebecec;
+    background-color: black;
 }
 
 .tablespisok {
@@ -365,6 +375,7 @@ li::marker {
 }
 
 .mainspisokpoeple {
+    width: 100%;
     padding-top: 20px;
     height: 57px;
     border-bottom: 1px solid #D9D9D9;
@@ -525,10 +536,5 @@ li::marker {
     background-color: #aba6a6;
     cursor: pointer;
     color: #000000;
-}
-.buttonsend:hover {
-    background-color: #425fc4;
-    cursor: pointer;
-    color: #ffffff;
 }
 

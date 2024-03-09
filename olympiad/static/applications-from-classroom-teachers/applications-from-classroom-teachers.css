@@ -36,7 +36,7 @@ html {
 }
 
 #sun {
-    right: 170px;
+    right: 135px;
     position: fixed;
     margin-top: -65px;
     border: none;
@@ -76,7 +76,7 @@ html {
 }
 
 .chatik {
-    right: 100px;
+    right: 85.1px;
     position: fixed;
     margin-top: -65px;
     border: none;
@@ -213,9 +213,10 @@ li::marker {
 }
 
 .exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s ;
     width: 183.822px;
     height: 20px;
-
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -239,8 +240,9 @@ li::marker {
 
 .exitbutton:hover {
     cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
 }
-
 .main {
     position: fixed;
     background-color: #FBF7F4;
@@ -566,6 +568,8 @@ li::marker {
 
 }
 .buttonedit {
+    transition-property: background;
+    transition-duration: 0.3s ;
     position: absolute;
     margin-left: 1600px;
     margin-top: -90px;
@@ -580,9 +584,12 @@ li::marker {
     border: none;
     text-decoration: none;
     text-align: center;
-    padding: 10px;
+    padding: 16px;
+    padding-bottom: 34px;
 }
 
 .buttonedit:hover {
     cursor: pointer;
+    color: #d9d9d9;
+    background-color: #2C62EE;
 }
