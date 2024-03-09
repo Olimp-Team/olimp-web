@@ -101,7 +101,9 @@ html {
 #buutt-strelka {
     border: none;
 }
-
+#buutt-strelka:hover{
+    cursor:pointer;
+}
 #gosus:hover {
     cursor: pointer;
 }
@@ -351,4 +353,5 @@ html {
 }
 #knopka{
     background-color: #FFFFFF;
+    cursor: pointer;
 }

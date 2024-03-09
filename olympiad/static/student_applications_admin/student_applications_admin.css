@@ -235,7 +235,7 @@ li::marker {
 }
 
 .main {
-    margin-top: -240px;
+    margin-top: -320px;
     position: fixed;
     background-color: #FBF7F4;
     width: 100%;
@@ -276,9 +276,7 @@ li::marker {
     border: none;
 }
 
-.buttonspispeople:hover {
-    cursor: pointer;
-}
+
 
 .savebutton {
     height: 50px;
@@ -317,7 +315,7 @@ li::marker {
 .buttonadd {
     margin-top: 0px;
     background-color: #ebecec;
-    margin-left: 60px;
+    margin-left: 1300px;
     border-radius: 10px;
     border: none;
     color: black;

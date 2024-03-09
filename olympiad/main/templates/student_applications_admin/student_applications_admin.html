@@ -43,12 +43,14 @@
     </div>
      <div class="topbuttons">
         <input class="buttonspispeople" type="submit" value="Список участников"/>
-        <a class="buttonsend" href="{% url 'main:register_send_teacher' %}">Отправить заявку</a>
         <a class="buttonadd" href="/admin/users/user/add/">Добавить ученика</a>
     </div>
     <div class="tablespisok">
         <div class="zagolovok">
             <table class="mainspisokpoepletable">
+                <th>
+                    <div id="id">ID</div>
+                </th>
                 <th>
                     <div id="textsurname">Фамилия</div>
                 </th>
