@@ -245,6 +245,8 @@ li::marker {
     margin-left: 400px;
     border-radius: 10px;
     padding-left: 23px;
+    width: 110%;
+    height: 110%;
 }
 
 #maintext {
@@ -416,7 +418,7 @@ li::marker {
 }
 
 .olympiads {
-    padding-top: 460px;
+    padding-top: 470px;
 }
 
 .firstolympiad {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль</title>
+    <title>Olimp | Регистрация на олимпиаду</title>
     <link rel="stylesheet" href="{% static 'register-olympiad/style.css' %}">
     <link rel="shortcut-icon" href="{% static 'register-olympiad/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'register-olympiad/img/logoolimp.jpg' %}">
@@ -70,7 +70,7 @@
                 <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
                 <h3 id="openreg">Регистрация открыта!</h3>
                 <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-                <a id="regknopka" href="#popup" href="{% url 'main:register_add' olympiad.id %}" type="button">Зарегистрироваться</a>
+                <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}" type="button">Зарегистрироваться</a>
                 {% if register.status_send == True %}
                     <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
                 {% endif %}

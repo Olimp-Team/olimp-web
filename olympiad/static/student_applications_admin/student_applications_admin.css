@@ -354,50 +354,34 @@ li::marker {
 }
 
 .mainspisokpoepletable {
-    padding-top:5px;
+    padding-top: 18px;
     padding-left: 20px;
     font-size: 18px;
 }
 
 .mainspisokpoeple {
-    padding-top: 20px;
-    height: 57px;
     width: 100%;
+    padding-top: 30px;
+    height: 40px;
     border-bottom: 1px solid #D9D9D9;
     border-right: 1px solid #D9D9D9;
     border-left: 1px solid #D9D9D9;
 }
-
+#id {
+margin-left: 40px;
+}
 #textsurname {
 
-    margin-left: 20px;
+    margin-left: 160px;
 }
 
-#textname {
+#textgender {
     margin-left: 160px;
     width: 100px;
 }
 
-#textpatronymic {
-    margin-left: 220px;
-}
-
-#textgender {
-    margin-left: 100px;
-}
-
 #textbirth {
-    margin-left: 100px;
-}
-
-#textgrajdanstvo {
-    margin-left: 160px;
-}
-#textOVZ {
-
-}
-#textuchrezdenie {
-
+    margin-left: 150px;
 }
 
 .namedate {
@@ -494,42 +478,29 @@ li::marker {
     font-weight: 400;
     font-family: Bahnschrift;
     font-size: 17px;
-    margin-left: 77px;
+    margin-left: 65px;
     max-width: 210px;
     background-color: #ffff;
     border-radius: 5px;
 }
 .name {
-margin-left: 240px
+margin-left: 180px
 }
-.patronymic {
-    margin-left: 625px;
-    margin-top: -20px;
-}
+
 .gender {
     margin-top: -20px;
-    margin-left: 795px;
+    margin-left: 487px;
 }
 .birth {
     margin-top: -20px;
-    margin-left: 922px;
+    margin-left: 700px;
 }
-.grajdanstvo {
-    margin-top: -20px;
-    margin-left: 1300px;
-}
-.OVZ {
-    margin-top: -20px;
-    margin-left: 1475px;
-}
-.ucherezhdenie {
-    margin-top: -20px;
-    margin-left: 1600px;
-}
+
+
 .buttonedit {
     position: absolute;
-    margin-left: 1800px;
-    margin-top: -30px;
+    margin-left: 1600px;
+    margin-top: -34px;
     height: 20px;
     width: 100px;
     border-radius: 5px;

@@ -1,0 +1,6 @@
+Django
+django-debug-toolbar
+djangorestframework
+django-excel-response
+six
+pillow

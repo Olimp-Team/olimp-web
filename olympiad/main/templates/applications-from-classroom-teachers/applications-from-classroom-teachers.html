@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Профиль</title>
+    <title>Olimp | Заявки на регистрацию учебных классов</title>
     <link rel="stylesheet"
           href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
     <link rel="shortcut-icon" href="{% static 'applications-from-classroom-teachers/img/shortcuticon.png' %}">
@@ -44,42 +44,42 @@
     <div class="toptext">
         <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>
     </div>
-    <div class="blockfilter">
-        <div class="filterimgdiv"><img src="{% static 'applications-from-classroom-teachers/img/Filter icon.png' %}"
-                                       alt="" id="filterimgdiv"></div>
-        <div class="filtertextzag"><p>Фильтровать по</p></div>
-        <div class="filterdate">
-            <select name="date" id="spisdate">
-                <option selected="selected" id="selected">Дата</option>
-                <option value="1">12.12.2024</option>
-                <option value="2">13.13.13</option>
-                <option value="3">14.14.14</option>
-            </select>
-        </div>
-        <div class="filtercategory">
-            <select name="category" id="spiscategory">
-                <option selected="selected" id="selected">Категория</option>
-                <option value="1">Школьный</option>
-                <option value="2">Муниципальный</option>
-                <option value="3">Всероссийский</option>
-            </select>
-        </div>
-        <div class="filterstage">
-            <select name="category" id="spisstage">
-                <option selected="selected" id="selected">Этап</option>
-                <option value="1">Школьный</option>
-                <option value="2">Муниципальный</option>
-                <option value="3">Всероссийский</option>
-            </select>
-        </div>
-        <div class="deletefilter">
-            <a href="">
-                <img src="{% static 'applications-from-classroom-teachers/img/ic-replay-24px.png' %}" alt=""
-                     id="deletefilterimg">
-                <p id="deletefiltertext">Сбросить фильтр</p>
-            </a>
-        </div>
-    </div>
+{#    <div class="blockfilter">#}
+{#        <div class="filterimgdiv"><img src="{% static 'applications-from-classroom-teachers/img/Filter icon.png' %}"#}
+{#                                       alt="" id="filterimgdiv"></div>#}
+{#        <div class="filtertextzag"><p>Фильтровать по</p></div>#}
+{#        <div class="filterdate">#}
+{#            <select name="date" id="spisdate">#}
+{#                <option selected="selected" id="selected">Дата</option>#}
+{#                <option value="1">12.12.2024</option>#}
+{#                <option value="2">13.13.13</option>#}
+{#                <option value="3">14.14.14</option>#}
+{#            </select>#}
+{#        </div>#}
+{#        <div class="filtercategory">#}
+{#            <select name="category" id="spiscategory">#}
+{#                <option selected="selected" id="selected">Категория</option>#}
+{#                <option value="1">Школьный</option>#}
+{#                <option value="2">Муниципальный</option>#}
+{#                <option value="3">Всероссийский</option>#}
+{#            </select>#}
+{#        </div>#}
+{#        <div class="filterstage">#}
+{#            <select name="category" id="spisstage">#}
+{#                <option selected="selected" id="selected">Этап</option>#}
+{#                <option value="1">Школьный</option>#}
+{#                <option value="2">Муниципальный</option>#}
+{#                <option value="3">Всероссийский</option>#}
+{#            </select>#}
+{#        </div>#}
+{#        <div class="deletefilter">#}
+{#            <a href="">#}
+{#                <img src="{% static 'applications-from-classroom-teachers/img/ic-replay-24px.png' %}" alt=""#}
+{#                     id="deletefilterimg">#}
+{#                <p id="deletefiltertext">Сбросить фильтр</p>#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
     <a class="buttonedit" type="submit" value="Изменить"
        href="{% url 'main:export_excel' %}">Скачать все заявки</a>
     <div class="mainblock">

@@ -9,6 +9,7 @@ html {
 
 .golova {
     background-color: white;
+
 }
 
 .logo {
@@ -239,7 +240,7 @@ li::marker {
 }
 
 .main {
-    margin-top: -310px;
+    margin-top: -240px;
     position: fixed;
     background-color: #FBF7F4;
     width: 100%;

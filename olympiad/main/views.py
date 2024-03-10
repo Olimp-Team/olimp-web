@@ -31,7 +31,7 @@ def register_add(request, Olympiad_id):
     olympiad = Olympiad.objects.get(id=Olympiad_id)
     registers = Register.objects.filter(child=request.user, Olympiad=olympiad)
     if not registers.exists():
-        Register.objects.create(child=request.user, Olympiad=olympiad)
+        Register.objects.create(child=request.user, Olympiad=olympiad, teacher=request.user.classroom.teacher)
     else:
         basket = registers.first()
         basket.save()
