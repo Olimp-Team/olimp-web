@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="{% static 'register-olympiad/style.css' %}">
     <link rel="shortcut-icon" href="{% static 'register-olympiad/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'register-olympiad/img/logoolimp.jpg' %}">
+    <link rel="stylesheet" href="{% static 'register-olympiad/daisy.css' %}">
 </head>
 
-<header >
+<header>
     <div class="golova">
         <img class="logo" src="{% static 'register-olympiad/img/logoolimp.jpg' %}" alt="">
         <p class="logoword">Olimp</p>
@@ -36,11 +37,11 @@
 {% endblock %}
 <div class="main">
     <div class="newsolympiad">
-            <img src="{% static 'register-olympiad/img/linii.png' %}" alt="" class="newsimg">
-            <p id="newsdate">{{ olympiad.date_olympiad }}</p>
-            <h1 id="newsolympiad">Открыта регистрация на {{ olympiads_last.name }}</h1>
-            <p id="newsogran">Поторопись количество, участников ограничено!</p>
-            <div class="registerbut">
+        <img src="{% static 'register-olympiad/img/linii.png' %}" alt="" class="newsimg">
+        <p id="newsdate">{{ olympiad.date_olympiad }}</p>
+        <h1 id="newsolympiad">Открыта регистрация на {{ olympiads_last.name }}</h1>
+        <p id="newsogran">Поторопись количество, участников ограничено!</p>
+        <div class="registerbut">
             <a id="newsknopka" class="registerbutton" type="button"
                href="{% url 'main:register_add' olympiads_last.id %}">Зарегистрироваться</a>
             {#            <input class="registerbutton"  />#}
@@ -66,21 +67,56 @@
 
 
                 <div class="firstolympiad">
-                <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
-                <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
-                <h3 id="openreg">Регистрация открыта!</h3>
-                <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-                <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}" type="button">Зарегистрироваться</a>
+                    <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
+                    <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
+                    <h3 id="openreg">Регистрация открыта!</h3>
+                    <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
+                    <button class="trigger">Зарегистрироваться</button>
+                    <div class="modal">
+                        <div role="alert" class="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                 class="stroke-info shrink-0 w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span>we use cookies for no reason.</span>
+                            <div>
+                                <button class="btn btn-sm" href="">Отлично</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% if register.status_send == True %}
                     <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
                 {% endif %}
             {% endfor %}
-        </div></ul>
-        <h1 id="maintext">Регистрация на олимпиаду</h1>
+    </div>
+    </ul>
+    <h1 id="maintext">Регистрация на олимпиаду</h1>
 
 </div>
 </div>
+<script>
+    var modal = document.querySelector(".modal");
+    var trigger = document.querySelector(".trigger");
+    var closeButton = document.querySelector(".btn-sm");
 
-</div>
+    function toggleModal() {
+        modal.classList.toggle("show-modal");
+    }
+
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
+        }
+    }
+
+    trigger.addEventListener("click", toggleModal);
+    closeButton.addEventListener("click", toggleModal);
+    window.addEventListener("click", windowOnClick);
+</script>
+</body>
+</html>
+</script>
 </body>
 </html>
