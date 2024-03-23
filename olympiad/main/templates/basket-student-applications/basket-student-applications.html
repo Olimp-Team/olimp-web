@@ -1,12 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'basket-student-applications/regzayavki.css' %}" id="them">
     <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
+    <link rel="stylesheet" href="{% static 'register-olympiad/daisy.css' %}">
     <title>Olimp | Ваши заявки</title>
 </head>
+
 <header>
     <div class="golova">
         <img class="logo" id="l-tip" src="{% static 'basket-student-applications/img/logoolimp.jpg' %}">
@@ -17,13 +19,13 @@
                                         src="{% static 'basket-student-applications/img/sun.png' %}">
             </button>
             <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'register-olympiad/img/Chatblack.png' %}"></button>
-        </div>
+                <button class="avatarka"><img class="sun" id="avatarka"
+                                              src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
+            </div>
+            <div id="chat">
+                <button class="chatik"><img class="sun" id="chatblack"
+                                            src="{% static 'register-olympiad/img/Chatblack.png' %}"></button>
+            </div>
         </div>
     </div>
 </header>
@@ -72,37 +74,70 @@
 
         <div class="mainspisokpoeple">
             <ul>
-                    {% for register in register %}
-                        <li>
-                            <div class="nameid">{{ register.id }}</div>
-                            <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
-                            <div class="olimps">
-                                <table class="tableolimps">
-                                    <td>
-                                    <th>
-                                        <div class="nameolimp1">{{ register.Olympiad.name }}</div>
-                                    </th>
-                                    </td>
-                                </table>
-                            </div>
-                            <div class="namestage">{{ register.Olympiad.stage }}</div>
-                            <div class="namegender">{{ register.child.gender }}</div>
-                            <div class="namedate">{{ register.child.birth_date }}</div>
-                            <a class="buttonedit" type="submit" value="Изменить"
-                               href="{% url 'main:register_remove' register.id %}">Удалить</a>
-                        </li>
+                {% for register in register %}
+                    <li>
+                        <div class="nameid">{{ register.id }}</div>
+                        <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
+                        <div class="olimps">
+                            <table class="tableolimps">
+                                <td>
+                                <th>
+                                    <div class="nameolimp1">{{ register.Olympiad.name }}</div>
+                                </th>
+                                </td>
+                            </table>
+                        </div>
+                        <div class="namestage">{{ register.Olympiad.stage }}</div>
+                        <div class="namegender">{{ register.child.gender }}</div>
+                        <div class="namedate">{{ register.child.birth_date }}</div>
+                        <a class="buttonedit" type="submit" value="Изменить"
+                           href="{% url 'main:register_remove' register.id %}">Удалить</a>
+                    </li>
 
 
-                    {% endfor %}
+                {% endfor %}
             </ul>
         </div>
 
     </div>
-<div id = "buttons">
-    <a class="buttonsend" type="submit" href="{% url 'main:register_send' %}">Отправить заявку</a>
-    <a href="{% url 'main:register-olympiad'%}" class="buttonadd" type="submit" value="Добавить олимпиаду">Добавить
-        олимпиаду</a>
+    <div id="buttons">
+        <a class="buttonadd" href="{% url 'main:register-olympiad' %}" type="submit" value="Добавить олимпиаду">Добавить
+            олимпиаду</a>
+        <button class="trigger" type="submit">Отправить заявку</button>
+        <div class="modal">
+            <div role="alert" class="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                     class="stroke-info shrink-0 w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>we use cookies for no reason.</span>
+                <div>
+                    <button class="btn btn-sm" href="">Да</button>
+                    <button class="btn btn-sm" href="">Нет</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    var modal = document.querySelector(".modal");
+    var trigger = document.querySelector(".trigger");
+    var closeButton = document.querySelector(".btn-sm");
+
+    function toggleModal() {
+        modal.classList.toggle("show-modal");
+    }
+
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
+        }
+    }
+
+    trigger.addEventListener("click", toggleModal);
+    closeButton.addEventListener("click", toggleModal);
+    window.addEventListener("click", windowOnClick);
+</script>
 </body>
 </html>
