@@ -28,5 +28,5 @@ urlpatterns = [
     # path('import/', upload_excel, name='import_excel'),
 
     # # API TEST
-    # path('api/users-list/', UsersAPIView.as_view(), name='users-list')
+
 ]

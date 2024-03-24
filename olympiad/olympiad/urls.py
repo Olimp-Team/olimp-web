@@ -12,6 +12,7 @@ urlpatterns = [
     path('main/', include('main.urls', namespace='main')),
     # Приложения авторизации
     path('auth/', include('users.urls', namespace='users')),
+    path('api/', include('api.urls', namespace='api')),
 
 ]
 
