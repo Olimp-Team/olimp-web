@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # My apps
     'main',
     'users',
+    'api'
 ]
 
 MIDDLEWARE = [

@@ -141,17 +141,17 @@ def excel_classroom(request, Classroom_id):
     data_classroom = [
         [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
          _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
-         _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"), _("Олимпиада"),
-         # _("Английский язык (4, 5-6, 7-8, 9-11)"),
-         # _("География (5, 6, 7, 8, 9, 10-11)"),
-         # _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"), _("История (5, 6, 7, 8, 9, 10-11)"),
-         # _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"), _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
-         # _("Обществознание (5, 6, 7, 8, 9, 10, 11 )"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"),
-         # _("Право (9, 10, 11)"), _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"),
-         # _("Технология (5-6, 7-8, 9, 10-11)"), _("Физика (5, 6)"),
-         # _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
-         # _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
-         # _("НШ: окружающий мир (4)"), _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"), _("Кол-во заявлений"),
+         _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
+         _("Английский язык (4, 5-6, 7-8, 9-11)"),
+         _("География (5, 6, 7, 8, 9, 10-11)"),
+         _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"), _("История (5, 6, 7, 8, 9, 10-11)"),
+         _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"), _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
+         _("Обществознание (5, 6, 7, 8, 9, 10, 11 )"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"),
+         _("Право (9, 10, 11)"), _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"),
+         _("Технология (5-6, 7-8, 9, 10-11)"), _("Физика (5, 6)"),
+         _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
+         _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
+         _("НШ: окружающий мир (4)"), _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"), _("Кол-во заявлений"),
          ],
 
     ]
@@ -169,12 +169,34 @@ def excel_classroom(request, Classroom_id):
             'МАОУ «МЛ № 1»',
             obj.Register_admin_str.Register_send_str.child.classroom.number,
             obj.Register_admin_str.Register_send_str.child.classroom.letter,
-            obj.Register_admin_str.Register_send_str.Olympiad.name
+            # obj.Register_admin_str.Register_send_str.Olympiad.subject.name,
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Английский язык' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'География' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Информатика' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Искусство (МХК)' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'История' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Литература' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Музыка' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Немецкий язык' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Обществознание' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'ОБЖ' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Право' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Психология' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Русский язык' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Технология' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Физика' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Физическая культура' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Французский язык' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Экология' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Экономика' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: литературное чтение' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: окружающий мир (4)' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: окружающий мир (4)' else '0',
+            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: русский язык (4)' else '0',
+
         ])
-        # if Register_admin.objects.filter(
-        #         Register_admin_str__Register_send_str__Olympiad__subject__name='Русский язык', ):
-        #     data_classroom.append(['1'])
-        return ExcelResponse(data_classroom, 'Classroom')
+
+        return ExcelResponse(data_classroom, f'register_classroom')
 
 
 class ExportToExcelView(View):
@@ -183,7 +205,18 @@ class ExportToExcelView(View):
         data = [
             [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
              _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
-             _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"), ],
+             _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
+             _("Английский язык (4, 5-6, 7-8, 9-11)"),
+             _("География (5, 6, 7, 8, 9, 10-11)"),
+             _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"), _("История (5, 6, 7, 8, 9, 10-11)"),
+             _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"), _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
+             _("Обществознание (5, 6, 7, 8, 9, 10, 11 )"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"),
+             _("Право (9, 10, 11)"), _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"),
+             _("Технология (5-6, 7-8, 9, 10-11)"), _("Физика (5, 6)"),
+             _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
+             _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
+             _("НШ: окружающий мир (4)"), _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"),
+             _("Кол-во заявлений"), ],
             # Заголовки столбцов
         ]
         for obj in queryset:
@@ -199,13 +232,31 @@ class ExportToExcelView(View):
                 'МАОУ «МЛ № 1»',
                 obj.Register_admin_str.Register_send_str.child.classroom.number,
                 obj.Register_admin_str.Register_send_str.child.classroom.letter,
-                obj.Register_admin_str.Register_send_str.Olympiad.name
+                # obj.Register_admin_str.Register_send_str.Olympiad.subject.name,
+                a := '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Английский язык' else '0',
+                b := '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'География' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Информатика' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Искусство (МХК)' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'История' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Литература' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Музыка' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Немецкий язык' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Обществознание' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'ОБЖ' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Право' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Психология' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Русский язык' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Технология' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Физика' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Физическая культура' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Французский язык' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Экология' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Экономика' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: литературное чтение' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: окружающий мир (4)' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: окружающий мир (4)' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: русский язык (4)' else '0',
+
             ])
 
-        return ExcelResponse(data, 'Регистрация')  # - имя файла Excel
-
-# @login_required
-# @is_admin
-# class UsersAPIView(generics.ListAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UsersSerializer
+        return ExcelResponse(data, 'register_all')  # - имя файла Excel
