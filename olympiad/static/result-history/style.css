@@ -1,3 +1,4 @@
+
 html {
     font-family: Bahnschrift;
     overflow: hidden;
@@ -252,6 +253,7 @@ h3 {
     height: 100%;
 }
 .results {
+    margin-left: 30px;
     width:159px;
     height:38px;
     background-color: #3d70f5;
@@ -263,6 +265,36 @@ h3 {
     text-align: center;
     padding-top: 16px;
 
+}
+.coxran{
+    position: fixed;
+    margin-top: -54px;
+   transition-property: background;
+    transition-duration: 0.3s;
+
+
+padding: 14px;
+    padding-top: -20px;
+    margin-left: 1500px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #3d70f5;
+    text-decoration: none;
+    color: #FFFFFF;
+    background: #3d70f5;
+    left: 500px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+.coxran:hover{
+ background-color: #FFFFFF;
+    color: #3d70f5;
 }
 .class {
     margin-top: 90px;
@@ -289,6 +321,43 @@ h3 {
     background-color: #F1F1F1;
     font-size: 24px;
 
+}
+#his{
+    font-weight: 500;
+    margin-left: 30px;
+}
+#ol{
+    font-weight: 500;
+    margin-top: 20px;
+    margin-left: 30px ;
+}
+#hl{
+    font-weight: 500;
+    margin-top: 25px;
+    margin-left: 30px;
+}
+.class{
+    font-weight: 500;
+    margin-top: -30px;
+    margin-left: 30px;
+}
+#etap{
+    font-weight: 500;
+    margin-top: 20px;
+    margin-left: 30px;
+    font-size: 24px;
+}
+#kat{
+    font-weight: 500;
+    margin-top: -10px;
+    margin-left: 30px ;
+    font-size: 24px;
+}
+#lev{
+    font-weight: 500;
+    margin-top: -10px;
+    margin-left: 30px ;
+    font-size: 24px;
 }
 
 .mainzagolovoktext tr th {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olimp | Заявки на регистрацию учебных классов</title>
+    <title>Olimp | История результатов</title>
     <link rel="stylesheet"
           href="{% static 'result-history/style.css' %}" id="them">
     <link rel="shortcut-icon" href="{% static 'result-history/img/shortcuticon.png' %}">
@@ -15,7 +15,7 @@
     <div class="golova">
         <img class="logo" id="l-tip" src="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
         <p class="logoword">Olimp</p>
-        <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
+        <p class="wordhead">История результатов</p>
         <div id="sun">
             <button class="solnce"><img class="sun" id="sunw"
                                         src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
@@ -40,9 +40,12 @@
 
 {% endblock %}
 <div class="main">
-    <h1>История результатов</h1>
-    <h2>Олимпиада: ВСОШ Математика</h2>
-    <h3>Дата <img class="data" src="{% static 'result-history/img/date.png' %}">22-01-2024 <img class="vremya"
+    <h1 id="his">История результатов</h1>
+    <h2 id="ol">Олимпиада: ВСОШ Математика</h2>
+    <h4 id ="etap"> Этап: Заключительный </h4>
+    <h5 id="kat"> Категория: Всероссийская </h5>
+    <h6 id = "lev"> Уровень: Второй </h6>
+    <h3 id="hl" >Дата <img class="data" src="{% static 'result-history/img/date.png' %}">22-01-2024 <img class="vremya"
                                                                                                 src="{% static 'result-history/img/clock.png' %}">12:30-15:30
     </h3>
     <h2 class="class">Класс: 10д</h2>
@@ -50,6 +53,7 @@
     <div class="results">
         Результаты
     </div>
+    <a class="coxran">Сохранить</a>
     <div>
         <div class="ucheniki">Ученики</div>
         <div class="mainblock">
