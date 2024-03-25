@@ -169,7 +169,6 @@ def excel_classroom(request, Classroom_id):
             'МАОУ «МЛ № 1»',
             obj.Register_admin_str.Register_send_str.child.classroom.number,
             obj.Register_admin_str.Register_send_str.child.classroom.letter,
-            # obj.Register_admin_str.Register_send_str.Olympiad.subject.name,
             '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Английский язык' else '0',
             '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'География' else '0',
             '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Информатика' else '0',
@@ -202,7 +201,7 @@ def excel_classroom(request, Classroom_id):
 class ExportToExcelView(View):
     def get(self, request):
         queryset = Register_admin.objects.all()  # Получаем данные из нашей модели
-        data = [
+        data_all = [
             [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
              _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
              _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
@@ -220,7 +219,7 @@ class ExportToExcelView(View):
             # Заголовки столбцов
         ]
         for obj in queryset:
-            data.append([
+            data_all.append([
                 obj.Register_admin_str.Register_send_str.child.id,
                 obj.Register_admin_str.Register_send_str.child.last_name,
                 obj.Register_admin_str.Register_send_str.child.first_name,
@@ -232,9 +231,8 @@ class ExportToExcelView(View):
                 'МАОУ «МЛ № 1»',
                 obj.Register_admin_str.Register_send_str.child.classroom.number,
                 obj.Register_admin_str.Register_send_str.child.classroom.letter,
-                # obj.Register_admin_str.Register_send_str.Olympiad.subject.name,
-                a := '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Английский язык' else '0',
-                b := '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'География' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Английский язык' else '0',
+                '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'География' else '0',
                 '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Информатика' else '0',
                 '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Искусство (МХК)' else '0',
                 '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'История' else '0',
@@ -259,4 +257,4 @@ class ExportToExcelView(View):
 
             ])
 
-        return ExcelResponse(data, 'register_all')  # - имя файла Excel
+        return ExcelResponse(data_all, 'register_all')  # - имя файла Excel

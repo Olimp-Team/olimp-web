@@ -11,17 +11,17 @@ class UserApi(generics.ListAPIView):
     serializer_class = UserSerializer
 
 
-class UserteacherApi(generics.ListAPIView):
+class TeacherApi(generics.ListAPIView):
     queryset = User.objects.filter(is_teacher=True)
     serializer_class = UserSerializer
 
 
-class UserchildApi(generics.ListAPIView):
+class ChildApi(generics.ListAPIView):
     queryset = User.objects.filter(is_child=True)
     serializer_class = UserSerializer
 
 
-class UseradminApi(generics.ListAPIView):
+class AdminApi(generics.ListAPIView):
     queryset = User.objects.filter(is_admin=True)
     serializer_class = UserSerializer
 
@@ -41,7 +41,7 @@ class СategoryApi(generics.ListAPIView):
     serializer_class = СategorySerializer
 
 
-class Level_olympiadApi(generics.ListAPIView):
+class LevelApi(generics.ListAPIView):
     queryset = Level_olympiad.objects.all()
     serializer_class = Level_olympiadSerializer
 
