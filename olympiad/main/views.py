@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext as _
 from django.views.generic import View
 from excel_response import ExcelResponse
-
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from main.models import *
 from .decorators import *
 
@@ -59,10 +59,11 @@ def basket_student_applications(request):
 @login_required
 @is_child
 def register_send(request):
-    reg_create = Register_send.objects.create(
-        Register_send_str=Register.objects.get(child=request.user, status_send=False))
-    Register.objects.filter(child=request.user).update(status_send=True)
-    reg_create.save()
+    reg_create = Register_send.objects.all()
+    for zayavka in reg_create:
+        zayavka.create(Register_send_str=Register.objects.get(child=request.user, status_send=False))
+        zayavka.objects.filter(child=request.user).update(status_send=True)
+    reg_create.update()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
@@ -258,3 +259,7 @@ class ExportToExcelView(View):
             ])
 
         return ExcelResponse(data_all, 'register_all')  # - имя файла Excel
+
+
+def result(request, *args, **kwargs):
+    return render(request, 'result-history/result-history.html')
