@@ -47,11 +47,17 @@ html {
     width: 28px;
     height: 28px;
 }
+#sunw:hover {
+    cursor: pointer;
+}
 
 .solnce {
     position: fixed;
     border: none;
     background-color: white;
+}
+.solnce:hover {
+    cursor: pointer;
 }
 
 .container {
