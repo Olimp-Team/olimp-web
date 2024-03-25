@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Olimp | Заявки на регистрацию учебных классов</title>
+    <link rel="stylesheet"
+          href="{% static 'result-history/style.css' %}" id="them">
+    <link rel="shortcut-icon" href="{% static 'result-history/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'result-history/img/logoolimp.jpg' %}">
+    <title>Title</title>
+</head>
+<header>
+    <div class="golova">
+        <img class="logo" id="l-tip" src="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
+        <p class="logoword">Olimp</p>
+        <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
+        <div id="sun">
+            <button class="solnce"><img class="sun" id="sunw"
+                                        src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
+            </button>
+        </div>
+        <div id="yourlogo">
+            <button class="avatarka"><img class="sun" id="avatarka"
+                                          src="{% static 'applications-from-classroom-teachers/img/avatarka.png' %}">
+            </button>
+        </div>
+        <div id="chat">
+            <button class="chatik"><img class="sun" id="chatblack"
+                                        src="{% static 'applications-from-classroom-teachers/img/chatblack.png' %}">
+            </button>
+        </div>
+    </div>
+</header>
+<body>
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+
+{% endblock %}
+<div class="main">
+    <h1>История результатов</h1>
+    <h2>Олимпиада: ВСОШ Математика</h2>
+    <h3>Дата <img class="data" src="{% static 'result-history/img/date.png' %}">22-01-2024 <img class="vremya"
+                                                                                                src="{% static 'result-history/img/clock.png' %}">12:30-15:30
+    </h3>
+    <h2 class="class">Класс: 10д</h2>
+
+    <div class="results">
+        Результаты
+    </div>
+    <div>
+        <div class="ucheniki">Ученики</div>
+        <div class="mainblock">
+            <div class="tablespisok">
+                <div class="zagolovok">
+
+                    <table class="mainspisokpoepletable">
+                        <th>
+                            <div id="textteacher">ФИО</div>
+                        </th>
+                        <th>
+                            <div id="textklass">Баллы</div>
+                        </th>
+                        <th>
+                            <div id="textsendz">Статус</div>
+                        </th>
+                    </table>
+
+                </div>
+
+                <div class="mainspisokpoeple">
+
+                    <ul>
+                        <li id="utka">
+                            <div class="stroka">
+                                <div class="namefio"> Антон Ильич Бурнашев
+                                </div>
+                            </div>
+                            <div class="namestage"><input type="number">/100</div>
+                            <select id="select">
+                            <option value="Победитель/Призер">Победитель/Призер</option>
+                            <option value="Участник">Участник</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
