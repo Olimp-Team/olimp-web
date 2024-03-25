@@ -21,10 +21,12 @@ urlpatterns = [
     # Страницы администратора
     path('applications-from-classroom-teachers/', register_list_classroom, name='applications-from-classroom-teachers'),
     path('list-classroom/', list_classroom, name='list_classroom'),
-    path('student-applications-admin/<int:Classroom_id>/', student_applications_admin, name='student-applications-admin'),
+    path('student-applications-admin/<int:Classroom_id>/', student_applications_admin,
+         name='student-applications-admin'),
     path('child-remove-admin/<int:User_id>', child_remove_admin, name='child_remove_admin'),
     path('export-excel/', ExportToExcelView.as_view(), name='export_excel'),
     path('export-excel-classroom/<int:Classroom_id>/', excel_classroom, name='excel_classroom'),
+    path('result/', result, name='result'),
     # path('import/', upload_excel, name='import_excel'),
 
     # # API TEST

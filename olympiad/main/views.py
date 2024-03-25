@@ -260,3 +260,5 @@ class ExportToExcelView(View):
             ])
 
         return ExcelResponse(data, 'register_all')  # - имя файла Excel
+def result(request):
+    return render(request, 'result-history/result-history.html')
