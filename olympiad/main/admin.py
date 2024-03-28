@@ -18,7 +18,7 @@ class SubjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(Сategory)
+@admin.register(categories)
 class СategoryAdmin(admin.ModelAdmin):
     """Модель категорий олимпиад в панеле администратора"""
     list_display = ('id', 'name',)
