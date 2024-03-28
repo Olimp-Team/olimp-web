@@ -1,25 +1,21 @@
+
 html {
+    overflow: hidden;
     font-family: Bahnschrift;
     zoom: 85%;
     max-width: 100%;
-    overflow-x: hidden;
     max-height: 100%;
 }
 
 .golova {
     width: 1800%;
     background-color: white;
-    margin-top: 90px;
 }
-
 .logo {
     width: 75px;
     height: 75px;
     padding: 0;
-    margin-top: -81.5px;
-    position: fixed;
 }
-
 .logoword {
     padding: 0;
     position: fixed;
@@ -28,74 +24,81 @@ html {
     font-weight: bold;
     font-size: 22px;
 }
-
-.wordhead {
+.wordhead{
     padding: 0;
-    position: absolute;
+    position: fixed;
     left: 450px;
     top: 15px;
     font-size: 18px;
     color: gray;
-    user-select: none;
 }
-
 #sun {
-    left: 92%;
-    position: absolute;
+    right: 135px;
+    position: fixed;
     margin-top: -65px;
-    border: none;
+    border:none;
     text-align: right;
     float: right;
-    padding-right: 10px;
+    padding-right:10px;
+}
+#sun:hover {
+    cursor: pointer;
 }
 
-.solnce {
-    border: none;
+.solnce{
+    border:none;
     background-color: white;
 
+}
+.solnce:hover {
+    cursor: pointer;
 }
 
 .avatarka {
-    left: 97%;
-    position: absolute;
+    right: 10px;
+    position: fixed;
     margin-top: -77.5px;
-    border: none;
+    border:none;
     text-align: right;
     float: right;
-    padding-right: 10px;
-    max-width: 40px;
-    max-height: 40px;
+    padding-right:10px;
+    background-color: white;
+
 
 }
-
-.chatik {
-    left: 94.5%;
-    position: absolute;
+.avatarka:hover {
+    cursor: pointer;
+}
+.chatik{
+    right: 85px;
+    position: fixed;
     margin-top: -65px;
-    border: none;
+    border:none;
     text-align: right;
     float: right;
-    padding-right: 10px;
+    padding-right:10px;
     background-color: white;
 }
-
-aside {
-    font-size: 20px;
+.chatik:hover {
+    cursor: pointer;
 }
+#spis {
 
-.mainpage1 {
-    padding-top: 20px;
-    width: 30px;
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
 }
 
 .spisok li {
     margin-bottom: 75px;
 }
-
 li::marker {
     content: '';
 }
-
 #mainpage {
 
     text-decoration: none;
@@ -106,7 +109,6 @@ li::marker {
     font-weight: bold;
 
 }
-
 #mainpageimg {
     position: fixed;
     left: 30px;
@@ -132,8 +134,7 @@ li::marker {
     position: fixed;
     left: 25px;
 }
-
-#rezultat {
+#rezultat{
 
     text-decoration: none;
     color: #000;
@@ -143,11 +144,10 @@ li::marker {
 }
 
 #historyimg {
-    position: fixed;
-    left: 25px;
+        position: fixed;
+        left: 25px;
 
 }
-
 #history {
 
     text-decoration: none;
@@ -158,12 +158,11 @@ li::marker {
 
 }
 
-#datesimg {
+#datesimg{
     position: fixed;
     left: 25px;
 }
-
-#dates {
+#dates{
 
     text-decoration: none;
     color: #000;
@@ -172,21 +171,10 @@ li::marker {
     font-size: 24px;
 
 }
-
 #settingimg {
     position: fixed;
     left: 25px;
 }
-#spis {
-    padding-left: 20px;
-    text-align: left;
-    position: fixed;
-    float: left;
-    width: 200px;
-    height: 100%;
-    background-color: white;
-}
-
 #setting {
 
     text-decoration: none;
@@ -196,18 +184,16 @@ li::marker {
     font-size: 24px;
 
 }
-
 #spis:after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50px;
-    border-top: 50px solid green;
-    border-top-color: inherit;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-}
-
+        content: "";
+        position: absolute;
+       top: 100%;
+       left: 50px;
+       border-top: 50px solid green;
+       border-top-color: inherit;
+       border-left: 50px solid transparent;
+       border-right: 50px solid transparent;
+    }
 .exitbutton {
     transition-property: background;
     transition-duration: 0.3s ;
@@ -243,7 +229,7 @@ li::marker {
     background-color: #f7f7f7;
     margin-left: 400px;
     padding-bottom: 500px;
-    margin-top: 70px;
+
 }
 
 .classes {
@@ -269,6 +255,7 @@ li::marker {
     opacity: 0.5;
 }
 
+
 .addclass {
     transition-property: background;
     transition-duration: 0.3s;
@@ -290,7 +277,7 @@ li::marker {
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
-    line-height: normal;;
+    line-height: normal;
 }
 .addclass:hover {
     background-color: #FFFFFF;
