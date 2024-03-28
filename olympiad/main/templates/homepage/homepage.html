@@ -1,10 +1,284 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Olimp | Главная</title>
     <meta charset="UTF-8">
+    <title>Olimp | Главная страница</title>
+    <link rel="stylesheet" href="{% static 'homepage/homepage.css' %}">
+    <link rel="shortcut-icon" href="{% static 'homepage/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
 </head>
+<header>
+    <div class="golova">
+        <img class="logo" src="{% static 'homepage/img/logoolimp.jpg' %}" alt="">
+        <p class="logoword">Olimp</p>
+        <p class="wordhead">Главная страница</p>
+        <div id="sun">
+            <button class="solnce"><img class="sun" src="{% static 'homepage/img/sun.png' %}"></button>
+        </div>
+        <div id="yourlogo">
+            <button class="avatarka"><img class="sun" id="avatarka"
+                                          src="{% static 'homepage/img/avatarka.png' %}"></button>
+        </div>
+        <div id="chat">
+            <button class="chatik"><img class="sun" id="chatblack"
+                                        src="{% static 'homepage/img/Chatblack.png' %}"></button>
+        </div>
+    </div>
+</header>
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
 <body>
-<div style="font-family: Bahnschrift; text-align: center; font-size: 40px; margin-top: 450px">Страница находится в разработке.</div>
+<div class="main">
+<div class="info">
+        <div class="infobox">
+          </div>
+    <p id="infotext">Информация о вас</p>
+    <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <img class="imgocontovka" src="{% static 'homepage/img/Base.png' %}"
+                 alt="">
+            <img class="imgpers" src="
+                    {% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
+                 alt="">
+        </div>
+        <div class="info">
+
+            <div class="textinfo">
+                <p class="fioinfo">{{ user.last_name }} {{ user.first_name }} {{ user.surname }}</p>
+                {% if user.is_child %}
+                    <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
+                {% endif %}
+            </div>
+            {{ form.image }}
+        </div>
+    </div>
+    </div>
+<div class="text">Расписание ближайших олимпиад</div>
+    <div class="wrapper">
+        <div class="text">Расписание ближайших олимпиад</div>
+    <header>
+        <p class="current-date"></p>
+        <div class="icons">
+            <span id="prev" class="material-symbols-rounded" ><img src="{% static 'homepage/img/Group%20289724.png'%}"></span>
+            <span id="next" class="material-symbols-rounded"><img src="{% static 'homepage/img/Group%20289723.png'%}"></span>
+        </div>
+    </header>
+    <div class="calendar">
+        <ul class="weeks">
+            <li>Пн</li>
+            <li>Вт</li>
+            <li>Ср</li>
+            <li>Чт</li>
+            <li>Пт</li>
+            <li>Сб</li>
+            <li>Вс</li>
+        </ul>
+        <ul class="days"></ul>
+    </div>
+</div>
+    <div class="logsbox">
+        <div id="nedav">Недавние результаты</div>
+        <button id = "pokazat" href="#">Показать все</button>
+        <div class="rezultlast">
+            <p id="rezultlasttext"></p>
+            <label>
+                <table id="tableinfo">
+                    <tr id="tableinfocol">
+                        <td>Категория</td>
+                        <td>Предмет</td>
+                        <td class = "h">Количество баллов</td>
+                    </tr>
+                    <tr>
+                        <th id="vseros">Всероссийская</th>
+                        <th id ="math">Математика</th>
+                        <th id ="ball">8 из 8</th>
+                    </tr>
+                    <tr id="tableinfocol2">
+                        <td>Этап</td>
+                        <td>Уровень</td>
+                        <td class = "h">Заработано опыта</td>
+                    </tr>
+                    <tr>
+                        <th id = "school">Школьный</th>
+                        <th id = "school2">Школьный</th>
+                        <th id="oput">300</th>
+                    </tr>
+                </table>
+            </label>
+        </div>
+        <div class="rezultlast1">
+            <p id="rezultlasttext"></p>
+            <label>
+                <table id="tableinfo">
+                    <tr id="tableinfocol">
+                        <td>Категория</td>
+                        <td>Предмет</td>
+                        <td class = "h">Количество баллов</td>
+                    </tr>
+                    <tr>
+                        <th id="vseros">Всероссийская</th>
+                        <th id ="math">Математика</th>
+                        <th id ="ball">8 из 8</th>
+                    </tr>
+                    <tr id="tableinfocol2">
+                        <td>Этап</td>
+                        <td>Уровень</td>
+                        <td class = "h">Заработано опыта</td>
+                    </tr>
+                    <tr>
+                        <th id = "school">Школьный</th>
+                        <th id = "school2">Школьный</th>
+                        <th id="oput">300</th>
+                    </tr>
+                </table>
+            </label>
+        </div>
+        <div class="rezultlast2">
+            <p id="rezultlasttext"></p>
+            <label>
+                <table id="tableinfo">
+                    <tr id="tableinfocol">
+                        <td>Категория</td>
+                        <td>Предмет</td>
+                        <td class = "h">Количество баллов</td>
+                    </tr>
+                    <tr>
+                        <th id="vseros">Всероссийская</th>
+                        <th id ="math">Математика</th>
+                        <th id ="ball">8 из 8</th>
+                    </tr>
+                    <tr id="tableinfocol2">
+                        <td>Этап</td>
+                        <td>Уровень</td>
+                        <td class = "h">Заработано опыта</td>
+                    </tr>
+                    <tr>
+                        <th id = "school">Школьный</th>
+                        <th id = "school2">Школьный</th>
+                        <th id="oput">300</th>
+                    </tr>
+                </table>
+            </label>
+        </div>
+        <div class="rezultlast3">
+            <p id="rezultlasttext"></p>
+            <label>
+                <table id="tableinfo">
+                    <tr id="tableinfocol">
+                        <td>Категория</td>
+                        <td>Предмет</td>
+                        <td class = "h">Количество баллов</td>
+                    </tr>
+                    <tr>
+                        <th id="vseros">Всероссийская</th>
+                        <th id ="math">Математика</th>
+                        <th id ="ball">8 из 8</th>
+                    </tr>
+                    <tr id="tableinfocol2">
+                        <td>Этап</td>
+                        <td>Уровень</td>
+                        <td class = "h">Заработано опыта</td>
+                    </tr>
+                    <tr>
+
+<th id = "school">Школьный</th>
+                        <th id = "school2">Школьный</th>
+                        <th id="oput">300</th>
+                    </tr>
+                </table>
+            </label>
+        </div>
+        <div class="rezultlast4">
+            <p id="rezultlasttext"></p>
+            <label>
+                <table id="tableinfo">
+                    <tr id="tableinfocol">
+                        <td>Категория</td>
+                        <td>Предмет</td>
+                        <td class = "h">Количество баллов</td>
+                    </tr>
+                    <tr>
+                        <th id="vseros">Всероссийская</th>
+                        <th id ="math">Математика</th>
+                        <th id ="ball">8 из 8</th>
+                    </tr>
+                    <tr id="tableinfocol2">
+                        <td>Этап</td>
+                        <td>Уровень</td>
+                        <td class = "h">Заработано опыта</td>
+                    </tr>
+                    <tr>
+                        <th id = "school">Школьный</th>
+                        <th id = "school2">Школьный</th>
+                        <th id="oput">300</th>
+                    </tr>
+                </table>
+            </label>
+        </div>
+    </div>
+        </div>
+
+
+</div>
+<script>
+const daysTag = document.querySelector(".days"),
+    currentDate = document.querySelector(".current-date"),
+    prevNextIcon = document.querySelectorAll(".icons span");
+
+let date = new Date(),
+    currYear = date.getFullYear(),
+    currMonth = date.getMonth();
+
+const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
+    "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+
+const renderCalendar = () => {
+    let firstDayofMonth = new Date(currYear, currMonth, 0).getDay(),
+        lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(),
+        lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(),
+        lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
+    let liTag = "";
+
+    for (let i = firstDayofMonth; i > 0; i--) {
+        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+    }
+
+    for (let i = 1; i <= lastDateofMonth; i++) {
+        let isToday = i === date.getDate() && currMonth === new Date().getMonth()
+        && currYear === new Date().getFullYear() ? "active" : "";
+        liTag += `<li class="${isToday}">${i}</li>`;
+    }
+
+    for (let i = lastDayofMonth; i < 7; i++) {
+        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
+    }
+    currentDate.innerText = `${months[currMonth]} `;
+    daysTag.innerHTML = liTag;
+}
+renderCalendar();
+
+prevNextIcon.forEach(icon => {
+    icon.addEventListener("click", () => {
+        currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+
+        if(currMonth < 0 || currMonth > 11) {
+            date = new Date(currYear, currMonth, new Date().getDate());
+            currYear = date.getFullYear();
+            currMonth = date.getMonth();
+        } else {
+            date = new Date();
+        }
+        renderCalendar();
+    });
+});
+
+</script>
 </body>
 </html>
