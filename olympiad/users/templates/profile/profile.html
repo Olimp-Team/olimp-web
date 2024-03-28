@@ -20,7 +20,7 @@
         </div>
         <div id="yourlogo">
             <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
+                                          src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"></button>
         </div>
         <div id="chat">
             <button class="chatik"><img class="sun" id="chatblack"
@@ -45,12 +45,6 @@
             <img class="imgocontovka" src="{% static 'profile/img/Base.png' %}"
                  alt="">
             <img class="imgpers" src="
-
-
-
-                    
-                    
-
                     {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
                  alt="">
         </div>

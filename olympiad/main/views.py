@@ -7,6 +7,7 @@ from excel_response import ExcelResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from main.models import *
 from .decorators import *
+from .models import Register, Register_admin
 
 
 # Страницы учеников
@@ -59,11 +60,10 @@ def basket_student_applications(request):
 @login_required
 @is_child
 def register_send(request):
-    reg_create = Register_send.objects.all()
-    for zayavka in reg_create:
-        zayavka.create(Register_send_str=Register.objects.get(child=request.user, status_send=False))
-        zayavka.objects.filter(child=request.user).update(status_send=True)
-    reg_create.update()
+    reg_create = Register_send.objects.create(
+        Register_send_str=Register.objects.get(child=request.user, status_send=False))
+    Register.objects.filter(child=request.user).update(status_send=True)
+    reg_create.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
@@ -133,6 +133,36 @@ def list_classroom(request):
         'classroom': Classroom.objects.all(),
     }
     return render(request, 'list_classroom/list_classroom.html', context)
+
+
+@login_required
+@is_admin
+def list_olympiad(request):
+    context = {
+        'olymp': Olympiad.objects.all()
+    }
+    return render(request, 'list-olympiad/list-olympiad.html', context)
+
+
+from .forms import ChoiceForm
+
+
+def result(request, olymp_id):
+    if request.method == 'GET':
+        form = ChoiceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
+    else:
+        form = ChoiceForm()
+    context = {
+        'form': form,
+        'register_olymp': Register_admin.objects.filter(
+            Register_admin_str__Register_send_str__Olympiad_id=olymp_id),
+        'register_olympiad': Register_admin.objects.filter(
+            Register_admin_str__Register_send_str__Olympiad_id=olymp_id).first(),
+    }
+    return render(request, 'result-history/result-history.html', context)
 
 
 def excel_classroom(request, Classroom_id):
@@ -259,7 +289,3 @@ class ExportToExcelView(View):
             ])
 
         return ExcelResponse(data_all, 'register_all')  # - имя файла Excel
-
-
-def result(request, *args, **kwargs):
-    return render(request, 'result-history/result-history.html')

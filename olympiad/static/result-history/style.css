@@ -269,7 +269,7 @@ h3 {
 .coxran{
     position: fixed;
     margin-top: -54px;
-   transition-property: background;
+    transition-property: background;
     transition-duration: 0.3s;
 
 

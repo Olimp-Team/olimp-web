@@ -32,7 +32,7 @@ class Subject(models.Model):
         return self.name
 
 
-class Сategory(models.Model):
+class categories(models.Model):
     """Модель категорий олимпиад
     Пример: ВСОШ"""
     class Meta:
@@ -102,7 +102,7 @@ class Olympiad(models.Model):
 
     name = models.CharField('Название олимпиады', max_length=256)
     description = models.TextField('Описание олимпиады', blank=True, null=True)
-    category = models.ForeignKey(to='Сategory', on_delete=models.CASCADE, verbose_name='Категория олимпиады',
+    category = models.ForeignKey(to='categories', on_delete=models.CASCADE, verbose_name='Категория олимпиады',
                                  max_length=256)
     level = models.ForeignKey(to='Level_olympiad', on_delete=models.CASCADE, verbose_name='Название уровня',
                               max_length=256)
