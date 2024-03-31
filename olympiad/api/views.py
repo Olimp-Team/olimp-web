@@ -37,7 +37,7 @@ class SubjectApi(generics.ListAPIView):
 
 
 class СategoryApi(generics.ListAPIView):
-    queryset = Сategory.objects.all()
+    queryset = categories.objects.all()
     serializer_class = СategorySerializer
 
 

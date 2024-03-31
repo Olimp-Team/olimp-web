@@ -23,7 +23,7 @@ class SubjectSerializer(serializers.ModelSerializer):
 
 class СategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Сategory
+        model = categories
         fields = '__all__'
 
 

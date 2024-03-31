@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 
-from olympiad.main.models import Classroom
+from main.models import *
 
 
 class ExcelUploadForm(forms.Form):
@@ -25,6 +25,30 @@ class NewClassroomForm(UserCreationForm):
     }))
     child = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
         # 'type': "input" пример
+    }))
+
+
+PARTICIPANT = 'У'
+PRIZE = 'ПР'
+WINNER = 'ПОБД'
+STATUSRES = [
+    (PARTICIPANT, 'Участник'),
+    (PRIZE, 'Призер'),
+    (WINNER, 'Победитель')
+
+]
+
+
+class ChoiceForm(forms.Form):
+    class Meta:
+        model = Result
+        fields = 'status_result', 'points'
+
+    status_result = forms.ChoiceField(choices=STATUSRES, widget=forms.Select(attrs={
+        'id': 'select',
+    }))
+    points = forms.IntegerField(widget=forms.NumberInput(attrs={
+        'type': 'number',
     }))
 
 

@@ -136,8 +136,3 @@ LOGIN_URL = '/auth/login/'
 # Медиа файлы
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-
-
-
-

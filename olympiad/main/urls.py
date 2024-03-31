@@ -26,7 +26,9 @@ urlpatterns = [
     path('child-remove-admin/<int:User_id>', child_remove_admin, name='child_remove_admin'),
     path('export-excel/', ExportToExcelView.as_view(), name='export_excel'),
     path('export-excel-classroom/<int:Classroom_id>/', excel_classroom, name='excel_classroom'),
-    path('result/', result, name='result'),
+    path('list_olympiad/', list_olympiad, name='list_olympiad'),
+    path('result/<int:olymp_id>', result, name='result'),
+
     # path('import/', upload_excel, name='import_excel'),
 
     # # API TEST
