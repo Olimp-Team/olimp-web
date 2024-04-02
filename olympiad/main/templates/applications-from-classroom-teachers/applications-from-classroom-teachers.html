@@ -116,20 +116,20 @@
                     <li id="utka">
                         {% for register in register %}
                             <div class="stroka">
-                                <div class="nameid">{{ register.id }}</div>
+                                <div class="nameid">{{ register.child_admin.id }}</div>
                                 <div class="namefio">
-                                    {{ register.Register_admin_str.Register_send_str.teacher.last_name }} {{ register.Register_admin_str.Register_send_str.teacher.first_name }} {{ register.Register_admin_str.Register_send_str.teacher.surname }}</div>
+                                    {{ register.teacher_admin.last_name }} {{ register.teacher_admin.first_name }} {{ register.teacher_admin.surname }}</div>
                                 <div class="olimps">
                                     <div class="nameolimp1">
-                                        {{ register.Register_admin_str.Register_send_str.teacher.classroom_guide.number }}{{ register.Register_admin_str.Register_send_str.teacher.classroom_guide.letter }}</div>
+                                        {{ register.teacher_admin.classroom_guide.number }}{{register.teacher_admin.classroom_guide.letter }}</div>
                                 </div>
                                 <div class="namestage">19.01.2024</div>
 
-                                <div class="namegender">{{ register.Register_admin_str.Register_send_str.Olympiad.name }}</div>
+                                <div class="namegender">{{ register.Olympiad_admin.name }}</div>
                                 {#                            <input class="buttonedittrue" type="submit" value="Добавлено"/>#}
 
                                 <a class="buttonedittrue" type="submit"
-                                   href="{% url 'main:excel_classroom' register.Register_admin_str.Register_send_str.child.classroom.id %}">Скачать
+                                   href="{% url 'main:excel_classroom' register.child_admin.classroom.id %}">Скачать
                                     excel файл</a>
                             </div>
                         {% endfor %}

@@ -17,11 +17,13 @@
                         </div>
                     </li>
                 {% endif %}
-
-                {#    <li><div class="mainpage">#}
-                {#        <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="#" id="rezultat">Олимпиады</a>#}
-                {#    </div></li>#}
-
+                {% if user.is_admin %}
+                    <li>
+                        <div class="mainpage">
+                            <img id="rezultatimg" src="{% static 'profile/img/Medal.png' %}"><a href="{% url 'main:list_olympiad' %}" id="rezultat">Олимпиады</a>
+                        </div>
+                    </li>
+                {% endif %}
                 {#    <li><div class="mainpage">#}
                 {#        <img id="historyimg" src="{% static 'profile/img/ClockClockwise.png' %}"><a href="#" id="history">История олимпиад</a>#}
                 {#    </div></li>#}
@@ -61,9 +63,10 @@
                         </div>
                     </li>
                     <li>
-                    <div class="mainpage">
-                        <img id="historyimg" src="{% static 'profile/img/ClockClockwise.png' %}"><a href="{% url 'main:list_olympiad' %}" id="history">История олимпиад</a>
-                    </div>
+                        <div class="mainpage">
+                            <img id="historyimg" src="{% static 'profile/img/ClockClockwise.png' %}"><a
+                                href="{% url 'main:result-list_olympiad' %}" id="history">Результаты олимпиад</a>
+                        </div>
                     </li>
                 {% endif %}
                 <li>
