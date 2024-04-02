@@ -60,10 +60,17 @@ def basket_student_applications(request):
 @login_required
 @is_child
 def register_send(request):
-    reg_create = Register_send.objects.create(
-        Register_send_str=Register.objects.get(child=request.user, status_send=False))
+    objs = [
+        Register_send(
+            teacher_send=i.teacher,
+            child_send=i.child,
+            Olympiad_send=i.Olympiad,
+        )
+        for i in Register.objects.filter(child=request.user, status_send=False)
+    ]
+
+    Register_send.objects.bulk_create(objs)
     Register.objects.filter(child=request.user).update(status_send=True)
-    reg_create.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
@@ -71,7 +78,7 @@ def register_send(request):
 @login_required
 @is_teacher
 def student_applications(request):
-    reg = Register_send.objects.filter(Register_send_str__child__classroom__exact=request.user.classroom_guide,
+    reg = Register_send.objects.filter(teacher_send__classroom_guide=request.user.classroom_guide,
                                        status_teacher=False)
     context = {
         'register': reg
@@ -90,15 +97,42 @@ def register_remove_teacher(request, Register_id):
 @login_required
 @is_teacher
 def register_send_teacher(request):
-    reg_create_teacher = Register_admin.objects.create(Register_admin_str=Register_send.objects.get(
-        Register_send_str__child__classroom__exact=request.user.classroom_guide, status_teacher=False))
+    objs = [
+        Register_admin(
+            teacher_admin=i.teacher_send,
+            child_admin=i.child_send,
+            Olympiad_admin=i.Olympiad_send,
 
-    Register_send.objects.filter(Register_send_str__child__classroom__teacher=request.user).update(status_teacher=True)
-    reg_create_teacher.save()
+        )
+        for i in
+        Register_send.objects.filter(child_send__classroom__exact=request.user.classroom_guide, status_teacher=False)
+    ]
+    # reg_create_teacher = Register_admin.objects.create(Register_admin_str=Register_send.objects.get(
+    #     Register_send_str__child__classroom__exact=request.user.classroom_guide, status_teacher=False))
+    Register_admin.objects.bulk_create(objs)
+    Register_send.objects.filter(child_send__classroom__teacher=request.user).update(status_teacher=True)
+
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
 # Страницы администратора
+@login_required
+@is_admin
+def list_olympiad(requests):
+    context = {
+        'olympiad': Olympiad.objects.filter()
+    }
+    return render(requests, 'list_olympiad/list_olympiad.html', context)
+
+
+@login_required
+@is_admin
+def olympiad_remove(request, Olympiad_id):
+    olympiad = Olympiad.objects.get(id=Olympiad_id)
+    olympiad.delete()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
 @login_required
 @is_admin
 def register_list_classroom(request):
@@ -137,28 +171,32 @@ def list_classroom(request):
 
 @login_required
 @is_admin
-def list_olympiad(request):
+def result_list_olympiad(request):
     context = {
         'olymp': Olympiad.objects.all()
     }
-    return render(request, 'list-olympiad/list-olympiad.html', context)
+    return render(request, 'result-list-olympiad/list-olympiad.html', context)
 
 
-from .forms import ChoiceForm
+from .forms import ResultCreateFrom
 
 
 def result(request, olymp_id):
-    if request.method == 'GET':
-        form = ChoiceForm(request.POST)
+    register_olymp = Register_admin.objects.filter(Register_admin_str__Register_send_str__Olympiad_id=olymp_id)
+    if request.method == 'POST':
+        print('POST НАХУЙ')
+        form = ResultCreateFrom(request.POST)
         if form.is_valid():
-            form.save()
+            print('ВАЛИД')
+            Result.objects.create(status_result=form.cleaned_data['status_result'], points=form.cleaned_data['points'],
+                                  info_children=Register_admin.Register_admin_str.Register_send_str.child,
+                                  info_olympiad=Register_admin.Register_admin_str.Register_send_str.Olympiad)
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
     else:
-        form = ChoiceForm()
+        form = ResultCreateFrom()
     context = {
         'form': form,
-        'register_olymp': Register_admin.objects.filter(
-            Register_admin_str__Register_send_str__Olympiad_id=olymp_id),
+        'register_olymp': register_olymp,
         'register_olympiad': Register_admin.objects.filter(
             Register_admin_str__Register_send_str__Olympiad_id=olymp_id).first(),
     }
@@ -167,7 +205,7 @@ def result(request, olymp_id):
 
 def excel_classroom(request, Classroom_id):
     queryset = Register_admin.objects.filter(
-        Register_admin_str__Register_send_str__child__classroom__id=Classroom_id)
+        child_admin__classroom__id=Classroom_id)
 
     data_classroom = [
         [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
@@ -189,40 +227,40 @@ def excel_classroom(request, Classroom_id):
 
     for obj in queryset:
         data_classroom.append([
-            obj.Register_admin_str.Register_send_str.child.id,
-            obj.Register_admin_str.Register_send_str.child.last_name,
-            obj.Register_admin_str.Register_send_str.child.first_name,
-            obj.Register_admin_str.Register_send_str.child.surname,
-            obj.Register_admin_str.Register_send_str.child.gender,
-            obj.Register_admin_str.Register_send_str.child.birth_date,
+            obj.child_admin.id,
+            obj.child_admin.last_name,
+            obj.child_admin.first_name,
+            obj.child_admin.surname,
+            obj.child_admin.gender,
+            obj.child_admin.birth_date,
             'РФ',
             '',
             'МАОУ «МЛ № 1»',
-            obj.Register_admin_str.Register_send_str.child.classroom.number,
-            obj.Register_admin_str.Register_send_str.child.classroom.letter,
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Английский язык' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'География' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Информатика' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Искусство (МХК)' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'История' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Литература' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Музыка' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Немецкий язык' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Обществознание' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'ОБЖ' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Право' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Психология' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Русский язык' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Технология' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Физика' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Физическая культура' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Французский язык' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Экология' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'Экономика' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: литературное чтение' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: окружающий мир (4)' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: окружающий мир (4)' else '0',
-            '1' if obj.Register_admin_str.Register_send_str.Olympiad.subject.name == 'НШ: русский язык (4)' else '0',
+            obj.child_admin.classroom.number,
+            obj.child_admin.classroom.letter,
+            '1' if obj.Olympiad_admin.subject.name == 'Английский язык' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'География' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Информатика' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Искусство (МХК)' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'История' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Литература' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Музыка' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Немецкий язык' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Обществознание' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'ОБЖ' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Право' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Психология' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Русский язык' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Технология' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Физика' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Физическая культура' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Французский язык' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Экология' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'Экономика' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'НШ: литературное чтение' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'НШ: окружающий мир (4)' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'НШ: окружающий мир (4)' else '0',
+            '1' if obj.Olympiad_admin.subject.name == 'НШ: русский язык (4)' else '0',
 
         ])
 

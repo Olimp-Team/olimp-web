@@ -1,0 +1,464 @@
+html {
+    font-family: Bahnschrift;
+    overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+    zoom: 85%;
+}
+
+.golova {
+    background-color: white;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wordhead {
+    padding: 0;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: gray;
+}
+
+#sun {
+    right: 135px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+#sun:hover {
+    cursor: pointer;
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+
+}
+
+.solnce:hover {
+    cursor: pointer;
+}
+
+.avatarka {
+    right: 10px;
+    position: fixed;
+    margin-top: -77.5px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+
+}
+
+.avatarka:hover {
+    cursor: pointer;
+}
+
+.chatik {
+    right: 85.1px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.chatik:hover {
+    cursor: pointer;
+}
+
+#spis {
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok li {
+    margin-bottom: 75px;
+}
+
+li::marker {
+    content: '';
+}
+
+#mainpage {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultat {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#history {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#datesimg {
+    position: fixed;
+    left: 25px;
+}
+
+#dates {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+
+#setting {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#spis:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+.main {
+    margin-left: 400px;
+    height: 100%;
+    width: 100%;
+    background-color: #fbf7f4;
+    position: fixed;
+
+}
+
+h1 {
+    margin-left: 10px;
+}
+
+.filtr {
+    padding-top: 10px;
+    width: 852px;
+    border-radius: 13px;
+    border: 0.6px solid gray;
+    height: 46.88px;
+    margin-left: 20px;
+    background: white;
+}
+
+.filtrovanie {
+    border-right-color: gray;
+    border-right-style: solid;
+    border-right-width: 0.6px;
+    padding: 0 14px;
+    margin-top: -10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    position: fixed;
+    margin-left: 50px;
+}
+
+.data {
+    width: 100px;
+    margin-left: 200px;
+    border-right-color: gray;
+    border-right-style: solid;
+    border-right-width: 0.6px;
+    padding: 0 14px;
+    margin-top: -10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    position: fixed;;
+}
+
+.category {
+    width: 100px;
+    margin-left: 330px;
+    border-right-color: gray;
+    border-right-style: solid;
+    border-right-width: 0.6px;
+    padding: 0 14px;
+    margin-top: -10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    position: fixed;
+}
+
+.etap {
+    width: 100px;
+    margin-left: 470px;
+    border-right-color: gray;
+    border-right-style: solid;
+    border-right-width: 0.6px;
+    padding: 0 14px;
+    margin-top: -10px;
+    padding-top: 20px;
+    padding-bottom: 16px;
+    position: fixed;
+}
+
+.sbros {
+    margin-top: 8px;
+    margin-left: 680px;
+    width: 135px;
+    height: 27px;
+    color: red;
+    font-size: 13px;
+    border: none;
+    position: fixed;
+}
+
+.imgfiltr {
+    border-right-color: gray;
+    border-right-style: solid;
+    border-right-width: 0.6px;
+    padding: 0 10px;
+    margin-top: -10px;
+    padding-top: 20px;
+    padding-bottom: 7px;
+    position: fixed;
+
+}
+
+.add {
+    width: 238px;
+    padding-top: 19.5px;
+    height: 39px;
+    position: fixed;
+    background: #4880ff;
+    color: white;
+    border-radius: 15px;
+    padding-left: 5px;
+    margin-top: -60px;
+    margin-left: 900px;
+    text-decoration: none;
+
+
+}
+
+.tablica {
+    margin-top: 20px;
+    font-size: 18px;
+    margin-left: 20px;
+    width: 1141px;
+    height: 811px;
+    box-shadow: -2px 3px 3px gray;
+    border: 1px;
+    border-radius: 15px;
+    position: fixed;
+    border: 0.2px solid black;
+    background: #FFFFFF;
+}
+
+.oformlenie {
+    border-bottom-color: gray;
+    border-bottom-style: solid;
+    border-bottom-width: 0.2px;
+    height: 30px;
+}
+
+.jpg {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.name {
+    margin-top: -22px;
+    margin-left: 200px;
+}
+
+.kategoriya {
+    margin-top: -22px;
+    margin-left: 400px;
+}
+
+.stage {
+    margin-top: -22px;
+    margin-left: 550px;
+}
+
+.level {
+    margin-top: -22px;
+    margin-left: 700px;
+}
+
+.date {
+    margin-top: -22px;
+    margin-left: 850px;
+}
+
+.actions {
+    margin-top: -22px;
+    margin-left: 1050px;
+}
+
+.action {
+    border-radius: 7px;
+    border: 1px solid gray;
+    margin-left: 1050px;
+    margin-top: -30px;
+    padding-bottom: 30px;
+    padding-right: 60px;
+    position: fixed;
+
+}
+
+.primer {
+    margin-top: 40px;
+}
+
+.pencil {
+    margin-top: -31px;
+    position: fixed;
+    margin-left: 1058px;
+    border-right-color: gray;
+    border-right-style: solid;
+    border-right-width: 0.6px;
+    padding-top: 7px;
+    width: 24.5px
+}
+
+.bin {
+    margin-top: -23px;
+    position: fixed;
+    margin-left: 1088px;
+}
+
+.otobrajenie {
+    margin-top: 850px;
+    margin-left: 20px;
+    position: fixed;
+}
+
+.strelki {
+    margin-top: 850px;
+    margin-left: 1100px;
+    position: fixed;
+    width: 86px ;
+    height: 30px
+}
+.vlevo {
+    text-decoration: none;
+}
+.vpravo {
+    text-decoration: none;
+}

@@ -79,3 +79,7 @@ class Register_adminApi(generics.ListAPIView):
 class ResultApi(generics.ListAPIView):
     queryset = Result.objects.all()
     serializer_class = ResultSerializer
+
+def api_auth(request):
+    if request.method == 'GET':
+        serializer = SnippetSerializer(data=request.query_params)

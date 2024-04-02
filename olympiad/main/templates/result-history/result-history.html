@@ -82,11 +82,15 @@
                                     <div class="namefio"> {{ register_olymp.Register_admin_str.Register_send_str.child.last_name }} {{ register_olymp.Register_admin_str.Register_send_str.child.first_name }} {{ register_olymp.Register_admin_str.Register_send_str.child.surname }}
                                     </div>
                                 </div>
-                                <div class="namestage">{{ form.points }}/100</div>
-                                <form method="get">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="namestage">{{ form.points }}/100</div>
+
                                     {{ form.status_result }}
-                                    <input type="submit" class="coxran">Сохранить</input>
+                                    <input type="submit" class="coxran"></input>
                                 </form>
+                                
+
                                 {#                                <select id="select">#}
                                 {#                                    #}
                                 {#                                    <option value="Победитель/Призер">Победитель/Призер</option>#}
@@ -95,6 +99,7 @@
                             </li>
                         </ul>
                     {% endfor %}
+                
                 </div>
 
             </div>
