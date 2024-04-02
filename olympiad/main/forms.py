@@ -39,7 +39,11 @@ STATUSRES = [
 ]
 
 
-class ChoiceForm(forms.Form):
+class ResultCreateFrom(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status_result'].empty_label = 'Статус не выбран'
+
     class Meta:
         model = Result
         fields = 'status_result', 'points'
