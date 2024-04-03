@@ -30,6 +30,7 @@ urlpatterns = [
     path('list_olympiad/', list_olympiad, name='list_olympiad'),
     path('result/<int:olymp_id>', result, name='result'),
     path('olympiad-delete/<int:Olympiad_id>', olympiad_remove, name='olympiad_remove'),
+    path('create-child/', create_child, name='create_child')
 
     # path('import/', upload_excel, name='import_excel'),
 
