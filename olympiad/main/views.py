@@ -171,6 +171,12 @@ def list_classroom(request):
 
 @login_required
 @is_admin
+def create_child(request):
+    return render(request, 'add_students/add_students.html')
+
+
+@login_required
+@is_admin
 def result_list_olympiad(request):
     context = {
         'olymp': Olympiad.objects.all()
