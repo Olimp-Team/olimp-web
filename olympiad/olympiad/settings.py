@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['olimp-team-olimp-web-2cda.twc1.net']
 
 # Application definition
 
@@ -77,13 +77,22 @@ WSGI_APPLICATION = 'olympiad.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'default_db',
+        'USER': 'gen_user',
+        'PASSWORD': "732301papa",
+        'HOST': '93.93.207.149',
+        'PORT': '5432'
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
