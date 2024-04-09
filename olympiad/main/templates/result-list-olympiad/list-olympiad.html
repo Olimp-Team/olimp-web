@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Olimp | Список учебных классов</title>
+    <title>Olimp | Результаты</title>
     <link rel="stylesheet" href="{% static 'result_list_olimpiad/list_classroom.css' %}">
     <link rel="shortcut-icon" href="{% static 'list_classroom/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
@@ -41,17 +41,17 @@
 
     {% for olymp in olymp %} 
         <div class="pole">
-            <div class="class">{{ olymp.name }}</div>
+            <div class="class">{{ olymp.Olympiad_admin.name }}</div>
             <div class="clasruk">
                 <div class="classruk">Этап</div>
-                <div class="rukovoditel">{{ olymp.stage }}</div>
+                <div class="rukovoditel">{{ olymp.Olympiad_admin.stage }}</div>
             </div>
             <div class="clasruk">
                 <div class="classruk">Категория</div>
-                <div class="rukovoditel">{{ olymp.category }}</div>
+                <div class="rukovoditel">{{ olymp.Olympiad_admin.category }}</div>
             </div>
-            <div class="kolvo">Участники: {{ olymp.count }}/30 учеников</div>
-            <a href="{% url 'main:result' olymp.id %}" class="watchinfo" type="button">Посмотреть
+            <div class="kolvo">Участники: {{ child_admin_count }}/30 учеников</div>
+            <a href="{% url 'main:result' olymp.Olympiad_admin.id %}" class="watchinfo" type="button">Посмотреть
                 участников</a>
             {#            <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}
         </div>
