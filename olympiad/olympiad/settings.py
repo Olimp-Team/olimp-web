@@ -24,8 +24,10 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net"]
 CSRF_TRUSTED_ORIGINS = ['https://olimp-team-olimp-web-7d5b.twc1.net']
+
 
 # Application definition
 
