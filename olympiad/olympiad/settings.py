@@ -26,7 +26,7 @@ DEBUG = True
 
 
 ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net"]
-CSRF_TRUSTED_ORIGINS = ['https://*.olimp-team-olimp-web-7d5b.twc1.net']
+CSRF_TRUSTED_ORIGINS = ['https://olimp-team-olimp-web-7d5b.twc1.net']
 
 
 # Application definition
