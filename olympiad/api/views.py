@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.response import Response
 from rest_framework import viewsets, generics
 from users.models import User
 from main.models import *
@@ -7,8 +8,9 @@ from .serializers import *
 
 
 class UserApi(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    def get(self, request):
+        users = User.objects.all()
+        return Response({'User': UserSerializer(users, many=True).data})
 
 
 class TeacherApi(generics.ListAPIView):
@@ -79,6 +81,7 @@ class Register_adminApi(generics.ListAPIView):
 class ResultApi(generics.ListAPIView):
     queryset = Result.objects.all()
     serializer_class = ResultSerializer
+
 
 def api_auth(request):
     if request.method == 'GET':
