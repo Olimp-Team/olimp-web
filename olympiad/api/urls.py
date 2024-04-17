@@ -5,7 +5,7 @@ from django.urls import path, include
 app_name = 'api'
 
 urlpatterns = [
-    path('users-list/', AuthApi.as_view(), name='users-list'),
+    path('users-list/', ChildrenApiReact.as_view(), name='users-list'),
 
 
 ]

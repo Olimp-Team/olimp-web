@@ -6,6 +6,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import View
 from excel_response import ExcelResponse
 from main.models import *
+from users.forms import NewChildForm
 from .decorators import *
 from .models import Register, Register_admin
 from .forms import ResultCreateFrom
@@ -254,7 +255,8 @@ class StudentAdminApp(View, LoginRequiredMixin):
 class ListClassroom(View, LoginRequiredMixin):
     def get(self, request):
         if request.user.is_admin:
-            return render(request, 'add_students/add_students.html')
+            classroom = Classroom.objects.all()
+            return render(request, 'list_classroom/list_classroom.html', context={'classroom': classroom})
         else:
             return HttpResponseForbidden()
 
@@ -272,6 +274,33 @@ class ResultListOlympiad(View, LoginRequiredMixin):
                 'child_admin_count': child_admin_count
             }
             return render(request, 'result-list-olympiad/list-olympiad.html', context)
+        else:
+            return HttpResponseForbidden()
+
+
+class CreateAdmin(View, LoginRequiredMixin):
+    def get(self, request):
+        if request.user.is_admin:
+            return render(request, 'add_admin/add_admin.html')
+        else:
+            return HttpResponseForbidden()
+
+
+class CreateChild(View, LoginRequiredMixin):
+    def get(self, request):
+        if request.user.is_admin:
+            context = {
+                'form': NewChildForm
+            }
+            return render(request, 'add_students/add_students.html', context)
+        else:
+            return HttpResponseForbidden()
+
+
+class CreateTeacher(View, LoginRequiredMixin):
+    def get(self, request):
+        if request.user.is_admin:
+            return render(request, 'add_teacher/add_teacher.html')
         else:
             return HttpResponseForbidden()
 

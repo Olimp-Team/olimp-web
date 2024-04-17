@@ -30,8 +30,9 @@ urlpatterns = [
     path('list-olympiad/', ListOlympiad.as_view(), name='list_olympiad'),
     path('result/<int:olymp_id>', Result.as_view(), name='result'),
     path('delete/olympiad/<int:Olympiad_id>', OlympiadDelete.as_view(), name='olympiad_remove'),
-    # path('create/child/', create_child, name='create_child'),
-    # path('create/admin/', ),
+    path('create/admin/', CreateAdmin.as_view(), name='CreateAdmin'),
+    path('create/child/', CreateChild.as_view(), name='CreateChild'),
+    path('create/teacher/', CreateTeacher.as_view(), name='CreateTeacher'),
     # path('create/olympiad',), разработка
     # path('create/classroom',), разработка
     # path('import/', upload_excel, name='import_excel'),
