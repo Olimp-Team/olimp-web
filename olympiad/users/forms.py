@@ -52,29 +52,45 @@ class UserProfileForm(UserChangeForm):
 class NewChildForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom')
+        fields = ('username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password', 'gender')
 
     username = forms.CharField(widget=forms.TextInput(attrs={
         # 'type': "input" пример
     }))
-    first_name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
-    }))
-    last_name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
-    }))
     surname = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': "search",
+        'class': "vvodinfo",
+        'placeholder': "Введите отчество ученика"
     }))
     birth_date = forms.DateField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': "search",
+        'class': "vvodinfo",
+        'placeholder': "Введите дату рождения ученика"
     }))
     is_child = forms.BooleanField(widget=forms.TextInput(attrs={
         # 'type': "input" пример
     }))
-    classroom = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    # classroom = forms.MultipleChoiceField(queryset=Classroom , widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+    #     'type': "search",
+    #     'class': "vvodinfo",
+    #     'placeholder': "Введите учебный класс ученика"
+    # }))
+    image = forms.ImageField(widget=forms.TextInput(attrs={
+        'type': "submit",
+        'value': "Загрузить новое фото",
+        'class': "savenewphoto"
     }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'type': "search",
+        'class': "vvodinfo",
+        'placeholder': "Введите фамилию ученика",
+    }))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        'type': "search",
+        'class': "vvodinfo",
+        'placeholder': "Введите имя ученика"
+    }))
+
 
 
 class NewTeacherForm(UserCreationForm):

@@ -28,6 +28,31 @@ class NewClassroomForm(UserCreationForm):
     }))
 
 
+class NewChild(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('image', 'last_name', 'first_name', 'surname', 'birth_date', 'gender', 'classroom',)
+
+    image = forms.ImageField(widget=forms.TextInput(attrs={
+        'type': "submit",
+        'value': "Загрузить новое фото",
+        'class': "savenewphoto"
+    }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'type': "search",
+        'class': "vvodinfo",
+        'placeholder': "Введите фамилию ученика",
+    }))
+    first_name = forms.CharField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        'type': "search",
+        'class': "vvodinfo",
+        'placeholder': "Введите имя ученика"
+    }))
+    child = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        # 'type': "input" пример
+    }))
+
+
 PARTICIPANT = 'У'
 PRIZE = 'ПР'
 WINNER = 'ПОБД'

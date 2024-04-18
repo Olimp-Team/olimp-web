@@ -7,11 +7,17 @@ from users.forms import UserLoginForm, UserProfileForm
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-def login(request):
-    """Модель представления для входа"""
-    if request.method == 'POST':
+class AuthLogin(View):
+    def get(self, request):
+        form = UserLoginForm()
+        context = {'form': form}
+        return render(request, "auth/auth.html", context)
+
+    def post(self, request):
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
             username = request.POST['username']
@@ -20,28 +26,25 @@ def login(request):
             if user:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('users:profile'))
-
-    else:
-        form = UserLoginForm()
-
-    context = {'form': form}
-    return render(request, "auth/auth.html", context)
+        context = {'form': form}
+        return render(request, "auth/auth.html", context)
 
 
-@login_required
-def profile(request):
-    """Модель представления для отображения профиля пользователя"""
-    if request.method == 'POST':
+class ProfileView(View, LoginRequiredMixin):
+    def get(self, request):
+        form = UserProfileForm(instance=request.user)
+        context = {'form': form}
+        return render(request, 'profile/profile.html', context)
+
+    def post(self, request):
         form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('users:profile'))
         else:
             print(form.errors)
-    else:
-        form = UserProfileForm(instance=request.user)
-    context = {'form': form}
-    return render(request, 'profile/profile.html', context)
+        context = {'form': form}
+        return render(request, 'profile/profile.html', context)
 
 
 def redirect(request):
@@ -56,10 +59,13 @@ def logout(request):
     return HttpResponseRedirect(reverse('users:login'))
 
 
-@login_required
-def password_change(request):
-    """Модель представления для смены пароля"""
-    if request.method == 'POST':
+class PasswordChange(View, LoginRequiredMixin):
+    def get(self, request):
+        form = PasswordChangeForm(request.user)
+        context = {'form': form}
+        return render(request, 'password_change/password_change.html', context)
+
+    def post(self, request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
@@ -68,7 +74,6 @@ def password_change(request):
             return HttpResponseRedirect(reverse('users:login'))
         else:
             print(form.errors)
-    else:
-        form = PasswordChangeForm(request.user)
-        context = {'form': form}
-        return render(request, 'password_change/password_change.html', context)
+
+
+

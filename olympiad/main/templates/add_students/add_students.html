@@ -1,5 +1,4 @@
 {% load static %}
-{% load admin_urls %}
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -44,19 +43,22 @@
     <li>
         <div class="divFam">
             <h2>Фамилия</h2>
-            <input type=search class="vvodinfo" placeholder="Введите фамилию ученика">
+            {{ form.last_name }}
+{#            <input type=search class="vvodinfo" placeholder="Введите фамилию ученика">#}
     </div></li>
     <li><div class="divName">
         <h2>Имя</h2>
-        <input type=search class="vvodinfo" placeholder="Введите имя ученика">
+        {{ form.first_name }}
+{#        <input type=search class="vvodinfo" placeholder="Введите имя ученика">#}
     </div></li>
     <li><div class="divOtch">
         <h2>Отчество</h2>
-        <input type=search class="vvodinfo" placeholder="Введите отчество ученика">
+        {{ form.surname }}
     </div></li>
     <li><div class="divDate">
         <h2>Дата рождения</h2>
-        <input type=search class="vvodinfo" placeholder="Введите дату рождения ученика">
+        {{ form.birth_date }}
+{#        <input type=search class="vvodinfo" placeholder="Введите дату рождения ученика">#}
     </div></li>
     <li><div class="divGen">
         <h2>Пол</h2>
@@ -71,6 +73,7 @@
     </div></li>
     <li><div class="divClass">
         <h2>Учебный класс</h2>
+        {{ form.classroom }}
         <input type=search class="vvodinfo" placeholder="Введите учебный класс ученика">
     </div></li>
     <li><div class="divLogin">
