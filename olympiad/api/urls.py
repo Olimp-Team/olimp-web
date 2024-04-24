@@ -7,5 +7,4 @@ app_name = 'api'
 urlpatterns = [
     path('users-list/', ChildrenApiReact.as_view(), name='users-list'),
 
-
 ]

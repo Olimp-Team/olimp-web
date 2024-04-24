@@ -19,11 +19,13 @@ def is_teacher(view_func):
 
 class ChildrenMixin(AccessMixin):
     """Декоратор прав доступа для учеников"""
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_child:
             return self.handle_no_permission()
         else:
             return super().dispatch(request, *args, **kwargs)
+
 
 def is_child(view_func):
     """Декоратор прав доступа для администраторов"""
@@ -35,10 +37,6 @@ def is_child(view_func):
             return HttpResponseForbidden()
 
     return wrapper_func
-
-
-
-
 
 
 def is_admin(view_func):

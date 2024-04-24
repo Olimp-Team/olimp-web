@@ -47,10 +47,12 @@ class ProfileView(View, LoginRequiredMixin):
         return render(request, 'profile/profile.html', context)
 
 
-def redirect(request):
-    """Модель представления для перенаправления с главной страницы на страницу авторизации"""
-    return HttpResponseRedirect(reverse('users:login'))
+# def redirect(request):
+#     """Модель представления для перенаправления с главной страницы на страницу авторизации"""
+#     return HttpResponseRedirect(reverse('users:login'))
 
+def start_page(request):
+    return render(request, 'start_page/start_page.html')
 
 @login_required
 def logout(request):

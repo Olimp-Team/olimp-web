@@ -8,8 +8,6 @@ class ChildrenApiSerializers(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
-
-
     # def validate(self, data):
     #     if data['username'] == self.context['request'].user:
     #         raise serializers.ValidationError('Logged in User is not an Author')
