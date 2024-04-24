@@ -50,12 +50,16 @@ class UserProfileForm(UserChangeForm):
 
 
 class NewChildForm(UserCreationForm):
-    class Meta:
+    class Meta():
         model = User
-        fields = ('username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password', 'gender')
+        fields = (
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password',
+            'gender')
 
     username = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин ученика"
     }))
     surname = forms.CharField(widget=forms.TextInput(attrs={
         'type': "search",
@@ -90,7 +94,6 @@ class NewChildForm(UserCreationForm):
         'class': "vvodinfo",
         'placeholder': "Введите имя ученика"
     }))
-
 
 
 class NewTeacherForm(UserCreationForm):

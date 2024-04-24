@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # My apps
     'main',
     'users',
-    'api'
+    'api',
+    'docs'
 ]
 
 MIDDLEWARE = [

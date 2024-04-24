@@ -10,11 +10,13 @@ html {
     width: 1800%;
     background-color: white;
 }
+
 .logo {
     width: 75px;
     height: 75px;
     padding: 0;
 }
+
 .logoword {
     padding: 0;
     position: fixed;
@@ -24,7 +26,8 @@ html {
     font-size: 22px;
     user-select: none;
 }
-.wordhead{
+
+.wordhead {
     user-select: none;
     padding: 0;
     position: fixed;
@@ -33,24 +36,27 @@ html {
     font-size: 18px;
     color: gray;
 }
+
 #sun {
     right: 135px;
     position: fixed;
     margin-top: -65px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
 }
+
 #sun:hover {
     cursor: pointer;
 }
 
-.solnce{
-    border:none;
+.solnce {
+    border: none;
     background-color: white;
 
 }
+
 .solnce:hover {
     cursor: pointer;
 }
@@ -59,30 +65,34 @@ html {
     right: 10px;
     position: fixed;
     margin-top: -77.5px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
     background-color: white;
 
 
 }
+
 .avatarka:hover {
     cursor: pointer;
 }
-.chatik{
+
+.chatik {
     right: 85px;
     position: fixed;
     margin-top: -65px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
     background-color: white;
 }
+
 .chatik:hover {
     cursor: pointer;
 }
+
 #spis {
     padding-top: -2px;
     padding-left: 20px;
@@ -97,9 +107,11 @@ html {
 .spisok li {
     margin-bottom: 75px;
 }
+
 li::marker {
     content: '';
 }
+
 #mainpage {
 
     text-decoration: none;
@@ -110,6 +122,7 @@ li::marker {
     font-weight: bold;
 
 }
+
 #mainpageimg {
     position: fixed;
     left: 30px;
@@ -135,7 +148,8 @@ li::marker {
     position: fixed;
     left: 25px;
 }
-#rezultat{
+
+#rezultat {
 
     text-decoration: none;
     color: #000;
@@ -145,10 +159,11 @@ li::marker {
 }
 
 #historyimg {
-        position: fixed;
-        left: 25px;
+    position: fixed;
+    left: 25px;
 
 }
+
 #history {
 
     text-decoration: none;
@@ -159,11 +174,12 @@ li::marker {
 
 }
 
-#datesimg{
+#datesimg {
     position: fixed;
     left: 25px;
 }
-#dates{
+
+#dates {
 
     text-decoration: none;
     color: #000;
@@ -172,10 +188,12 @@ li::marker {
     font-size: 24px;
 
 }
+
 #settingimg {
     position: fixed;
     left: 25px;
 }
+
 #setting {
 
     text-decoration: none;
@@ -185,19 +203,21 @@ li::marker {
     font-size: 24px;
 
 }
+
 #spis:after {
-        content: "";
-        position: absolute;
-       top: 100%;
-       left: 50px;
-       border-top: 50px solid green;
-       border-top-color: inherit;
-       border-left: 50px solid transparent;
-       border-right: 50px solid transparent;
-    }
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
 .exitbutton {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     width: 183.822px;
     height: 20px;
     justify-content: center;
@@ -226,6 +246,7 @@ li::marker {
     color: #FFFFFF;
     background-color: #333333;
 }
+
 #textexit {
     position: relative;
     font-size: 20px;
@@ -252,6 +273,7 @@ li::marker {
     padding-top: 1px;
 
 }
+
 .infobox {
     position: fixed;
     margin-left: -90px;
@@ -264,6 +286,7 @@ li::marker {
     padding-left: 20px;
     padding-top: 40px;
 }
+
 .imgpers {
     margin-top: 68px;
     position: absolute;
@@ -272,7 +295,7 @@ li::marker {
     height: 90px;
     border-radius: 50%;
     z-index: 2;
-    margin-left:-60px;
+    margin-left: -60px;
 }
 
 .imgocontovka {
@@ -311,6 +334,7 @@ li::marker {
 table {
     margin-left: 5px;
 }
+
 td, th {
 
     padding: 8px;
@@ -333,12 +357,13 @@ th {
     font-weight: bold;
     color: var(--colors-color-text-day, #AAA);
     font-weight: 400;
-line-height: 130%;
-text-align: left;
-font-family: Bahnschrift;
-font-style: normal;
+    line-height: 130%;
+    text-align: left;
+    font-family: Bahnschrift;
+    font-style: normal;
 }
-.wrapper{
+
+.wrapper {
     margin-top: -10px;
     position: fixed;
     left: 1105px;;
@@ -350,24 +375,26 @@ font-style: normal;
     font-family: Bahnschrift;
 }
 
-.text{
+.text {
     padding-top: 30px;
     text-align: center;
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-.wrapper header{
+.wrapper header {
     padding-left: 27px;
     display: flex;
     align-items: center;
 
     justify-content: space-between;
 }
-header .icons{
+
+header .icons {
     display: flex;
 }
-header .icons span{
+
+header .icons span {
     height: 38px;
     width: 38px;
 
@@ -379,52 +406,64 @@ header .icons span{
     user-select: none;
     border-radius: 50%;
 }
-.icons span:last-child{
+
+.icons span:last-child {
     margin-right: 10px;
 }
-header .icons span:hover{
+
+header .icons span:hover {
     background: #f2f2f2;
 }
-header .current-date{
+
+header .current-date {
     font-size: 1.45rem;
     font-weight: 500;
 }
-.calendar{
+
+.calendar {
     margin-left: -50px;
     padding: 20px;
 }
-.calendar ul{
+
+.calendar ul {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
     text-align: center;
 }
-.calendar .days{
+
+.calendar .days {
     margin-bottom: 20px;
 }
-.calendar li{
+
+.calendar li {
     color: #333;
     width: calc(100% / 7);
     font-size: 1.07rem;
 }
-.calendar .weeks li{
+
+.calendar .weeks li {
     opacity: 50%;
     font-weight: 500;
     cursor: default;
 }
-.calendar .days li{
+
+.calendar .days li {
     z-index: 1;
     cursor: pointer;
     position: relative;
     margin-top: 30px;
 }
-.days li.inactive{
+
+.days li.inactive {
     color: #aaa;
 }
-.days li.active{
+
+.days li.active {
     color: #fff;
 }
-.days li::before{
+
+.days li::before {
     position: absolute;
     content: "";
     left: 50%;
@@ -435,13 +474,16 @@ header .current-date{
     border-radius: 50%;
     transform: translate(-50%, -50%);
 }
-.days li.active::before{
-    background: #186F65  ;
+
+.days li.active::before {
+    background: #186F65;
 }
-.days li:not(.active):hover::before{
+
+.days li:not(.active):hover::before {
     border: 1px solid #aaa;
     background: #f2f2f2;
 }
+
 .logsbox {
 
     position: relative;
@@ -456,18 +498,23 @@ header .current-date{
     padding-left: 20px;
     margin-top: -10px;
 }
+
 .rezultlast {
     margin-bottom: 25px;
 }
+
 .rezultlast1 {
     margin-bottom: 25px;
 }
-.rezultlast2{
+
+.rezultlast2 {
     margin-bottom: 25px;
 }
+
 .rezultlast3 {
     margin-bottom: 25px;
 }
+
 #tableinfo td {
     background-color: none;
     text-align: left;
@@ -476,55 +523,63 @@ header .current-date{
     left: -25px;
     top: -30px;
     height: 1px;
-font-feature-settings: 'clig' off, 'liga' off;
-/* Small Reg */
-font-family: Bahnschrift;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 8.5px;
-}
-#tableinfo th {
-        text-align: left;
-        padding-left: 20px;
-        position: relative;
-        left: -23px;
-        top: -35px;
-        background-color: none;
-        height: 1px;
-        font-feature-settings: 'clig' off, 'liga' off;
-        /* Small Reg */
-        font-family: Bahnschrift;
-        font-size: 15px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 8.5px;
+    font-feature-settings: 'clig' off, 'liga' off;
+    /* Small Reg */
+    font-family: Bahnschrift;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 8.5px;
 }
 
-#vseros{
+#tableinfo th {
+    text-align: left;
+    padding-left: 20px;
+    position: relative;
+    left: -23px;
+    top: -35px;
+    background-color: none;
+    height: 1px;
+    font-feature-settings: 'clig' off, 'liga' off;
+    /* Small Reg */
+    font-family: Bahnschrift;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 8.5px;
+}
+
+#vseros {
     color: #000000;
 
 }
-#ball{
+
+#ball {
     color: #2A3EF3;
 }
-#math{
+
+#math {
     color: #2A3EF3;
 }
-#school{
+
+#school {
     color: black;
 }
-#school2{
+
+#school2 {
     color: #2A3EF3;
 }
-#oput{
+
+#oput {
     color: #2A3EF3;
 }
-#tableinfocol{
+
+#tableinfocol {
     color: #333333;
     opacity: 60%;
 }
-#tableinfocol2{
+
+#tableinfocol2 {
     color: #333333;
     opacity: 60%;
 }
@@ -533,11 +588,12 @@ line-height: 8.5px;
 #tableinfo1 {
     margin-left: 200px;
 }
+
 .rezultlast1 {
     margin-top: 1px;
 }
 
-#pokazat{
+#pokazat {
     cursor: pointer;
     position: relative;
     top: -10px;
@@ -548,9 +604,11 @@ line-height: 8.5px;
     font-size: 14px;
     font-family: Bahnschrift;
 }
-.h{
+
+.h {
     white-space: nowrap;
 }
+
 #nedav {
     user-select: none;
     left: -10px;

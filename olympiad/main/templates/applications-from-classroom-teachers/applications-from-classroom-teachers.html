@@ -44,44 +44,8 @@
     <div class="toptext">
         <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>
     </div>
-{#    <div class="blockfilter">#}
-{#        <div class="filterimgdiv"><img src="{% static 'applications-from-classroom-teachers/img/Filter icon.png' %}"#}
-{#                                       alt="" id="filterimgdiv"></div>#}
-{#        <div class="filtertextzag"><p>Фильтровать по</p></div>#}
-{#        <div class="filterdate">#}
-{#            <select name="date" id="spisdate">#}
-{#                <option selected="selected" id="selected">Дата</option>#}
-{#                <option value="1">12.12.2024</option>#}
-{#                <option value="2">13.13.13</option>#}
-{#                <option value="3">14.14.14</option>#}
-{#            </select>#}
-{#        </div>#}
-{#        <div class="filtercategory">#}
-{#            <select name="category" id="spiscategory">#}
-{#                <option selected="selected" id="selected">Категория</option>#}
-{#                <option value="1">Школьный</option>#}
-{#                <option value="2">Муниципальный</option>#}
-{#                <option value="3">Всероссийский</option>#}
-{#            </select>#}
-{#        </div>#}
-{#        <div class="filterstage">#}
-{#            <select name="category" id="spisstage">#}
-{#                <option selected="selected" id="selected">Этап</option>#}
-{#                <option value="1">Школьный</option>#}
-{#                <option value="2">Муниципальный</option>#}
-{#                <option value="3">Всероссийский</option>#}
-{#            </select>#}
-{#        </div>#}
-{#        <div class="deletefilter">#}
-{#            <a href="">#}
-{#                <img src="{% static 'applications-from-classroom-teachers/img/ic-replay-24px.png' %}" alt=""#}
-{#                     id="deletefilterimg">#}
-{#                <p id="deletefiltertext">Сбросить фильтр</p>#}
-{#            </a>#}
-{#        </div>#}
-{#    </div>#}
     <a class="buttonedit" type="submit" value="Изменить"
-       href="{% url 'main:export_excel' %}">Скачать все заявки</a>
+       href="{% url 'docs:export_excel' %}">Скачать все заявки</a>
     <div class="mainblock">
         <div class="tablespisok">
             <div class="zagolovok">
@@ -121,7 +85,7 @@
                                     {{ register.teacher_admin.last_name }} {{ register.teacher_admin.first_name }} {{ register.teacher_admin.surname }}</div>
                                 <div class="olimps">
                                     <div class="nameolimp1">
-                                        {{ register.teacher_admin.classroom_guide.number }}{{register.teacher_admin.classroom_guide.letter }}</div>
+                                        {{ register.teacher_admin.classroom_guide.number }}{{ register.teacher_admin.classroom_guide.letter }}</div>
                                 </div>
                                 <div class="namestage">19.01.2024</div>
 
@@ -129,7 +93,7 @@
                                 {#                            <input class="buttonedittrue" type="submit" value="Добавлено"/>#}
 
                                 <a class="buttonedittrue" type="submit"
-                                   href="{% url 'main:excel_classroom' register.child_admin.classroom.id %}">Скачать
+                                   href="{% url 'docs:excel_classroom' register.child_admin.classroom.id %}">Скачать
                                     excel файл</a>
                             </div>
                         {% endfor %}
