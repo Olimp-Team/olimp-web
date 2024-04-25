@@ -79,23 +79,27 @@
                 <ul>
                     <li id="utka">
                         {% for register in register %}
-                            <div class="stroka">
-                                <div class="nameid">{{ register.child_admin.id }}</div>
-                                <div class="namefio">
-                                    {{ register.teacher_admin.last_name }} {{ register.teacher_admin.first_name }} {{ register.teacher_admin.surname }}</div>
-                                <div class="olimps">
-                                    <div class="nameolimp1">
-                                        {{ register.teacher_admin.classroom_guide.number }}{{ register.teacher_admin.classroom_guide.letter }}</div>
-                                </div>
-                                <div class="namestage">19.01.2024</div>
-
-                                <div class="namegender">{{ register.Olympiad_admin.name }}</div>
-                                {#                            <input class="buttonedittrue" type="submit" value="Добавлено"/>#}
-
-                                <a class="buttonedittrue" type="submit"
-                                   href="{% url 'docs:excel_classroom' register.child_admin.classroom.id %}">Скачать
-                                    excel файл</a>
+                        <div class="stroka">
+                            <div class="nameid">{{ register.child_admin.id }}</div>
+                            <div class="namefio">
+                                {{ register.teacher_admin.last_name }} {{ register.teacher_admin.first_name }} {{
+                                register.teacher_admin.surname }}
                             </div>
+                            <div class="olimps">
+                                <div class="nameolimp1">
+                                    {{ register.teacher_admin.classroom_guide.number }}{{
+                                    register.teacher_admin.classroom_guide.letter }}
+                                </div>
+                            </div>
+                            <div class="namestage">19.01.2024</div>
+
+                            <div class="namegender">{{ register.Olympiad_admin.name }}</div>
+                            {# <input class="buttonedittrue" type="submit" value="Добавлено"/>#}
+
+                            <a class="buttonedittrue" type="submit"
+                               href="{% url 'docs:excel_classroom' register.child_admin.classroom.id %}">Скачать
+                                excel файл</a>
+                        </div>
                         {% endfor %}
                     </li>
             </div>

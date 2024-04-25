@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0003_rename_register_register_send_register_send_str_and_more'),
     ]

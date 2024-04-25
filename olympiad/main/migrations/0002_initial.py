@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -23,12 +22,14 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='classroom',
             name='teacher',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='teacher', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='teacher', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='olympiad',
             name='level',
-            field=models.ForeignKey(max_length=256, on_delete=django.db.models.deletion.CASCADE, to='main.level_olympiad', verbose_name='Название уровня'),
+            field=models.ForeignKey(max_length=256, on_delete=django.db.models.deletion.CASCADE,
+                                    to='main.level_olympiad', verbose_name='Название уровня'),
         ),
         migrations.AddField(
             model_name='register',
@@ -38,41 +39,49 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='register',
             name='child',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Ученик', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Ученик',
+                                    to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='register',
             name='teacher',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name=''),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to=settings.AUTH_USER_MODEL, verbose_name=''),
         ),
         migrations.AddField(
             model_name='register_send',
             name='Register',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Register', to='main.register'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Register',
+                                    to='main.register'),
         ),
         migrations.AddField(
             model_name='result',
             name='info_children',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Информация об ученике'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
+                                    verbose_name='Информация об ученике'),
         ),
         migrations.AddField(
             model_name='result',
             name='info_olympiad',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.olympiad', verbose_name='Информация об олимпиаде'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.olympiad',
+                                    verbose_name='Информация об олимпиаде'),
         ),
         migrations.AddField(
             model_name='olympiad',
             name='stage',
-            field=models.ForeignKey(max_length=256, on_delete=django.db.models.deletion.CASCADE, to='main.stage', verbose_name='Название этапа'),
+            field=models.ForeignKey(max_length=256, on_delete=django.db.models.deletion.CASCADE, to='main.stage',
+                                    verbose_name='Название этапа'),
         ),
         migrations.AddField(
             model_name='olympiad',
             name='subject',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.subject', verbose_name='Название школьного предмета'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.subject',
+                                    verbose_name='Название школьного предмета'),
         ),
         migrations.AddField(
             model_name='olympiad',
             name='category',
-            field=models.ForeignKey(max_length=256, on_delete=django.db.models.deletion.CASCADE, to='main.сategory', verbose_name='Категория олимпиады'),
+            field=models.ForeignKey(max_length=256, on_delete=django.db.models.deletion.CASCADE, to='main.сategory',
+                                    verbose_name='Категория олимпиады'),
         ),
     ]

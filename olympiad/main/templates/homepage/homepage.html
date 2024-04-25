@@ -57,14 +57,14 @@
                 <div class="textinfo">
                     <p class="fioinfo">{{ user.last_name }} {{ user.first_name }} {{ user.surname }}</p>
                     {% if user.is_child %}
-                        <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
+                    <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
                     {% endif %}
                     {% if user.is_teacher %}
-                        <p class="classinfo">Классный руководитель:
-                            {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
+                    <p class="classinfo">Классный руководитель:
+                        {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
                     {% endif %}
                     {% if user.is_admin %}
-                        <p class="classinfo">Администратор системы</p>
+                    <p class="classinfo">Администратор системы</p>
                     {% endif %}
                 </div>
             </div>

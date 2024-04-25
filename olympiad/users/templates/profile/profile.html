@@ -20,7 +20,8 @@
         </div>
         <div id="yourlogo">
             <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"></button>
+                                          src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}">
+            </button>
         </div>
         <div id="chat">
             <button class="chatik"><img class="sun" id="chatblack"
@@ -53,18 +54,19 @@
             <div class="textinfo">
                 <p class="fioinfo">{{ user.last_name }} {{ user.first_name }} {{ user.surname }}</p>
                 {% if user.is_child %}
-                    <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
+                <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
                 {% endif %}
                 {% if user.is_child %}
-                    <p class="teach">Классный руководитель:
-                        {{ user.classroom.teacher.last_name }} {{ user.classroom.teacher.first_name }} {{ user.classroom.teacher.surname }} </p>
+                <p class="teach">Классный руководитель:
+                    {{ user.classroom.teacher.last_name }} {{ user.classroom.teacher.first_name }} {{
+                    user.classroom.teacher.surname }} </p>
                 {% endif %}
                 {% if user.is_teacher %}
-                    <p class="teach">Классный руководитель
-                        {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
+                <p class="teach">Классный руководитель
+                    {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
                 {% endif %}
                 {% if user.is_admin %}
-                    <p class="teach">Администратор системы</p>
+                <p class="teach">Администратор системы</p>
                 {% endif %}
             </div>
             {{ form.image }}
@@ -79,11 +81,14 @@
                 <p class="texteditname">Email</p>
                 {{ form.email }}
             </div>
-            {#            <div class="editphone">#}
-            {#                <img src="{% static 'profile/img/Phone.png' %}" alt="" class="photoeditpe">#}
-            {#                <p class="texteditname">Номер телефона</p>#}
-            {#                <input type="input" id="phoneedit" placeholder="Введите свой номер телефона" name="emailedit">#}
-            {#            </div>#}
+            {#
+            <div class="editphone">#}
+                {# <img src="{% static 'profile/img/Phone.png' %}" alt="" class="photoeditpe">#}
+                {# <p class="texteditname">Номер телефона</p>#}
+                {# <input type="input" id="phoneedit" placeholder="Введите свой номер телефона" name="emailedit">#}
+                {#
+            </div>
+            #}
         </div>
 
         <div class="buttons">

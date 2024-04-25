@@ -9,6 +9,7 @@ a {
     font-size: 25px;
     font-family: Bahnschrift;
 }
+
 :root {
     color-scheme: light;
     --in: 0.7206 0.191 231.6;
@@ -2306,7 +2307,6 @@ summary {
 }
 
 
-
 fieldset {
     margin: 0;
     padding: 0
@@ -2408,8 +2408,6 @@ img, video {
         }
     }
 }
-
-
 
 
 ::backdrop {
@@ -3917,7 +3915,6 @@ img, video {
     display: inline-block;
     text-align: right
 }
-
 
 
 .modal-scroll {

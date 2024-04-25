@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0002_initial'),
     ]
@@ -31,7 +30,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('status_admin', models.BooleanField(default=False)),
-                ('Register_admin_str', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Register_admin', to='main.register_send')),
+                ('Register_admin_str',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='Register_admin',
+                                   to='main.register_send')),
             ],
         ),
     ]

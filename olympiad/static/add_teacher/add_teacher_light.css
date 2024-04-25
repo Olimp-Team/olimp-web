@@ -108,11 +108,13 @@ html {
     height: 100%;
     background-color: white;
 }
+
 .spisok {
     margin-top: 100px;
     z-index: 1;
 
 }
+
 .spisok li {
     margin-bottom: 75px;
 
@@ -269,7 +271,7 @@ li::marker {
 
 }
 
-.add_newstudents_text{
+.add_newstudents_text {
     position: relative;
     left: 35px;
     top: 70px;
@@ -278,17 +280,20 @@ li::marker {
     font-size: 36px;
     font-weight: 500;
 }
+
 .spisokreg {
     position: relative;
     top: 90px;
     left: 80px;
 }
+
 .spisokreg li {
     position: relative;
     margin: 0px;
     padding: 0px;
     margin-bottom: -20px;
 }
+
 h2 {
     position: relative;
     font-family: Bahnschrift;
@@ -297,6 +302,7 @@ h2 {
     font-weight: 500;
 
 }
+
 .vvodinfo {
     position: relative;
     top: -20px;
@@ -307,6 +313,7 @@ h2 {
     font-size: 14px;
     padding-left: 5px;
 }
+
 #spisokmain {
     color: #808080FF;
 }
@@ -319,6 +326,7 @@ h2 {
     font-weight: 500;
     margin-bottom: 100px;
 }
+
 .randombutton {
     position: relative;
     padding: 10px;
@@ -331,31 +339,37 @@ h2 {
     left: 20px;
     text-decoration: none;
     color: #000000;
-        transition: 0.5s;
+    transition: 0.5s;
 
 }
+
 .randombutton:hover {
     background-color: #000;
     color: #FFFFFF;
     transition: 0.5s;
 }
-select{
+
+select {
     -webkit-appearance: none;
-  -moz-appearance: none;
+    -moz-appearance: none;
 }
+
 .selected {
     display: none;
 }
+
 .right {
     position: relative;
     margin-top: -905px;
     margin-left: 600px;
 }
+
 .imgocontovka {
     position: relative;
     margin-left: 500px;
     margin-top: -1px;
 }
+
 .imgpers {
     position: absolute;
     width: 80px;
@@ -364,10 +378,11 @@ select{
     margin-top: 15px;
     margin-left: 515px;
 }
+
 .savenewphoto {
     position: relative;
     top: 50px;
-    height:56px;
+    height: 56px;
     width: 176px;
     left: -275px;
     background-color: #000000;
@@ -377,16 +392,18 @@ select{
     transition: 0.5s;
 
 }
+
 .savenewphoto:hover {
     cursor: pointer;
     background-color: #FFFFFF;
     color: #000;
     transition: 0.5s;
 }
+
 .delbutton {
     position: relative;
     top: 50px;
-    height:56px;
+    height: 56px;
     width: 176px;
     left: -200px;
     border-radius: 10px;
@@ -395,12 +412,14 @@ select{
     transition: 0.5s;
 
 }
+
 .delbutton:hover {
     cursor: pointer;
     background-color: #000;
     color: #FFFFFF;
     transition: 0.5s;
 }
+
 .savebutton {
     position: fixed;
 
@@ -414,6 +433,7 @@ select{
     border-radius: 10px;
     transition: 0.5s;
 }
+
 .savebutton:hover {
     cursor: pointer;
     background-color: #FFFFFF;

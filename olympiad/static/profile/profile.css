@@ -10,11 +10,13 @@ html {
     width: 1800%;
     background-color: white;
 }
+
 .logo {
     width: 75px;
     height: 75px;
     padding: 0;
 }
+
 .logoword {
     padding: 0;
     position: fixed;
@@ -23,7 +25,8 @@ html {
     font-weight: bold;
     font-size: 22px;
 }
-.wordhead{
+
+.wordhead {
     padding: 0;
     position: fixed;
     left: 450px;
@@ -31,24 +34,27 @@ html {
     font-size: 18px;
     color: gray;
 }
+
 #sun {
     right: 135px;
     position: fixed;
     margin-top: -65px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
 }
+
 #sun:hover {
     cursor: pointer;
 }
 
-.solnce{
-    border:none;
+.solnce {
+    border: none;
     background-color: white;
 
 }
+
 .solnce:hover {
     cursor: pointer;
 }
@@ -61,30 +67,34 @@ html {
     right: 10px;
     position: fixed;
     margin-top: -77.5px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
     background-color: white;
 
 
 }
+
 .avatarka:hover {
     cursor: pointer;
 }
-.chatik{
+
+.chatik {
     right: 85px;
     position: fixed;
     margin-top: -65px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
     background-color: white;
 }
+
 .chatik:hover {
     cursor: pointer;
 }
+
 #spis {
 
     padding-left: 20px;
@@ -99,9 +109,11 @@ html {
 .spisok li {
     margin-bottom: 75px;
 }
+
 li::marker {
     content: '';
 }
+
 #mainpage {
 
     text-decoration: none;
@@ -112,6 +124,7 @@ li::marker {
     font-weight: bold;
 
 }
+
 #mainpageimg {
     position: fixed;
     left: 30px;
@@ -137,7 +150,8 @@ li::marker {
     position: fixed;
     left: 25px;
 }
-#rezultat{
+
+#rezultat {
 
     text-decoration: none;
     color: #000;
@@ -147,10 +161,11 @@ li::marker {
 }
 
 #historyimg {
-        position: fixed;
-        left: 25px;
+    position: fixed;
+    left: 25px;
 
 }
+
 #history {
 
     text-decoration: none;
@@ -161,11 +176,12 @@ li::marker {
 
 }
 
-#datesimg{
+#datesimg {
     position: fixed;
     left: 25px;
 }
-#dates{
+
+#dates {
 
     text-decoration: none;
     color: #000;
@@ -174,10 +190,12 @@ li::marker {
     font-size: 24px;
 
 }
+
 #settingimg {
     position: fixed;
     left: 25px;
 }
+
 #setting {
 
     text-decoration: none;
@@ -187,19 +205,21 @@ li::marker {
     font-size: 24px;
 
 }
+
 #spis:after {
-        content: "";
-        position: absolute;
-       top: 100%;
-       left: 50px;
-       border-top: 50px solid green;
-       border-top-color: inherit;
-       border-left: 50px solid transparent;
-       border-right: 50px solid transparent;
-    }
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
 .exitbutton {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     width: 183.822px;
     height: 20px;
     justify-content: center;
@@ -228,6 +248,7 @@ li::marker {
     color: #FFFFFF;
     background-color: #333333;
 }
+
 #textexit {
     position: relative;
     font-size: 20px;
@@ -453,7 +474,7 @@ line-height: normal;
 } */
 .savebutton {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     margin-top: 50px;
     margin-left: 50px;
     width: 183.822px;
@@ -482,9 +503,10 @@ line-height: normal;
     background-color: #272626;
     cursor: pointer;
 }
+
 .editpassbut {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -508,6 +530,7 @@ line-height: normal;
     text-decoration: none;
     color: black;
 }
+
 .editpassbut:hover {
     cursor: pointer;
     color: #FFFFFF;

@@ -47,6 +47,7 @@ html {
     width: 28px;
     height: 28px;
 }
+
 #sunw:hover {
     cursor: pointer;
 }
@@ -56,6 +57,7 @@ html {
     border: none;
     background-color: white;
 }
+
 .solnce:hover {
     cursor: pointer;
 }
@@ -107,9 +109,11 @@ html {
 #buutt-strelka {
     border: none;
 }
-#buutt-strelka:hover{
-    cursor:pointer;
+
+#buutt-strelka:hover {
+    cursor: pointer;
 }
+
 #gosus:hover {
     cursor: pointer;
 }
@@ -337,10 +341,12 @@ html {
     opacity: 0.5;
 
 }
-#href{
+
+#href {
     color: #000000;
     text-decoration: none;
 }
+
 #ctrelka {
     width: 90px;
     height: 90px;
@@ -357,7 +363,8 @@ html {
 #buutt-strelka {
     background-color: #FFFFFF;
 }
-#knopka{
+
+#knopka {
     background-color: #FFFFFF;
     cursor: pointer;
 }

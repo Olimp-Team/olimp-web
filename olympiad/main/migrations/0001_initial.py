@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -79,7 +78,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('points', models.IntegerField(verbose_name='Количество намбранных очков')),
-                ('status_result', models.CharField(choices=[('У', 'Участник'), ('ПР', 'Призер'), ('ПОБД', 'Победитель')], default='У', max_length=256, verbose_name='Статус результата')),
+                ('status_result',
+                 models.CharField(choices=[('У', 'Участник'), ('ПР', 'Призер'), ('ПОБД', 'Победитель')], default='У',
+                                  max_length=256, verbose_name='Статус результата')),
             ],
             options={
                 'verbose_name': 'Результат олимпиады',

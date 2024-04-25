@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0009_alter_register_teacher'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -16,23 +15,27 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='register_send',
             name='Olympiad_send',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='Olympiad_send', to='main.olympiad'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='Olympiad_send', to='main.olympiad'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='register_send',
             name='child_send',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='child_send', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='child_send',
+                                    to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='register_send',
             name='teacher_send',
-            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='teacher_send', to=settings.AUTH_USER_MODEL, verbose_name=''),
+            field=models.ForeignKey(blank=True, default=None, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='teacher_send', to=settings.AUTH_USER_MODEL, verbose_name=''),
         ),
         migrations.AlterField(
             model_name='register_send',
             name='Register_send_str',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='Register', to='main.register'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='Register', to='main.register'),
         ),
     ]

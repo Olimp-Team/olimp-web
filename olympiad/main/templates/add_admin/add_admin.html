@@ -41,84 +41,97 @@
 
     <h1 class="add_newstudents_text">Создание нового администратора</h1>
     <ul class="spisokreg">
-    <li>
-        <div class="divFam">
-            <h2>Фамилия</h2>
-            <input type=search class="vvodinfo" placeholder="Введите фамилию администратора">
-    </div></li>
-    <li><div class="divName">
-        <h2>Имя</h2>
-        <input type=search class="vvodinfo" placeholder="Введите имя администратора">
-    </div></li>
-    <li><div class="divOtch">
-        <h2>Отчество</h2>
-        <input type=search class="vvodinfo" placeholder="Введите отчество администратора">
-    </div></li>
-    <li><div class="divDate">
-        <h2>Дата рождения</h2>
-        <input type=search class="vvodinfo" placeholder="Введите дату рождения администратора">
-    </div></li>
-    <li><div class="divGen">
-        <h2>Пол</h2>
-        <select  class="vvodinfo" id="spisokmain">
-            <div class="xui">
-  <option selected class="selected">Выберите пол администратора</option>
-  <option>Муж</option>
-  <option>Жен</option>
+        <li>
+            <div class="divFam">
+                <h2>Фамилия</h2>
+                <input type=search class="vvodinfo" placeholder="Введите фамилию администратора">
             </div>
+        </li>
+        <li>
+            <div class="divName">
+                <h2>Имя</h2>
+                <input type=search class="vvodinfo" placeholder="Введите имя администратора">
+            </div>
+        </li>
+        <li>
+            <div class="divOtch">
+                <h2>Отчество</h2>
+                <input type=search class="vvodinfo" placeholder="Введите отчество администратора">
+            </div>
+        </li>
+        <li>
+            <div class="divDate">
+                <h2>Дата рождения</h2>
+                <input type=search class="vvodinfo" placeholder="Введите дату рождения администратора">
+            </div>
+        </li>
+        <li>
+            <div class="divGen">
+                <h2>Пол</h2>
+                <select class="vvodinfo" id="spisokmain">
+                    <div class="xui">
+                        <option selected class="selected">Выберите пол администратора</option>
+                        <option>Муж</option>
+                        <option>Жен</option>
+                    </div>
 
-</select>
-    </div></li>
-    <li><div class="divLogin">
-        <h2>Логин</h2>
-        <input type=search class="vvodinfo" placeholder="Введите логин администратора">
-        <a class="randombutton" href="#">Случайный</a>
-    </div></li>
-    <li><div class="divPassword">
-        <h2>Пароль</h2>
-        <input type=search class="vvodinfo" placeholder="Введите пароль администратора">
-        <a class="randombutton" href="#">Случайный</a>
+                </select>
+            </div>
+        </li>
+        <li>
+            <div class="divLogin">
+                <h2>Логин</h2>
+                <input type=search class="vvodinfo" placeholder="Введите логин администратора">
+                <a class="randombutton" href="#">Случайный</a>
+            </div>
+        </li>
+        <li>
+            <div class="divPassword">
+                <h2>Пароль</h2>
+                <input type=search class="vvodinfo" placeholder="Введите пароль администратора">
+                <a class="randombutton" href="#">Случайный</a>
 
-    </div></li>
+            </div>
+        </li>
     </ul>
-<div class="right">
-    <div class="editphoto">
-        <div>
-            <img class="imgpers" src="
+    <div class="right">
+        <div class="editphoto">
+            <div>
+                <img class="imgpers" src="
                     {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
-                 alt="">
+                     alt="">
 
-            <img class="imgocontovka" src="{% static 'profile/img/Base.png' %}"
-                 alt="">
+                <img class="imgocontovka" src="{% static 'profile/img/Base.png' %}"
+                     alt="">
 
-            <input class="savenewphoto" type="submit" value="Загрузить новое фото"/>
-            <input class="delbutton" type="submit" value="Удалить фото"/>
+                <input class="savenewphoto" type="submit" value="Загрузить новое фото"/>
+                <input class="delbutton" type="submit" value="Удалить фото"/>
 
+            </div>
         </div>
+        <a class="savebutton">Создать</a>
+
     </div>
-    <a class="savebutton">Создать</a>
-
-</div>
 
 
-<script>
-    var modal = document.querySelector(".modal");
-    var trigger = document.querySelector(".trigger");
-    var closeButton = document.querySelector(".btn-sm");
+    <script>
+        var modal = document.querySelector(".modal");
+        var trigger = document.querySelector(".trigger");
+        var closeButton = document.querySelector(".btn-sm");
 
-    function toggleModal() {
-        modal.classList.toggle("show-modal");
-    }
-
-    function windowOnClick(event) {
-        if (event.target === modal) {
-            toggleModal();
+        function toggleModal() {
+            modal.classList.toggle("show-modal");
         }
-    }
 
-    trigger.addEventListener("click", toggleModal);
-    closeButton.addEventListener("click", toggleModal);
-    window.addEventListener("click", windowOnClick);
-</script>
+        function windowOnClick(event) {
+            if (event.target === modal) {
+                toggleModal();
+            }
+        }
+
+        trigger.addEventListener("click", toggleModal);
+        closeButton.addEventListener("click", toggleModal);
+        window.addEventListener("click", windowOnClick);
+    </script>
 </body>
 </html>
