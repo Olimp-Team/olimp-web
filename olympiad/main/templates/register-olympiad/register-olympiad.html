@@ -44,7 +44,7 @@
         <div class="registerbut">
             <a id="newsknopka" class="registerbutton" type="button"
                href="{% url 'main:register_add' olympiads_last.id %}">Зарегистрироваться</a>
-            {#            <input class="registerbutton"  />#}
+            {# <input class="registerbutton"/>#}
         </div>
         <div id="circleleft">
             <button class="round-button">
@@ -66,32 +66,32 @@
             {% for olympiad in olympiads %}
 
 
-                <div class="firstolympiad">
-                    <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
-                    <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
-                    <h3 id="openreg">Регистрация открыта!</h3>
-                    <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-                    <button onclick="window.location.href = '{% url 'main:register_add' olympiad.id %}';"
-                            class="trigger">Зарегистрироваться
-                    </button>
+            <div class="firstolympiad">
+                <h2 id="olympiadtext">{{ olympiad.level }} олимпиада по</h2>
+                <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
+                <h3 id="openreg">Регистрация открыта!</h3>
+                <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
+                <button onclick="window.location.href = '{% url 'main:register_add' olympiad.id %}';"
+                        class="trigger">Зарегистрироваться
+                </button>
 
-                    <div class="modal">
-                        <div role="alert" class="alert">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                 class="stroke-info shrink-0 w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span>we use cookies for no reason.</span>
-                            <div>
-                                <a class="btn btn-sm" href="">Отлично</a>
-                            </div>
+                <div class="modal">
+                    <div role="alert" class="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                             class="stroke-info shrink-0 w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>we use cookies for no reason.</span>
+                        <div>
+                            <a class="btn btn-sm" href="">Отлично</a>
                         </div>
                     </div>
                 </div>
-                {% if register.status_send == True %}
-                    <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
-                {% endif %}
+            </div>
+            {% if register.status_send == True %}
+            <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
+            {% endif %}
             {% endfor %}
     </div>
     </ul>

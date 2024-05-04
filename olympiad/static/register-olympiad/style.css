@@ -17,6 +17,7 @@ html {
     height: 75px;
     padding: 0;
 }
+
 .logoword {
     padding: 0;
     position: fixed;
@@ -25,7 +26,8 @@ html {
     font-weight: bold;
     font-size: 22px;
 }
-.wordhead{
+
+.wordhead {
     margin-top: 10px;
     position: fixed;
     left: 450px;
@@ -33,24 +35,27 @@ html {
     font-size: 18px;
     color: gray;
 }
+
 #sun {
     right: 135px;
     position: fixed;
     margin-top: -65px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
 }
+
 #sun:hover {
     cursor: pointer;
 }
 
-.solnce{
-    border:none;
+.solnce {
+    border: none;
     background-color: white;
 
 }
+
 .solnce:hover {
     cursor: pointer;
 }
@@ -59,29 +64,33 @@ html {
     right: 10px;
     position: fixed;
     margin-top: -77.5px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
     background-color: white;
 
 }
+
 .avatarka:hover {
     cursor: pointer;
 }
-.chatik{
+
+.chatik {
     right: 85px;
     position: fixed;
     margin-top: -65px;
-    border:none;
+    border: none;
     text-align: right;
     float: right;
-    padding-right:10px;
+    padding-right: 10px;
     background-color: white;
 }
+
 .chatik:hover {
     cursor: pointer;
 }
+
 #spis {
 
     padding-left: 20px;
@@ -208,7 +217,7 @@ li::marker {
 
 .exitbutton {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     width: 183.822px;
     height: 20px;
     justify-content: center;
@@ -288,10 +297,11 @@ li::marker {
     height: 55px;
     width: 300px;
 }
+
 .registerbutton {
-     border-radius: 15px;
+    border-radius: 15px;
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -315,19 +325,20 @@ li::marker {
 }
 
 .registerbutton:hover {
-      cursor: pointer;
+    cursor: pointer;
     color: #FFFFFF;
     background-color: #4880FF;
 }
 
 #circleleft {
-     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-property: background;
+    transition-duration: 0.3s;
     position: fixed;
     top: 350px;
     left: 450px;
 }
-#circleleft:hover{
+
+#circleleft:hover {
     cursor: pointer;
 }
 
@@ -364,12 +375,13 @@ li::marker {
 
 #circleright {
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     position: fixed;
     top: 350px;
     left: 2110px;
 }
-#circleright:hover{
+
+#circleright:hover {
     cursor: pointer;
 }
 
@@ -511,12 +523,13 @@ li::marker {
     font-size: 21px;
     user-select: none;
 }
+
 .trigger {
     border: 2px solid #3D70F5;
     color: #FFFFFF;
     border-radius: 9px;
     transition-property: background;
-    transition-duration: 0.3s ;
+    transition-duration: 0.3s;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
@@ -544,6 +557,7 @@ li::marker {
     color: #3D70F5;
     background-color: #FFFFFF;
 }
+
 .modal {
     position: fixed;
     left: 0;
@@ -555,6 +569,7 @@ li::marker {
     transform: scale(1.1);
     transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
+
 .modal-content {
     position: absolute;
     top: 50%;
@@ -565,6 +580,7 @@ li::marker {
     width: 24rem;
     border-radius: 0.5rem;
 }
+
 .close-button {
     float: right;
     width: 1.5rem;
@@ -574,9 +590,11 @@ li::marker {
     border-radius: 0.25rem;
     background-color: lightgray;
 }
+
 .close-button:hover {
     background-color: darkgray;
 }
+
 .show-modal {
     opacity: 1;
     visibility: visible;

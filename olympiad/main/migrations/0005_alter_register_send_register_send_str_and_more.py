@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0004_rename_сategory_categories'),
     ]
@@ -14,7 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='register_send',
             name='Register_send_str',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='Register', to='main.register'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='Register',
+                                    to='main.register'),
         ),
         migrations.AlterField(
             model_name='register_send',

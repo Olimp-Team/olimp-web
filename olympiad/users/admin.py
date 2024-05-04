@@ -28,4 +28,3 @@ class UserAdmin(admin.ModelAdmin):
         'is_active', ]
     ordering = ['id']
     search_fields = ['last_name', 'first_name', ]
-

@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0010_register_send_olympiad_send_register_send_child_send_and_more'),
     ]
@@ -30,7 +29,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='register_send',
             name='Register_send_str',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='Register', to='main.register'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='Register',
+                                    to='main.register'),
             preserve_default=False,
         ),
     ]

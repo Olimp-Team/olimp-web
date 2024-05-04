@@ -41,7 +41,7 @@
         <h1 class="toptext1">Список учеников</h1>
         <h2 class="toptext2">Класс: {{ classroom.number }}{{ classroom.letter }}</h2>
     </div>
-     <div class="topbuttons">
+    <div class="topbuttons">
         <input class="buttonspispeople" type="submit" value="Список участников"/>
         <a class="buttonadd" href="{% url 'main:CreateChild' %}">Добавить ученика</a>
     </div>
@@ -60,23 +60,22 @@
                 <th>
                     <div id="textbirth">Дата рождения</div>
                 </th>
-               
+
             </table>
 
         </div>
         {% for child in child %}
-            <div class="mainspisokpoeple">
-                <div class="surname">{{ child.id }}</div>
-                <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
-                <div class="gender">{{ child.gender }}</div>
-                <div class="birth">{{ child.birth_date }}</div>
-                
-                
+        <div class="mainspisokpoeple">
+            <div class="surname">{{ child.id }}</div>
+            <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
+            <div class="gender">{{ child.gender }}</div>
+            <div class="birth">{{ child.birth_date }}</div>
 
-                <a class="buttonedit" type="submit" value="Изменить"
-                   href="{% url 'main:child_remove_admin' child.id %}">Удалить</a>
 
-            </div>
+            <a class="buttonedit" type="submit" value="Изменить"
+               href="{% url 'main:child_remove_admin' child.id %}">Удалить</a>
+
+        </div>
         {% endfor %}
 
     </div>

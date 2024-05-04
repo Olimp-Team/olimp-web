@@ -453,12 +453,14 @@ h1 {
     margin-top: 850px;
     margin-left: 1100px;
     position: fixed;
-    width: 86px ;
+    width: 86px;
     height: 30px
 }
+
 .vlevo {
     text-decoration: none;
 }
+
 .vpravo {
     text-decoration: none;
 }

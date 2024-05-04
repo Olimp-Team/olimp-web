@@ -54,6 +54,7 @@ class ProfileView(View, LoginRequiredMixin):
 def start_page(request):
     return render(request, 'start_page/start_page.html')
 
+
 @login_required
 def logout(request):
     """Модель представления для выхода"""
@@ -76,6 +77,3 @@ class PasswordChange(View, LoginRequiredMixin):
             return HttpResponseRedirect(reverse('users:login'))
         else:
             print(form.errors)
-
-
-

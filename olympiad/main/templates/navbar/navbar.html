@@ -1,93 +1,106 @@
 {% load static %}
 {% block content %}
-    <aside class="spisok">
-        <div id="spis">
-            <ul class="asidespis">
-                <li>
-                    <div class="mainpage">
-                        <img id="mainpageimg" src="{% static 'profile/img/Vector.png' %}"><a
-                            href="{% url 'main:home' %}" id="mainpage">Главная страница</a>
-                    </div>
-                </li>
+<aside class="spisok">
+    <div id="spis">
+        <ul class="asidespis">
+            <li>
+                <div class="mainpage">
+                    <img id="mainpageimg" src="{% static 'profile/img/Vector.png' %}"><a
+                        href="{% url 'main:home' %}" id="mainpage">Главная страница</a>
+                </div>
+            </li>
 
-                {% if user.is_child %}
-                    <li>
-                        <div class="mainpage">
-                            <img id="registerimg" src="{% static 'profile/img/NotePencil.png' %}"><a
-                                href="{% url 'main:register-olympiad' %}" id="register">Регистрация олимпиад</a>
-                        </div>
-                    </li>
+            {% if user.is_child %}
+            <li>
+                <div class="mainpage">
+                    <img id="registerimg" src="{% static 'profile/img/NotePencil.png' %}"><a
+                        href="{% url 'main:register-olympiad' %}" id="register">Регистрация олимпиад</a>
+                </div>
+            </li>
 
-                    <li>
-                        <div class="mainpage">
-                            <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a
-                                href="{% url 'main:basket-student-applications' %}" id="dates">Ваши заявки</a>
-                        </div>
-                    </li>
+            <li>
+                <div class="mainpage">
+                    <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a
+                        href="{% url 'main:basket-student-applications' %}" id="dates">Ваши заявки</a>
+                </div>
+            </li>
 
-                {% endif %}
-                {% if user.is_admin %}
-                    <li>
-                        <div class="mainpage">
-                            <img id="rezultatimg" src="{% static 'profile/img/олимп.png' %}"><a
-                                href="{% url 'main:list_olympiad' %}" id="rezultat">Список олимпиад</a>
-                        </div>
-                    </li>
+            {% endif %}
+            {% if user.is_admin %}
+            <li>
+                <div class="mainpage">
+                    <img id="rezultatimg" src="{% static 'profile/img/олимп.png' %}"><a
+                        href="{% url 'main:list_olympiad' %}" id="rezultat">Список олимпиад</a>
+                </div>
+            </li>
 
-                    <li>
-                        <div class="mainpage">
-                            <img id="rezultatimg" src="{% static 'profile/img/классы.png' %}"><a
-                                href="{% url 'main:list_classroom' %}" id="rezultat">Список
-                            классов</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="mainpage">
-                            <img id="rezultatimg" src="{% static 'profile/img/заявки-и.png' %}"><a
-                                href="{% url 'main:applications-from-classroom-teachers' %}" id="rezultat">Заявки
-                            на регистрацию</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="mainpage">
-                            <img id="historyimg" src="{% static 'profile/img/результаты.png' %}"><a
-                                href="{% url 'main:result-list_olympiad' %}" id="history">Результаты олимпиад</a>
-                        </div>
-                    </li>
+            <li>
+                <div class="mainpage">
+                    <img id="rezultatimg" src="{% static 'profile/img/классы.png' %}"><a
+                        href="{% url 'main:list_classroom' %}" id="rezultat">Список
+                    классов</a>
+                </div>
+            </li>
+            <li>
+                <div class="mainpage">
+                    <img id="rezultatimg" src="{% static 'profile/img/заявки-и.png' %}"><a
+                        href="{% url 'main:applications-from-classroom-teachers' %}" id="rezultat">Заявки
+                    на регистрацию</a>
+                </div>
+            </li>
+            <li>
+                <div class="mainpage">
+                    <img id="historyimg" src="{% static 'profile/img/результаты.png' %}"><a
+                        href="{% url 'main:result-list_olympiad' %}" id="history">Результаты олимпиад</a>
+                </div>
+            </li>
 
-                {% endif %}
-                {#    <li><div class="mainpage">#}
-                {#        <img id="historyimg" src="{% static 'profile/img/ClockClockwise.png' %}"><a href="#" id="history">История олимпиад</a>#}
-                {#    </div></li>#}
-                {#    <li><div class="mainpage">#}
-                {#        <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a href="#" id="dates">Календарь олимпиад</a>#}
-                {#    </div></li>#}
-                {% if user.is_teacher %}
-                    <li>
-                        <div class="mainpage">
-                            <img id="rezultatimg" src="{% static 'profile/img/классы.png' %}"><a
-                                href="{% url 'main:TeacherClassroomGuide' %}" id="rezultat">Список
-                            классов</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="mainpage">
-                            <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a
-                                href="{% url 'main:student-applications' %}" id="dates">Заявки
-                            учеников</a>
-                        </div>
-                    </li>
-                {% endif %}
-                <li>
-                    <div class="mainpage">
-                        <img id="settingimg" src="{% static 'profile/img/Gear.png' %}"><a
-                            href="{% url 'users:profile' %}" id="setting">Настройки</a>
-                    </div>
-                </li>
-            </ul>
+            {% endif %}
+            {#
+            <li>
+                <div class="mainpage">#}
+                    {# <img id="historyimg" src="{% static 'profile/img/ClockClockwise.png' %}"><a href="#"
+                                                                                                   id="history">История
+                        олимпиад</a>#}
+                    {#
+                </div>
+            </li>
+            #}
+            {#
+            <li>
+                <div class="mainpage">#}
+                    {# <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a href="#" id="dates">Календарь
+                        олимпиад</a>#}
+                    {#
+                </div>
+            </li>
+            #}
+            {% if user.is_teacher %}
+            <li>
+                <div class="mainpage">
+                    <img id="rezultatimg" src="{% static 'profile/img/классы.png' %}"><a
+                        href="{% url 'main:TeacherClassroomGuide' %}" id="rezultat">Список
+                    классов</a>
+                </div>
+            </li>
+            <li>
+                <div class="mainpage">
+                    <img id="datesimg" src="{% static 'profile/img/Calendar.png' %}"><a
+                        href="{% url 'main:student-applications' %}" id="dates">Заявки
+                    учеников</a>
+                </div>
+            </li>
+            {% endif %}
+            <li>
+                <div class="mainpage">
+                    <img id="settingimg" src="{% static 'profile/img/Gear.png' %}"><a
+                        href="{% url 'users:profile' %}" id="setting">Настройки</a>
+                </div>
+            </li>
+        </ul>
 
-            <a href="{% url 'users:logout' %}" class="exitbutton" type="button" value="Выйти">Выйти</a>
-        </div>
-    </aside>
+        <a href="{% url 'users:logout' %}" class="exitbutton" type="button" value="Выйти">Выйти</a>
+    </div>
+</aside>
 {% endblock %}
 

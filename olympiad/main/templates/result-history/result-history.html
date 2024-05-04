@@ -76,28 +76,33 @@
 
                 <div class="mainspisokpoeple">
                     {% for register_olymp in register_olymp %}
-                        <ul>
-                            <li id="utka">
-                                <div class="stroka">
-                                    <div class="namefio"> {{ register_olymp.child_admin.last_name }} {{ register_olymp.child_admin.first_name }} {{ register_olymp.child_admin.surname }}
-                                    </div>
+                    <ul>
+                        <li id="utka">
+                            <div class="stroka">
+                                <div class="namefio"> {{ register_olymp.child_admin.last_name }} {{
+                                    register_olymp.child_admin.first_name }} {{ register_olymp.child_admin.surname }}
                                 </div>
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <div class="namestage">{{ form.points }}/100</div>
+                            </div>
+                            <form method="post">
+                                {% csrf_token %}
+                                <div class="namestage">{{ form.points }}/100</div>
 
-                                    {{ form.status_result }}
-                                    <input type="submit" class="coxran"></input>
-                                </form>
+                                {{ form.status_result }}
+                                <input type="submit" class="coxran"></input>
+                            </form>
 
 
-                                {#                                <select id="select">#}
-                                {#                                    #}
-                                {#                                    <option value="Победитель/Призер">Победитель/Призер</option>#}
-                                {#                                    <option value="Участник">Участник</option>#}
-                                {#                                </select>#}
-                            </li>
-                        </ul>
+                            {# <select id="select">#}
+                            {# #}
+                            {#
+                            <option value="Победитель/Призер">Победитель/Призер</option>
+                            #}
+                            {#
+                            <option value="Участник">Участник</option>
+                            #}
+                            {# </select>#}
+                        </li>
+                    </ul>
                     {% endfor %}
 
                 </div>

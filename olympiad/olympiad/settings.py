@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net"]
+ALLOWED_HOSTS = ["olimp-team-olimp-web-7d5b.twc1.net", "olimp-olympiad.ru"]
 CSRF_TRUSTED_ORIGINS = ['https://olimp-team-olimp-web-7d5b.twc1.net']
 
 # Application definition
@@ -36,14 +36,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'debug_toolbar',
     'rest_framework',
     # My apps
     'main',
     'users',
     'api',
-    'docs'
+    'docs',
 ]
+
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -135,6 +137,7 @@ DATE_INPUT_FORMATS = '%d-%m-%Y'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -148,3 +151,5 @@ LOGIN_URL = '/auth/login/'
 # Медиа файлы
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+SITE_ID = 1

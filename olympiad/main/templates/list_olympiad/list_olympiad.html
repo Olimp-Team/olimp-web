@@ -60,18 +60,19 @@
             <div class="actions">Действия</div>
         </div>
         {% for olympiad in olympiad %}
-            <div class="primer">
-                <img class="jpg" src="">
-                <div class="name">{{ olympiad.name }}</div>
-                <div class="kategoriya">{{ olympiad.category }}</div>
-                <div class="stage">{{ olympiad.stage }}</div>
-                <div class="level">{{ olympiad.level }}</div>
-                <div class="date">gdfgdf</div>
-                <a class="action">
-                    <a class="pencil" href=""><img src="{% static 'list-olympiad/img/pencil-write.png' %}"> </a>
-                    <a class="bin" href="{% url 'main:olympiad_remove' olympiad.id %}"><img src="{% static 'list-olympiad/img/bin.png' %}"></a>
-                </a>
-            </div>
+        <div class="primer">
+            <img class="jpg" src="">
+            <div class="name">{{ olympiad.name }}</div>
+            <div class="kategoriya">{{ olympiad.category }}</div>
+            <div class="stage">{{ olympiad.stage }}</div>
+            <div class="level">{{ olympiad.level }}</div>
+            <div class="date">gdfgdf</div>
+            <a class="action">
+                <a class="pencil" href=""><img src="{% static 'list-olympiad/img/pencil-write.png' %}"> </a>
+                <a class="bin" href="{% url 'main:olympiad_remove' olympiad.id %}"><img
+                        src="{% static 'list-olympiad/img/bin.png' %}"></a>
+            </a>
+        </div>
         {% endfor %}
     </div>
 

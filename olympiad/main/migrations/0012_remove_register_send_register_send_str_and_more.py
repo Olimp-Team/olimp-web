@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0011_remove_register_teacher_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -20,24 +19,28 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='register',
             name='teacher',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name=''),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                    to=settings.AUTH_USER_MODEL, verbose_name=''),
         ),
         migrations.AddField(
             model_name='register_send',
             name='Olympiad_send',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='Olympiad_send', to='main.olympiad'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE,
+                                    related_name='Olympiad_send', to='main.olympiad'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='register_send',
             name='child_send',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='child_send', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='child_send',
+                                    to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='register_send',
             name='teacher_send',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='teacher_send'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL,
+                                    verbose_name='teacher_send'),
             preserve_default=False,
         ),
     ]
