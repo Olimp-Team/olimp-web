@@ -1,6 +1,6 @@
-{% load static %}
-{% load admin_urls %}
+
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -58,8 +58,7 @@
                 {% endif %}
                 {% if user.is_child %}
                 <p class="teach">Классный руководитель:
-                    {{ user.classroom.teacher.last_name }} {{ user.classroom.teacher.first_name }} {{
-                    user.classroom.teacher.surname }} </p>
+                    {{ user.classroom.teacher.last_name }} {{ user.classroom.teacher.first_name }} {{ user.classroom.teacher.surname }} </p>
                 {% endif %}
                 {% if user.is_teacher %}
                 <p class="teach">Классный руководитель
@@ -81,14 +80,14 @@
                 <p class="texteditname">Email</p>
                 {{ form.email }}
             </div>
-            {#
-            <div class="editphone">#}
-                {# <img src="{% static 'profile/img/Phone.png' %}" alt="" class="photoeditpe">#}
-                {# <p class="texteditname">Номер телефона</p>#}
-                {# <input type="input" id="phoneedit" placeholder="Введите свой номер телефона" name="emailedit">#}
-                {#
-            </div>
-            #}
+<!--            {#-->
+<!--            <div class="editphone">#}-->
+<!--                {# <img src="{% static 'profile/img/Phone.png' %}" alt="" class="photoeditpe">#}-->
+<!--                {# <p class="texteditname">Номер телефона</p>#}-->
+<!--                {# <input type="input" id="phoneedit" placeholder="Введите свой номер телефона" name="emailedit">#}-->
+<!--                {#-->
+<!--            </div>-->
+<!--            #}-->
         </div>
 
         <div class="buttons">

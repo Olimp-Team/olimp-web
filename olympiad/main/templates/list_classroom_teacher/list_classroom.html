@@ -1,5 +1,6 @@
-{% load static %}
+
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,12 +34,12 @@
 <div class="main">
     <div class="classes">Классы</div>
     <a class="addclass" href="http://localhost:8000/admin/main/classroom/add/">Добавить класс</a>
-    {#
-    <div class="search-form">#}
-        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}
-        {#
-    </div>
-    #}
+<!--    {#-->
+<!--    <div class="search-form">#}-->
+<!--        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}-->
+<!--        {#-->
+<!--    </div>-->
+<!--    #}-->
     <div class="sha">Текущие классы</div>
     <div class="do">Выпустившиеся классы</div>
 
@@ -47,8 +48,7 @@
         <div class="class">{{ classroom_teacher.number }}{{ classroom_teacher.letter }}</div>
         <div class="clasruk">
             <div class="classruk">Классный руководитель:</div>
-            <div class="rukovoditel">{{ classroom_teacher.teacher.last_name }} {{ classroom_teacher.teacher.first_name
-                }} {{ classroom_teacher.teacher.surname }}
+            <div class="rukovoditel">{{ classroom_teacher.teacher.last_name }} {{ classroom_teacher.teacher.first_name }} {{ classroom_teacher.teacher.surname }}
             </div>
         </div>
         <div class="kolvo">Класс: {{ classroom_teacher.child.count }}/30 учеников</div>

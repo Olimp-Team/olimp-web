@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
+from django.urls import reverse_lazy
+
 from .models import *
 from users.forms import NewChildForm
 from .decorators import *
@@ -314,6 +316,7 @@ class CreateAdmin(View, LoginRequiredMixin):
 class CreateChild(CreateView, LoginRequiredMixin):
     form_class = NewChildForm
     template_name = 'add_students/add_students.html'
+    success_url = reverse_lazy('list_classroom')
 
     def form_valid(self, form):
         form.save()

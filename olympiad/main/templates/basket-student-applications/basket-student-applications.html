@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -77,8 +77,7 @@
                 {% for register in register %}
                 <li>
                     <div class="nameid">{{ register.id }}</div>
-                    <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{
-                        register.child.surname }}
+                    <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}
                     </div>
                     <div class="olimps">
                         <table class="tableolimps">

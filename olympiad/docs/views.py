@@ -1,12 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden
-from django.shortcuts import render
 from django.views.generic import View
-from django.views.generic import TemplateView
-from excel_response import ExcelResponse
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
-
 from main.models import Register_admin
 
 

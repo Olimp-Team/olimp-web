@@ -50,7 +50,7 @@ class UserProfileForm(UserChangeForm):
 
 
 class NewChildForm(UserCreationForm):
-    class Meta():
+    class Meta:
         model = User
         fields = (
             'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password',
@@ -71,19 +71,22 @@ class NewChildForm(UserCreationForm):
         'class': "vvodinfo",
         'placeholder': "Введите дату рождения ученика"
     }))
-    is_child = forms.BooleanField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
-    }))
+
     # classroom = forms.MultipleChoiceField(queryset=Classroom , widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
     #     'type': "search",
     #     'class': "vvodinfo",
     #     'placeholder': "Введите учебный класс ученика"
     # }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите пароль ученика"
+    }))
     image = forms.ImageField(widget=forms.TextInput(attrs={
         'type': "submit",
         'value': "Загрузить новое фото",
         'class': "savenewphoto"
-    }))
+    }), required=False)
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'type': "search",
         'class': "vvodinfo",
@@ -94,6 +97,10 @@ class NewChildForm(UserCreationForm):
         'class': "vvodinfo",
         'placeholder': "Введите имя ученика"
     }))
+    gender = forms.ChoiceField(widget=forms.TextInput(attrs={}), required=False)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={}), required=False)
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={}), required=False)
+    is_child = forms.BooleanField(widget=forms.HiddenInput(), initial=True, required=False)
 
 
 class NewTeacherForm(UserCreationForm):

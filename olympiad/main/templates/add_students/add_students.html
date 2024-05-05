@@ -103,16 +103,18 @@
             <div class="divPassword">
                 <h2>Пароль</h2>
                 {{ form.password }}
-                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">
+                <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
                 <a class="randombutton" href="#">Случайный</a>
-
             </div>
 
         </li>
+
     </ul>
+
     <div class="right">
         <div class="editphoto">
             <div>
+                {{ form.errors }}
                 <img class="imgpers" src="
 
 
@@ -130,7 +132,7 @@
 
             </div>
         </div>
-        {{ form.errors }}
+
 
         <button type="submit" class="savebutton">Создать</button>
         </form>
