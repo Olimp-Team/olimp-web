@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -71,7 +71,7 @@
                 <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
                 <h3 id="openreg">Регистрация открыта!</h3>
                 <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-                <button onclick="window.location.href = '{% url 'main:register_add' olympiad.id %}';"
+                <button href="{% url 'main:register_add' olympiad.id %}"
                         class="trigger">Зарегистрироваться
                 </button>
 

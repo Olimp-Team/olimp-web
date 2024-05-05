@@ -42,15 +42,9 @@
         <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
-                <img class="imgocontovka" src="{% static 'homepage/img/Base.png' %}"
-                     alt="">
-                <img class="imgpers" src="
-
-
-
-
-
-                        {% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
+                <img class="imgocontovka" src="{% static 'homepage/img/Base.png' %}" alt="">
+                <img class="imgpers"
+                     src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
                      alt="">
             </div>
             <div class="info">

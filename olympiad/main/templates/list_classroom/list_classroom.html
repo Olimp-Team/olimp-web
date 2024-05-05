@@ -1,5 +1,6 @@
-{% load static %}
+
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33,12 +34,12 @@
 <div class="main">
     <div class="classes">Классы</div>
     <a class="addclass" href="http://localhost:8000/admin/main/classroom/add/">Добавить класс</a>
-    {#
-    <div class="search-form">#}
-        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}
-        {#
-    </div>
-    #}
+    <!--    {#-->
+    <!--    <div class="search-form">#}-->
+    <!--        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}-->
+    <!--        {#-->
+    <!--    </div>-->
+    <!--    #}-->
     <div class="sha">Текущие классы</div>
     <div class="do">Выпустившиеся классы</div>
 
@@ -47,14 +48,13 @@
         <div class="class">{{ classroom.number }}{{ classroom.letter }}</div>
         <div class="clasruk">
             <div class="classruk">Классный руководитель:</div>
-            <div class="rukovoditel">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{
-                classroom.teacher.surname }}
+            <div class="rukovoditel">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}
             </div>
         </div>
         <div class="kolvo">Класс: {{ classroom.child.count }}/30 учеников</div>
         <a href="{% url 'main:student-applications-admin' classroom.id %}" class="watchinfo" type="button">Посмотреть
             участников</a>
-        {# <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}
+        <!--        {# <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}-->
     </div>
     {% endfor %}
 
