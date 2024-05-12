@@ -1,5 +1,6 @@
-<!DOCTYPE html>
 {% load static %}
+
+<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -16,8 +17,7 @@
         <p class="wordhead">Ваши заявки</p>
         <div id="sun">
             <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'basket-student-applications/img/sun.png' %}">
-            </button>
+                                        src="{% static 'basket-student-applications/img/sun.png' %}"></button>
             <div id="yourlogo">
                 <button class="avatarka"><img class="sun" id="avatarka"
                                               src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
@@ -73,32 +73,32 @@
         </div>
 
         <div class="mainspisokpoeple">
-            <ul>
-                {% for register in register %}
-                <li>
-                    <div class="nameid">{{ register.id }}</div>
-                    <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}
-                    </div>
-                    <div class="olimps">
-                        <table class="tableolimps">
-                            <td>
-                            <th>
-                                <div class="nameolimp1">{{ register.Olympiad.name }}</div>
-                            </th>
-                            </td>
-                        </table>
-                    </div>
-                    <div class="namestage">{{ register.Olympiad.stage }}</div>
-                    <div class="namegender">{{ register.child.gender }}</div>
-                    <div class="namedate">{{ register.child.birth_date }}</div>
-                    <a class="buttonedit" type="submit" value="Изменить"
-                       href="{% url 'main:register_remove' register.id %}">Удалить</a>
-                </li>
 
+                <ul>
+                    {% for register in register %}
+                    <li>
+                        <div class="nameid">{{ register.id }}</div>
+                        <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}
+                        </div>
+                        <div class="olimps">
+                            <table class="tableolimps">
+                                <th>
+                                    <div class="nameolimp1">{{ register.Olympiad.name }}</div>
+                                </th>
+                            </table>
+                        </div>
+                        <div class="namestage">{{ register.Olympiad.stage }}</div>
+                        <div class="namegender">{{ register.child.gender }}</div>
+                        <div class="namedate">{{ register.child.birth_date }}</div>
+                        <a class="buttonedit" type="submit" value="Изменить"
+                           href="{% url 'main:register_remove' register.id %}">Удалить</a>
+                    </li>
+                    {% endfor %}
+                </ul>
 
-                {% endfor %}
-            </ul>
         </div>
+
+
 
     </div>
     <div id="buttons">

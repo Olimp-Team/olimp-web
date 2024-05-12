@@ -71,13 +71,12 @@
             </table>
 
         </div>
-
+        {% for register in register %}
         <div class="mainspisokpoeple">
 
-            {% for register in register %}
+
             <div class="nameid">{{ register.id }}</div>
-            <div class="namefio">{{ register.child_send.last_name }} {{ register.child_send.first_name }} {{
-                register.child_send.surname }}
+            <div class="namefio">{{ register.child_send.last_name }} {{ register.child_send.first_name }} {{ register.child_send.surname }}
             </div>
             <div class="olimps">
                 <table class="tableolimps">
@@ -93,9 +92,10 @@
             <div class="namedate">{{ register.child_send.birth_date }}</div>
             <a class="buttonedit" type="submit" value="Изменить"
                href="{% url 'main:register_remove_teacher' register.id %}">Удалить</a>
-            {% endfor %}
+
 
         </div>
+        {% endfor %}
 
 
     </div>

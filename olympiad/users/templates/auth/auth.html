@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,10 +11,10 @@
 </head>
 <header>
     <div class="head">
-        <img class="logo" id="logotip" src="{% static 'auth/img/logoolimp.jpg' %}">
+        <img class="logo" id="logotip" src="{% static 'auth/img/logoolimp.jpg' %}" alt="">
         <p class="logohead">Olimp</p>
         <div id="sun">
-            <button class="solnce"><img id="sunw" src="{% static 'auth/img/sun.png' %}" alt=""></button>
+            <button class="solnce"><img id="sunw" src="{% static 'profile/img/sun.png' %}"></img></button>
         </div>
     </div>
 </header>
@@ -75,16 +75,12 @@
             them.href = "{% static 'auth/dark.css' %}"
             document.getElementById("logotip").src = "{% static 'auth/img/shortcuticon.png' %}"
             myImg = document.getElementById('sunw');
-            myImg.src = '{% static '
-            auth / img / sunwhite.png
-            ' %}';
+            myImg.src = '{% static 'auth/img/sunwhite.png' %}';
         } else {
             them.href = "{% static 'auth/auth.css' %}"
             document.getElementById("logotip").src = "{% static 'auth/img/logoolimp.jpg' %}"
             myImg = document.getElementById('sunw');
-            myImg.src = '{% static '
-            auth / img / sun.png
-            ' %}';
+            myImg.src = '{% static 'profile/img/sun.png' %}';
         }
     }
 </script>
