@@ -66,8 +66,8 @@
     <section class="items-container">
         {% for olympiad in olympiads %}
             <div class="firstolympiad">
-                <h2 id="olympiadtext"> {{ olympiad.level }} олимпиада по</h2>
-                <h2 id="nameolympiad">{{ olympiad.subject }}</h2>
+                <h2 id="olympiadtext"> {{ olympiad.name }} </h2>
+{#                <h2 id="nameolympiad">{{ olympiad.subject }}</h2>#}
                 <h3 id="openreg">Регистрация открыта!</h3>
                 <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
                 <a href="{% url 'main:register_add' olympiad.id %}" class="trigger">Зарегистрироваться</a>
