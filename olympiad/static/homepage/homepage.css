@@ -603,6 +603,7 @@ header .current-date {
     border: none;
     font-size: 14px;
     font-family: Bahnschrift;
+    background-color: white;
 }
 
 .h {
@@ -611,10 +612,13 @@ header .current-date {
 
 #nedav {
     user-select: none;
-    left: -10px;
+    left: 2px;
     position: relative;
-    top: 10px;
+    top: 14px;
     color: black;
     font-weight: bold;
     font-size: 23.5px;
+}
+.logsbox tr td {
+    background-color: white;
 }
