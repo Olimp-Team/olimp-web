@@ -432,6 +432,14 @@ li::marker {
 
 .olympiads {
     padding-top: 470px;
+
+
+}
+
+section {
+    display: flex;
+    margin-left: -25px;
+    margin-top: 490px;
 }
 
 .firstolympiad {
@@ -444,7 +452,12 @@ li::marker {
     width: 534px;
     height: 250px;
     border-radius: 20px;
+    /*width: 100px;*/
+    /*height: 100px;*/
+    margin: 25px;
+
 }
+
 
 .secondolympiad {
     position: fixed;
