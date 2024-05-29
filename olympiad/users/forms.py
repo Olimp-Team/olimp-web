@@ -1,6 +1,9 @@
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 from django import forms
+from django.forms import formset_factory
 from users.models import User
+
+from main.models import Classroom
 
 
 class UserLoginForm(AuthenticationForm):
@@ -72,11 +75,6 @@ class NewChildForm(UserCreationForm):
         'placeholder': "Введите дату рождения ученика"
     }))
 
-    # classroom = forms.MultipleChoiceField(queryset=Classroom , widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-    #     'type': "search",
-    #     'class': "vvodinfo",
-    #     'placeholder': "Введите учебный класс ученика"
-    # }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
@@ -97,10 +95,34 @@ class NewChildForm(UserCreationForm):
         'class': "vvodinfo",
         'placeholder': "Введите имя ученика"
     }))
-    gender = forms.ChoiceField(widget=forms.TextInput(attrs={}), required=False)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={}), required=False)
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={}), required=False)
-    is_child = forms.BooleanField(widget=forms.HiddenInput(), initial=True, required=False)
+    at_obj = User()
+    gender = forms.CharField(
+        widget=forms.Select(
+            choices=((at_obj, at_obj.name) for at_obj in at_obj.get_types())
+        )
+    )
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите пароль ученика"
+    }))
+    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите пароль ученика"
+    }))
+    is_child = True
+
+
+
+form_class = formset_factory(NewChildForm, extra=2)
+formset = form_class(
+    initial=[
+        {
+            'is_child': True,
+        }
+    ]
+)
 
 
 class NewTeacherForm(UserCreationForm):

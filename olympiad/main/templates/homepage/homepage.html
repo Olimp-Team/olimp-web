@@ -41,21 +41,22 @@
             <div>
                 <img class="imgocontovka" src="{% static 'homepage/img/Base.png' %}" alt="">
                 <img class="imgpers"
-                     src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
+                     src="
+                             {% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
                      alt="">
             </div>
             <div class="info">
                 <div class="textinfo">
                     <p class="fioinfo">{{ user.last_name }} {{ user.first_name }} {{ user.surname }}</p>
                     {% if user.is_child %}
-                    <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
+                        <p class="classinfo">Класс: {{ user.classroom.number }}{{ user.classroom.letter }}</p>
                     {% endif %}
                     {% if user.is_teacher %}
-                    <p class="classinfo">Классный руководитель:
-                        {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
+                        <p class="classinfo">Классный руководитель:
+                            {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }} класса</p>
                     {% endif %}
                     {% if user.is_admin %}
-                    <p class="classinfo">Администратор системы</p>
+                        <p class="classinfo">Администратор системы</p>
                     {% endif %}
                 </div>
             </div>
@@ -114,172 +115,11 @@
             </table>
         </label>
     </div>
-{#    <div class="rezultlast1">#}
-{#        <p id="rezultlasttext"></p>#}
-{#        <label>#}
-{#            <table id="tableinfo">#}
-{#                <tr id="tableinfocol">#}
-{#                    <td>Категория</td>#}
-{#                    <td>Предмет</td>#}
-{#                    <td class="h">Количество баллов</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="vseros">Всероссийская</th>#}
-{#                    <th id="math">Математика</th>#}
-{#                    <th id="ball">8 из 8</th>#}
-{#                </tr>#}
-{#                <tr id="tableinfocol2">#}
-{#                    <td>Этап</td>#}
-{#                    <td>Уровень</td>#}
-{#                    <td class="h">Заработано опыта</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="school">Школьный</th>#}
-{#                    <th id="school2">Школьный</th>#}
-{#                    <th id="oput">300</th>#}
-{#                </tr>#}
-{#            </table>#}
-{#        </label>#}
-{#    </div>#}
-{#    <div class="rezultlast2">#}
-{#        <p id="rezultlasttext"></p>#}
-{#        <label>#}
-{#            <table id="tableinfo">#}
-{#                <tr id="tableinfocol">#}
-{#                    <td>Категория</td>#}
-{#                    <td>Предмет</td>#}
-{#                    <td class="h">Количество баллов</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="vseros">Всероссийская</th>#}
-{#                    <th id="math">Математика</th>#}
-{#                    <th id="ball">8 из 8</th>#}
-{#                </tr>#}
-{#                <tr id="tableinfocol2">#}
-{#                    <td>Этап</td>#}
-{#                    <td>Уровень</td>#}
-{#                    <td class="h">Заработано опыта</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="school">Школьный</th>#}
-{#                    <th id="school2">Школьный</th>#}
-{#                    <th id="oput">300</th>#}
-{#                </tr>#}
-{#            </table>#}
-{#        </label>#}
-{#    </div>#}
-{#    <div class="rezultlast3">#}
-{#        <p id="rezultlasttext"></p>#}
-{#        <label>#}
-{#            <table id="tableinfo">#}
-{#                <tr id="tableinfocol">#}
-{#                    <td>Категория</td>#}
-{#                    <td>Предмет</td>#}
-{#                    <td class="h">Количество баллов</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="vseros">Всероссийская</th>#}
-{#                    <th id="math">Математика</th>#}
-{#                    <th id="ball">8 из 8</th>#}
-{#                </tr>#}
-{#                <tr id="tableinfocol2">#}
-{#                    <td>Этап</td>#}
-{#                    <td>Уровень</td>#}
-{#                    <td class="h">Заработано опыта</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{##}
-{#                    <th id="school">Школьный</th>#}
-{#                    <th id="school2">Школьный</th>#}
-{#                    <th id="oput">300</th>#}
-{#                </tr>#}
-{#            </table>#}
-{#        </label>#}
-{#    </div>#}
-{#    <div class="rezultlast4">#}
-{#        <p id="rezultlasttext"></p>#}
-{#        <label>#}
-{#            <table id="tableinfo">#}
-{#                <tr id="tableinfocol">#}
-{#                    <td>Категория</td>#}
-{#                    <td>Предмет</td>#}
-{#                    <td class="h">Количество баллов</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="vseros">Всероссийская</th>#}
-{#                    <th id="math">Математика</th>#}
-{#                    <th id="ball">8 из 8</th>#}
-{#                </tr>#}
-{#                <tr id="tableinfocol2">#}
-{#                    <td>Этап</td>#}
-{#                    <td>Уровень</td>#}
-{#                    <td class="h">Заработано опыта</td>#}
-{#                </tr>#}
-{#                <tr>#}
-{#                    <th id="school">Школьный</th>#}
-{#                    <th id="school2">Школьный</th>#}
-{#                    <th id="oput">300</th>#}
-{#                </tr>#}
-{#            </table>#}
-{#        </label>#}
-{#    </div>#}
+</div>
 </div>
 </div>
 
+<script src="{% static 'homepage/js/calendar.js' %}"></script>
 
-</div>
-<script>
-    const daysTag = document.querySelector(".days"),
-        currentDate = document.querySelector(".current-date"),
-        prevNextIcon = document.querySelectorAll(".icons span");
-
-    let date = new Date(),
-        currYear = date.getFullYear(),
-        currMonth = date.getMonth();
-
-    const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль",
-        "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-
-    const renderCalendar = () => {
-        let firstDayofMonth = new Date(currYear, currMonth, 0).getDay(),
-            lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(),
-            lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(),
-            lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate();
-        let liTag = "";
-
-        for (let i = firstDayofMonth; i > 0; i--) {
-            liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
-        }
-
-        for (let i = 1; i <= lastDateofMonth; i++) {
-            let isToday = i === date.getDate() && currMonth === new Date().getMonth()
-            && currYear === new Date().getFullYear() ? "active" : "";
-            liTag += `<li class="${isToday}">${i}</li>`;
-        }
-
-        for (let i = lastDayofMonth; i < 7; i++) {
-            liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
-        }
-        currentDate.innerText = `${months[currMonth]} `;
-        daysTag.innerHTML = liTag;
-    }
-    renderCalendar();
-
-    prevNextIcon.forEach(icon => {
-        icon.addEventListener("click", () => {
-            currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
-
-            if (currMonth < 0 || currMonth > 11) {
-                date = new Date(currYear, currMonth, new Date().getDate());
-                currYear = date.getFullYear();
-                currMonth = date.getMonth();
-            } else {
-                date = new Date();
-            }
-            renderCalendar();
-        });
-    });
-
-</script>
 </body>
 </html>

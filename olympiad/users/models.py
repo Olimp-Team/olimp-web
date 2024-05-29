@@ -19,9 +19,9 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
         verbose_name = "Пользователь"
 
-    MALE = 'М'
-    WOMENS = 'Ж'
-    GENDERS = [("М", "Мужчина"), ("Ж", "Женщина")]
+    class Gender(models.TextChoices):
+        MALE = 'М'
+        WOMENS = 'Ж'
 
     # Общие сведения
     image = models.ImageField(upload_to='users_images', null=True, blank=True)
@@ -29,7 +29,10 @@ class User(AbstractUser):
         "Отчество пользователя (при наличии)", max_length=256, blank=True, null=True
     )
     birth_date = models.DateField('Дата рождения', blank=True, null=True)
-    gender = models.CharField("Пол учителя", max_length=1, choices=GENDERS, default=MALE)
+    gender = models.CharField("Пол учителя", max_length=2, choices=Gender.choices, default=Gender.MALE)
+
+    def get_types(self):
+        return self.Gender
 
     # Роль пользователя в системе
     is_teacher = models.BooleanField("Учитель", default=False, blank=True,

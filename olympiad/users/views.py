@@ -25,7 +25,7 @@ class AuthLogin(View):
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
-                return HttpResponseRedirect(reverse('users:profile'))
+                return HttpResponseRedirect(reverse('main:home'))
         context = {'form': form}
         return render(request, "auth/auth.html", context)
 
