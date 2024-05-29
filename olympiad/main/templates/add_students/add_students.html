@@ -73,15 +73,7 @@
         <li>
             <div class="divGen">
                 <h2>Пол</h2>
-                <select class="vvodinfo" id="spisokmain">
-                    <div class="xui">
-
-                        <option selected class="selected">Выберите пол ученика</option>
-                        <option>Муж</option>
-                        <option>Жен</option>
-                    </div>
-
-                </select>
+                {{ form.gender }}
             </div>
         </li>
         <li>
@@ -106,7 +98,19 @@
                 <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
                 <a class="randombutton" href="#">Случайный</a>
             </div>
-
+            <div class="divPassword">
+                <h2>Пароль</h2>
+                {{ form.password1 }}
+                <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
+                <a class="randombutton" href="#">Случайный</a>
+            </div>
+            <div class="divPassword">
+                <h2>Пароль</h2>
+                {{ form.password2 }}
+                <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
+                <a class="randombutton" href="#">Случайный</a>
+            </div>
+{#            {{ form.is_child }}#}
         </li>
 
     </ul>

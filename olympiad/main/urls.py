@@ -1,5 +1,8 @@
 from django.urls import path
 from .views import *
+from .views_child import *
+from .views_teacher import *
+from .views_admin import *
 
 app_name = 'main'
 
