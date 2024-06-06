@@ -5,3 +5,5 @@ django-excel-response
 six
 pillow
 django-cors-headers
+pandas
+openpyxl

@@ -104,7 +104,7 @@
     <div id="buttons">
         <a class="buttonadd" href="{% url 'main:register-olympiad' %}" type="submit" value="Добавить олимпиаду">Добавить
             олимпиаду</a>
-        <button class="trigger" type="submit">Отправить заявку</button>
+        <a class="trigger" type="submit" href="{% url 'main:register_send' %}">Отправить заявку</a>
         <div class="modal">
             <div role="alert" class="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

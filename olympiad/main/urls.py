@@ -1,8 +1,6 @@
 from django.urls import path
 from .views import *
-from .views_child import *
-from .views_teacher import *
-from .views_admin import *
+
 
 app_name = 'main'
 
@@ -19,7 +17,7 @@ urlpatterns = [
     # Страницы учителей
     path('student/applications/', StudentApp.as_view(), name='student-applications'),
     path('register/send/teacher/', RegisterSendTeacher.as_view(), name='register_send_teacher'),
-    path('olympiad/teach/delete/<int:Register_id>/', RegisterRemoveTeacher.as_view(), name='register_remove_teacher'),
+    path('delete-register/<int:Olympiad_id>/<int:student_id>/', RegisterDeleteTeacher.as_view(), name='delete_register'),
     path('classroom/teacher/', TeacherClassroomGuide.as_view(), name='TeacherClassroomGuide'),
     path('classroom/teacher/list/<int:Classroom_id>/', ChildrenListTeacher.as_view(), name='ChildrenListTeacher'),
 

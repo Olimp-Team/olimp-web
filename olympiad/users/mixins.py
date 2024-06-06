@@ -1,26 +1,29 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.core.exceptions import PermissionDenied
+from django.contrib.auth.mixins import AccessMixin
+from django.shortcuts import redirect
 
 
-class ChildRequiredMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_child
-
-    def handle_no_permission(self):
-        raise PermissionDenied("You do not have child access.")
-
-
-class TeacherRequiredMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_teacher
-
-    def handle_no_permission(self):
-        raise PermissionDenied("You do not have teacher access.")
+# Миксин для доступа только администратора
+class AdminRequiredMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_admin:
+            # Перенаправляем на страницу доступа запрещен
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
 
 
-class AdminRequiredMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.is_admin
+# Миксин для доступа только ученика
+class ChildRequiredMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_child:
+            # Перенаправляем на страницу доступа запрещен
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
 
-    def handle_no_permission(self):
-        raise PermissionDenied("You do not have admin access.")
+
+# Миксин для доступа только учителя
+class TeacherRequiredMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not request.user.is_teacher:
+            # Перенаправляем на страницу доступа запрещен
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)

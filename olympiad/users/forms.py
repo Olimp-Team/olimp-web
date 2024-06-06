@@ -111,18 +111,6 @@ class NewChildForm(UserCreationForm):
         'class': "vvodinfo",
         'placeholder': "Введите пароль ученика"
     }))
-    is_child = True
-
-
-
-form_class = formset_factory(NewChildForm, extra=2)
-formset = form_class(
-    initial=[
-        {
-            'is_child': True,
-        }
-    ]
-)
 
 
 class NewTeacherForm(UserCreationForm):
@@ -133,22 +121,29 @@ class NewTeacherForm(UserCreationForm):
             'post_job_teacher')
 
     username = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин ученика"
     }))
     first_name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин ученика"
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин ученика"
     }))
     surname = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин ученика"
     }))
     birth_date = forms.DateField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
-    }))
-    is_teacher = forms.BooleanField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин ученика"
     }))
     classroom_guide = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
         # 'type': "input" пример

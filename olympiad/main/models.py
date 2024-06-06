@@ -131,9 +131,9 @@ class Register(models.Model):
         verbose_name_plural = 'Заявки регистрации на олимпиады'
         verbose_name = 'Заявка регистрации на олимпиаду'
 
-    teacher = models.ForeignKey(to='users.User', on_delete=models.CASCADE, verbose_name='', blank=True, null=True, )
-    child = models.ForeignKey(to="users.User", on_delete=models.CASCADE, related_name='Ученик')
-    Olympiad = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE)
+    teacher = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='', blank=True, null=True)
+    child = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='Ученик')
+    Olympiad = models.ForeignKey('Olympiad', on_delete=models.CASCADE)
     status_send = models.BooleanField(default=False)
 
     def __str__(self):
@@ -142,25 +142,31 @@ class Register(models.Model):
 
 
 class Register_send(models.Model):
-    teacher_send = models.ForeignKey(to='users.User', on_delete=models.CASCADE, verbose_name='teacher_send')
-    child_send = models.ForeignKey(to="users.User", on_delete=models.CASCADE, related_name='child_send')
-    Olympiad_send = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE, related_name='Olympiad_send')
-    Register_send_str = models.TextField(null=True, blank=True)
+    teacher_send = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='teacher_send')
+    child_send = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='child_send')
+    Olympiad_send = models.ForeignKey('Olympiad', on_delete=models.CASCADE, related_name='Olympiad_send')
     status_teacher = models.BooleanField(default=False)
+    status_admin = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+    status_send = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('teacher_send', 'child_send', 'Olympiad_send')
 
     def __str__(self):
-        return f'{self.Register_send_str} | Статус Учитель: {self.status_teacher}'
+        return f' | Статус Учитель: {self.status_teacher}'
 
 
 class Register_admin(models.Model):
-    teacher_admin = models.ForeignKey(to='users.User', on_delete=models.CASCADE, verbose_name='teacher_admin')
-    child_admin = models.ForeignKey(to="users.User", on_delete=models.CASCADE, related_name='child_admin')
-    Olympiad_admin = models.ForeignKey(to='Olympiad', on_delete=models.CASCADE, related_name='Olympiad_admin')
-    Register_admin_str = models.TextField(null=True, blank=True)
+    teacher_admin = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='teacher_admin')
+    child_admin = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='child_admin')
+    Olympiad_admin = models.ForeignKey('Olympiad', on_delete=models.CASCADE, related_name='Olympiad_admin')
     status_admin = models.BooleanField(default=False)
+    status_teacher = models.BooleanField(default=False)
+
 
     def __str__(self):
-        return f'{self.Register_admin_str} | Статус Админ: {self.status_admin}'
+        return f' | Статус Админ: {self.status_admin}'
 
 
 class Result(models.Model):
