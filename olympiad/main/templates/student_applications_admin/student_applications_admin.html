@@ -64,19 +64,13 @@
             </table>
 
         </div>
-        {% for child in child %}
-        <div class="mainspisokpoeple">
-            <div class="surname">{{ child.id }}</div>
-            <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
-            <div class="gender">{{ child.gender }}</div>
-            <div class="birth">{{ child.birth_date }}</div>
-
-
-            <a class="buttonedit" type="submit" value="Изменить"
-               href="{% url 'main:child_remove_admin' child.id %}">Удалить</a>
-
-        </div>
-        {% endfor %}
+        {% for register in registers %}
+      <li>
+        Ученик: {{ register.child_admin.get_full_name }}<br>
+        Олимпиада: {{ register.Olympiad_admin.name }}<br>
+        Учитель: {{ register.teacher_admin.get_full_name }}
+      </li>
+    {% endfor %}
 
     </div>
 </div>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for classroom, registers in grouped_registers.items %}
+    <h2>Класс: {{ classroom }}</h2>
+    <a class="buttonedittrue" type="submit"
+       href="{% url 'docs:excel_classroom' classroom.id %}" class="btn btn-primary">Скачать excel файл</a>
+    <ul>
+        {% for register in registers %}
+            <li>
+                Ученик: {{ register.child_admin }},
+                Олимпиада: {{ register.Olympiad_admin }},
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
+</body>
+</html>
