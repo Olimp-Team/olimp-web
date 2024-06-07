@@ -3,12 +3,14 @@ from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from users.forms import UserLoginForm, UserProfileForm
+from .forms import UserLoginForm, UserProfileForm
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import NewChildForm
+from .mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 
 
 class AuthLogin(View):
@@ -77,3 +79,46 @@ class PasswordChange(View, LoginRequiredMixin):
             return HttpResponseRedirect(reverse('users:login'))
         else:
             print(form.errors)
+
+
+class CreateAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
+    def get(self, request):
+        return render(request, 'add_admin/add_admin.html')
+
+
+class CreateChild(View, LoginRequiredMixin, AdminRequiredMixin):
+    def get(self, request):
+        form = NewChildForm()
+        context = {'form': form}
+        return render(request, 'add_students/add_students.html', context)
+
+    def post(self, request):
+        form = NewChildForm(data=request.POST)
+        if form.is_valid():
+            child = form.save(commit=False)
+            child.is_child = True
+            child.save()
+            classroom = form.cleaned_data['classroom']
+            Classroom.objects.get(id=classroom.id).child.add(child)
+            return HttpResponseRedirect(reverse('main:list_classroom'))
+        context = {'form': form}
+        return render(request, 'add_students/add_students.html', context)
+
+
+class CreateTeacher(View, LoginRequiredMixin, AdminRequiredMixin):
+    def get(self, request):
+        form = NewTeacherForm()
+        context = {'form': form}
+        return render(request, 'add_teacher/add_teacher.html', context)
+
+    def post(self, request):
+        form = NewTeacherForm(data=request.POST)
+        if form.is_valid():
+            teacher = form.save(commit=False)
+            teacher.is_teacher = True
+            teacher.save()
+            classroom_guide = form.cleaned_data['classroom_guide']
+            Classroom.objects.get(id=classroom_guide.id).teacher.add(teacher)
+            return HttpResponseRedirect(reverse('main:list_classroom'))
+        context = {'form': form}
+        return render(request, 'add_students/add_students.html', context)

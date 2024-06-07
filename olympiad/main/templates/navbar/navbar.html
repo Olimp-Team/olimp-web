@@ -20,14 +20,14 @@
                     <li>
                         <div class="mainpage">
                             <img id="registerimg" src="{% static 'profile/img/register.png' %}"><a
-                                href="{% url 'main:register-olympiad' %}" id="register">Регистрация олимпиад</a>
+                                href="{% url 'register:register-olympiad' %}" id="register">Регистрация олимпиад</a>
                         </div>
                     </li>
 
                     <li>
                         <div class="mainpage">
                             <img id="datesimg" src="{% static 'profile/img/zayvki.png' %}"><a
-                                href="{% url 'main:basket-student-applications' %}" id="dates">Ваши заявки</a>
+                                href="{% url 'register:basket-student-applications' %}" id="dates">Ваши заявки</a>
                         </div>
                     </li>
 
@@ -50,7 +50,7 @@
                     <li>
                         <div class="mainpage">
                             <img id="rezultatimg" src="{% static 'profile/img/zayvki.png' %}"><a
-                                href="{% url 'main:applications-from-classroom-teachers' %}" id="rezultat">Заявки
+                                href="{% url 'register:applications-from-classroom-teachers' %}" id="rezultat">Заявки
                             на регистрацию</a>
                         </div>
                     </li>
@@ -85,7 +85,7 @@
                     <li>
                         <div class="mainpage">
                             <img id="datesimg" src="{% static 'profile/img/zayvki.png' %}"><a
-                                href="{% url 'main:student-applications' %}" id="dates">Заявки
+                                href="{% url 'register:student-applications' %}" id="dates">Заявки
                             учеников</a>
                         </div>
                     </li>

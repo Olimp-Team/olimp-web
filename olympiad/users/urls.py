@@ -8,5 +8,8 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('logout/', logout, name='logout'),
     path('password_change/', PasswordChange.as_view(), name='password_change'),
+    path('create/admin/', CreateAdmin.as_view(), name='CreateAdmin'),
+    path('create/child/', CreateChild.as_view(), name='CreateChild'),
+    path('create/teacher/', CreateTeacher.as_view(), name='CreateTeacher'),
 
 ]

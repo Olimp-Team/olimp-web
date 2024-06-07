@@ -41,7 +41,7 @@
     </div>
     <div class="topbuttons">
         <a class="buttonspispeople" type="submit">Список участников</a>
-        <a class="buttonsend" href="{% url 'main:register_send_teacher' %}">Отправить заявку</a>
+        <a class="buttonsend" href="{% url 'register:register_send_teacher' %}">Отправить заявку</a>
         <a class="buttonadd" href="/admin/main/register/add/">Добавить ученика</a>
     </div>
     <div class="tablespisok">
@@ -96,29 +96,6 @@
         </td>
         </table>
         </div>
-
-
-
-        {#{% for student, olympiads in student_olympiads.items %}#}
-        {#    <li>#}
-        {#        <strong>{{ student.get_full_name }} (ID: {{ student.id }})</strong>#}
-        {#        <ul>#}
-        {#                    {% for olympiad in olympiads %}#}
-        {#                        <li>#}
-        {#                            {{ olympiad.name }} (ID: {{ olympiad.id }})#}
-        {#                            <form method="post" action="{% url 'main:delete_register' olympiad.id student.id %}"#}
-        {#                                  style="display:inline;">#}
-        {#                                {% csrf_token %}#}
-        {#                                <button type="submit">Удалить</button>#}
-        {#                            </form>#}
-        {#                        </li>#}
-        {#                    {% endfor %}#}
-        {#        </ul>#}
-        {#    </li>#}
-        {#{% endfor %}#}
-        {#</ul>#}
-
-
     </div>
 </div>
 </body>

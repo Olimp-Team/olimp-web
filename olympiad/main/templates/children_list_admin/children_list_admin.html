@@ -4,27 +4,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'student_applications_admin/student_applications_admin.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'children_list_admin/children_list_admin.css' %}" id="them">
     <title>Olimp | Список учеников</title>
 </head>
 <header>
     <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'student_applications_admin/img/logoolimp.jpg' %}">
+        <img class="logo" id="l-tip" src="{% static 'children_list_admin/img/logoolimp.jpg' %}">
         <p class="logoword">Olimp</p>
         <p class="wordhead">Список учеников</p>
         <div id="sun">
             <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'student_applications_admin/img/sun.png' %}">
+                                        src="{% static 'children_list_admin/img/sun.png' %}">
             </button>
         </div>
         <div id="yourlogo">
             <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'student_applications_admin/img/avatarka.png' %}">
+                                          src="{% static 'children_list_admin/img/avatarka.png' %}">
             </button>
         </div>
         <div id="chat">
             <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'student_applications_admin/img/chatblack.png' %}">
+                                        src="{% static 'children_list_admin/img/chatblack.png' %}">
             </button>
         </div>
     </div>
@@ -43,7 +43,7 @@
     </div>
     <div class="topbuttons">
         <input class="buttonspispeople" type="submit" value="Список участников"/>
-        <a class="buttonadd" href="{% url 'main:CreateChild' %}">Добавить ученика</a>
+        <a class="buttonadd" href="{% url 'users:CreateChild' %}">Добавить ученика</a>
     </div>
     <div class="tablespisok">
         <div class="zagolovok">
@@ -64,13 +64,19 @@
             </table>
 
         </div>
-        {% for register in registers %}
-      <li>
-        Ученик: {{ register.child_admin.get_full_name }}<br>
-        Олимпиада: {{ register.Olympiad_admin.name }}<br>
-        Учитель: {{ register.teacher_admin.get_full_name }}
-      </li>
-    {% endfor %}
+        {% for child in child %}
+        <div class="mainspisokpoeple">
+            <div class="surname">{{ child.id }}</div>
+            <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
+            <div class="gender">{{ child.gender }}</div>
+            <div class="birth">{{ child.birth_date }}</div>
+
+
+            <a class="buttonedit" type="submit" value="Изменить"
+               href="{% url 'main:child_remove_admin' child.id %}">Удалить</a>
+
+        </div>
+        {% endfor %}
 
     </div>
 </div>

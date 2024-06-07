@@ -180,3 +180,29 @@ class NewAdminForm(UserCreationForm):
     is_admin = forms.BooleanField(widget=forms.TextInput(attrs={
         # 'type': "input" пример
     }))
+class NewOlympiadForm(UserCreationForm):
+    class Meta:
+        model = Classroom
+        fields = ('name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad')
+
+    name = forms.CharField(widget=forms.TextInput(attrs={
+        # 'type': "input" пример
+    }))
+    description = forms.CharField(widget=forms.TextInput(attrs={
+        # 'type': "input" пример
+    }))
+    category = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        # 'type': "input" пример
+    }))
+    level = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        # 'type': "input" пример
+    }))
+    stage = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        # 'type': "input" пример
+    }))
+    subject = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        # 'type': "input" пример
+    }))
+    class_olympiad = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+        # 'type': "input" пример
+    }))

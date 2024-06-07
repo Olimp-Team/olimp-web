@@ -44,7 +44,7 @@
         <p id="newsogran">Поторопись количество, участников ограничено!</p>
         <div class="registerbut">
             <a id="newsknopka" class="registerbutton" type="button"
-               href="{% url 'main:register_add' olympiads_last.id %}">Зарегистрироваться</a>
+               href="{% url 'register:register_add' olympiads_last.id %}">Зарегистрироваться</a>
             {# <input class="registerbutton"/>#}
         </div>
         <div id="circleleft">
@@ -70,10 +70,10 @@
 {#                <h2 id="nameolympiad">{{ olympiad.subject }}</h2>#}
                 <h3 id="openreg">Регистрация открыта!</h3>
                 <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-                <a href="{% url 'main:register_add' olympiad.id %}" class="trigger">Зарегистрироваться</a>
+                <a href="{% url 'register:register_add' olympiad.id %}" class="trigger">Зарегистрироваться</a>
             </div>
             {% if register.status_send == True %}
-                <a id="regknopka" href="{% url 'main:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
+                <a id="regknopka" href="{% url 'register:register_add' olympiad.id %}">Вы уже зарегистрированы</a>
             {% endif %}
         {% endfor %}
 </div>

@@ -91,7 +91,7 @@
                         <div class="namegender">{{ register.child.gender }}</div>
                         <div class="namedate">{{ register.child.birth_date }}</div>
                         <a class="buttonedit" type="submit" value="Изменить"
-                           href="{% url 'main:register_remove' register.id %}">Удалить</a>
+                           href="{% url 'register:register_remove' register.id %}">Удалить</a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -102,9 +102,9 @@
 
     </div>
     <div id="buttons">
-        <a class="buttonadd" href="{% url 'main:register-olympiad' %}" type="submit" value="Добавить олимпиаду">Добавить
+        <a class="buttonadd" href="{% url 'register:register-olympiad' %}" type="submit" value="Добавить олимпиаду">Добавить
             олимпиаду</a>
-        <a class="trigger" type="submit" href="{% url 'main:register_send' %}">Отправить заявку</a>
+        <a class="trigger" type="submit" href="{% url 'register:register_send' %}">Отправить заявку</a>
         <div class="modal">
             <div role="alert" class="alert">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -114,7 +114,7 @@
                 </svg>
                 <span>Вы точно хотите отправить?</span>
                 <div>
-                    <a class="btn btn-sm" href="{% url 'main:register_send' %}">Да</a>
+                    <a class="btn btn-sm" href="{% url 'register:register_send' %}">Да</a>
                     <button class="btn btn-sm" href="">Нет</button>
                 </div>
             </div>
