@@ -111,6 +111,7 @@ class BasketStudentApp(View, LoginRequiredMixin):
         if action == 'accept':
             Register.objects.create(
                 child=request.user,
+                teacher=request.user.classroom.teacher,
                 Olympiad=recommendation.Olympiad,
                 status_send=False
             )
