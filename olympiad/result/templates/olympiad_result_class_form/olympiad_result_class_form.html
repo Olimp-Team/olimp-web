@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить результаты олимпиады по классу</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+<h1>Добавить результаты олимпиады по классу</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.classroom.label_tag }} {{ form.classroom }}
+    {{ form.olympiad.label_tag }} {{ form.olympiad }}
+
+    <div id="students-results">
+        {% for student in students %}
+            <div class="student-result">
+                <label>{{ student }}</label>
+                <input type="number" name="score" class="score-input" placeholder="Введите результат" required/>
+                <select name="status" class="status-select">
+                    {% for value, display in form.fields.status.choices %}
+                        <option value="{{ value }}">{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endfor %}
+    </div>
+    <button type="submit">Сохранить</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('.classroom-select').select2({
+            placeholder: 'Выберите класс',
+            allowClear: true
+        }).on('change', function () {
+            const classroomId = $(this).val();
+            if (classroomId) {
+                $.ajax({
+                    url: '{% url "result:get_students" %}', // Создайте этот URL в конфигурации URL
+                    data: {'classroom_id': classroomId},
+                    success: function (data) {
+                        $('#students-results').html(data);
+                        $('.status-select').select2({
+                            placeholder: 'Выберите статус',
+                            allowClear: true
+                        });
+                    }
+                });
+            } else {
+                $('#students-results').html('');
+            }
+        });
+
+        $('.olympiad-select').select2({
+            placeholder: 'Выберите олимпиаду',
+            allowClear: true
+        });
+
+        $('.status-select').select2({
+            placeholder: 'Выберите статус',
+            allowClear: true
+        });
+    });
+</script>
+</body>
+</html>

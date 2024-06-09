@@ -1,15 +1,10 @@
-from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
-from django.forms import formset_factory
 from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponseForbidden
-from users.models import User
-from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from main.models import *
-from main.models import Register_admin
+from register.models import *
 from django.views.generic import *
 from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
@@ -98,14 +93,33 @@ class BasketStudentApp(View, LoginRequiredMixin):
     def get(self, request):
         if request.user.is_child:
             context = {
-                'register': Register.objects.filter(child=request.user, status_send=False)
+                'register': Register.objects.filter(child=request.user, status_send=False),
+                'recommendations': Recommendation.objects.filter(child=request.user, status=False),
             }
             return render(request, 'basket-student-applications/basket-student-applications.html', context)
         else:
             return HttpResponseForbidden()
 
     def post(self, request, *args, **kwargs):
-        pass
+        action = request.POST.get('action')
+        recommendation_id = request.POST.get('recommendation_id')
+        if not action or not recommendation_id:
+            return HttpResponseForbidden("Missing data in form.")
+
+        recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+
+        if action == 'accept':
+            Register.objects.create(
+                child=request.user,
+                Olympiad=recommendation.Olympiad,
+                status_send=False
+            )
+            recommendation.status = True
+            recommendation.save()
+        elif action == 'decline':
+            recommendation.delete()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 ########################################################################################################################
@@ -116,7 +130,8 @@ class ChildRegisterList(View, LoginRequiredMixin):
             # Получаем все заявки учеников, которые связаны с классом текущего учителя
             reg = Register_send.objects.filter(
                 teacher_send__classroom_guide=request.user.classroom_guide,
-                status_send=False
+                status_send=False,
+                is_deleted=False,
             )
 
             # Создаем словарь, где ключом будет ученик, а значением - список олимпиад
@@ -126,15 +141,28 @@ class ChildRegisterList(View, LoginRequiredMixin):
                     student_olympiads[register.child_send] = []
                 student_olympiads[register.child_send].append(register.Olympiad_send)
 
+            # Получаем рекомендации для текущего учителя
+            recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False)
+            recommended_students = {}
+            for rec in recommendations:
+                if rec.child not in recommended_students:
+                    recommended_students[rec.child] = []
+                recommended_students[rec.child].append({
+                    'olympiad': rec.Olympiad,
+                    'recommended_by': rec.recommended_by
+                })
+
             context = {
-                'student_olympiads': student_olympiads
+                'student_olympiads': student_olympiads,
+                'recommended_students': recommended_students,
             }
             return render(request, 'student-applications/student-applications.html', context)
         else:
             return HttpResponseForbidden()
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseForbidden()
+        if request.user.is_teacher:
+            return HttpResponseForbidden()
 
 
 class RegisterDeleteTeacher(View, LoginRequiredMixin):
@@ -176,6 +204,90 @@ class RegisterSendTeacher(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
+class AddRecommendation(View, LoginRequiredMixin):
+    def get(self, request):
+        if request.user.is_teacher:
+            context = {
+                'students': User.objects.filter(is_child=True, classroom__teacher=request.user),
+                'olympiads': Olympiad.objects.all(),
+                'teachers': User.objects.filter(is_teacher=True)
+            }
+            return render(request, 'add-recommendation/add-recommendation.html', context)
+        else:
+            return HttpResponseForbidden()
+
+    def post(self, request):
+        if request.user.is_teacher:
+            recommended_to = User.objects.get(id=request.POST['recommended_to'])
+            child = User.objects.get(id=request.POST['child'])
+            olympiad = Olympiad.objects.get(id=request.POST['olympiad'])
+
+            Recommendation.objects.create(
+                recommended_by=request.user,
+                recommended_to=recommended_to,
+                child=child,
+                Olympiad=olympiad
+            )
+            return HttpResponseRedirect(reverse_lazy('main:home'))
+        else:
+            return HttpResponseForbidden()
+
+
+class ProcessRecommendation(View):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_teacher:
+            return HttpResponseForbidden("Permission denied.")
+
+        student_id = request.POST.get('student_id')
+        recommended_by_id = request.POST.get('recommended_by_id')
+        olympiad_id = request.POST.get('olympiad_id')
+        action = request.POST.get('action')
+
+        print(student_id, recommended_by_id, olympiad_id, action)  # Для отладки
+
+        if not student_id:
+            return HttpResponseForbidden("Missing student_id")
+        if not recommended_by_id:
+            return HttpResponseForbidden("Missing recommended_by_id")
+        if not olympiad_id:
+            return HttpResponseForbidden("Missing olympiad_id")
+        if not action:
+            return HttpResponseForbidden("Missing action")
+
+        student = get_object_or_404(User, pk=student_id)
+        recommended_by = get_object_or_404(User, pk=recommended_by_id)
+        olympiad = get_object_or_404(Olympiad, pk=olympiad_id)
+
+        if action == 'accept':
+            Register_send.objects.create(
+                teacher_send=request.user,
+                child_send=student,
+                Olympiad_send=olympiad,
+                status_send=False
+            )
+            recommendation = get_object_or_404(
+                Recommendation,
+                recommended_by=recommended_by,
+                recommended_to=request.user,
+                child=student,
+                Olympiad=olympiad
+            )
+            recommendation.status = True
+            recommendation.save()
+        elif action == 'decline':
+            Recommendation.objects.filter(
+                recommended_by=recommended_by,
+                recommended_to=request.user,
+                child=student,
+                Olympiad=olympiad
+            ).delete()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
+########################################################################################################################
+# Страницы администратора
+
 class RegisterListClassroom(View, LoginRequiredMixin):
     def get(self, request):
         if request.user.is_admin:
@@ -195,8 +307,3 @@ class RegisterListClassroom(View, LoginRequiredMixin):
                           context)
         else:
             return HttpResponseForbidden()
-
-
-########################################################################################################################
-# Страницы администратора
-

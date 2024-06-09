@@ -74,8 +74,8 @@
 
         <div class="mainspisokpoeple">
 
-                <ul>
-                    {% for register in register %}
+            <ul>
+                {% for register in register %}
                     <li>
                         <div class="nameid">{{ register.id }}</div>
                         <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}
@@ -93,11 +93,23 @@
                         <a class="buttonedit" type="submit" value="Изменить"
                            href="{% url 'register:register_remove' register.id %}">Удалить</a>
                     </li>
-                    {% endfor %}
-                </ul>
-
+                {% endfor %}
+            </ul>
+            <h2>Рекомендации</h2>
+            <ul>
+                {% for recommendation in recommendations %}
+                    <li>
+                        {{ recommendation.Olympiad.name }}
+                        <form action="{% url 'basket_student_app' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="recommendation_id" value="{{ recommendation.id }}">
+                            <button type="submit" name="action" value="accept">Принять</button>
+                            <button type="submit" name="action" value="decline">Отклонить</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>s
         </div>
-
 
 
     </div>

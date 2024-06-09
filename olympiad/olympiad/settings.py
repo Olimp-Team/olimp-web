@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'docs',
     'register',
     'classroom',
-    'result'
+    'result',
+    'django_filters'
 ]
 
 MIDDLEWARE = [

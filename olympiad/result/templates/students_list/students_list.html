@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% for student in students %}
+    <div class="student-result">
+        <label>{{ student }}</label>
+        <input type="number" name="score" class="score-input" placeholder="Введите результат" required/>
+        <select name="status" class="status-select">
+            <option value="participant">Участник</option>
+            <option value="winner">Победитель</option>
+            <option value="prizewinner">Призер</option>
+        </select>
+    </div>
+{% endfor %}
+</body>
+</html>

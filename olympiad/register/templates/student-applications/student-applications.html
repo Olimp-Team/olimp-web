@@ -83,7 +83,7 @@
                 <div class="olimps">
                     <li>
                         {{ olympiad.name }} (ID: {{ olympiad.id }})
-                        <form method="post" action="{% url 'main:delete_register' olympiad.id student.id %}"
+                        <form method="post" action="{% url 'register:delete_register' olympiad.id student.id %}"
                               style="display:inline;">
                             {% csrf_token %}
                             <button type="submit">Удалить</button>
@@ -96,6 +96,28 @@
         </td>
         </table>
         </div>
+        <h2>Рекомендации</h2>
+        <ul>
+            {% for student, recommendations in recommended_students.items %}
+                <li>
+                    <strong>{{ student.get_full_name }}</strong>
+                    <ul>
+                        {% for recommendation in recommendations %}
+                            <li>{{ recommendation.olympiad.name }}</li>
+                            <form action="{% url 'register:process_recommendation' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="student_id" value="{{ student.id }}">
+                                <input type="hidden" name="recommended_by_id"
+                                       value="{{ recommendation.recommended_by.id }}">
+                                <input type="hidden" name="olympiad_id" value="{{ recommendation.olympiad.id }}">
+                                <button type="submit" name="action" value="accept">Принять</button>
+                                <button type="submit" name="action" value="decline">Отклонить</button>
+                            </form>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
 </body>

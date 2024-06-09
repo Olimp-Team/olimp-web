@@ -16,6 +16,8 @@ urlpatterns = [
     path('delete-register/<int:Olympiad_id>/<int:student_id>/', RegisterDeleteTeacher.as_view(),
          name='delete_register'),
 
+    path('add-recommendation/', AddRecommendation.as_view(), name='add_recommendation'),
+    path('process-recommendation/', ProcessRecommendation.as_view(), name='process_recommendation'),
 
 
     path('applications/classroom/teachers/', RegisterListClassroom.as_view(),

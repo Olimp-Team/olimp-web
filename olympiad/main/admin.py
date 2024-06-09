@@ -59,27 +59,10 @@ class OlympiadAdmin(admin.ModelAdmin):
     search_fields = ['name', 'class_olympiad', 'category', 'level', 'stage', 'subject']
 
 
-@admin.register(Register)
-class RegisterAdmin(admin.ModelAdmin):
-    """Модель регистрации на олимпиаду в панеле администратора"""
-    list_display = ('id', 'teacher', 'child', 'Olympiad')
-    list_editable = ['teacher', 'child', 'Olympiad']
-    search_fields = ['id', 'teacher', 'child', 'Olympiad']
 
 
-@admin.register(Result)
-class ResultAdmin(admin.ModelAdmin):
-    """Модель результатов олимпиад в панеле администратора"""
-    list_display = ('id', 'info_children', 'info_olympiad', 'points', 'status_result')
-    list_editable = ['info_children', 'info_olympiad', 'points', 'status_result']
-    search_fields = ['status_result', 'points', 'info_olympiad', 'info_children']
 
 
-@admin.register(Register_send)
-class Register_sendAdmin(admin.ModelAdmin):
-    pass
 
 
-@admin.register(Register_admin)
-class Register_adminAdmin(admin.ModelAdmin):
-    pass
+
