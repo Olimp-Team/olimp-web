@@ -3,7 +3,8 @@ from django.http import HttpResponseForbidden
 from django.views.generic import View
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
-from main.models import Register_admin, Classroom, Subject, Post
+from main.models import *
+from register.models import *
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
 from users.models import User

@@ -53,12 +53,12 @@ class User(AbstractUser):
     classroom = models.ForeignKey(to='main.Classroom', on_delete=models.CASCADE, verbose_name='Класс ученика',
                                   blank=True, null=True)
 
-    # def __str__(self):
-    #     if self.is_teacher:
-    #         return f"Учитель: {self.last_name} {self.first_name} {self.surname} | Классное руководство: {self.classroom_guide.number}{self.classroom_guide.letter}"
-    #     elif self.is_admin:
-    #         return f"Администратор: {self.last_name} {self.first_name} {self.surname}"
-    #     elif self.is_child:
-    #         return f"Ученик: {self.last_name} {self.first_name} {self.surname} | Класс: {self.classroom.number}{self.classroom.letter}"
-    #     else:
-    #         return f"Неизвстная роль: {self.last_name} {self.first_name} {self.surname}"
+    def __str__(self):
+        if self.is_teacher:
+            return f"Учитель: {self.last_name} {self.first_name} {self.surname} | Классное руководство: {self.classroom_guide.number}{self.classroom_guide.letter}"
+        elif self.is_admin:
+            return f"Администратор: {self.last_name} {self.first_name} {self.surname}"
+        elif self.is_child:
+            return f"Ученик: {self.last_name} {self.first_name} {self.surname} | Класс: {self.classroom.number}{self.classroom.letter}"
+        else:
+            return f"Неизвстная роль: {self.last_name} {self.first_name} {self.surname}"

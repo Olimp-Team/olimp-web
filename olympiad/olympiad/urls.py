@@ -3,7 +3,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from users.views import start_page
-
 from main.views import page_not_found
 
 urlpatterns = [
@@ -14,6 +13,9 @@ urlpatterns = [
     # Главное приложение
     path('main/', include('main.urls', namespace='main')),
     path('docs/', include('docs.urls', namespace='docs')),
+    path('register/', include('register.urls', namespace='register')),
+    path('result/', include('result.urls', namespace='result')),
+    # path('classroom/', include('classroom.urls', namespace='classroom')),
     # Приложения авторизации
     path('auth/', include('users.urls', namespace='users')),
     path('api/', include('api.urls', namespace='api')),

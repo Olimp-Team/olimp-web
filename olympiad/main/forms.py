@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 
 from main.models import *
+from register.models import *
+from result.models import *
 
 
 class ExcelUploadForm(forms.Form):

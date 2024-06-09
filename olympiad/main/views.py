@@ -11,7 +11,6 @@ from django.urls import reverse_lazy, reverse
 from .models import *
 from users.forms import NewChildForm, NewTeacherForm, NewAdminForm
 from .decorators import *
-from .models import Register_admin
 from .forms import ResultCreateFrom
 from django.views.generic import *
 from users.models import User

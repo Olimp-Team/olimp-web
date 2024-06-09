@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты олимпиад</title>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+<body>
+    <h1>Результаты олимпиад</h1>
+    <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit">Фильтровать</button>
+    </form>
+    <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %}">
+        {% csrf_token %}
+        <input type="file" name="excel_file" accept=".xlsx">
+        <select name="info_children">
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.get_full_name }}</option>
+            {% endfor %}
+        </select>
+        <select name="info_olympiad">
+            {% for olympiad in olympiads %}
+                <option value="{{ olympiad.id }}">{{ olympiad.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Импортировать результаты</button>
+    </form>
+    <form method="get" action="{% url 'result:export_results' %}">
+        <button type="submit">Экспортировать результаты</button>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Ученик</th>
+                <th>Класс</th>
+                <th>Олимпиада</th>
+                <th>Результат</th>
+                <th>Статус</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in filter.qs %}
+                <tr>
+                    <td>{{ result.info_children.get_full_name }}</td>
+                    <td>{{ result.info_children.classroom }}</td>
+                    <td>{{ result.info_olympiad.name }}</td>
+                    <td>{{ result.points }}</td>
+                    <td>{{ result.get_status_result_display }}</td>
+                    <td>{{ result.date_added }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        $(document).ready(function() {
+            $('.classroom-select').select2({
+                placeholder: 'Выберите класс',
+                allowClear: true
+            });
+
+            $('.olympiad-select').select2({
+                placeholder: 'Выберите олимпиаду',
+                allowClear: true
+            });
+        });
+    </script>
+</body>
+</html>
+
+
