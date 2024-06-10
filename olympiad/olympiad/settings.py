@@ -170,4 +170,4 @@ CHANNEL_LAYERS = {
     },
 }
 
-LOGIN_URL = 'auth/login/'
+LOGIN_URL = 'users/login/'
