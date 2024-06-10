@@ -8,15 +8,13 @@ urlpatterns = [
     # Страницы учеников
     path('home/', HomePage.as_view(), name='home'),
     # Страницы учителей
-    path('student/applications/', ChildrenListTeacher.as_view(), name='student-applications'),
+    # path('student/applications/', ChildrenListTeacher.as_view(), name='student-applications'),
     path('classroom/teacher/', TeacherClassroomGuide.as_view(), name='TeacherClassroomGuide'),
     path('classroom/teacher/list/<int:Classroom_id>/', ChildrenListTeacher.as_view(), name='ChildrenListTeacher'),
     # Страницы администратора
     path('classroom/list/', ListClassroom.as_view(), name='list_classroom'),
     path('child/remove/<int:User_id>', ChildRemoveAdmin.as_view(), name='child_remove_admin'),
-    path('result/list/olympiad/', ResultListOlympiad.as_view(), name='result-list_olympiad'),
     path('olympiad/list/', ListOlympiad.as_view(), name='list_olympiad'),
-    path('result/<int:olymp_id>', Result.as_view(), name='result'),
     path('delete/olympiad/<int:Olympiad_id>', OlympiadDelete.as_view(), name='olympiad_remove'),
     path('student/applications/admin/<int:Classroom_id>/', ChildClassroomListAdmin.as_view(),
          name='student-applications-admin'),

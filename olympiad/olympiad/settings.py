@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'register',
     'classroom',
     'result',
-    'django_filters'
+    'django_filters',
+    'channels',
+    'chat'
 ]
 
 MIDDLEWARE = [
@@ -90,6 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'olympiad.wsgi.application'
+ASGI_APPLICATION = 'olympiad.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -155,3 +158,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 SITE_ID = 1
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',  # Использование Redis в качестве слоя каналов
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],  # Адрес и порт Redis
+        },
+    },
+}
+

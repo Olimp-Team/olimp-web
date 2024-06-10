@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        form label, form input, form select, form button {
+            margin-right: 10px;
+        }
+    </style>
+    <script>
+        $(function() {
+            var dateFormat = "yy-mm-dd",
+                from = $("#start-date")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        changeMonth: true,
+                        numberOfMonths: 1,
+                        dateFormat: dateFormat
+                    })
+                    .on("change", function() {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#end-date").datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                        numberOfMonths: 1,
+                        dateFormat: dateFormat
+                    })
+                    .on("change", function() {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+                return date;
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Отчет по результатам олимпиад</h1>
+
+    <form method="get" id="filterForm">
+        <label for="start-date">Начальная дата:</label>
+        <input type="text" id="start-date" name="start-date" value="{{ request.GET.start_date }}">
+
+        <label for="end-date">Конечная дата:</label>
+        <input type="text" id="end-date" name="end-date" value="{{ request.GET.end_date }}">
+
+        <label for="class">Класс:</label>
+        <select id="class" name="class">
+            <option value="">Выберите класс</option>
+            {% for class in classrooms %}
+                <option value="{{ class.id }}" {% if class.id|stringformat:"s" == request.GET.class %}selected{% endif %}>
+                    {{ class.number }} {{ class.letter }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="subject">Предмет:</label>
+        <select id="subject" name="subject">
+            <option value="">Выберите предмет</option>
+            {% for subject in subjects %}
+                <option value="{{ subject.id }}" {% if subject.id|stringformat:"s" == request.GET.subject %}selected{% endif %}>
+                    {{ subject.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="student">Ученик:</label>
+        <input type="text" id="student" name="student" placeholder="Введите имя ученика" value="{{ request.GET.student }}">
+
+        <label for="olympiad">Олимпиада:</label>
+        <select id="olympiad" name="olympiad">
+            <option value="">Выберите олимпиаду</option>
+            {% for olympiad in olympiads %}
+                <option value="{{ olympiad.id }}" {% if olympiad.id|stringformat:"s" == request.GET.olympiad %}selected{% endif %}>
+                    {{ olympiad.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <form method="get" action="{% url 'docs:export_excel' %}">
+        <!-- Передача текущих параметров фильтра для выгрузки -->
+        <input type="hidden" name="start-date" value="{{ request.GET.start_date }}">
+        <input type="hidden" name="end-date" value="{{ request.GET.end_date }}">
+        <input type="hidden" name="class" value="{{ request.GET.class }}">
+        <input type="hidden" name="subject" value="{{ request.GET.subject }}">
+        <input type="hidden" name="student" value="{{ request.GET.student }}">
+        <input type="hidden" name="olympiad" value="{{ request.GET.olympiad }}">
+        <button type="submit">Выгрузить в Excel</button>
+    </form>
+
+    <h2>Результаты</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Ученик</th>
+                <th>Олимпиада</th>
+                <th>Предмет</th>
+                <th>Класс</th>
+                <th>Очки</th>
+                <th>Статус</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results %}
+                <tr>
+                    <td>{{ result.info_children.get_full_name }}</td>
+                    <td>{{ result.info_olympiad.name }}</td>
+                    <td>{{ result.info_olympiad.subject.name }}</td>
+                    <td>{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
+                    <td>{{ result.points }}</td>
+                    <td>{{ result.get_status_result_display }}</td>
+                    <td>{{ result.date_added }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
