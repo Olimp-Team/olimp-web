@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 DEBUG = True
 
 ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net", "olimp-olympiad.ru"]
-CSRF_TRUSTED_ORIGINS = ["https://*", "http://*", 'https://*.olimp-olympiad.ru','https://*.127.0.0.1', 'http://*.olimp-olympiad.ru']
+CSRF_TRUSTED_ORIGINS = ["https://*", "http://*", 'https://*.olimp-olympiad.ru', 'https://*.127.0.0.1',
+                        'http://*.olimp-olympiad.ru']
 
 # Application definition
 
@@ -47,7 +48,9 @@ INSTALLED_APPS = [
     'register',
     'classroom',
     'result',
-    'django_filters'
+    'django_filters',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -147,11 +150,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Users
 
-AUTH_USER_MODEL = 'users.User'
-LOGIN_URL = '/auth/login/'
 
 # Медиа файлы
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 SITE_ID = 1
+
+AUTH_USER_MODEL = 'users.User'
+
+ASGI_APPLICATION = 'olympiad.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+LOGIN_URL = 'users/login/'

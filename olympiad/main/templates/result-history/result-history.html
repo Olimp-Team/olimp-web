@@ -7,38 +7,22 @@
     <title>Olimp | Результаты</title>
     <link rel="stylesheet"
           href="{% static 'result-history/style.css' %}" id="them">
+          <link rel="stylesheet" href="{% static 'header/header.css' %}">
+          <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="shortcut-icon" href="{% static 'result-history/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'result-history/img/logoolimp.jpg' %}">
     <title>Title</title>
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Результаты</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
-            </button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'applications-from-classroom-teachers/img/avatarka.png' %}">
-            </button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'applications-from-classroom-teachers/img/chatblack.png' %}">
-            </button>
-        </div>
-    </div>
-</header>
-<body>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
 {% endblock %}
+<body>
 <div class="main">
 
     <h1 id="his">Результаты</h1>

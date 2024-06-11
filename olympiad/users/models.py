@@ -55,11 +55,13 @@ class User(AbstractUser):
 
     def __str__(self):
         if self.is_teacher:
-            return f"Учитель: {self.last_name} {self.first_name} {self.surname} | Классное руководство: {self.classroom_guide.number}{self.classroom_guide.letter}"
+            return f"Учитель: {self.last_name} {self.first_name} {self.surname}"
         elif self.is_admin:
             return f"Администратор: {self.last_name} {self.first_name} {self.surname}"
         elif self.is_child:
-            return f"{self.last_name} {self.first_name} {self.surname} | Класс: {self.classroom.number}{self.classroom.letter}"
+            return f"{self.last_name} {self.first_name} {self.surname}"
         else:
             return f"Неизвстная роль: {self.last_name} {self.first_name} {self.surname}"
 
+    def get_full_name(self):
+        return f"{self.last_name} {self.first_name} {self.surname}"

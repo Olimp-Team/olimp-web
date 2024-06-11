@@ -4,38 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'add_students/add_students_light.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="icon" href="{% static 'add_students/img/logoolimp.jpg' %}">
 
     <title>Olimp | Ваши заявки</title>
 </head>
 
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'add_students/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Создание нового ученика</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'add_students/img/sun.png' %}">
-            </button>
-            <div id="yourlogo">
-                <button class="avatarka"><img class="sun" id="avatarka"
-                                              src="{% static 'add_students/img/avatarka.png' %}"></button>
-            </div>
-            <div id="chat">
-                <button class="chatik"><img class="sun" id="chatblack"
-                                            src="{% static 'add_students/img/Chatblack.png' %}"></button>
-            </div>
-        </div>
-    </div>
-</header>
-<body>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
 {% endblock %}
-
+<body>
 <div class="main">
 
     <h1 class="add_newstudents_text">Создание нового ученика</h1>

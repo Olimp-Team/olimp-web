@@ -7,3 +7,7 @@ pillow
 django-cors-headers
 pandas
 openpyxl
+django-filter
+channels
+channels_redis
+uvicorn

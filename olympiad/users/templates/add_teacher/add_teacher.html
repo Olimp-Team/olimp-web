@@ -5,31 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'add_teacher/add_teacher_light.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="icon" href="{% static 'add_teacher/img/logoolimp.jpg' %}">
 
     <title>Olimp | Ваши заявки</title>
 </head>
 
-<header>
-    <div class="golova">
-
-
-        <p class="wordhead">Создание нового учителя</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'add_teacher/img/sun.png' %}">
-            </button>
-            <div id="yourlogo">
-                <button class="avatarka"><img class="sun" id="avatarka"
-                                              src="{% static 'add_teacher/img/avatarka.png' %}"></button>
-            </div>
-            <div id="chat">
-                <button class="chatik"><img class="sun" id="chatblack"
-                                            src="{% static 'add_teacher/img/Chatblack.png' %}"></button>
-            </div>
-        </div>
-    </div>
-</header>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
 <body>
 
 {% include 'navbar/navbar.html' %}

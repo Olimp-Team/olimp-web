@@ -5,32 +5,15 @@
     <meta charset="UTF-8">
     <title>Список олимпиад | Olimp</title>
     <link rel="stylesheet" href="{% static 'list-olympiad/list_olympiad.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="shortcut-icon" href="{% static 'list-olympiad/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'list-olympiad/img/logoolimp.jpg' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'list-olympiad/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Список олимпиад</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'list-olympiad/img/sun.png' %}">
-            </button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'list-olympiad/img/avatarka.png' %}">
-            </button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'list-olympiad/img/Chatblack.png' %}">
-            </button>
-        </div>
-    </div>
-</header>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
 {% include 'navbar/navbar.html' %}
 {% block content %}
 {% endblock %}

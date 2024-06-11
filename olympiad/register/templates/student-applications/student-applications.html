@@ -5,35 +5,19 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'student-applications/student-applications.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <title>Olimp | Заявки вашего класса</title>
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'student-applications/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Заявки учеников</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw" src="{% static 'student-applications/img/sun.png' %}">
-            </button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'student-applications/img/avatarka.png' %}">
-            </button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'student-applications/img/chatblack.png' %}">
-            </button>
-        </div>
-    </div>
-</header>
-<body>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+
 {% include 'navbar/navbar.html' %}
 {% block content %}
 {% endblock %}
 
-
+<body>
 <div class="main">
     <div class="toptext">
         <h1 class="toptext1">Заявки учеников</h1>
@@ -83,7 +67,7 @@
                 <div class="olimps">
                     <li>
                         {{ olympiad.name }} (ID: {{ olympiad.id }})
-                        <form method="post" action="{% url 'register:delete_register' olympiad.id student.id %}"
+                        <form method="post" action="{% url 'main:delete_register' olympiad.id student.id %}"
                               style="display:inline;">
                             {% csrf_token %}
                             <button type="submit">Удалить</button>
@@ -96,28 +80,6 @@
         </td>
         </table>
         </div>
-        <h2>Рекомендации</h2>
-        <ul>
-            {% for student, recommendations in recommended_students.items %}
-                <li>
-                    <strong>{{ student.get_full_name }}</strong>
-                    <ul>
-                        {% for recommendation in recommendations %}
-                            <li>{{ recommendation.olympiad.name }}</li>
-                            <form action="{% url 'register:process_recommendation' %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="student_id" value="{{ student.id }}">
-                                <input type="hidden" name="recommended_by_id"
-                                       value="{{ recommendation.recommended_by.id }}">
-                                <input type="hidden" name="olympiad_id" value="{{ recommendation.olympiad.id }}">
-                                <button type="submit" name="action" value="accept">Принять</button>
-                                <button type="submit" name="action" value="decline">Отклонить</button>
-                            </form>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
     </div>
 </div>
 </body>

@@ -96,42 +96,6 @@ class ListClassroom(View, LoginRequiredMixin, AdminRequiredMixin):
         pass
 
 
-class ResultListOlympiad(View, LoginRequiredMixin, AdminRequiredMixin):
-    def get(self, request):
-        olymp = Register_admin.objects.all()
-        child_admin_count = Register_admin.objects.all().count()
-        context = {
-            'olymp': olymp,
-            'child_admin_count': child_admin_count
-        }
-        return render(request, 'result-list-olympiad/list-olympiad.html', context)
-
-
-class Result(View, LoginRequiredMixin, AdminRequiredMixin):
-    def get(self, request, olymp_id):
-        register_olymp = Register_admin.objects.filter(Olympiad_admin_id=olymp_id)
-        context = {
-            'register_olymp': register_olymp,
-            'register_olympiad': Register_admin.objects.filter(
-                Olympiad_admin_id=olymp_id).first(),
-        }
-        return render(request, 'result-history/result-history.html', context)
-
-    def post(self, request, olymp_id):
-        register_olymp = Register_admin.objects.filter(Olympiad_admin_id=olymp_id)
-        form = ResultCreateFrom(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect(request.META['HTTP_REFERER'])
-        form = ResultCreateFrom()
-        context = {
-            'form': form,
-            'register_olymp': register_olymp,
-            'register_olympiad': Register_admin.objects.filter(
-                Olympiad_admin_id=olymp_id).first(),
-        }
-        return render(request, 'result-history/result-history.html', context)
-
-
 class ChildClassroomListAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
     def get(self, request, Classroom_id):
         classroom = Classroom.objects.get(id=Classroom_id)
