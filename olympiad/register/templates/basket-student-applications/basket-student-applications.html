@@ -5,37 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'basket-student-applications/regzayavki.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
     <link rel="stylesheet" href="{% static 'register-olympiad/daisy.css' %}">
     <title>Olimp | Ваши заявки</title>
 </head>
 
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'basket-student-applications/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Ваши заявки</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'basket-student-applications/img/sun.png' %}"></button>
-            <div id="yourlogo">
-                <button class="avatarka"><img class="sun" id="avatarka"
-                                              src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
-            </div>
-            <div id="chat">
-                <button class="chatik"><img class="sun" id="chatblack"
-                                            src="{% static 'register-olympiad/img/Chatblack.png' %}"></button>
-            </div>
-        </div>
-    </div>
-</header>
-<body>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
 {% endblock %}
-
+<body>
 <div class="main">
     <div class="toptext">
         <h1 class="toptext1">Ваши заявки</h1>
@@ -74,8 +60,8 @@
 
         <div class="mainspisokpoeple">
 
-            <ul>
-                {% for register in register %}
+                <ul>
+                    {% for register in register %}
                     <li>
                         <div class="nameid">{{ register.id }}</div>
                         <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}
@@ -93,23 +79,11 @@
                         <a class="buttonedit" type="submit" value="Изменить"
                            href="{% url 'register:register_remove' register.id %}">Удалить</a>
                     </li>
-                {% endfor %}
-            </ul>
-            <h2>Рекомендации</h2>
-            <ul>
-                {% for recommendation in recommendations %}
-                    <li>
-                        {{ recommendation.Olympiad.name }}
-                        <form action="{% url 'register:basket-student-applications' %}" method="post">
-                            {% csrf_token %}
-                            <input type="hidden" name="recommendation_id" value="{{ recommendation.id }}">
-                            <button type="submit" name="action" value="accept">Принять</button>
-                            <button type="submit" name="action" value="decline">Отклонить</button>
-                        </form>
-                    </li>
-                {% endfor %}
-            </ul>
+                    {% endfor %}
+                </ul>
+
         </div>
+
 
 
     </div>

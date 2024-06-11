@@ -5,41 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olimp | Заявки на регистрацию учебных классов</title>
-    <link rel="stylesheet"
-          href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="shortcut-icon" href="{% static 'applications-from-classroom-teachers/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
 
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'applications-from-classroom-teachers/img/sun.png' %}">
-            </button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'applications-from-classroom-teachers/img/avatarka.png' %}">
-            </button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'applications-from-classroom-teachers/img/chatblack.png' %}">
-            </button>
-        </div>
-    </div>
-</header>
-<body>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
 {% endblock %}
-
+<body>
 <div class="main">
     <div class="toptext">
         <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>

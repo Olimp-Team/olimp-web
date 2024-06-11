@@ -6,35 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olimp | Регистрация на олимпиаду</title>
     <link rel="stylesheet" href="{% static 'register-olympiad/style.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="shortcut-icon" href="{% static 'register-olympiad/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'register-olympiad/img/logoolimp.jpg' %}">
     <link rel="stylesheet" href="{% static 'register-olympiad/daisy.css' %}">
 </head>
 
-<header>
-    <div class="golova">
-        <img class="logo" src="{% static 'register-olympiad/img/logoolimp.jpg' %}" alt="">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Регистрация на олимпиаду</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" src="{% static 'register-olympiad/img/sun.png' %}"></button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'register-olympiad/img/avatarka.png' %}"></button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'register-olympiad/img/Chatblack.png' %}"></button>
-        </div>
-    </div>
-</header>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
 
-<body>
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 {% endblock %}
+<body>
 <div class="main">
 {#<h1 id="maintext">Регистрация на олимпиаду</h1>#}
     <div class="newsolympiad">
