@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Комната чата</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #chat-log {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message .username {
+            font-weight: bold;
+        }
+        .message .timestamp {
+            font-size: small;
+            color: gray;
+        }
+        #chat-message-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        #chat-message-submit {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-log">
+            {% for message in messages %}
+                <div class="message">
+                    <span class="username">{{ message.user.username }}</span>: 
+                    <span class="content">{{ message.content }}</span>
+                    <div class="timestamp">{{ message.timestamp }}</div>
+                </div>
+            {% endfor %}
+        </div>
+        <input id="chat-message-input" type="text" size="100">
+        <input id="chat-message-submit" type="button" value="Отправить">
+    </div>
+    <script>
+        const roomName = "{{ room_name }}";
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/');
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (data.error) {
+                alert(data.error);
+            } else {
+                const chatLog = document.querySelector('#chat-log');
+                chatLog.innerHTML += '<div class="message"><span class="username">' + data.username + '</span>: <span class="content">' + data.message + '</span><div class="timestamp">Сейчас</div></div>';
+                chatLog.scrollTop = chatLog.scrollHeight;
+            }
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Соединение с чатом было закрыто');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html>

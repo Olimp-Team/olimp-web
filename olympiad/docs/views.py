@@ -5,10 +5,13 @@ from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
 from main.models import *
 from register.models import *
+from result.models import *
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
 from users.models import User
 import pandas as pd
+from django.views.generic import ListView
+from django.db.models import Q
 
 
 class ExcelClassroom(View, LoginRequiredMixin):
@@ -308,3 +311,111 @@ def parse_classroom(classroom_str):
     number = int(''.join(filter(str.isdigit, classroom_str)))
     letter = ''.join(filter(str.isalpha, classroom_str))
     return number, letter
+
+
+class DashboardView(ListView):
+    model = Result
+    template_name = 'dashboard.html'
+    context_object_name = 'results'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # Фильтры
+        start_date = self.request.GET.get('start-date')
+        end_date = self.request.GET.get('end-date')
+        class_filter = self.request.GET.get('class')
+        subject_filter = self.request.GET.get('subject')
+        student_filter = self.request.GET.get('student')
+        olympiad_filter = self.request.GET.get('olympiad')
+
+        if start_date and end_date:
+            queryset = queryset.filter(date_added__range=[start_date, end_date])
+        if class_filter:
+            queryset = queryset.filter(info_children__classroom__id=class_filter)
+        if subject_filter:
+            queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
+        if student_filter:
+            queryset = queryset.filter(
+                Q(info_children__first_name__icontains=student_filter) |
+                Q(info_children__last_name__icontains=student_filter) |
+                Q(info_children__surname__icontains=student_filter)
+            )
+        if olympiad_filter:
+            queryset = queryset.filter(info_olympiad__id=olympiad_filter)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['classrooms'] = Classroom.objects.all()
+        context['subjects'] = Subject.objects.all()
+        context['olympiads'] = Olympiad.objects.all()
+        return context
+
+
+import pandas as pd
+from django.http import HttpResponse
+
+
+class ExportExcelView(ListView):
+    model = Result
+
+    def get_queryset(self):
+        queryset = Result.objects.all()
+
+        # Фильтры
+        start_date = self.request.GET.get('start-date')
+        end_date = self.request.GET.get('end-date')
+        class_filter = self.request.GET.get('class')
+        subject_filter = self.request.GET.get('subject')
+        student_filter = self.request.GET.get('student')
+        olympiad_filter = self.request.GET.get('olympiad')
+
+        if start_date and end_date:
+            queryset = queryset.filter(date_added__date__range=[start_date, end_date])
+        if class_filter:
+            queryset = queryset.filter(info_children__classroom__id=class_filter)
+        if subject_filter:
+            queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
+        if student_filter:
+            queryset = queryset.filter(
+                Q(info_children__first_name__icontains=student_filter) |
+                Q(info_children__last_name__icontains=student_filter) |
+                Q(info_children__surname__icontains=student_filter)
+            )
+        if olympiad_filter:
+            queryset = queryset.filter(info_olympiad__id=olympiad_filter)
+
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Подготовка данных для выгрузки
+        data = []
+        for result in queryset:
+            data.append([
+                result.info_children.get_full_name(),
+                result.info_olympiad.name,
+                result.info_olympiad.subject.name,
+                f"{result.info_children.classroom.number} {result.info_children.classroom.letter}",
+                result.points,
+                result.get_status_result_display(),
+                result.date_added.replace(tzinfo=None)  # Удаление информации о временной зоне
+            ])
+
+        # Создание DataFrame
+        df = pd.DataFrame(data, columns=[
+            'Ученик', 'Олимпиада', 'Предмет', 'Класс', 'Очки', 'Статус', 'Дата'
+        ])
+
+        # Создание HttpResponse с заголовками для выгрузки
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=report.xlsx'
+
+        # Сохранение DataFrame в Excel файл
+        with pd.ExcelWriter(response, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Results')
+
+        return response
