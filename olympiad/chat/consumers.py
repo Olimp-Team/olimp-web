@@ -1,3 +1,5 @@
+import django
+django.setup()
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from chat.models import Message, Group

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Импорт завершен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #28a745;
+        }
+        p {
+            font-size: 1.2em;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Импорт завершен успешно</h1>
+    <p>Пользователи успешно импортированы в базу данных.</p>
+    <a href="{% url 'docs:import_users' %}">Вернуться к форме импорта</a>
+</body>
+</html>

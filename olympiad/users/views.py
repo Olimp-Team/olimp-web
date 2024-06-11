@@ -11,6 +11,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import NewChildForm
 from .mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
+from main.models import *
 
 
 class AuthLogin(View):
@@ -83,7 +84,19 @@ class PasswordChange(View, LoginRequiredMixin):
 
 class CreateAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
     def get(self, request):
-        return render(request, 'add_admin/add_admin.html')
+        form = NewAdminForm()
+        context = {'form': form}
+        return render(request, 'add_admin/add_admin.html', context)
+
+    def post(self, request):
+        form = NewAdminForm(data=request.POST)
+        if form.is_valid():
+            admin = form.save(commit=False)
+            admin.is_admin = True
+            admin.save()
+            return HttpResponseRedirect(reverse('main:admin_list'))
+        context = {'form': form}
+        return render(request, 'add_admin/add_admin.html', context)
 
 
 class CreateChild(View, LoginRequiredMixin, AdminRequiredMixin):
@@ -118,7 +131,22 @@ class CreateTeacher(View, LoginRequiredMixin, AdminRequiredMixin):
             teacher.is_teacher = True
             teacher.save()
             classroom_guide = form.cleaned_data['classroom_guide']
-            Classroom.objects.get(id=classroom_guide.id).teacher.add(teacher)
+            for classroom_id in classroom_guide:
+                Classroom.objects.get(id=classroom_id).teacher.add(teacher)
             return HttpResponseRedirect(reverse('main:list_classroom'))
         context = {'form': form}
-        return render(request, 'add_students/add_students.html', context)
+        return render(request, 'add_teacher/add_teacher.html', context)
+
+
+class TeacherListView(View, LoginRequiredMixin, AdminRequiredMixin):
+    def get(self, request):
+        teachers = User.objects.filter(is_teacher=True)
+        context = {'teachers': teachers}
+        return render(request, 'teacher_list.html', context)
+
+
+class AdminListView(View, LoginRequiredMixin, AdminRequiredMixin):
+    def get(self, request):
+        admins = User.objects.filter(is_admin=True)
+        context = {'admins': admins}
+        return render(request, 'admin_list.html', context)

@@ -9,9 +9,17 @@ from result.models import *
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
 from users.models import User
-import pandas as pd
 from django.views.generic import ListView
 from django.db.models import Q
+from register.models import *
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase import pdfmetrics
+import os
+import pymorphy3
+import zipfile
+import tempfile
 
 
 class ExcelClassroom(View, LoginRequiredMixin):
@@ -238,7 +246,7 @@ def import_users(request):
         if form.is_valid():
             file = request.FILES['file']
             import_data(file)
-            return redirect('docs:success_import')
+            return redirect('docs:succes_import')
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
@@ -419,3 +427,159 @@ class ExportExcelView(ListView):
             df.to_excel(writer, index=False, sheet_name='Results')
 
         return response
+
+
+def create_pdf_for_student(student, olympiads, output_path):
+    font_path = os.path.join('static', 'fonts', 'timesnewromanpsmt.ttf')
+    pdfmetrics.registerFont(TTFont('timesnewromanpsmt', font_path))
+
+    pdf_canvas = canvas.Canvas(output_path, pagesize=A4)
+    width, height = A4
+    margin = 50
+    x_right = width - margin
+    y_top = height - margin
+
+    morph = pymorphy3.MorphAnalyzer()
+
+    def to_accusative(name):
+        parsed_name = morph.parse(name)[0]
+        return parsed_name.inflect({'accs'}).word.capitalize()
+
+    pdf_canvas.setFont("timesnewromanpsmt", 12)
+
+    subjects_str = ', '.join(olympiads)
+    full_name_accusative = f"{to_accusative(student.last_name)} {to_accusative(student.first_name)} {to_accusative(student.surname)}"
+
+    pdf_canvas.drawRightString(x_right, y_top, 'В оргкомитет школьного этапа')
+    y_top -= 20
+    pdf_canvas.drawRightString(x_right, y_top, 'всероссийской и муниципальной')
+    y_top -= 20
+    pdf_canvas.drawRightString(x_right, y_top, 'олимпиад школьников')
+    y_top -= 20
+    pdf_canvas.drawRightString(x_right, y_top, '________________________________')
+    y_top -= 20
+    pdf_canvas.drawRightString(x_right, y_top, '________________________________')
+    y_top -= 20
+    pdf_canvas.drawRightString(x_right, y_top, '________________________________')
+    pdf_canvas.setFont("timesnewromanpsmt", 10)
+    y_top -= 20
+    pdf_canvas.drawRightString(x_right, y_top, '(Ф.И.О. родителя (законного представителя))')
+    y_top -= 40
+    pdf_canvas.setFont("timesnewromanpsmt", 12)
+    pdf_canvas.drawCentredString(width / 2.0, y_top, 'Заявление')
+    y_top -= 40
+
+    son_or_daughter = 'сына' if student.gender == 'М' else 'дочь'
+
+    pdf_canvas.drawString(margin, y_top, f'Прошу включить моего {son_or_daughter} {full_name_accusative},')
+    y_top -= 20
+    pdf_canvas.drawString(margin, y_top,
+                          f'обучающегося (ся) {student.classroom.number} {student.classroom.letter} класса МАОУ «МЛ № 1» г. Магнитогорска,')
+    y_top -= 20
+    pdf_canvas.drawString(margin, y_top, 'в состав участников школьного этапа всероссийской и муниципальной')
+    y_top -= 20
+    pdf_canvas.drawString(margin, y_top, f'олимпиад в 2023-2024 учебном году по следующим предметам:')
+    y_top -= 40
+
+    pdf_canvas.drawString(margin, y_top, subjects_str)
+    y_top -= 20
+
+    pdf_canvas.drawString(margin, y_top, 'С Порядком проведения всероссийской олимпиады школьников,')
+    y_top -= 20
+    pdf_canvas.drawString(margin, y_top, 'утвержденным приказом Министерства образования и науки Российской Федерации')
+    y_top -= 20
+    pdf_canvas.drawString(margin, y_top, 'от 27 ноября 2020г. N678 (ред. от 26.01.2023), ознакомлен(а).')
+    y_top -= 40
+
+    pdf_canvas.drawString(margin, y_top,
+                          'Дата _______________________________              Подпись _______________________________')
+    y_top -= 60
+
+    if y_top < 100:
+        pdf_canvas.showPage()
+        pdf_canvas.setFont("timesnewromanpsmt", 12)
+        y_top = height - margin
+
+    pdf_canvas.save()
+
+
+def create_zip_archive(request):
+    if not request.user.is_admin:
+        return HttpResponseForbidden()
+
+    temp_dir = tempfile.TemporaryDirectory()
+    temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
+
+    registers = Register_admin.objects.filter(status_admin=False)
+    classes = {}
+
+    for register in registers:
+        student = register.child_admin
+        olympiad = register.Olympiad_admin
+        class_name = f'{student.classroom.number}{student.classroom.letter}'
+        if class_name not in classes:
+            classes[class_name] = {}
+        if student not in classes[class_name]:
+            classes[class_name][student] = []
+        classes[class_name][student].append(olympiad.subject.name)
+
+    for class_name, students in classes.items():
+        class_dir = os.path.join(temp_dir.name, class_name)
+        os.makedirs(class_dir, exist_ok=True)
+        for student, subjects in students.items():
+            student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
+            create_pdf_for_student(student, subjects, student_file)
+
+    with zipfile.ZipFile(temp_zip, 'w') as zf:
+        for root, _, files in os.walk(temp_dir.name):
+            for file in files:
+                zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir.name))
+
+    temp_dir.cleanup()
+
+    response = HttpResponse(open(temp_zip.name, 'rb').read(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="applications.zip"'
+    os.remove(temp_zip.name)
+    return response
+
+
+def create_zip_archive_for_teacher(request):
+    if not request.user.is_teacher:
+        return HttpResponseForbidden()
+
+    temp_dir = tempfile.TemporaryDirectory()
+    temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
+
+    teacher = request.user
+    classroom = teacher.classroom_guide
+    registers = Register_admin.objects.filter(teacher_admin=request.user, )
+    classes = {}
+
+    for register in registers:
+        student = register.child_admin
+        olympiad = register.Olympiad_admin
+        class_name = f'{student.classroom.number}{student.classroom.letter}'
+        if class_name not in classes:
+            classes[class_name] = {}
+        if student not in classes[class_name]:
+            classes[class_name][student] = []
+        classes[class_name][student].append(olympiad.subject.name)
+
+    for class_name, students in classes.items():
+        class_dir = os.path.join(temp_dir.name, class_name)
+        os.makedirs(class_dir, exist_ok=True)
+        for student, subjects in students.items():
+            student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
+            create_pdf_for_student(student, subjects, student_file)
+
+    with zipfile.ZipFile(temp_zip, 'w') as zf:
+        for root, _, files in os.walk(temp_dir.name):
+            for file in files:
+                zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir.name))
+
+    temp_dir.cleanup()
+
+    response = HttpResponse(open(temp_zip.name, 'rb').read(), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="applications.zip"'
+    os.remove(temp_zip.name)
+    return response

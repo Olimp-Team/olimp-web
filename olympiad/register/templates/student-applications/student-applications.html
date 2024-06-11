@@ -37,6 +37,7 @@
 <div class="main">
     <div class="toptext">
         <h1 class="toptext1">Заявки учеников</h1>
+        <a href="{% url 'docs:download_teacher_applications_zip' %}" class="btn btn-primary">Скачать заявки класса (ZIP)</a>
         <h2 class="toptext2">Класс {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }}</h2>
     </div>
     <div class="topbuttons">

@@ -4,11 +4,14 @@
     <title>Импорт пользователей</title>
 </head>
 <body>
-    <h1>Импорт пользователей из Excel</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Загрузить</button>
-    </form>
+<h1>Импорт пользователей из Excel</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Загрузить</button>
+</form>
+{#<a href="{% url 'docs:generate_pdf' %}" class="btn btn-primary">Сгенерировать PDF</a>#}
+
+
 </body>
 </html>

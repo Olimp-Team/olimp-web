@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     # My apps
+    'olympiad',
     'main',
     'users',
     'api',
@@ -91,7 +92,20 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = 'users.User'
 
+ASGI_APPLICATION = 'olympiad.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+LOGIN_URL = 'users:login'
 WSGI_APPLICATION = 'olympiad.wsgi.application'
 
 # Database
@@ -137,11 +151,18 @@ USE_TZ = True
 
 DATE_INPUT_FORMATS = '%d-%m-%Y'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Укажите путь к директории, где находятся статические файлы
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Укажите путь к директории, куда будут собираться статические файлы для продакшена
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -153,21 +174,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Медиа файлы
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SITE_ID = 1
-
-AUTH_USER_MODEL = 'users.User'
-
-ASGI_APPLICATION = 'olympiad.asgi.application'
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
-
-LOGIN_URL = 'users/login/'
