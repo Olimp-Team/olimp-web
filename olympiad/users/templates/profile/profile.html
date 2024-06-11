@@ -6,36 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Olimp | Профиль</title>
     <link rel="stylesheet" href="{% static 'profile/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="shortcut-icon" href="{% static 'profile/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'profile/img/logoolimp.jpg' %}">
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" src="{% static 'profile/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Настройки</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" src="{% static 'profile/img/sun.png' %}"></button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                    {#src="{% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}">#}
-            >
-            </button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'profile/img/chat.png' %}"></button>
-        </div>
-    </div>
-</header>
-<body>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
 {% endblock %}
-
+<body>
 <div class="main">
     <div class="textprofile">
         <p>Профиль</p>
