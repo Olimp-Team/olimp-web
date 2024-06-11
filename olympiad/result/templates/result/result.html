@@ -10,6 +10,8 @@
 </head>
 <body>
     <h1>Результаты олимпиад</h1>
+    <div><a href="{% url 'result:add_result' %}" > Добавить результаты ученика</a></div>
+    <div><a href="{% url 'result:add_result_class' %}" > Добавить результаты класса</a></div>
     <form method="get">
         {{ filter.form.as_p }}
         <button type="submit">Фильтровать</button>
