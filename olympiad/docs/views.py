@@ -552,7 +552,8 @@ def create_zip_archive_for_teacher(request):
 
     teacher = request.user
     classroom = teacher.classroom_guide
-    registers = Register_admin.objects.filter(teacher_admin=request.user, )
+    registers = Register_admin.objects.filter(teacher_admin=teacher, child_admin__classroom=classroom,
+                                              status_teacher=True, status_admin=True)
     classes = {}
 
     for register in registers:
@@ -583,3 +584,31 @@ def create_zip_archive_for_teacher(request):
     response['Content-Disposition'] = 'attachment; filename="applications.zip"'
     os.remove(temp_zip.name)
     return response
+
+
+def import_olympiads(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES['file']
+            df = pd.read_excel(excel_file)
+
+            for index, row in df.iterrows():
+                category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
+                level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
+                stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
+                subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
+
+                Olympiad.objects.create(
+                    name=row['Название олимпиады'],
+                    description=row['Описание олимпиады'],
+                    category=category,
+                    level=level,
+                    stage=stage,
+                    subject=subject,
+                    class_olympiad=row['Класс олимпиады']
+                )
+            return HttpResponseRedirect('/success_url/')
+    else:
+        form = UploadFileForm()
+    return render(request, 'import_olympiads.html', {'form': form})
