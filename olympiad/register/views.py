@@ -36,13 +36,15 @@ class RegisterAdd(View, LoginRequiredMixin):
     def get(self, request, Olympiad_id):
         if request.user.is_child:
             olympiad = Olympiad.objects.get(id=Olympiad_id)
-            # Проверка наличия существующей записи и создание новой, если не существует
+            if olympiad.stage.name != 'Школьный':
+                return HttpResponseForbidden('Регистрация возможна только на школьный этап.')
+
             register, created = Register.objects.get_or_create(
                 child=request.user,
                 Olympiad=olympiad,
                 defaults={'teacher': request.user.classroom.teacher}
             )
-            # Если заявка уже существует, то можно выполнить другие действия, если это необходимо
+
             if not created:
                 register.save()
 
