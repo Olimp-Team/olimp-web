@@ -36,7 +36,7 @@ class ExportResultsView(LoginRequiredMixin, View):
                       'Дата']
 
         # Преобразуем столбец 'Дата' в неявные объекты datetime без учета часового пояса
-        df['Дата'] = df['Дата'].dt.tz_convert(None)
+        df['Даtта'] = df['Дата'].dt.tz_convert(None)
 
         # Создаем HTTP-ответ с файлом Excel
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
