@@ -1,28 +1,28 @@
+import os
+import pymorphy3
+import zipfile
+import tempfile
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden, HttpResponseRedirect
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
 from main.models import *
 from register.models import *
 from result.models import *
+from users.models import *
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
-from users.models import User
-from django.views.generic import ListView
 from django.db.models import Q
-from register.models import *
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-import os
-import pymorphy3
-import zipfile
-import tempfile
+
+from users.mixins import AdminRequiredMixin
 
 
-class ExcelClassroom(View, LoginRequiredMixin):
+class ExcelClassroom(AdminRequiredMixin, View):
     def get(self, request, Classroom_id):
         if request.user.is_admin:
             queryset = Register_admin.objects.filter(
@@ -132,7 +132,7 @@ class ExcelClassroom(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
-class ExcelAll(View, LoginRequiredMixin):
+class ExcelAll(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
             queryset = Register_admin.objects.all()  # Получаем данные из нашей модели
@@ -321,7 +321,7 @@ def parse_classroom(classroom_str):
     return number, letter
 
 
-class DashboardView(ListView):
+class DashboardView(AdminRequiredMixin, ListView):
     model = Result
     template_name = 'dashboard.html'
     context_object_name = 'results'
@@ -366,7 +366,7 @@ import pandas as pd
 from django.http import HttpResponse
 
 
-class ExportExcelView(ListView):
+class ExportExcelView(AdminRequiredMixin, ListView):
     model = Result
 
     def get_queryset(self):

@@ -12,6 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import NewChildForm
 from .mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from main.models import *
+from main.models import Classroom
 
 
 class AuthLogin(View):
@@ -33,7 +34,7 @@ class AuthLogin(View):
         return render(request, "auth/auth.html", context)
 
 
-class ProfileView(View, LoginRequiredMixin):
+class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         form = UserProfileForm(instance=request.user)
         context = {'form': form}
@@ -65,7 +66,7 @@ def logout(request):
     return HttpResponseRedirect(reverse('users:login'))
 
 
-class PasswordChange(View, LoginRequiredMixin):
+class PasswordChange(AdminRequiredMixin, View):
     def get(self, request):
         form = PasswordChangeForm(request.user)
         context = {'form': form}
@@ -82,7 +83,7 @@ class PasswordChange(View, LoginRequiredMixin):
             print(form.errors)
 
 
-class CreateAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
+class CreateAdmin(AdminRequiredMixin, View):
     def get(self, request):
         form = NewAdminForm()
         context = {'form': form}
@@ -99,7 +100,7 @@ class CreateAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
         return render(request, 'add_admin/add_admin.html', context)
 
 
-class CreateChild(View, LoginRequiredMixin, AdminRequiredMixin):
+class CreateChild(AdminRequiredMixin, View):
     def get(self, request):
         form = NewChildForm()
         context = {'form': form}
@@ -118,7 +119,7 @@ class CreateChild(View, LoginRequiredMixin, AdminRequiredMixin):
         return render(request, 'add_students/add_students.html', context)
 
 
-class CreateTeacher(View, LoginRequiredMixin, AdminRequiredMixin):
+class CreateTeacher(AdminRequiredMixin, View):
     def get(self, request):
         form = NewTeacherForm()
         context = {'form': form}
@@ -138,14 +139,14 @@ class CreateTeacher(View, LoginRequiredMixin, AdminRequiredMixin):
         return render(request, 'add_teacher/add_teacher.html', context)
 
 
-class TeacherListView(View, LoginRequiredMixin, AdminRequiredMixin):
+class TeacherListView(AdminRequiredMixin, View):
     def get(self, request):
         teachers = User.objects.filter(is_teacher=True)
         context = {'teachers': teachers}
         return render(request, 'teacher_list.html', context)
 
 
-class AdminListView(View, LoginRequiredMixin, AdminRequiredMixin):
+class AdminListView(AdminRequiredMixin, View):
     def get(self, request):
         admins = User.objects.filter(is_admin=True)
         context = {'admins': admins}

@@ -14,8 +14,10 @@ from register.models import *
 from .forms import OlympiadResultClassForm
 from users.models import User
 
+from users.mixins import AdminRequiredMixin
 
-class ExportResultsView(LoginRequiredMixin, View):
+
+class ExportResultsView(AdminRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         filter_set = ResultFilter(request.GET, queryset=Result.objects.all())
         results = filter_set.qs.values(
@@ -48,7 +50,7 @@ class ExportResultsView(LoginRequiredMixin, View):
         return response
 
 
-class ImportResultsView(LoginRequiredMixin, View):
+class ImportResultsView(AdminRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         users = User.objects.all()
         olympiads = Olympiad.objects.all()
@@ -84,14 +86,14 @@ class ImportResultsView(LoginRequiredMixin, View):
         return redirect('results_list')
 
 
-class ResultListView(LoginRequiredMixin, FilterView):
+class ResultListView(AdminRequiredMixin, FilterView):
     model = Result
     template_name = 'result/result.html'
     context_object_name = 'results'
     filterset_class = ResultFilter
 
 
-class OlympiadResultCreateView(LoginRequiredMixin, View):
+class OlympiadResultCreateView(AdminRequiredMixin, View):
     def get(self, request):
         form = OlympiadResultForm()
         return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
@@ -104,7 +106,7 @@ class OlympiadResultCreateView(LoginRequiredMixin, View):
         return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
 
 
-class OlympiadResultClassCreateView(LoginRequiredMixin, View):
+class OlympiadResultClassCreateView(AdminRequiredMixin, View):
     def get(self, request):
         form = OlympiadResultClassForm()
         return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': []})

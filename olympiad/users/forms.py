@@ -110,7 +110,7 @@ class NewTeacherForm(forms.ModelForm):
         model = User
         fields = (
             'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_teacher', 'classroom_guide', 'subject',
-            'post_job_teacher', 'password'
+            'post_job_teacher', 'password', 'gender'
         )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -165,7 +165,7 @@ class NewAdminForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_admin', 'password'
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_admin', 'password','gender'
         )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
