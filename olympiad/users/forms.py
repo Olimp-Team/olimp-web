@@ -3,7 +3,7 @@ from django import forms
 from django.forms import formset_factory
 from users.models import User
 
-from main.models import Classroom
+from main.models import *
 
 
 class UserLoginForm(AuthenticationForm):
@@ -106,10 +106,21 @@ class NewChildForm(forms.ModelForm):
 
 
 class NewTeacherForm(forms.ModelForm):
+    subject = forms.ModelMultipleChoiceField(
+        queryset=Subject.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+    classroom_guide = forms.ModelMultipleChoiceField(
+        queryset=Classroom.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
     class Meta:
         model = User
         fields = (
-            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_teacher', 'classroom_guide', 'subject',
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'classroom_guide', 'subject',
             'post_job_teacher', 'password', 'gender'
         )
 
@@ -138,12 +149,6 @@ class NewTeacherForm(forms.ModelForm):
         'class': "vvodinfo",
         'placeholder': "Введите дату рождения учителя"
     }))
-    classroom_guide = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={
-        'class': "vvodinfo"
-    }))
-    subject = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={
-        'class': "vvodinfo"
-    }))
     post_job_teacher = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={
         'class': "vvodinfo"
     }))
@@ -165,7 +170,7 @@ class NewAdminForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_admin', 'password','gender'
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'password', 'gender'
         )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -192,9 +197,6 @@ class NewAdminForm(forms.ModelForm):
         'type': 'search',
         'class': "vvodinfo",
         'placeholder': "Введите дату рождения администратора"
-    }))
-    is_admin = forms.BooleanField(widget=forms.CheckboxInput(attrs={
-        'class': "vvodinfo"
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'type': 'search',

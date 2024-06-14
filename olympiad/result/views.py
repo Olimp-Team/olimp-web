@@ -121,10 +121,10 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
 
             for idx, student in enumerate(classroom.child.all()):
                 Result.objects.create(
-                    student=student,
-                    olympiad=olympiad,
-                    score=score[idx],
-                    status=status[idx]
+                    info_children=student,
+                    info_olympiad=olympiad,
+                    points=score[idx],
+                    status_result=status[idx]
                 )
 
             return redirect('success_page')  # Замените 'success_page' на ваш URL для успешного добавления

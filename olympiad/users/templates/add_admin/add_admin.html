@@ -26,10 +26,12 @@
     <h1 class="add_newstudents_text">Создание нового администратора</h1>
     <ul class="spisokreg">
         <li>
-            <div class="divFam">
-                <h2>Фамилия</h2>
-                {{ form.last_name }}
-            </div>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="divFam">
+                    <h2>Фамилия</h2>
+                    {{ form.last_name }}
+                </div>
         </li>
         <li>
             <div class="divName">
@@ -74,13 +76,14 @@
             </div>
         </li>
     </ul>
-                
+
 
     <div class="right">
         <div class="editphoto">
             <div>
                 <img class="imgpers" src="
                     
+                        
                         
                         {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
                      alt="">
@@ -93,8 +96,8 @@
 
             </div>
         </div>
-        <a class="savebutton">Создать</a>
-
+        <button type="submit" class="savebutton">Создать</button>
+        </form>
     </div>
 
 

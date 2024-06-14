@@ -95,7 +95,7 @@ class CreateAdmin(AdminRequiredMixin, View):
             admin = form.save(commit=False)
             admin.is_admin = True
             admin.save()
-            return HttpResponseRedirect(reverse('main:admin_list'))
+            return HttpResponseRedirect(reverse('users:admin_list'))
         context = {'form': form}
         return render(request, 'add_admin/add_admin.html', context)
 
@@ -131,10 +131,8 @@ class CreateTeacher(AdminRequiredMixin, View):
             teacher = form.save(commit=False)
             teacher.is_teacher = True
             teacher.save()
-            classroom_guide = form.cleaned_data['classroom_guide']
-            for classroom_id in classroom_guide:
-                Classroom.objects.get(id=classroom_id).teacher.add(teacher)
-            return HttpResponseRedirect(reverse('main:list_classroom'))
+            form.save_m2m()  # Ensure M2M fields are saved
+            return HttpResponseRedirect(reverse('users:teacher_list'))
         context = {'form': form}
         return render(request, 'add_teacher/add_teacher.html', context)
 
