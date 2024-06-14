@@ -2,13 +2,13 @@
 {% block header %}
 <header>
     <div class="golova">
-        <p class="wordhead">Главная страница</p>
+        
         <div id="sun">
             <button class="btnh"><img class="sun" src="{% static 'homepage/img/sun.png' %}"></button>
         </div>
         <div id="yourlogo">
             <button class="btnh"><img class="sun" id="avatarka"
-                                          src="{% static 'homepage/img/avatarka.png' %}"></button>
+                                          src=" {% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"></button>
         </div>
         <div id="chat">
             <button class="btnh"><img class="sun" id="chatblack"
