@@ -112,6 +112,8 @@ class Olympiad(models.Model):
                                  max_length=256)
     level = models.ForeignKey(to='Level_olympiad', on_delete=models.CASCADE, verbose_name='Название уровня',
                               max_length=256)
+    next_stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='next_olympiads', verbose_name='Следующий этап')
     stage = models.ForeignKey(to='Stage', on_delete=models.CASCADE, verbose_name='Название этапа', max_length=256)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Название школьного предмета')
     class_olympiad = models.IntegerField('Класс олимпиады')

@@ -14,8 +14,10 @@ from register.models import *
 from .forms import OlympiadResultClassForm
 from users.models import User
 
+from users.mixins import AdminRequiredMixin
 
-class ExportResultsView(LoginRequiredMixin, View):
+
+class ExportResultsView(AdminRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         filter_set = ResultFilter(request.GET, queryset=Result.objects.all())
         results = filter_set.qs.values(
@@ -36,7 +38,7 @@ class ExportResultsView(LoginRequiredMixin, View):
                       'Дата']
 
         # Преобразуем столбец 'Дата' в неявные объекты datetime без учета часового пояса
-        df['Дата'] = df['Дата'].dt.tz_convert(None)
+        df['Даtта'] = df['Дата'].dt.tz_convert(None)
 
         # Создаем HTTP-ответ с файлом Excel
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -48,7 +50,7 @@ class ExportResultsView(LoginRequiredMixin, View):
         return response
 
 
-class ImportResultsView(LoginRequiredMixin, View):
+class ImportResultsView(AdminRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         users = User.objects.all()
         olympiads = Olympiad.objects.all()
@@ -84,14 +86,14 @@ class ImportResultsView(LoginRequiredMixin, View):
         return redirect('results_list')
 
 
-class ResultListView(LoginRequiredMixin, FilterView):
+class ResultListView(AdminRequiredMixin, FilterView):
     model = Result
     template_name = 'result/result.html'
     context_object_name = 'results'
     filterset_class = ResultFilter
 
 
-class OlympiadResultCreateView(LoginRequiredMixin, View):
+class OlympiadResultCreateView(AdminRequiredMixin, View):
     def get(self, request):
         form = OlympiadResultForm()
         return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
@@ -104,7 +106,7 @@ class OlympiadResultCreateView(LoginRequiredMixin, View):
         return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
 
 
-class OlympiadResultClassCreateView(LoginRequiredMixin, View):
+class OlympiadResultClassCreateView(AdminRequiredMixin, View):
     def get(self, request):
         form = OlympiadResultClassForm()
         return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': []})
@@ -119,10 +121,10 @@ class OlympiadResultClassCreateView(LoginRequiredMixin, View):
 
             for idx, student in enumerate(classroom.child.all()):
                 Result.objects.create(
-                    student=student,
-                    olympiad=olympiad,
-                    score=score[idx],
-                    status=status[idx]
+                    info_children=student,
+                    info_olympiad=olympiad,
+                    points=score[idx],
+                    status_result=status[idx]
                 )
 
             return redirect('success_page')  # Замените 'success_page' на ваш URL для успешного добавления

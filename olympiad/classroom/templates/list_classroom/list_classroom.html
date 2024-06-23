@@ -6,27 +6,14 @@
     <meta charset="UTF-8">
     <title>Olimp | Список учебных классов</title>
     <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="shortcut-icon" href="{% static 'list_classroom/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" src="{% static 'list_classroom/img/logoolimp.jpg' %}" alt="">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Страница списков учебных классов</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" src="{% static 'list_classroom/img/sun.png' %}"></button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'list_classroom/img/avatarka.png' %}"></button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'list_classroom/img/Chatblack.png' %}"></button>
-        </div>
-    </div>
-</header>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
 {% include 'navbar/navbar.html' %}
 {% block content %}
 {% endblock %}

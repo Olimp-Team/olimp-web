@@ -14,7 +14,7 @@ from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequired
 # Страницы учеников
 
 
-class RegisterPage(View, LoginRequiredMixin):
+class RegisterPage(ChildRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_child:
             context = {
@@ -32,17 +32,19 @@ class RegisterPage(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
-class RegisterAdd(View, LoginRequiredMixin):
+class RegisterAdd(ChildRequiredMixin, View):
     def get(self, request, Olympiad_id):
         if request.user.is_child:
             olympiad = Olympiad.objects.get(id=Olympiad_id)
-            # Проверка наличия существующей записи и создание новой, если не существует
+            if olympiad.stage.name != 'Школьный':
+                return HttpResponseForbidden('Регистрация возможна только на школьный этап.')
+
             register, created = Register.objects.get_or_create(
                 child=request.user,
                 Olympiad=olympiad,
                 defaults={'teacher': request.user.classroom.teacher}
             )
-            # Если заявка уже существует, то можно выполнить другие действия, если это необходимо
+
             if not created:
                 register.save()
 
@@ -54,7 +56,7 @@ class RegisterAdd(View, LoginRequiredMixin):
         return HttpResponseForbidden()
 
 
-class RegisterDelete(View, LoginRequiredMixin):
+class RegisterDelete(ChildRequiredMixin, View):
     def get(self, request, Register_id):
         if request.user.is_child:
             register_basket = Register.objects.get(id=Register_id)
@@ -67,7 +69,7 @@ class RegisterDelete(View, LoginRequiredMixin):
         pass
 
 
-class RegisterSend(View, LoginRequiredMixin):
+class RegisterSend(ChildRequiredMixin, View):
     def get(self, request):
         if request.user.is_child:
             objs = [
@@ -89,7 +91,7 @@ class RegisterSend(View, LoginRequiredMixin):
         pass
 
 
-class BasketStudentApp(View, LoginRequiredMixin):
+class BasketStudentApp(ChildRequiredMixin, View):
     def get(self, request):
         if request.user.is_child:
             context = {
@@ -125,7 +127,7 @@ class BasketStudentApp(View, LoginRequiredMixin):
 
 ########################################################################################################################
 # Страницы учителей
-class ChildRegisterList(View, LoginRequiredMixin):
+class ChildRegisterList(TeacherRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_teacher:
             # Получаем все заявки учеников, которые связаны с классом текущего учителя
@@ -166,7 +168,7 @@ class ChildRegisterList(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
-class RegisterDeleteTeacher(View, LoginRequiredMixin):
+class RegisterDeleteTeacher(TeacherRequiredMixin, View):
     def post(self, request, Olympiad_id, student_id):
         if request.user.is_teacher:
             try:
@@ -181,7 +183,7 @@ class RegisterDeleteTeacher(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
-class RegisterSendTeacher(View, LoginRequiredMixin):
+class RegisterSendTeacher(TeacherRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_teacher:
             # Получаем заявки от текущего учителя, которые ещё не были обработаны
@@ -205,7 +207,7 @@ class RegisterSendTeacher(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
-class AddRecommendation(View, LoginRequiredMixin):
+class AddRecommendation(TeacherRequiredMixin, View):
     def get(self, request):
         if request.user.is_teacher:
             context = {
@@ -234,7 +236,7 @@ class AddRecommendation(View, LoginRequiredMixin):
             return HttpResponseForbidden()
 
 
-class ProcessRecommendation(View):
+class ProcessRecommendation(TeacherRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_teacher:
             return HttpResponseForbidden("Permission denied.")
@@ -289,7 +291,7 @@ class ProcessRecommendation(View):
 ########################################################################################################################
 # Страницы администратора
 
-class RegisterListClassroom(View, LoginRequiredMixin):
+class RegisterListClassroom(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
             # Получаем все заявки и группируем их по учебным классам

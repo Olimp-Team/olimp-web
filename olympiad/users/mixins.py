@@ -1,13 +1,12 @@
-from django.contrib.auth.mixins import AccessMixin
-from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.core.exceptions import PermissionDenied
 
 
 # Миксин для доступа только администратора
-class AdminRequiredMixin(AccessMixin):
+class AdminRequiredMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_admin:
-            # Перенаправляем на страницу доступа запрещен
-            return self.handle_no_permission()
+            raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -15,8 +14,7 @@ class AdminRequiredMixin(AccessMixin):
 class ChildRequiredMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_child:
-            # Перенаправляем на страницу доступа запрещен
-            return self.handle_no_permission()
+            raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -24,6 +22,5 @@ class ChildRequiredMixin(AccessMixin):
 class TeacherRequiredMixin(AccessMixin):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated or not request.user.is_teacher:
-            # Перенаправляем на страницу доступа запрещен
-            return self.handle_no_permission()
+            raise PermissionDenied
         return super().dispatch(request, *args, **kwargs)

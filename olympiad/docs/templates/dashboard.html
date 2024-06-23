@@ -1,35 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления</title>
+    <title>Olimp | Отчет по результатам олимпиад</title>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        form label, form input, form select, form button {
-            margin-right: 10px;
-        }
-    </style>
+    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <script>
         $(function() {
             var dateFormat = "yy-mm-dd",
@@ -65,17 +47,30 @@
         });
     </script>
 </head>
+{% include 'header/header.html' %}
+<p class="wordhead">Отчет по результатам олимпиад</p>
+{% block header %}
+{% endblock %}
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
 <body>
-    <h1>Отчет по результатам олимпиад</h1>
-
+<div class="main">
+    <div class="headpage">
     <form method="get" id="filterForm">
-        <label for="start-date">Начальная дата:</label>
+        <div class="startdata">
+        <label for="start-date" class="text">Начальная дата</label>
         <input type="text" id="start-date" name="start-date" value="{{ request.GET.start_date }}">
+        </div>
 
-        <label for="end-date">Конечная дата:</label>
+        <div class="enddata">
+        <label for="end-date"  class="text">Конечная дата</label>
         <input type="text" id="end-date" name="end-date" value="{{ request.GET.end_date }}">
+        </div>
 
-        <label for="class">Класс:</label>
+        <div class="classroom">
+        <label for="class" class="text">Класс</label>
         <select id="class" name="class">
             <option value="">Выберите класс</option>
             {% for class in classrooms %}
@@ -84,8 +79,10 @@
                 </option>
             {% endfor %}
         </select>
+        </div>
 
-        <label for="subject">Предмет:</label>
+        <div class="classsubject">
+        <label for="subject" class="text">Предмет</label>
         <select id="subject" name="subject">
             <option value="">Выберите предмет</option>
             {% for subject in subjects %}
@@ -94,11 +91,15 @@
                 </option>
             {% endfor %}
         </select>
+        </div>
 
-        <label for="student">Ученик:</label>
+        <div class="student">
+        <label for="student" class="text">Ученик</label>
         <input type="text" id="student" name="student" placeholder="Введите имя ученика" value="{{ request.GET.student }}">
+        </div>
 
-        <label for="olympiad">Олимпиада:</label>
+        <div class="olympiad">
+        <label for="olympiad" class="text">Олимпиада</label>
         <select id="olympiad" name="olympiad">
             <option value="">Выберите олимпиаду</option>
             {% for olympiad in olympiads %}
@@ -107,9 +108,11 @@
                 </option>
             {% endfor %}
         </select>
+        </div>
 
-        <button type="submit">Фильтровать</button>
+        <button type="submit" class="filterbtn">Фильтровать</button>
     </form>
+</div>
 
     <form method="get" action="{% url 'docs:export_excel' %}">
         <!-- Передача текущих параметров фильтра для выгрузки -->
@@ -119,9 +122,9 @@
         <input type="hidden" name="subject" value="{{ request.GET.subject }}">
         <input type="hidden" name="student" value="{{ request.GET.student }}">
         <input type="hidden" name="olympiad" value="{{ request.GET.olympiad }}">
-        <button type="submit">Выгрузить в Excel</button>
+        <button type="submit" class="excelbtn">Выгрузить в Excel</button>
     </form>
-
+    
     <h2>Результаты</h2>
     <table>
         <thead>
@@ -149,5 +152,6 @@
             {% endfor %}
         </tbody>
     </table>
+</div>
 </body>
 </html>

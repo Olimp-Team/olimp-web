@@ -5,38 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'add_teacher/add_teacher_light.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="icon" href="{% static 'add_teacher/img/logoolimp.jpg' %}">
 
-    <title>Olimp | Ваши заявки</title>
+    <title>Olimp | Создание нового учителя</title>
 </head>
 
-<header>
-    <div class="golova">
-
-
-        <p class="wordhead">Создание нового учителя</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'add_teacher/img/sun.png' %}">
-            </button>
-            <div id="yourlogo">
-                <button class="avatarka"><img class="sun" id="avatarka"
-                                              src="{% static 'add_teacher/img/avatarka.png' %}"></button>
-            </div>
-            <div id="chat">
-                <button class="chatik"><img class="sun" id="chatblack"
-                                            src="{% static 'add_teacher/img/Chatblack.png' %}"></button>
-            </div>
-        </div>
-    </div>
-</header>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
 <body>
 
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
-<img class="logo" id="l-tip" src="{% static 'add_teacher/img/logoolimp.jpg' %}">
-<p class="logoword">Olimp</p>
+    <img class="logo" id="l-tip" src="{% static 'add_teacher/img/logoolimp.jpg' %}">
+    <p class="logoword">Olimp</p>
 {% endblock %}
 
 <div class="main">
@@ -44,114 +29,75 @@
     <h1 class="add_newstudents_text">Создание нового учителя</h1>
     <ul class="spisokreg">
         <li>
-            <div class="divFam">
-                <h2>Фамилия</h2>
-                <input type=search class="vvodinfo" placeholder="Введите фамилию ученика">
-            </div>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="divFam">
+                    <h2>Фамилия</h2>
+                    {{ form.last_name }}
+                    {#                <input type=search class="vvodinfo" placeholder="Введите фамилию ученика">#}
+                </div>
         </li>
         <li>
             <div class="divName">
                 <h2>Имя</h2>
-                <input type=search class="vvodinfo" placeholder="Введите имя ученика">
+                {{ form.first_name }}
+                {#                <input type=search class="vvodinfo" placeholder="Введите имя ученика">#}
             </div>
         </li>
         <li>
             <div class="divOtch">
                 <h2>Отчество</h2>
-                <input type=search class="vvodinfo" placeholder="Введите отчество ученика">
+                {{ form.surname }}
+                {#                <input type=search class="vvodinfo" placeholder="Введите отчество ученика">#}
             </div>
         </li>
         <li>
             <div class="divDate">
                 <h2>Дата рождения</h2>
-                <input type=search class="vvodinfo" placeholder="Введите дату рождения ученика">
+                {{ form.birth_date }}
+                {#                <input type=search class="vvodinfo" placeholder="Введите дату рождения ученика">#}
             </div>
         </li>
         <li>
             <div class="divGen">
                 <h2>Пол</h2>
-                <select class="vvodinfo" id="spisokmain">
-                    <div class="xui">
-                        <option selected class="selected">Выберите пол ученика</option>
-                        <option>Муж</option>
-                        <option>Жен</option>
-                    </div>
-
-                </select>
+                {{ form.gender }}
             </div>
         </li>
         <li>
             <div class="divsubject">
                 <h2>Какие предметы преподает</h2>
-                <select class="vvodinfo" id="spisokmain">
-                    <div class="xui">
-                        <option selected class="selected">Выберите предмет, которые преподаёт учитель</option>
-                        <option>Математика</option>
-                        <option>Алгебра</option>
-                        <option>Геометрия</option>
-                        <option>ТВИС</option>
-                        <option>Информатика</option>
-                        <option>Окружающий мир</option>
-                        <option>География</option>
-                        <option>Биология</option>
-                        <option>Физика</option>
-                        <option>Химия</option>
-                        <option>ОБЖ</option>
-                        <option>История</option>
-                        <option>Обществознание</option>
-                        <option>Русский язык</option>
-                        <option>Иностранный язык</option>
-                        <option>Технология</option>
-                        <option>Черчение</option>
-                        <option>Индивидуальный проект</option>
-                        <option>Физическая культура</option>
-                        <option>Музыка</option>
-                        <option>ИЗО</option>
-                        <option>Искусство</option>
-
-                    </div>
-
-                </select>
+                {{ form.subject }}
             </div>
         </li>
         <li>
             <div class="divGen">
-                <h2>Пол</h2>
-                <select class="vvodinfo" id="spisokmain">
-                    <div class="xui">
-                        <option selected class="selected">Выберите класс, которым руководит учитель</option>
-                        <option>10 А</option>
-                        <option>10 Б</option>
-                        <option>10 В</option>
-                        <option>10 Г</option>
-                        <option>10 Д</option>
-
-                    </div>
-
-                </select>
+                <h2>Классное руководство</h2>
+                {{ form.classroom_guide }}
             </div>
         </li>
         <li>
             <div class="divLogin">
                 <h2>Логин</h2>
-                <input type=search class="vvodinfo" placeholder="Введите логин ученика">
+                {{ form.username }}
                 <a class="randombutton" href="#">Случайный</a>
             </div>
         </li>
         <li>
             <div class="divPassword">
                 <h2>Пароль</h2>
-                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">
+                {{ form.password }}
                 <a class="randombutton" href="#">Случайный</a>
 
             </div>
         </li>
     </ul>
-    <div class="right">
+    <form class="right">
         <div class="editphoto">
             <div>
                 <img class="imgpers" src="
-                    {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
+                    
+                        {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
                      alt="">
 
                 <img class="imgocontovka" src="{% static 'profile/img/Base.png' %}"
@@ -162,30 +108,30 @@
 
             </div>
         </div>
-        <a class="savebutton">Создать</a>
+        <button type="submit" class="savebutton">Создать</button>
+    </form>
+</div>
 
-    </div>
 
+<script>
+    var modal = document.querySelector(".modal");
+    var trigger = document.querySelector(".trigger");
+    var closeButton = document.querySelector(".btn-sm");
 
-    <script>
-        var modal = document.querySelector(".modal");
-        var trigger = document.querySelector(".trigger");
-        var closeButton = document.querySelector(".btn-sm");
+    function toggleModal() {
+        modal.classList.toggle("show-modal");
+    }
 
-        function toggleModal() {
-            modal.classList.toggle("show-modal");
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
         }
+    }
 
-        function windowOnClick(event) {
-            if (event.target === modal) {
-                toggleModal();
-            }
-        }
-
-        trigger.addEventListener("click", toggleModal);
-        closeButton.addEventListener("click", toggleModal);
-        window.addEventListener("click", windowOnClick);
-    </script>
+    trigger.addEventListener("click", toggleModal);
+    closeButton.addEventListener("click", toggleModal);
+    window.addEventListener("click", windowOnClick);
+</script>
 </div>
 </body>
 </html>

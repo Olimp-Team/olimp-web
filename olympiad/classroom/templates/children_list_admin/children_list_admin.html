@@ -5,30 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'children_list_admin/children_list_admin.css' %}" id="them">
+    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <title>Olimp | Список учеников</title>
 </head>
-<header>
-    <div class="golova">
-        <img class="logo" id="l-tip" src="{% static 'children_list_admin/img/logoolimp.jpg' %}">
-        <p class="logoword">Olimp</p>
-        <p class="wordhead">Список учеников</p>
-        <div id="sun">
-            <button class="solnce"><img class="sun" id="sunw"
-                                        src="{% static 'children_list_admin/img/sun.png' %}">
-            </button>
-        </div>
-        <div id="yourlogo">
-            <button class="avatarka"><img class="sun" id="avatarka"
-                                          src="{% static 'children_list_admin/img/avatarka.png' %}">
-            </button>
-        </div>
-        <div id="chat">
-            <button class="chatik"><img class="sun" id="chatblack"
-                                        src="{% static 'children_list_admin/img/chatblack.png' %}">
-            </button>
-        </div>
-    </div>
-</header>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
 <body>
 {% include 'navbar/navbar.html' %}
 {% block content %}

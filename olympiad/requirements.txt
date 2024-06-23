@@ -11,3 +11,5 @@ django-filter
 channels
 channels_redis
 uvicorn
+reportlab
+pymorphy3

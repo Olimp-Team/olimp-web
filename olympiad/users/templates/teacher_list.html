@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Список учителей</title>
+</head>
+<body>
+    <h1>Список учителей</h1>
+    <a href="{% url 'users:CreateTeacher' %}">
+        <button>Создать учителя</button>
+    </a>
+    <ul>
+        {% for teacher in teachers %}
+            <li>{{ teacher.first_name }} {{ teacher.last_name }} ({{ teacher.username }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -30,6 +30,7 @@ class Result(models.Model):
     points = models.IntegerField(verbose_name='Количество намбранных очков')
     status_result = models.CharField(verbose_name='Статус результата', max_length=256, choices=STATUSRES,
                                      default=PARTICIPANT)
+    advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап')
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
