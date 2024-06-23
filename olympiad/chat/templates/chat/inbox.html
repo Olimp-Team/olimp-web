@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inbox</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'chat/style.css' %}">
+</head>
+<body>
+    <h1>Inbox</h1>
+    <ul id="messages">
+        {% for message in messages %}
+            <li>
+                <strong>From: {{ message.sender.username }}</strong><br>
+                {{ message.content }}<br>
+                <small>{{ message.timestamp }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+    <form id="chat-form">
+        <input type="text" id="chat-message-input" autocomplete="off">
+        <button type="submit">Send</button>
+    </form>
+    <a href="{% url 'send_message' %}">Send a new message</a>
+
+    <script>
+        const roomName = "{{ request.user.username }}";
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#messages').innerHTML += ('<li><strong>From: ' + data.sender + '</strong><br>' + data.message + '</li>');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-form').onsubmit = function(e) {
+            e.preventDefault();
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html>

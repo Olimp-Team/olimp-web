@@ -18,7 +18,7 @@ from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequired
 
 
 def page_not_found(request, exception):
-    return HttpResponseNotFound('Sorry, you are not allowed to see this page.')
+    return HttpResponseNotFound('К сожалению, страница не найдена.')
 
 
 class HomePage(View, LoginRequiredMixin):
@@ -32,37 +32,12 @@ class HomePage(View, LoginRequiredMixin):
 ########################################################################################################################
 # Страницы учителей
 
-class ChildrenListTeacher(View, LoginRequiredMixin):
-    def get(self, request, Classroom_id):
-        if request.user.teacher:
-            classroom = Classroom.objects.get(id=Classroom_id)
-            classroom_children = User.objects.filter(classroom_id=Classroom_id)
-            context = {
-                'classroom': classroom,
-                'child': classroom_children
-            }
-            return render(request, 'children_list_teacher/children_list_teacher.html', context)
-        else:
-            return HttpResponseForbidden()
-
-    def post(self, request):
-        pass
-
-
-class TeacherClassroomGuide(View, LoginRequiredMixin):
-    def get(self, request, *args, **kwargs):
-        if request.user.is_teacher:
-            classroom_teacher = Classroom.objects.filter(teacher__classroom_guide=request.user.classroom_guide)
-            context = {
-                'classroom_teacher': classroom_teacher
-            }
-            return render(request, 'list_classroom_teacher/list_classroom.html', context)
-
-
 ########################################################################################################################
 # Страницы администратора
 
 class ListOlympiad(TemplateView, AdminRequiredMixin):
+    """ Страница для отображения олимпиад """
+
     def get(self, request, *args, **kwargs):
         context = {
             'olympiad': Olympiad.objects.filter()
@@ -71,40 +46,11 @@ class ListOlympiad(TemplateView, AdminRequiredMixin):
 
 
 class OlympiadDelete(View, LoginRequiredMixin, AdminRequiredMixin):
+    """ Функция для удаления олимпиады"""
     def get(self, request, Olympiad_id):
         olympiad = Olympiad.objects.get(id=Olympiad_id)
         olympiad.delete()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-    def post(self, request):
-        pass
-
-
-class ChildRemoveAdmin(View, LoginRequiredMixin):
-    def get(self, request, User_id):
-        user_id = User.objects.get(id=User_id)
-        user_id.delete()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
-
-
-class ListClassroom(View, LoginRequiredMixin, AdminRequiredMixin):
-    def get(self, request):
-        classroom = Classroom.objects.all()
-        return render(request, 'list_classroom/list_classroom.html', context={'classroom': classroom})
-
-    def post(self, request):
-        pass
-
-
-class ChildClassroomListAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
-    def get(self, request, Classroom_id):
-        classroom = Classroom.objects.get(id=Classroom_id)
-        classroom_children = User.objects.filter(classroom_id=Classroom_id)
-        context = {
-            'classroom': classroom,
-            'child': classroom_children
-        }
-        return render(request, 'children_list_admin/children_list_admin.html', context)
 
     def post(self, request):
         pass

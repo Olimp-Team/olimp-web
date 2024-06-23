@@ -1,7 +1,7 @@
 from django.urls import path
-from . import views
+from .views import InboxView, SendMessageView
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('<str:room_name>/', views.room, name='room'),
+    path('inbox/', InboxView.as_view(), name='inbox'),
+    path('send/', SendMessageView.as_view(), name='send_message'),
 ]

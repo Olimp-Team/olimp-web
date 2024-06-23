@@ -16,7 +16,7 @@ urlpatterns = [
     path('docs/', include('docs.urls', namespace='docs')),
     path('register/', include('register.urls', namespace='register')),
     path('result/', include('result.urls', namespace='result')),
-    # path('classroom/', include('classroom.urls', namespace='classroom')),
+    path('classroom/', include('classroom.urls', namespace='classroom')),
     # Приложения авторизации
     path('users/', include('users.urls', namespace='users')),
     path('api/', include('api.urls', namespace='api')),
