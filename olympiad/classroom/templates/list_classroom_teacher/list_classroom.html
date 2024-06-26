@@ -39,7 +39,7 @@
             </div>
         </div>
         <div class="kolvo">Класс: {{ classroom_teacher.child.count }}/30 учеников</div>
-        <a href="{% url 'main:ChildrenListTeacher' classroom_teacher.id %}" class="watchinfo" type="button">Посмотреть
+        <a href="{% url 'classroom:ChildrenListTeacher' classroom_teacher.id %}" class="watchinfo" type="button">Посмотреть
             участников</a>
         {# <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}
     </div>

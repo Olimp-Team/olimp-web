@@ -6,7 +6,7 @@ app_name = 'main'
 urlpatterns = [
 
     # Страницы учеников
-    path('home/', HomePage.as_view(), name='home'),
+    path('', HomePageView.as_view(), name='home'),
     # Страницы учителей
 
     # Страницы администратора

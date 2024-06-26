@@ -68,7 +68,7 @@
                 <div class="olimps">
                     <li>
                         {{ olympiad.name }} (ID: {{ olympiad.id }})
-                        <form method="post" action="{% url 'main:delete_register' olympiad.id student.id %}"
+                        <form method="post" action="{% url 'register:delete_register' olympiad.id student.id %}"
                               style="display:inline;">
                             {% csrf_token %}
                             <button type="submit">Удалить</button>
