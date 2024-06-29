@@ -17,6 +17,8 @@ from main.models import Classroom
 
 class AuthLogin(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('main:home'))
         form = UserLoginForm()
         context = {'form': form}
         return render(request, "auth/auth.html", context)
@@ -26,9 +28,14 @@ class AuthLogin(View):
         if form.is_valid():
             username = request.POST['username']
             password = request.POST['password']
+            remember_me = request.POST.get('remember_me', None)
             user = auth.authenticate(username=username, password=password)
             if user:
                 auth.login(request, user)
+                if remember_me:
+                    request.session.set_expiry(1209600)  # 2 недели
+                else:
+                    request.session.set_expiry(0)  # Закрыть сессию после закрытия браузера
                 return HttpResponseRedirect(reverse('main:home'))
         context = {'form': form}
         return render(request, "auth/auth.html", context)
@@ -66,7 +73,7 @@ def logout(request):
     return HttpResponseRedirect(reverse('users:login'))
 
 
-class PasswordChange(AdminRequiredMixin, View):
+class PasswordChange(View):
     def get(self, request):
         form = PasswordChangeForm(request.user)
         context = {'form': form}
@@ -114,7 +121,7 @@ class CreateChild(AdminRequiredMixin, View):
             child.save()
             classroom = form.cleaned_data['classroom']
             Classroom.objects.get(id=classroom.id).child.add(child)
-            return HttpResponseRedirect(reverse('main:list_classroom'))
+            return HttpResponseRedirect(reverse('classroom:list_classroom'))
         context = {'form': form}
         return render(request, 'add_students/add_students.html', context)
 

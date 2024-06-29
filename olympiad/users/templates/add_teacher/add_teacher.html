@@ -72,6 +72,12 @@
         </li>
         <li>
             <div class="divGen">
+                <h2>Должность</h2>
+                {{ form.post_job_teacher }}
+            </div>
+        </li>
+        <li>
+            <div class="divGen">
                 <h2>Классное руководство</h2>
                 {{ form.classroom_guide }}
             </div>
@@ -95,6 +101,7 @@
     <form class="right">
         <div class="editphoto">
             <div>
+            {{ form.errors }}
                 <img class="imgpers" src="
                     
                         {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"

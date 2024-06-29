@@ -1,15 +1,16 @@
 import django
+
 django.setup()
 import json
 import django
 import os
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'olympiad.olympiad.settings')
 django.setup()
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from chat.models import Message
 from django.contrib.auth.models import User
-
 
 
 class ChatConsumer(AsyncWebsocketConsumer):

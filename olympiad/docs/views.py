@@ -507,83 +507,89 @@ def create_zip_archive(request):
     if not request.user.is_admin:
         return HttpResponseForbidden()
 
-    temp_dir = tempfile.TemporaryDirectory()
-    temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
+    with tempfile.TemporaryDirectory() as temp_dir:
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
+            registers = Register_admin.objects.filter(status_admin=False)
+            classes = {}
 
-    registers = Register_admin.objects.filter(status_admin=False)
-    classes = {}
+            for register in registers:
+                student = register.child_admin
+                olympiad = register.Olympiad_admin
+                class_name = f'{student.classroom.number}{student.classroom.letter}'
+                if class_name not in classes:
+                    classes[class_name] = {}
+                if student not in classes[class_name]:
+                    classes[class_name][student] = []
+                classes[class_name][student].append(olympiad.subject.name)
 
-    for register in registers:
-        student = register.child_admin
-        olympiad = register.Olympiad_admin
-        class_name = f'{student.classroom.number}{student.classroom.letter}'
-        if class_name not in classes:
-            classes[class_name] = {}
-        if student not in classes[class_name]:
-            classes[class_name][student] = []
-        classes[class_name][student].append(olympiad.subject.name)
+            for class_name, students in classes.items():
+                class_dir = os.path.join(temp_dir, class_name)
+                os.makedirs(class_dir, exist_ok=True)
+                for student, subjects in students.items():
+                    student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
+                    create_pdf_for_student(student, subjects, student_file)
 
-    for class_name, students in classes.items():
-        class_dir = os.path.join(temp_dir.name, class_name)
-        os.makedirs(class_dir, exist_ok=True)
-        for student, subjects in students.items():
-            student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
-            create_pdf_for_student(student, subjects, student_file)
+            with zipfile.ZipFile(temp_zip.name, 'w') as zf:
+                for root, _, files in os.walk(temp_dir):
+                    for file in files:
+                        zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir))
 
-    with zipfile.ZipFile(temp_zip, 'w') as zf:
-        for root, _, files in os.walk(temp_dir.name):
-            for file in files:
-                zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir.name))
+        with open(temp_zip.name, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename="applications.zip"'
 
-    temp_dir.cleanup()
-
-    response = HttpResponse(open(temp_zip.name, 'rb').read(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="applications.zip"'
-    os.remove(temp_zip.name)
-    return response
+        os.remove(temp_zip.name)
+        return response
 
 
 def create_zip_archive_for_teacher(request):
     if not request.user.is_teacher:
         return HttpResponseForbidden()
 
-    temp_dir = tempfile.TemporaryDirectory()
-    temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
+    with tempfile.TemporaryDirectory() as temp_dir:
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
+            teacher = request.user
+            classroom = teacher.classroom_guide
 
-    teacher = request.user
-    classroom = teacher.classroom_guide
-    registers = Register_admin.objects.filter(teacher_admin=teacher, child_admin__classroom=classroom,
-                                              status_teacher=True, status_admin=True)
-    classes = {}
+            # Убедимся, что classroom существует и имеет связанных учеников
+            if classroom is None:
+                return HttpResponseBadRequest("Класс не найден для текущего учителя")
 
-    for register in registers:
-        student = register.child_admin
-        olympiad = register.Olympiad_admin
-        class_name = f'{student.classroom.number}{student.classroom.letter}'
-        if class_name not in classes:
-            classes[class_name] = {}
-        if student not in classes[class_name]:
-            classes[class_name][student] = []
-        classes[class_name][student].append(olympiad.subject.name)
+            # Найти все заявки учеников класса, которым руководит текущий учитель
+            registers = Register_send.objects.filter(
+                child_send__classroom=request.user.classroom_guide,
+            )
 
-    for class_name, students in classes.items():
-        class_dir = os.path.join(temp_dir.name, class_name)
-        os.makedirs(class_dir, exist_ok=True)
-        for student, subjects in students.items():
-            student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
-            create_pdf_for_student(student, subjects, student_file)
+            classes = {}
 
-    with zipfile.ZipFile(temp_zip, 'w') as zf:
-        for root, _, files in os.walk(temp_dir.name):
-            for file in files:
-                zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir.name))
+            for register in registers:
+                student = register.child_send
+                olympiad = register.Olympiad_send
+                class_name = f'{student.classroom.number}{student.classroom.letter}'
+                if class_name not in classes:
+                    classes[class_name] = {}
+                if student not in classes[class_name]:
+                    classes[class_name][student] = []
+                classes[class_name][student].append(olympiad.subject.name)
 
-    temp_dir.cleanup()
+            for class_name, students in classes.items():
+                class_dir = os.path.join(temp_dir, class_name)
+                os.makedirs(class_dir, exist_ok=True)
+                for student, subjects in students.items():
+                    student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
+                    create_pdf_for_student(student, subjects, student_file)
 
-    response = HttpResponse(open(temp_zip.name, 'rb').read(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="applications.zip"'
-    os.remove(temp_zip.name)
-    return response
+            with zipfile.ZipFile(temp_zip.name, 'w') as zf:
+                for root, _, files in os.walk(temp_dir):
+                    for file in files:
+                        zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir))
+
+        with open(temp_zip.name, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/zip')
+            response['Content-Disposition'] = 'attachment; filename="applications.zip"'
+
+        os.remove(temp_zip.name)
+        return response
 
 
 def import_olympiads(request):

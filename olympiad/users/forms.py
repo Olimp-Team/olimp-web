@@ -111,9 +111,9 @@ class NewTeacherForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         required=True
     )
-    classroom_guide = forms.ModelMultipleChoiceField(
+    classroom_guide = forms.ModelChoiceField(
         queryset=Classroom.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.RadioSelect,  # Или другой подходящий виджет
         required=False
     )
 
@@ -149,9 +149,13 @@ class NewTeacherForm(forms.ModelForm):
         'class': "vvodinfo",
         'placeholder': "Введите дату рождения учителя"
     }))
-    post_job_teacher = forms.MultipleChoiceField(widget=forms.SelectMultiple(attrs={
-        'class': "vvodinfo"
-    }))
+    post_job_teacher = forms.ModelMultipleChoiceField(
+        queryset=Post.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            'class': "vvodinfo"
+        }),
+        required=True
+    )
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
@@ -238,3 +242,10 @@ class NewOlympiadForm(UserCreationForm):
     class_olympiad = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
         # 'type': "input" пример
     }))
+
+
+from django.contrib.auth.forms import PasswordResetForm
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))

@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 
 class Register(models.Model):
@@ -22,8 +23,8 @@ class Register(models.Model):
 
 
 class Register_send(models.Model):
-    teacher_send = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='teacher_send')
-    child_send = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='child_send')
+    teacher_send = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='teacher_send')
+    child_send = models.ForeignKey(User, on_delete=models.CASCADE, related_name='child_send')
     Olympiad_send = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE, related_name='Olympiad_send')
     status_teacher = models.BooleanField(default=False)
     status_admin = models.BooleanField(default=False)

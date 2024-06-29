@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'django_filters',
     'channels',
     'chat',
+    'schedule',
+    'calendar_olimp',
 ]
 
 MIDDLEWARE = [
@@ -94,6 +96,11 @@ TEMPLATES = [
 ]
 AUTH_USER_MODEL = 'users.User'
 
+
+SESSION_COOKIE_AGE = 1209600  # 2 недели
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
 ASGI_APPLICATION = 'olympiad.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -135,6 +142,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'  # SMTP-сервер вашего почтового провайдера
+EMAIL_PORT = 2525  # Порт SMTP-сервера
+EMAIL_USE_TLS = True  # Использовать TLS (рекомендуется для безопасности)
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'olimp-team@mail.ru'  # Ваш адрес электронной почты
+EMAIL_HOST_PASSWORD = 'mgYJwJCtEYtM6DzyVRf1'  # Пароль от вашего email
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

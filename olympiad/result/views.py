@@ -86,7 +86,7 @@ class ImportResultsView(AdminRequiredMixin, View):
         return redirect('results_list')
 
 
-class ResultListView(AdminRequiredMixin, FilterView):
+class ResultListView(FilterView):
     model = Result
     template_name = 'result/result.html'
     context_object_name = 'results'

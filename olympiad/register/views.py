@@ -69,20 +69,36 @@ class RegisterDelete(ChildRequiredMixin, View):
         pass
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class RegisterSend(ChildRequiredMixin, View):
     def get(self, request):
         if request.user.is_child:
-            objs = [
-                Register_send(
-                    teacher_send=i.teacher,
-                    child_send=i.child,
-                    Olympiad_send=i.Olympiad,
-                )
-                for i in Register.objects.filter(child=request.user, status_send=False)
-            ]
+            register_entries = Register.objects.filter(child=request.user, status_send=False)
+            objs = []
+            for entry in register_entries:
+                if entry.teacher and entry.child and entry.Olympiad:
+                    logger.debug(
+                        f"Creating Register_send for teacher: {entry.teacher}, child: {entry.child}, Olympiad: {entry.Olympiad}")
+                    objs.append(Register_send(
+                        teacher_send=entry.teacher,
+                        child_send=entry.child,
+                        Olympiad_send=entry.Olympiad,
+                    ))
+                else:
+                    logger.warning(
+                        f"Skipping entry due to missing data: teacher={entry.teacher}, child={entry.child}, Olympiad={entry.Olympiad}")
 
-            Register_send.objects.bulk_create(objs)
-            Register.objects.filter(child=request.user).update(status_send=True)
+            if objs:
+                Register_send.objects.bulk_create(objs)
+                register_entries.update(status_send=True)
+                logger.debug(f"Created {len(objs)} Register_send entries and updated register entries.")
+            else:
+                logger.warning("No valid Register_send entries to create.")
+
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
         else:
             return HttpResponseForbidden()
