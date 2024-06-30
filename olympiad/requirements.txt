@@ -158,7 +158,7 @@ reportlab==4.1.0
 requests==2.31.0
 requests-oauthlib==1.3.1
 rich==13.7.1
-schedule==1.2.2
+schedule
 service-identity==24.1.0
 service_utils==0.2.0
 setuptools==69.1.1
