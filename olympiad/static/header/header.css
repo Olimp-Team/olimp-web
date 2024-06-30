@@ -37,3 +37,8 @@
     right: 150px;
     top: 25px;
 }
+#avatarka {
+    width: 55px;
+    height: 55px;
+    border-radius: 15px;
+}

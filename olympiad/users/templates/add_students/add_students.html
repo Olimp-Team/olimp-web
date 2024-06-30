@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="icon" href="{% static 'add_students/img/logoolimp.jpg' %}">
 
-    <title>Olimp | Ваши заявки</title>
+    <title>Olimp | Создание нового ученика</title>
 </head>
 
 {% include 'header/header.html' %}
@@ -83,19 +83,6 @@
                 <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
                 <a class="randombutton" href="#">Случайный</a>
             </div>
-            <div class="divPassword">
-                <h2>Пароль</h2>
-                {{ form.password1 }}
-                <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
-                <a class="randombutton" href="#">Случайный</a>
-            </div>
-            <div class="divPassword">
-                <h2>Пароль</h2>
-                {{ form.password2 }}
-                <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
-                <a class="randombutton" href="#">Случайный</a>
-            </div>
-{#            {{ form.is_child }}#}
         </li>
 
     </ul>

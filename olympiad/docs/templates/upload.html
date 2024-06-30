@@ -1,14 +1,31 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Импорт пользователей</title>
+    <link rel="stylesheet" href="{% static 'upload/upload.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
+    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
+    <title>Olimp | Импорт пользователей</title>
 </head>
+{% include 'header/header.html' %}
+<p class="wordhead">Импорт пользователей из Excel</p>
+{% block header %}
+{% endblock %}
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
 <body>
-    <h1>Импорт пользователей из Excel</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Загрузить</button>
-    </form>
+    <div class="main">
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h1>File</h1>
+    {{ form.file }}
+    <button type="submit" class="save">Загрузить</button>
+</form>
+{#<a href="{% url 'docs:generate_pdf' %}" class="btn btn-primary">Сгенерировать PDF</a>#}
+
+</div>
 </body>
 </html>

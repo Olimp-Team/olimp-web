@@ -3,7 +3,7 @@ from django import forms
 from django.forms import formset_factory
 from users.models import User
 
-from main.models import Classroom
+from main.models import *
 
 
 class UserLoginForm(AuthenticationForm):
@@ -52,12 +52,13 @@ class UserProfileForm(UserChangeForm):
         fields = ('image', 'username', 'email')
 
 
-class NewChildForm(UserCreationForm):
+class NewChildForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
             'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password',
-            'gender')
+            'gender'
+        )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
         'type': 'search',
@@ -74,13 +75,12 @@ class NewChildForm(UserCreationForm):
         'class': "vvodinfo",
         'placeholder': "Введите дату рождения ученика"
     }))
-
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
         'placeholder': "Введите пароль ученика"
     }))
-    image = forms.ImageField(widget=forms.TextInput(attrs={
+    image = forms.ImageField(widget=forms.FileInput(attrs={
         'type': "submit",
         'value': "Загрузить новое фото",
         'class': "savenewphoto"
@@ -88,98 +88,134 @@ class NewChildForm(UserCreationForm):
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'type': "search",
         'class': "vvodinfo",
-        'placeholder': "Введите фамилию ученика",
+        'placeholder': "Введите фамилию ученика"
     }))
-    first_name = forms.CharField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
         'type': "search",
         'class': "vvodinfo",
         'placeholder': "Введите имя ученика"
     }))
-    at_obj = User()
-    gender = forms.CharField(
-        widget=forms.Select(
-            choices=((at_obj, at_obj.name) for at_obj in at_obj.get_types())
-        )
+    gender = forms.ChoiceField(choices=[(gender, gender) for gender in User().get_types()])
+
+    def save(self, commit=True):
+        user = super(NewChildForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+
+class NewTeacherForm(forms.ModelForm):
+    subject = forms.ModelMultipleChoiceField(
+        queryset=Subject.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
     )
-    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={
-        'type': 'search',
-        'class': "vvodinfo",
-        'placeholder': "Введите пароль ученика"
-    }))
-    password2 = forms.CharField(label='Повтор пароля', widget=forms.PasswordInput(attrs={
-        'type': 'search',
-        'class': "vvodinfo",
-        'placeholder': "Введите пароль ученика"
-    }))
+    classroom_guide = forms.ModelChoiceField(
+        queryset=Classroom.objects.all(),
+        widget=forms.RadioSelect,  # Или другой подходящий виджет
+        required=False
+    )
 
-
-class NewTeacherForm(UserCreationForm):
     class Meta:
         model = User
         fields = (
-            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_teacher', 'classroom_guide', 'subject',
-            'post_job_teacher')
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'classroom_guide', 'subject',
+            'post_job_teacher', 'password', 'gender'
+        )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
-        'placeholder': "Введите логин ученика"
+        'placeholder': "Введите логин учителя"
     }))
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
-        'placeholder': "Введите логин ученика"
+        'placeholder': "Введите имя учителя"
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
-        'placeholder': "Введите логин ученика"
+        'placeholder': "Введите фамилию учителя"
     }))
     surname = forms.CharField(widget=forms.TextInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
-        'placeholder': "Введите логин ученика"
+        'placeholder': "Введите отчество учителя"
     }))
     birth_date = forms.DateField(widget=forms.TextInput(attrs={
         'type': 'search',
         'class': "vvodinfo",
-        'placeholder': "Введите логин ученика"
+        'placeholder': "Введите дату рождения учителя"
     }))
-    classroom_guide = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
-    }))
-    subject = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
-    }))
-    post_job_teacher = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    post_job_teacher = forms.ModelMultipleChoiceField(
+        queryset=Post.objects.all(),
+        widget=forms.SelectMultiple(attrs={
+            'class': "vvodinfo"
+        }),
+        required=True
+    )
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите пароль учителя"
     }))
 
+    def save(self, commit=True):
+        user = super(NewTeacherForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 
-class NewAdminForm(UserCreationForm):
+
+class NewAdminForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_admin')
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'password', 'gender'
+        )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите логин администратора"
     }))
     first_name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите имя администратора"
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите фамилию администратора"
     }))
     surname = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите отчество администратора"
     }))
     birth_date = forms.DateField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите дату рождения администратора"
     }))
-    is_admin = forms.BooleanField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        'type': 'search',
+        'class': "vvodinfo",
+        'placeholder': "Введите пароль администратора"
     }))
+
+    def save(self, commit=True):
+        user = super(NewAdminForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+
+
 class NewOlympiadForm(UserCreationForm):
     class Meta:
         model = Classroom
@@ -206,3 +242,10 @@ class NewOlympiadForm(UserCreationForm):
     class_olympiad = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
         # 'type': "input" пример
     }))
+
+
+from django.contrib.auth.forms import PasswordResetForm
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))

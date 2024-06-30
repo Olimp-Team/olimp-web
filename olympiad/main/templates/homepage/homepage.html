@@ -11,14 +11,10 @@
     <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"/>
 </head>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-
-{% include 'navbar/navbar.html' %}
-{% block content %}
-{% endblock %}
 <body>
+{% include 'header/header.html' %}
+{% include 'navbar/navbar.html' %}
+
 <div class="main">
     <div class="info">
         <div class="infobox">
@@ -66,9 +62,9 @@
             <li>Вт</li>
             <li>Ср</li>
             <li>Чт</li>
-            <li>Пт</li>
-            <li>Сб</li>
-            <li>Вс</li>
+            <li>Пт</ли>
+            <li>Сб</ли>
+            <li>Вс</ли>
         </ul>
         <ul class="days"></ul>
     </div>
@@ -77,34 +73,26 @@
     <div id="nedav">Недавние результаты</div>
     <button id="pokazat" href="">Показать все</button>
     <div class="rezultlast">
-        <p id="rezultlasttext"></p>
-        <label>
-            <table id="tableinfo">
-                <tr id="tableinfocol">
-                    <td>Категория</td>
-                    <td>Предмет</td>
-                    <td class="h">Количество баллов</td>
-                </tr>
-                <tr>
-                    <th id="vseros">Всероссийская</th>
-                    <th id="math">Математика</th>
-                    <th id="ball">8 из 8</th>
-                </tr>
-                <tr id="tableinfocol2">
-                    <td>Этап</td>
-                    <td>Уровень</td>
-                    <td class="h">Заработано опыта</td>
-                </tr>
-                <tr>
-                    <th id="school">Школьный</th>
-                    <th id="school2">Школьный</th>
-                    <th id="oput">300</th>
-                </tr>
-            </table>
-        </label>
+        <table id="tableinfo">
+            <tr id="tableinfocol">
+                <td>Олимпиада</td>
+                <td>Баллы</td>
+                <td>Статус</td>
+                <td>Дата</td>
+            </tr>
+            {% for result in recent_results %}
+            <tr>
+{#                <td>{{ result.info_children.last_name }}</td>#}
+{#                <td>{{ result.info_children.first_name }}</td>#}
+{#                <td>{{ result.info_children.surname }}</td>#}
+                <td>{{ result.info_olympiad.name }}</td>
+                <td>{{ result.points }}</td>
+                <td>{{ result.get_status_result_display }}</td>
+                <td>{{ result.date_added }}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
-</div>
-</div>
 </div>
 
 <script src="{% static 'homepage/js/calendar.js' %}"></script>

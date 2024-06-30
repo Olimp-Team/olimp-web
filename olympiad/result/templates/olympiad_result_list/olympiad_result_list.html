@@ -1,19 +1,51 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить результат олимпиады</title>
+    <title>Olimp | Добавить результат олимпиады</title>
+    <link rel="stylesheet" href="{% static 'olympiad_result_list/olympiad_result_list.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
 </head>
+{% include 'header/header.html' %}
+<p class="wordhead">Добавление результат олимпиады</p>
+{% block header %}
+{% endblock %}
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
 <body>
-    <h1>Добавить результат олимпиады</h1>
+<div class="main">
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Сохранить</button>
+        <div class="infochildren">
+            <h1>ФИО ученика:</h1>
+        {{ form.info_children }}
+        </div>
+
+        <div class="infoolympiad">
+            <h1>Название олимпиды:</h1>
+        {{ form.info_olympiad }}
+        </div>
+
+        <div class="infopoints">
+        <h1>Количество намбранных очков:</h1>
+        {{ form.points }}
+        </div>
+
+        <div class="infopoints">
+        <h1>Статус результата:</h1>
+        {{ form.status_result }}
+        </div>
+
+        <button type="submit" class="save">Сохранить</button>
     </form>
 
     <script>
@@ -28,5 +60,6 @@
             });
         });
     </script>
+    </div>
 </body>
 </html>

@@ -1,19 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить результаты олимпиады по классу</title>
+    <title>Olimp | Добавить результаты олимпиады по классу</title>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'olympiad_result_class_form/olympiad_result_class_form.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link rel="shortcut-icon" href="{% static 'homepage/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
 </head>
+{% include 'header/header.html' %}
+<p class="wordhead">Добавить результаты олимпиады по классу</p>
+{% block header %}
+{% endblock %}
+
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
 <body>
-<h1>Добавить результаты олимпиады по классу</h1>
+    <div class="main">
+
 <form method="post">
     {% csrf_token %}
-    {{ form.classroom.label_tag }} {{ form.classroom }}
-    {{ form.olympiad.label_tag }} {{ form.olympiad }}
+    
+    <div class="classroom">
+    <h1>Класс:</h1>
+    <div class="cl">{{ form.classroom }}</div>
+</div>
+
+
+    <div class="olympiad">
+    <h1>Олимпиада:</h1>
+    <div class="ol">{{ form.olympiad }} </div>
+    </div>
 
     <div id="students-results">
         {% for student in students %}
@@ -25,10 +49,11 @@
                         <option value="{{ value }}">{{ display }}</option>
                     {% endfor %}
                 </select>
+                <hr></hr>
             </div>
         {% endfor %}
     </div>
-    <button type="submit">Сохранить</button>
+    <button type="submit" class="save">Сохранить</button>
 </form>
 
 <script>
@@ -66,5 +91,6 @@
         });
     });
 </script>
+</div>
 </body>
 </html>

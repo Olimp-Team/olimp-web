@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     # My apps
+    'olympiad',
     'main',
     'users',
     'api',
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
     'django_filters',
     'channels',
     'chat',
+    'schedule',
+    'calendar_olimp',
 ]
 
 MIDDLEWARE = [
@@ -91,7 +94,25 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = 'users.User'
 
+
+SESSION_COOKIE_AGE = 1209600  # 2 недели
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+
+ASGI_APPLICATION = 'olympiad.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+LOGIN_URL = 'users:login'
 WSGI_APPLICATION = 'olympiad.wsgi.application'
 
 # Database
@@ -122,6 +143,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mail.ru'  # SMTP-сервер вашего почтового провайдера
+EMAIL_PORT = 2525  # Порт SMTP-сервера
+EMAIL_USE_TLS = True  # Использовать TLS (рекомендуется для безопасности)
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = 'olimp-team@mail.ru'  # Ваш адрес электронной почты
+EMAIL_HOST_PASSWORD = 'mgYJwJCtEYtM6DzyVRf1'  # Пароль от вашего email
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -137,11 +170,18 @@ USE_TZ = True
 
 DATE_INPUT_FORMATS = '%d-%m-%Y'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.2/howto/static-files/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Укажите путь к директории, где находятся статические файлы
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Укажите путь к директории, куда будут собираться статические файлы для продакшена
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -153,21 +193,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Медиа файлы
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 SITE_ID = 1
 
-AUTH_USER_MODEL = 'users.User'
-
-ASGI_APPLICATION = 'olympiad.asgi.application'
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        # Добавьте другие методы аутентификации, если нужно, например, токены
+        # 'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
-LOGIN_URL = 'users/login/'
+LOGIN_URL = 'users:login'

@@ -1,6 +1,5 @@
-{% load static %}
-{% load admin_urls %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link rel="icon" href="{% static 'add_admin/img/logoolimp.jpg' %}">
 
-    <title>Olimp | Ваши заявки</title>
+    <title>Olimp | Создание нового администратора</title>
 </head>
 
 {% include 'header/header.html' %}
@@ -27,63 +26,66 @@
     <h1 class="add_newstudents_text">Создание нового администратора</h1>
     <ul class="spisokreg">
         <li>
-            <div class="divFam">
-                <h2>Фамилия</h2>
-                <input type=search class="vvodinfo" placeholder="Введите фамилию администратора">
-            </div>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="divFam">
+                    <h2>Фамилия</h2>
+                    {{ form.last_name }}
+                </div>
         </li>
         <li>
             <div class="divName">
                 <h2>Имя</h2>
-                <input type=search class="vvodinfo" placeholder="Введите имя администратора">
+                {{ form.first_name }}
+
             </div>
         </li>
         <li>
             <div class="divOtch">
                 <h2>Отчество</h2>
-                <input type=search class="vvodinfo" placeholder="Введите отчество администратора">
+                {{ form.surname }}
+
             </div>
         </li>
         <li>
             <div class="divDate">
                 <h2>Дата рождения</h2>
-                <input type=search class="vvodinfo" placeholder="Введите дату рождения администратора">
+                {{ form.birth_date }}
             </div>
         </li>
         <li>
             <div class="divGen">
                 <h2>Пол</h2>
-                <select class="vvodinfo" id="spisokmain">
-                    <div class="xui">
-                        <option selected class="selected">Выберите пол администратора</option>
-                        <option>Муж</option>
-                        <option>Жен</option>
-                    </div>
-
-                </select>
+                {{ form.gender }}
             </div>
         </li>
         <li>
             <div class="divLogin">
                 <h2>Логин</h2>
-                <input type=search class="vvodinfo" placeholder="Введите логин администратора">
+                {{ form.username }}
                 <a class="randombutton" href="#">Случайный</a>
             </div>
         </li>
         <li>
             <div class="divPassword">
                 <h2>Пароль</h2>
-                <input type=search class="vvodinfo" placeholder="Введите пароль администратора">
+                {{ form.password }}
+                {{ form.errors }}
                 <a class="randombutton" href="#">Случайный</a>
 
             </div>
         </li>
     </ul>
+
+
     <div class="right">
         <div class="editphoto">
             <div>
                 <img class="imgpers" src="
-                    {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
+                    
+                        
+                        
+                        {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
                      alt="">
 
                 <img class="imgocontovka" src="{% static 'profile/img/Base.png' %}"
@@ -94,8 +96,8 @@
 
             </div>
         </div>
-        <a class="savebutton">Создать</a>
-
+        <button type="submit" class="savebutton">Создать</button>
+        </form>
     </div>
 
 

@@ -28,6 +28,7 @@
     </div>
     <a class="buttonedit" type="submit" value="Изменить"
        href="{% url 'docs:export_excel' %}">Скачать все заявки</a>
+    <a href="{% url 'docs:download_applications_zip' %}" class="btn btn-primary">Скачать все согласия (ZIP)</a>
     <div class="mainblock">
         <div class="tablespisok">
             {% for classroom, registers in grouped_registers.items %}
@@ -38,7 +39,7 @@
                     {% for register in registers %}
                         <li>
                             Ученик: {{ register.child_admin }},
-                            Олимпиада: {{ register.Olympiad_admin }},
+                            Олимпиада: {{ register.Olympiad_admin.name }},
                         </li>
                     {% endfor %}
                 </ul>

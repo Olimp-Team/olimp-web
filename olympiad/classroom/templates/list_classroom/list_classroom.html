@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Olimp | Список учебных классов</title>
+    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
+    <link rel="shortcut-icon" href="{% static 'list_classroom/img/shortcuticon.png' %}">
+    <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
+</head>
+{% include 'header/header.html' %}
+{% block header %}
+{% endblock %}
+{% include 'navbar/navbar.html' %}
+{% block content %}
+{% endblock %}
+<body>
+<div class="main">
+    <div class="classes">Классы</div>
+    <a class="addclass" href="http://localhost:8000/admin/main/classroom/add/">Добавить класс</a>
+    <!--    {#-->
+    <!--    <div class="search-form">#}-->
+    <!--        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}-->
+    <!--        {#-->
+    <!--    </div>-->
+    <!--    #}-->
+    <div class="sha">Текущие классы</div>
+    <div class="do">Выпустившиеся классы</div>
+
+    {% for classroom in classroom %}
+    <div class="pole">
+        <div class="class">{{ classroom.number }}{{ classroom.letter }}</div>
+        <div class="clasruk">
+            <div class="classruk">Классный руководитель:</div>
+            <div class="rukovoditel">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}
+            </div>
+        </div>
+        <div class="kolvo">Класс: {{ classroom.child.count }}/30 учеников</div>
+        <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="watchinfo" type="button">Посмотреть
+            участников</a>
+        <!--        {# <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}-->
+    </div>
+    {% endfor %}
+
+
+</div>
+</body>
+</html>

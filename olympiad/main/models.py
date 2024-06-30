@@ -90,17 +90,11 @@ class Post(models.Model):
         return self.name
 
 
+from django.db import models
+
+
 class Olympiad(models.Model):
-    """Модель олимпиады
-        Пример:
-        ВСОШ по русскому языку
-        Описание
-        Мунципальная
-        Школьный
-        Русский язык
-        10 класс
-        29.02.2024 - 13:40
-        Карла Маркса 153, Школа №53"""
+    """Модель олимпиады"""
 
     class Meta:
         verbose_name_plural = "Олимпиады"
@@ -112,10 +106,14 @@ class Olympiad(models.Model):
                                  max_length=256)
     level = models.ForeignKey(to='Level_olympiad', on_delete=models.CASCADE, verbose_name='Название уровня',
                               max_length=256)
+    next_stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='next_olympiads', verbose_name='Следующий этап')
     stage = models.ForeignKey(to='Stage', on_delete=models.CASCADE, verbose_name='Название этапа', max_length=256)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, verbose_name='Название школьного предмета')
+    subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name='Название школьного предмета')
     class_olympiad = models.IntegerField('Класс олимпиады')
+    date = models.DateField('Дата проведения')
+    time = models.TimeField('Время проведения')
+    location = models.CharField('Место проведения олимпиады', max_length=256)
 
-    # locations = models.CharField(verbose_name='Место проведения олимпиады')
     def __str__(self):
         return f'{self.name} {self.category} {self.level} {self.stage} {self.subject} {self.class_olympiad}'

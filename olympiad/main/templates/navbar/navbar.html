@@ -41,11 +41,23 @@
                                 href="{% url 'main:list_olympiad' %}" id="rezultat">Список олимпиад</a>
                         </div>
                     </li>
+                    <li>
+                        <div class="mainpage">
+                            <img id="mainpageimg" src="{% static 'profile/img/list_olympiad.png' %}"><a
+                                href="{% url 'users:teacher_list' %}" id="rezultat">Список учителей</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="mainpage">
+                            <img id="mainpageimg" src="{% static 'profile/img/list_olympiad.png' %}"><a
+                                href="{% url 'users:admin_list' %}" id="rezultat">Список администраторов</a>
+                        </div>
+                    </li>
 
                     <li>
                         <div class="mainpage">
                             <img id="mainpageimg" src="{% static 'profile/img/list_classroom.png' %}"><a
-                                href="{% url 'main:list_classroom' %}" id="rezultat">Список
+                                href="{% url 'classroom:list_classroom' %}" id="rezultat">Список
                             классов</a>
                         </div>
                     </li>
@@ -58,29 +70,30 @@
                     </li>
                     <li>
                         <div class="mainpage">
-                            <img id="historyimg" src="{% static 'profile/img/result.png' %}"><a
+                            <img id="mainpageimg" src="{% static 'profile/img/result.png' %}"><a
                                 href="{% url 'result:results_list' %}" id="history">Результаты олимпиад</a>
                         </div>
                     </li>
-
                 {% endif %}
+
                 <li>
                     <div class="mainpage">
-                        <img id="mainpageimg" src="{% static 'profile/img/calendar.png' %}"><a href="#" id="dates">Календарь
-                        олимпиад</a>
-                    </div>
-                </li>
-                <li>
-                    <div class="mainpage">
-                        <img id="mainpageimg" src="{% static 'profile/img/history.png' %}"><a href="#" id="history">История
+                        <img id="mainpageimg" src="{% static 'profile/img/calendar.png' %}"><a
+                            href="{% url 'calendar_olimp:calendar' %}" id="dates">Календарь
                         олимпиад</a>
                     </div>
                 </li>
                 {% if user.is_teacher %}
                     <li>
                         <div class="mainpage">
+                            <img id="mainpageimg" src="{% static 'profile/img/result.png' %}"><a
+                                href="{% url 'result:results_list' %}" id="history">Результаты олимпиад</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="mainpage">
                             <img id="mainpageimg" src="{% static 'profile/img/list_classroom.png' %}"><a
-                                href="{% url 'main:TeacherClassroomGuide' %}" id="rezultat">Список
+                                href="{% url 'classroom:TeacherClassroomGuide' %}" id="rezultat">Список
                             классов</a>
                         </div>
                     </li>
@@ -100,8 +113,8 @@
     </aside>
     <script>
         function StartAnim() {
-  document.querySelector('.mainpage').animation = 'anim-navbar 60s';
-}
+            document.querySelector('.mainpage').animation = 'anim-navbar 60s';
+        }
     </script>
 {% endblock %}
 
