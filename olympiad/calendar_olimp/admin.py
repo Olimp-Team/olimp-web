@@ -1,6 +1,6 @@
 from django.contrib import admin
 from main.models import Olympiad
-from schedule.models import Calendar, Event
+
 
 
 class OlympiadAdmin(admin.ModelAdmin):
