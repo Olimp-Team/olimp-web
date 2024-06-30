@@ -13,7 +13,6 @@ from result.models import *
 from register.models import *
 from .forms import OlympiadResultClassForm
 from users.models import User
-
 from users.mixins import AdminRequiredMixin
 
 
