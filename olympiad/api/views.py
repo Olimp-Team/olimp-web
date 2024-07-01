@@ -4,7 +4,7 @@ from register.models import *
 from result.models import *
 from users.models import *
 from .serializers import *
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 
 
 class UserViewSet(viewsets.ModelViewSet):
