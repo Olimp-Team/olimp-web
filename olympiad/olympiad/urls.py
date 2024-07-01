@@ -5,12 +5,11 @@ from django.urls import include, path
 from users.views import start_page
 from main.views import page_not_found
 
-from django.contrib.auth import views as auth_views
 urlpatterns = [
 
     path('admin/', admin.site.urls),
     # Пока нет главной страницы перенаправление на страницу входа
-    path('', start_page, name='start_page'),
+    path('', start_page.as_view(), name='start_page'),
     # Главное приложение
     path('main/', include('main.urls', namespace='main')),
     path('docs/', include('docs.urls', namespace='docs')),

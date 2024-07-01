@@ -2,7 +2,6 @@ import django_filters
 from main.models import *
 from register.models import *
 from result.models import *
-from users.models import User
 
 
 class ResultFilter(django_filters.FilterSet):

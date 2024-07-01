@@ -15,6 +15,9 @@ from register.models import *
 from .forms import OlympiadResultClassForm
 from users.models import User
 from users.mixins import AdminRequiredMixin
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from main.models import Classroom
 
 
 class ExportResultsView(AdminRequiredMixin, View):
@@ -134,19 +137,15 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
                       {'form': form, 'students': students})
 
 
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from main.models import Classroom
-
-
-def get_students(request):
-    classroom_id = request.GET.get('classroom_id')
-    if classroom_id:
-        classroom = Classroom.objects.get(id=classroom_id)
-        students = classroom.child.all()
-        html = render_to_string('students_list.html', {'students': students})
-        return JsonResponse({'html': html})
-    return JsonResponse({'html': ''})
+class get_students(View):
+    def get(request):
+        classroom_id = request.GET.get('classroom_id')
+        if classroom_id:
+            classroom = Classroom.objects.get(id=classroom_id)
+            students = classroom.child.all()
+            html = render_to_string('students_list.html', {'students': students})
+            return JsonResponse({'html': html})
+        return JsonResponse({'html': ''})
 
 
 class StudentResultListView(LoginRequiredMixin, ListView):

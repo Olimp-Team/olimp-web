@@ -240,7 +240,7 @@ class ExcelAll(AdminRequiredMixin, View):
             return HttpResponseForbidden()
 
 
-class import_users():
+class import_users(View):
     def get(request):
         form = UploadFileForm()
         return render(request, 'upload.html', {'form': form})
@@ -315,6 +315,7 @@ class import_data():
                         user.post_job_teacher.add(post_obj)
                     except Post.DoesNotExist:
                         pass  # Если должность не найдена, пропускаем
+
 
 class parse_classroom():
     def post(classroom_str):
@@ -501,108 +502,108 @@ def create_pdf_for_student(student, olympiads, output_path):
     pdf_canvas.save()
 
 
-def create_zip_archive(request):
-    if not request.user.is_admin:
-        return HttpResponseForbidden()
+class create_zip_archive(View):
+    def get(request):
+        if not request.user.is_admin:
+            return HttpResponseForbidden()
 
-    with tempfile.TemporaryDirectory() as temp_dir:
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-            registers = Register_admin.objects.filter(status_admin=False)
-            classes = {}
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
+                registers = Register_admin.objects.filter(status_admin=False)
+                classes = {}
 
-            for register in registers:
-                student = register.child_admin
-                olympiad = register.Olympiad_admin
-                class_name = f'{student.classroom.number}{student.classroom.letter}'
-                if class_name not in classes:
-                    classes[class_name] = {}
-                if student not in classes[class_name]:
-                    classes[class_name][student] = []
-                classes[class_name][student].append(olympiad.subject.name)
+                for register in registers:
+                    student = register.child_admin
+                    olympiad = register.Olympiad_admin
+                    class_name = f'{student.classroom.number}{student.classroom.letter}'
+                    if class_name not in classes:
+                        classes[class_name] = {}
+                    if student not in classes[class_name]:
+                        classes[class_name][student] = []
+                    classes[class_name][student].append(olympiad.subject.name)
 
-            for class_name, students in classes.items():
-                class_dir = os.path.join(temp_dir, class_name)
-                os.makedirs(class_dir, exist_ok=True)
-                for student, subjects in students.items():
-                    student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
-                    create_pdf_for_student(student, subjects, student_file)
+                for class_name, students in classes.items():
+                    class_dir = os.path.join(temp_dir, class_name)
+                    os.makedirs(class_dir, exist_ok=True)
+                    for student, subjects in students.items():
+                        student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
+                        create_pdf_for_student(student, subjects, student_file)
 
-            with zipfile.ZipFile(temp_zip.name, 'w') as zf:
-                for root, _, files in os.walk(temp_dir):
-                    for file in files:
-                        zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir))
+                with zipfile.ZipFile(temp_zip.name, 'w') as zf:
+                    for root, _, files in os.walk(temp_dir):
+                        for file in files:
+                            zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir))
 
-        with open(temp_zip.name, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename="applications.zip"'
+            with open(temp_zip.name, 'rb') as f:
+                response = HttpResponse(f.read(), content_type='application/zip')
+                response['Content-Disposition'] = 'attachment; filename="applications.zip"'
 
-        os.remove(temp_zip.name)
-        return response
-
-
-def create_zip_archive_for_teacher(request):
-    if not request.user.is_teacher:
-        return HttpResponseForbidden()
-
-    with tempfile.TemporaryDirectory() as temp_dir:
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-            teacher = request.user
-            classroom = teacher.classroom_guide
-
-            # Убедимся, что classroom существует и имеет связанных учеников
-            if classroom is None:
-                return HttpResponseBadRequest("Класс не найден для текущего учителя")
-
-            # Найти все заявки учеников класса, которым руководит текущий учитель
-            registers = Register_send.objects.filter(
-                child_send__classroom=request.user.classroom_guide,
-            )
-
-            classes = {}
-
-            for register in registers:
-                student = register.child_send
-                olympiad = register.Olympiad_send
-                class_name = f'{student.classroom.number}{student.classroom.letter}'
-                if class_name not in classes:
-                    classes[class_name] = {}
-                if student not in classes[class_name]:
-                    classes[class_name][student] = []
-                classes[class_name][student].append(olympiad.subject.name)
-
-            for class_name, students in classes.items():
-                class_dir = os.path.join(temp_dir, class_name)
-                os.makedirs(class_dir, exist_ok=True)
-                for student, subjects in students.items():
-                    student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
-                    create_pdf_for_student(student, subjects, student_file)
-
-            with zipfile.ZipFile(temp_zip.name, 'w') as zf:
-                for root, _, files in os.walk(temp_dir):
-                    for file in files:
-                        zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir))
-
-        with open(temp_zip.name, 'rb') as f:
-            response = HttpResponse(f.read(), content_type='application/zip')
-            response['Content-Disposition'] = 'attachment; filename="applications.zip"'
-
-        os.remove(temp_zip.name)
-        return response
+            os.remove(temp_zip.name)
+            return response
 
 
-def import_olympiads(request):
-    if request.method == 'POST':
+class create_zip_archive_for_teacher(View):
+    def post(request):
+        if not request.user.is_teacher:
+            return HttpResponseForbidden()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
+                teacher = request.user
+                classroom = teacher.classroom_guide
+
+                # Убедимся, что classroom существует и имеет связанных учеников
+                if classroom is None:
+                    return HttpResponseBadRequest("Класс не найден для текущего учителя")
+
+                # Найти все заявки учеников класса, которым руководит текущий учитель
+                registers = Register_send.objects.filter(
+                    child_send__classroom=request.user.classroom_guide,
+                )
+
+                classes = {}
+
+                for register in registers:
+                    student = register.child_send
+                    olympiad = register.Olympiad_send
+                    class_name = f'{student.classroom.number}{student.classroom.letter}'
+                    if class_name not in classes:
+                        classes[class_name] = {}
+                    if student not in classes[class_name]:
+                        classes[class_name][student] = []
+                    classes[class_name][student].append(olympiad.subject.name)
+
+                for class_name, students in classes.items():
+                    class_dir = os.path.join(temp_dir, class_name)
+                    os.makedirs(class_dir, exist_ok=True)
+                    for student, subjects in students.items():
+                        student_file = os.path.join(class_dir, f'{student.last_name}_{student.first_name}.pdf')
+                        create_pdf_for_student(student, subjects, student_file)
+
+                with zipfile.ZipFile(temp_zip.name, 'w') as zf:
+                    for root, _, files in os.walk(temp_dir):
+                        for file in files:
+                            zf.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), temp_dir))
+
+            with open(temp_zip.name, 'rb') as f:
+                response = HttpResponse(f.read(), content_type='application/zip')
+                response['Content-Disposition'] = 'attachment; filename="applications.zip"'
+
+            os.remove(temp_zip.name)
+            return response
+
+
+class import_olympiads(View):
+    def post(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file = request.FILES['file']
             df = pd.read_excel(excel_file)
-
             for index, row in df.iterrows():
                 category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
                 level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
                 stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
                 subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
-
                 Olympiad.objects.create(
                     name=row['Название олимпиады'],
                     description=row['Описание олимпиады'],
@@ -613,6 +614,7 @@ def import_olympiads(request):
                     class_olympiad=row['Класс олимпиады']
                 )
             return HttpResponseRedirect('/success_url/')
-    else:
+
+    def get(request):
         form = UploadFileForm()
-    return render(request, 'import_olympiads.html', {'form': form})
+        return render(request, 'import_olympiads.html', {'form': form})

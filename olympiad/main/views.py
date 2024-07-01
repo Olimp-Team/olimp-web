@@ -1,18 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
-from django.forms import formset_factory
-from django.http import HttpResponseRedirect, HttpResponseNotFound
-from users.models import User
-from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
+from django.http import HttpResponseNotFound
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
 from .models import *
 from users.forms import NewChildForm, NewTeacherForm, NewAdminForm
 from .decorators import *
 from django.views.generic import *
-from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from result.models import *
 from .forms import *

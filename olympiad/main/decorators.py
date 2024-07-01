@@ -1,7 +1,3 @@
-from django.contrib.auth.mixins import AccessMixin
-from django.http import HttpResponse
-from django.shortcuts import redirect
-from functools import wraps
 from django.http import HttpResponseForbidden
 
 

@@ -57,12 +57,3 @@ class OlympiadAdmin(admin.ModelAdmin):
         'id', 'name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad')
     list_editable = ['name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad']
     search_fields = ['name', 'class_olympiad', 'category', 'level', 'stage', 'subject']
-
-
-
-
-
-
-
-
-
