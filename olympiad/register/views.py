@@ -191,6 +191,12 @@ class RegisterDeleteTeacher(TeacherRequiredMixin, View):
                                                      is_deleted=False)
                 register.is_deleted = True
                 register.save()
+                # Запись действия в аудит
+                AuditLog.objects.create(
+                    user=request.user,
+                    action='Удаление заявки',
+                    object_name=f'Заявка ученика {register.child_send.get_full_name()} на олимпиаду {register.Olympiad_send.name}'
+                )
                 return HttpResponseRedirect(request.META['HTTP_REFERER'])
             except Register_send.DoesNotExist:
                 return HttpResponseForbidden("Заявка не найдена.")
@@ -246,9 +252,16 @@ class AddRecommendation(TeacherRequiredMixin, View):
                 child=child,
                 Olympiad=olympiad
             )
+            # Запись действия в аудит
+            AuditLog.objects.create(
+                user=request.user,
+                action='Создание рекомендации',
+                object_name=f'Рекомендация ученику {child.get_full_name()} на олимпиаду {olympiad.name}'
+            )
             return HttpResponseRedirect(reverse_lazy('main:home'))
         else:
             return HttpResponseForbidden()
+
 
 
 class ProcessRecommendation(TeacherRequiredMixin, View):

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Olimp | Журнал действий сотрудников</title>
+    <link rel="stylesheet" href="{% static 'audit/audit_log.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
+</head>
+<body>
+{% include 'header/header.html' %}
+{% include 'navbar/navbar.html' %}
+
+<div class="main">
+    <div class="auditbox">
+        <div id="audit">Журнал действий сотрудников</div>
+        <div class="auditlast">
+            <table id="audittable">
+                <tr id="audittablecol">
+                    <th>Сотрудник</th>
+                    <th>Действие</th>
+                    <th>Объект</th>
+                    <th>Дата</th>
+                </tr>
+                {% for log in audit_logs %}
+                <tr>
+                    <td>{{ log.user.get_full_name }}</td>
+                    <td>{{ log.action }}</td>
+                    <td>{{ log.object_name }}</td>
+                    <td>{{ log.timestamp }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

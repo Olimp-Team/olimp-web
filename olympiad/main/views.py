@@ -22,6 +22,20 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class AuditLogView(LoginRequiredMixin, ListView):
+    model = AuditLog
+    template_name = 'audit_log/audit_log.html'
+    context_object_name = 'audit_logs'
+    ordering = ['-timestamp']
+
+    def get_queryset(self):
+        # Отображаем только для администраторов
+        if self.request.user.is_admin:
+            return super().get_queryset()
+        else:
+            return AuditLog.objects.none()
+
+
 class OlympiadListView(ListView):
     model = Olympiad
     template_name = 'list_olympiad/list_olympiad.html'

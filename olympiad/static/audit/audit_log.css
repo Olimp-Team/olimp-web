@@ -1,0 +1,76 @@
+html {
+    overflow: hidden;
+    font-family: Bahnschrift;
+    zoom: 85%;
+    max-width: 100%;
+    max-height: 100%;
+    animation: anim-navbar 0.3s linear;
+}
+
+.main {
+    position: fixed;
+    background-color: #FBF7F4;
+    width: calc(100% - 400px); /* Учесть ширину navbar */
+    height: calc(100% - 60px); /* Учесть высоту header */
+    margin-left: 400px;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 60px;
+    overflow-y: auto;
+}
+
+.auditbox {
+    margin: 20px 0;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 100%;
+    overflow-x: auto;
+}
+
+#audit {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#audittable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#audittablecol {
+    background-color: #f4f4f4;
+}
+
+#audittable th, #audittable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#audittable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#audittable tr:hover {
+    background-color: #f1f1f1;
+}
+
+#audittable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+@keyframes anim-navbar {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 100;
+    }
+}

@@ -1,6 +1,8 @@
 from django.db import models
 
 from datetime import datetime
+
+
 class Classroom(models.Model):
     """Модель учебных классов
     Пример: 10 А - Иваницкий Илья Олегович"""
@@ -28,6 +30,15 @@ class Classroom(models.Model):
             self.graduation_year = datetime.now().year
         self.save()
 
+
+class AuditLog(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Пользователь')
+    action = models.CharField(max_length=256, verbose_name='Действие')
+    object_name = models.CharField(max_length=256, verbose_name='Объект')
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Время действия')
+
+    def __str__(self):
+        return f'{self.user} - {self.action} - {self.object_name} - {self.timestamp}'
 
 
 class Subject(models.Model):
