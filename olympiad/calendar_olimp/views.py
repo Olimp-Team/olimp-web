@@ -5,12 +5,12 @@ from django.views.generic import View
 
 
 class olympiad_calendar_view(View):
-    def get(request):
+    def get(self, request):
         return render(request, 'calendar/calendar.html')
 
 
 class olympiad_events(View):
-    def get(request):
+    def get(self, request):
         olympiads = Olympiad.objects.all()
         events = []
         for olympiad in olympiads:

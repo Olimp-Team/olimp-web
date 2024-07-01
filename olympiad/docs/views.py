@@ -241,11 +241,11 @@ class ExcelAll(AdminRequiredMixin, View):
 
 
 class import_users(View):
-    def get(request):
+    def get(self, request):
         form = UploadFileForm()
         return render(request, 'upload.html', {'form': form})
 
-    def post(request):
+    def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['file']
@@ -254,7 +254,7 @@ class import_users(View):
 
 
 class import_data():
-    def post(file):
+    def post(self, file):
         df = pd.read_excel(file)
 
         for index, row in df.iterrows():
@@ -318,7 +318,7 @@ class import_data():
 
 
 class parse_classroom():
-    def post(classroom_str):
+    def post(self, classroom_str):
         number = int(''.join(filter(str.isdigit, classroom_str)))
         letter = ''.join(filter(str.isalpha, classroom_str))
         return number, letter
@@ -503,7 +503,7 @@ def create_pdf_for_student(student, olympiads, output_path):
 
 
 class create_zip_archive(View):
-    def get(request):
+    def get(self, request):
         if not request.user.is_admin:
             return HttpResponseForbidden()
 
@@ -543,7 +543,7 @@ class create_zip_archive(View):
 
 
 class create_zip_archive_for_teacher(View):
-    def post(request):
+    def post(self, request):
         if not request.user.is_teacher:
             return HttpResponseForbidden()
 
@@ -594,7 +594,7 @@ class create_zip_archive_for_teacher(View):
 
 
 class import_olympiads(View):
-    def post(request):
+    def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file = request.FILES['file']
@@ -615,6 +615,6 @@ class import_olympiads(View):
                 )
             return HttpResponseRedirect('/success_url/')
 
-    def get(request):
+    def get(self, request):
         form = UploadFileForm()
         return render(request, 'import_olympiads.html', {'form': form})
