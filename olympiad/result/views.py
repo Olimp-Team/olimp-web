@@ -1,5 +1,6 @@
 import pandas as pd
 from django.http import HttpResponse
+from django.views.generic import ListView
 from django_filters.views import FilterView
 from .models import Result
 from .filters import ResultFilter
@@ -108,7 +109,8 @@ class OlympiadResultCreateView(AdminRequiredMixin, View):
 class OlympiadResultClassCreateView(AdminRequiredMixin, View):
     def get(self, request):
         form = OlympiadResultClassForm()
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': []})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
+                      {'form': form, 'students': []})
 
     def post(self, request):
         form = OlympiadResultClassForm(request.POST)
@@ -128,7 +130,8 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
 
             return redirect('success_page')  # Замените 'success_page' на ваш URL для успешного добавления
         students = form.cleaned_data['classroom'].child.all() if 'classroom' in form.cleaned_data else []
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': students})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
+                      {'form': form, 'students': students})
 
 
 from django.http import JsonResponse
@@ -144,3 +147,12 @@ def get_students(request):
         html = render_to_string('students_list.html', {'students': students})
         return JsonResponse({'html': html})
     return JsonResponse({'html': ''})
+
+
+class StudentResultListView(LoginRequiredMixin, ListView):
+    model = Result
+    template_name = 'student_results.html'
+    context_object_name = 'results'
+
+    def get_queryset(self):
+        return Result.objects.filter(info_children=self.request.user)
