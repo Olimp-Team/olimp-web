@@ -10,7 +10,9 @@ urlpatterns = [
     # Страницы учителей
 
     # Страницы администратора
-    path('olympiad/list/', ListOlympiad.as_view(), name='list_olympiad'),
-    path('delete/olympiad/<int:Olympiad_id>', OlympiadDelete.as_view(), name='olympiad_remove'),
+    path('olympiad/list/', OlympiadListView.as_view(), name='list_olympiad'),
+    path('olympiad/new/', OlympiadCreateView.as_view(), name='olympiad_create'),
+    path('olympiad/edit/<int:pk>/', OlympiadUpdateView.as_view(), name='olympiad_update'),
+    path('olympiad/delete/<int:pk>/', OlympiadDeleteView.as_view(), name='olympiad_delete'),
 
 ]

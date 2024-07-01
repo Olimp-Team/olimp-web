@@ -11,11 +11,12 @@ from django.urls import reverse_lazy, reverse
 from .models import *
 from users.forms import NewChildForm, NewTeacherForm, NewAdminForm
 from .decorators import *
-from .forms import ResultCreateFrom
 from django.views.generic import *
 from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from result.models import *
+from .forms import *
+from .filters import *
 
 
 def page_not_found(request, exception):
@@ -27,37 +28,43 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        recent_results = Result.objects.filter(info_children=self.request.user).order_by('-date_added')[:10]  # Получение последних 10 результатов для текущего пользователя
+        # Получение последних 10 результатов для текущего пользователя
+        recent_results = Result.objects.filter(info_children=self.request.user).order_by('-date_added')[:10]
         context['recent_results'] = recent_results
         return context
 
 
-########################################################################################################################
-# Страницы учеников
+class OlympiadListView(ListView):
+    model = Olympiad
+    template_name = 'list_olympiad/list_olympiad.html'
+    context_object_name = 'olympiads'
 
-########################################################################################################################
-# Страницы учителей
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = OlympiadFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
 
-########################################################################################################################
-# Страницы администратора
-
-class ListOlympiad(TemplateView, AdminRequiredMixin):
-    """ Страница для отображения олимпиад """
-
-    def get(self, request, *args, **kwargs):
-        context = {
-            'olympiad': Olympiad.objects.filter()
-        }
-        return render(request, 'list_olympiad/list_olympiad.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+        return context
 
 
-class OlympiadDelete(View, LoginRequiredMixin, AdminRequiredMixin):
-    """ Функция для удаления олимпиады"""
+class OlympiadCreateView(CreateView):
+    model = Olympiad
+    form_class = OlympiadForm
+    template_name = 'list_olympiad/olympiad_form.html'
+    success_url = reverse_lazy('main:list_olympiad')
 
-    def get(self, request, Olympiad_id):
-        olympiad = Olympiad.objects.get(id=Olympiad_id)
-        olympiad.delete()
-        return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-    def post(self, request):
-        pass
+class OlympiadUpdateView(UpdateView):
+    model = Olympiad
+    form_class = OlympiadForm
+    template_name = 'list_olympiad/olympiad_form.html'
+    success_url = reverse_lazy('main:list_olympiad')
+
+
+class OlympiadDeleteView(DeleteView):
+    model = Olympiad
+    template_name = 'list_olympiad/olympiad_confirm_delete.html'
+    success_url = reverse_lazy('main:list_olympiad')
