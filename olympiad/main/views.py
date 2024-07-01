@@ -1,12 +1,7 @@
 from django.http import HttpResponseNotFound
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from .models import *
-from users.forms import NewChildForm, NewTeacherForm, NewAdminForm
-from .decorators import *
+from django.urls import reverse_lazy
 from django.views.generic import *
-from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from result.models import *
 from .forms import *
 from .filters import *
