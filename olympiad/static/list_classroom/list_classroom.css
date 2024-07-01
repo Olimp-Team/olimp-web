@@ -27,6 +27,27 @@ html {
     font-size: 22px;
 }
 
+.switch-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.switch-button {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.switch-button:hover {
+    background-color: #2980b9;
+}
+
+
 .wordhead {
     padding: 0;
     position: fixed;

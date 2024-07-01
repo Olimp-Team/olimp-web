@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение массового продвижения классов</title>
+    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Подтверждение массового продвижения классов</h1>
+    <p>Вы уверены, что хотите продвинуть все текущие классы на следующий год?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Да, продвинуть все классы</button>
+        <a href="{% url 'classroom:list_classroom' %}">Отмена</a>
+    </form>
+</div>
+</body>
+</html>

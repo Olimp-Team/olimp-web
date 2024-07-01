@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import *
 from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from main.models import *
 from .forms import *
+from django.contrib import messages
 
 
 class ChildrenListTeacher(View, LoginRequiredMixin):
@@ -36,13 +37,32 @@ class TeacherClassroomGuide(View, LoginRequiredMixin):
             return render(request, 'list_classroom_teacher/list_classroom.html', context)
 
 
-class ListClassroom(View, LoginRequiredMixin, AdminRequiredMixin):
+class ClassroomListView(View):
     def get(self, request):
-        classroom = Classroom.objects.all()
-        return render(request, 'list_classroom/list_classroom.html', context={'classroom': classroom})
+        graduated = request.GET.get('graduated') == '1'
+        if graduated:
+            classrooms = Classroom.objects.filter(is_graduated=True)
+            context_title = "Выпустившиеся классы"
+        else:
+            classrooms = Classroom.objects.filter(is_graduated=False)
+            context_title = "Текущие классы"
+        return render(request, 'list_classroom/list_classroom.html', {
+            'classrooms': classrooms,
+            'graduated': graduated,
+            'context_title': context_title
+        })
+
+
+class PromoteAllClassroomsView(View):
+    def get(self, request):
+        return render(request, 'list_classroom/promote_all_classrooms_confirm.html')
 
     def post(self, request):
-        pass
+        classrooms = Classroom.objects.filter(is_graduated=False)
+        for classroom in classrooms:
+            classroom.promote()
+        messages.success(request, 'Все классы успешно продвинуты.')
+        return redirect('classroom:list_classroom')
 
 
 class ChildClassroomListAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
