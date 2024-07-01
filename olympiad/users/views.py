@@ -62,7 +62,7 @@ class ProfileView(LoginRequiredMixin, View):
 #     return HttpResponseRedirect(reverse('users:login'))
 
 class start_page(View):
-    def get(request):
+    def get(self, request):
         return render(request, 'start_page/start_page.html')
 
 

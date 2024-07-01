@@ -138,7 +138,7 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
 
 
 class get_students(View):
-    def get(request):
+    def get(self, request):
         classroom_id = request.GET.get('classroom_id')
         if classroom_id:
             classroom = Classroom.objects.get(id=classroom_id)
