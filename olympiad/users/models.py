@@ -65,3 +65,11 @@ class User(AbstractUser):
 
     def get_full_name(self):
         return f"{self.last_name} {self.first_name} {self.surname}"
+
+    @staticmethod
+    def get_teachers():
+        return User.objects.filter(is_teacher=True)
+
+    @staticmethod
+    def get_children():
+        return User.objects.filter(is_child=True)
