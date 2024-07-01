@@ -1,19 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
-from django.forms import formset_factory
-from django.http import HttpResponseRedirect, HttpResponseNotFound
-from users.models import User
-from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
+from django.http import HttpResponseNotFound
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy, reverse
 from .models import *
-from users.forms import NewChildForm, NewTeacherForm, NewAdminForm
-from .decorators import *
-from .forms import ResultCreateFrom
 from django.views.generic import *
-from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from result.models import *
 
@@ -27,7 +17,8 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        recent_results = Result.objects.filter(info_children=self.request.user).order_by('-date_added')[:10]  # Получение последних 10 результатов для текущего пользователя
+        recent_results = Result.objects.filter(info_children=self.request.user).order_by('-date_added')[
+                         :10]  # Получение последних 10 результатов для текущего пользователя
         context['recent_results'] = recent_results
         return context
 

@@ -6,7 +6,6 @@ from .filters import ResultFilter
 from .forms import OlympiadResultForm
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.mixins import LoginRequiredMixin
 from main.models import *
 from users.models import *
 from result.models import *
@@ -14,6 +13,9 @@ from register.models import *
 from .forms import OlympiadResultClassForm
 from users.models import User
 from users.mixins import AdminRequiredMixin
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from main.models import Classroom
 
 
 class ExportResultsView(AdminRequiredMixin, View):
@@ -108,7 +110,8 @@ class OlympiadResultCreateView(AdminRequiredMixin, View):
 class OlympiadResultClassCreateView(AdminRequiredMixin, View):
     def get(self, request):
         form = OlympiadResultClassForm()
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': []})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
+                      {'form': form, 'students': []})
 
     def post(self, request):
         form = OlympiadResultClassForm(request.POST)
@@ -128,19 +131,16 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
 
             return redirect('success_page')  # Замените 'success_page' на ваш URL для успешного добавления
         students = form.cleaned_data['classroom'].child.all() if 'classroom' in form.cleaned_data else []
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': students})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
+                      {'form': form, 'students': students})
 
 
-from django.http import JsonResponse
-from django.template.loader import render_to_string
-from main.models import Classroom
-
-
-def get_students(request):
-    classroom_id = request.GET.get('classroom_id')
-    if classroom_id:
-        classroom = Classroom.objects.get(id=classroom_id)
-        students = classroom.child.all()
-        html = render_to_string('students_list.html', {'students': students})
-        return JsonResponse({'html': html})
-    return JsonResponse({'html': ''})
+class get_students(View):
+    def get(request):
+        classroom_id = request.GET.get('classroom_id')
+        if classroom_id:
+            classroom = Classroom.objects.get(id=classroom_id)
+            students = classroom.child.all()
+            html = render_to_string('students_list.html', {'students': students})
+            return JsonResponse({'html': html})
+        return JsonResponse({'html': ''})

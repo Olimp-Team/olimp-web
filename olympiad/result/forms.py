@@ -33,5 +33,3 @@ class OlympiadResultClassForm(forms.Form):
         choices=Result.STATUSRES,
         widget=forms.Select(attrs={'class': 'status-select'})
     )
-
-

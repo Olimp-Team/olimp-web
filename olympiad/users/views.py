@@ -1,16 +1,15 @@
-from django.http import HttpResponse
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404
+from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from .forms import *
-from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import NewChildForm
-from .mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
+from .mixins import AdminRequiredMixin
 from main.models import *
 from main.models import Classroom
 
@@ -62,8 +61,9 @@ class ProfileView(LoginRequiredMixin, View):
 #     """Модель представления для перенаправления с главной страницы на страницу авторизации"""
 #     return HttpResponseRedirect(reverse('users:login'))
 
-def start_page(request):
-    return render(request, 'start_page/start_page.html')
+class start_page(View):
+    def get(request):
+        return render(request, 'start_page/start_page.html')
 
 
 @login_required

@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserCreationForm
 from register.models import *
 from result.models import *
 from main.models import *
@@ -29,9 +29,6 @@ class NewClassroomForm(UserCreationForm):
     }))
 
 
-
-
-
 PARTICIPANT = 'У'
 PRIZE = 'ПР'
 WINNER = 'ПОБД'
@@ -58,6 +55,3 @@ class ResultCreateFrom(forms.ModelForm):
     points = forms.IntegerField(widget=forms.NumberInput(attrs={
         'type': 'number',
     }))
-
-
-

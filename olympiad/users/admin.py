@@ -1,7 +1,5 @@
 from django.contrib import admin
-
 from users.models import User
-from main.admin import ClassroomAdmin, PostAdmin
 
 
 @admin.register(User)
