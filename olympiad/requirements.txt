@@ -13,3 +13,4 @@ schedule
 pymorphy3
 reportlab
 djangorestframework-simplejwt
+prompt-toolkit
