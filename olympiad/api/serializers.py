@@ -1,77 +1,21 @@
 from rest_framework import serializers
-from main.models import *
-from register.models import *
-from result.models import *
-from users.models import *
+from django.contrib.auth.models import User
 
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
+        return user
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
-
-
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Register
-        fields = '__all__'
-
-
-class ResultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Result
-        fields = '__all__'
-
-
-class OlympiadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Olympiad
-        fields = '__all__'
-
-
-class ClassroomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Classroom
-        fields = '__all__'
-
-
-class SubjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subject
-        fields = '__all__'
-
-
-class RegisterAdminSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Register_admin
-        fields = '__all__'
-
-
-class RegisterSendSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Register_send
-        fields = '__all__'
-
-
-class RecommendationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recommendation
-        fields = '__all__'
-
-
-class CategoriesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = categories
-        fields = '__all__'
-
-
-class LevelOlympiadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Level_olympiad
-        fields = '__all__'
-
-
-class StageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Stage
-        fields = '__all__'
+        fields = ['id', 'username', 'email']

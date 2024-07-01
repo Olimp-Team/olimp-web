@@ -1,10 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import *
 from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from main.models import *
+from .forms import *
 
 
 class ChildrenListTeacher(View, LoginRequiredMixin):
@@ -62,3 +64,24 @@ class ChildRemoveAdmin(View, LoginRequiredMixin):
         user_id = User.objects.get(id=User_id)
         user_id.delete()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class ClassroomCreateView(CreateView):
+    model = Classroom
+    form_class = ClassroomForm
+    template_name = 'classroom_add/classroom_form.html'
+    success_url = reverse_lazy('classroom:list_classroom')
+
+
+class ClassroomUpdateView(UpdateView):
+    model = Classroom
+    form_class = ClassroomForm
+    template_name = 'classroom_add/classroom_form.html'
+    success_url = reverse_lazy('classroom:list_classroom')
+
+
+class ClassroomDeleteView(DeleteView):
+    model = Classroom
+    form_class = ClassroomForm
+    template_name = 'classroom_add/classroom_confirm_delete.html'
+    success_url = reverse_lazy('classroom:list_classroom')

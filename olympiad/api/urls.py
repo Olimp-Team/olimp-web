@@ -1,23 +1,12 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 from .views import *
-
-router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'registers', RegisterViewSet)
-router.register(r'results', ResultViewSet)
-router.register(r'olympiads', OlympiadViewSet)
-router.register(r'classrooms', ClassroomViewSet)
-router.register(r'subjects', SubjectViewSet)
-router.register(r'registers_admin', RegisterAdminViewSet)
-router.register(r'registers_send', RegisterSendViewSet)
-router.register(r'recommendations', RecommendationViewSet)
-router.register(r'categories', CategoriesViewSet)
-router.register(r'levels', LevelOlympiadViewSet)
-router.register(r'stages', StageViewSet)
-
+from rest_framework_simplejwt.views import TokenRefreshView
 app_name = 'api'
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('login/', MyTokenObtainPairView.as_view(), name='login'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('request-reset-password/', RequestPasswordResetView.as_view(), name='request_reset_password'),
+    path('reset-password/<uid>/<token>/', ResetPasswordView.as_view(), name='reset_password'),
 ]
