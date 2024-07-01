@@ -22,15 +22,13 @@
     <h1>Олимпиады</h1>
 
     <div class="filtr">
-        <a class="imgfiltr"><img class="img" src="{% static 'list-olympiad/img/filter.png' %}"></a>
-        <div class="filtrovanie">Фильтровать по</div>
-        <a class="data">Дата</a>
-        <a class="category">Категория</a>
-        <a class="etap">Этап</a>
-        <a class="sbros"><img src="{% static 'list-olympiad/img/Path.png' %}"> Сбросить фильтр</a>
+        <form method="get">
+            <div class="filters">
+                {{ filterset.form.as_p }}
+            </div>
+        </form>
     </div>
-    <a class="add" href="">+ Добавить новую олимпиаду</a>
-
+    <a class="add" href="{% url 'main:olympiad_create' %}">+ Добавить новую олимпиаду</a>
 
     <div class="tablica">
         <div class="oformlenie">
@@ -42,20 +40,21 @@
             <div class="date">Дата проведения</div>
             <div class="actions">Действия</div>
         </div>
-        {% for olympiad in olympiad %}
-        <div class="primer">
-            <img class="jpg" src="">
-            <div class="name">{{ olympiad.name }}</div>
-            <div class="kategoriya">{{ olympiad.category }}</div>
-            <div class="stage">{{ olympiad.stage }}</div>
-            <div class="level">{{ olympiad.level }}</div>
-            <div class="date">13.05.2024</div>
-            <a class="action">
-                <a class="pencil" href=""><img src="{% static 'list-olympiad/img/pencil-write.png' %}"> </a>
-                <a class="bin" href="{% url 'main:olympiad_remove' olympiad.id %}"><img
-                        src="{% static 'list-olympiad/img/bin.png' %}"></a>
-            </a>
-        </div>
+        {% for olympiad in olympiads %}
+            <div class="primer">
+                <img class="jpg" src="">
+                <div class="name">{{ olympiad.name }}</div>
+                <div class="kategoriya">{{ olympiad.category }}</div>
+                <div class="stage">{{ olympiad.stage }}</div>
+                <div class="level">{{ olympiad.level }}</div>
+                <div class="date">{{ olympiad.date }}</div>
+                <a class="action">
+                    <a class="pencil" href="{% url 'main:olympiad_update' olympiad.pk %}"><img
+                            src="{% static 'list-olympiad/img/pencil-write.png' %}"> </a>
+                    <a class="bin" href="{% url 'main:olympiad_delete' olympiad.pk %}"><img
+                            src="{% static 'list-olympiad/img/bin.png' %}"></a>
+                </a>
+            </div>
         {% endfor %}
     </div>
 
@@ -71,7 +70,5 @@
         </a>
     </div>
 </div>
-
-
 </body>
 </html>

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'debug_toolbar',
     'rest_framework',
+    'rest_framework.authtoken',
     # My apps
     'olympiad',
     'main',
@@ -54,6 +55,7 @@ INSTALLED_APPS = [
     'chat',
     'schedule',
     'calendar_olimp',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -67,14 +69,21 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5174",
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
-
 CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'olympiad.urls'

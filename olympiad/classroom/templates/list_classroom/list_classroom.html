@@ -20,7 +20,7 @@
 <body>
 <div class="main">
     <div class="classes">Классы</div>
-    <a class="addclass" href="http://localhost:8000/admin/main/classroom/add/">Добавить класс</a>
+    <a class="addclass" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
     <!--    {#-->
     <!--    <div class="search-form">#}-->
     <!--        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}-->
@@ -41,6 +41,9 @@
         <div class="kolvo">Класс: {{ classroom.child.count }}/30 учеников</div>
         <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="watchinfo" type="button">Посмотреть
             участников</a>
+        <a href="{% url 'classroom:classroom_update' classroom.pk %}" class="watchinfo" type="button">Изменить</a>
+        <a href="{% url 'classroom:classroom_delete' classroom.pk %}" class="watchinfo" type="button">Удалить</a>
+        
         <!--        {# <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}-->
     </div>
     {% endfor %}

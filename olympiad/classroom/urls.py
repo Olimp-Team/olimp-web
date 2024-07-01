@@ -10,4 +10,7 @@ urlpatterns = [
     path('child/remove/<int:User_id>', ChildRemoveAdmin.as_view(), name='child_remove_admin'),
     path('student/applications/admin/<int:Classroom_id>/', ChildClassroomListAdmin.as_view(),
          name='student-applications-admin'),
+    path('new/', ClassroomCreateView.as_view(), name='classroom_create'),
+    path('edit/<int:pk>/', ClassroomUpdateView.as_view(), name='classroom_update'),
+    path('delete/<int:pk>/', ClassroomDeleteView.as_view(), name='classroom_delete'),
 ]
