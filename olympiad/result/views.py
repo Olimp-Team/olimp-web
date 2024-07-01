@@ -1,11 +1,13 @@
 import pandas as pd
 from django.http import HttpResponse
+from django.views.generic import ListView
 from django_filters.views import FilterView
 from .models import Result
 from .filters import ResultFilter
 from .forms import OlympiadResultForm
 from django.shortcuts import render, redirect
 from django.views import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 from main.models import *
 from users.models import *
 from result.models import *
@@ -144,3 +146,12 @@ class get_students(View):
             html = render_to_string('students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
+
+
+class StudentResultListView(LoginRequiredMixin, ListView):
+    model = Result
+    template_name = 'student_results.html'
+    context_object_name = 'results'
+
+    def get_queryset(self):
+        return Result.objects.filter(info_children=self.request.user)

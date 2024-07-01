@@ -10,5 +10,5 @@ urlpatterns = [
     path('list/', ResultListView.as_view(), name='results_list'),
     path('import-results/', ImportResultsView.as_view(), name='import_results'),
     path('export-results/', ExportResultsView.as_view(), name='export_results'),
-
+    path('student/results/', StudentResultListView.as_view(), name='student_results'),
 ]
