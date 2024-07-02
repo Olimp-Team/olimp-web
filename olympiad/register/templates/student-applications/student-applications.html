@@ -9,15 +9,10 @@
     <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <title>Olimp | Заявки вашего класса</title>
 </head>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-
-{% include 'navbar/navbar.html' %}
-{% block content %}
-{% endblock %}
-
 <body>
+{% include 'header/header.html' %}
+{% include 'navbar/navbar.html' %}
+
 <div class="main">
     <div class="toptext">
         <h1 class="toptext1">Заявки учеников</h1>
@@ -28,59 +23,50 @@
         <a class="buttonspispeople" type="submit">Список участников</a>
         <a class="buttonsend" href="{% url 'register:register_send_teacher' %}">Отправить заявку</a>
         <a class="buttonadd" href="/admin/main/register/add/">Добавить ученика</a>
+        <a class="buttonrecommend" href="{% url 'register:add_recommendation' %}">Добавить рекомендацию</a>
     </div>
     <div class="tablespisok">
         <div class="zagolovok">
             <table class="mainspisokpoepletable">
-                <th>
-                    <div id="textid">ID</div>
-                </th>
-                <th>
-                    <div id="textychenik">Ученик</div>
-                </th>
-                <th>
-                    <div id="textolimp">Олимпиада</div>
-                </th>
-                <th>
-                    <div id="textstage">Этап</div>
-                </th>
-                <th>
-                    <div id="textgender">Пол</div>
-                </th>
-                <th>
-                    <div id="textdate">Дата рождения</div>
-                </th>
-                <th>
-                    <div id="textdeistie">Действие</div>
-                </th>
+                <thead>
+                    <tr>
+                        <th><div id="textid">ID</div></th>
+                        <th><div id="textychenik">Ученик</div></th>
+                        <th><div id="textolimp">Олимпиада</div></th>
+                        <th><div id="textstage">Этап</div></th>
+                        <th><div id="textgender">Пол</div></th>
+                        <th><div id="textdate">Дата рождения</div></th>
+                        <th><div id="textdeistie">Действие</div></th>
+                    </tr>
+                </thead>
             </table>
-
         </div>
 
         {% for student, olympiads in student_olympiads.items %}
-            <div class="mainspisokpoeple">
+        <div class="mainspisokpoeple">
             <div class="nameid">{{ student.id }}</div>
             <div class="namefio">{{ student.last_name }} {{ student.first_name }} {{ student.surname }}</div>
             <table class="tableolimps">
-            <td>
-            <th>
-            {% for olympiad in olympiads %}
-                <div class="olimps">
-                    <li>
-                        {{ olympiad.name }} (ID: {{ olympiad.id }})
-                        <form method="post" action="{% url 'register:delete_register' olympiad.id student.id %}"
-                              style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit">Удалить</button>
-                        </form>
-                    </li>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        </th>
-        </td>
-        </table>
+                <tbody>
+                    {% for olympiad in olympiads %}
+                    <tr>
+                        <td>
+                            <div class="olimps">
+                                <li>
+                                    {{ olympiad.name }} (ID: {{ olympiad.id }})
+                                    <form method="post" action="{% url 'register:delete_register' olympiad.id student.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit">Удалить</button>
+                                    </form>
+                                </li>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        {% endfor %}
     </div>
 </div>
 </body>
