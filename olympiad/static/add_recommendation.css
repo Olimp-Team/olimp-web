@@ -27,7 +27,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 600px;
     margin: 20px auto;
     padding: 20px;
     background-color: #ffffff;
@@ -41,30 +41,39 @@ h1 {
     margin-bottom: 20px;
 }
 
-.results-table {
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group select {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.results-table th,
-.results-table td {
-    padding: 12px 15px;
+    padding: 8px;
     border: 1px solid #ddd;
-    text-align: left;
+    border-radius: 5px;
 }
 
-.results-table th {
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
     background-color: #4CAF50;
-    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
 }
 
-.results-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.results-table tr:hover {
-    background-color: #f1f1f1;
+.btn:hover {
+    background-color: #45a049;
 }
 
 @media (max-width: 600px) {
@@ -72,7 +81,8 @@ h1 {
         padding: 10px;
     }
 
-    .results-table th, .results-table td {
+    .form-group select, .btn {
+        font-size: 14px;
         padding: 8px;
     }
 

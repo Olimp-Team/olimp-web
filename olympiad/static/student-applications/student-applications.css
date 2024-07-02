@@ -7,9 +7,14 @@ html {
     zoom: 85%;
 }
 
+body {
+    background-color: #FBF7F4;
+    margin: 0;
+    padding: 0;
+}
+
 .golova {
     background-color: white;
-
 }
 
 .logo {
@@ -53,7 +58,6 @@ html {
 .solnce {
     border: none;
     background-color: white;
-
 }
 
 .solnce:hover {
@@ -69,7 +73,6 @@ html {
     float: right;
     padding-right: 10px;
     background-color: white;
-
 }
 
 .avatarka:hover {
@@ -88,14 +91,12 @@ html {
 }
 
 #spis {
-
     padding-left: 20px;
 }
 
 .chatik:hover {
     cursor: pointer;
 }
-
 
 .spisok li {
     margin-bottom: 75px;
@@ -106,14 +107,12 @@ li::marker {
 }
 
 #mainpage {
-
     text-decoration: none;
     color: #000;
     position: fixed;
     left: 60px;
     font-size: 24px;
     font-weight: bold;
-
 }
 
 #mainpageimg {
@@ -122,11 +121,9 @@ li::marker {
 }
 
 #register {
-
     text-decoration: none;
     color: #000;
     position: fixed;
-
     left: 60px;
     font-size: 24px;
 }
@@ -134,7 +131,6 @@ li::marker {
 #registerimg {
     position: fixed;
     left: 25px;
-
 }
 
 #rezultatimg {
@@ -143,7 +139,6 @@ li::marker {
 }
 
 #rezultat {
-
     text-decoration: none;
     color: #000;
     position: fixed;
@@ -154,17 +149,14 @@ li::marker {
 #historyimg {
     position: fixed;
     left: 25px;
-
 }
 
 #history {
-
     text-decoration: none;
     color: #000;
     position: fixed;
     left: 60px;
     font-size: 24px;
-
 }
 
 #datesimg {
@@ -173,13 +165,11 @@ li::marker {
 }
 
 #dates {
-
     text-decoration: none;
     color: #000;
     position: fixed;
     left: 60px;
     font-size: 24px;
-
 }
 
 #settingimg {
@@ -188,13 +178,11 @@ li::marker {
 }
 
 #setting {
-
     text-decoration: none;
     color: #000;
     position: fixed;
     left: 60px;
     font-size: 24px;
-
 }
 
 #spis:after {
@@ -244,10 +232,13 @@ li::marker {
     margin-top: -4px;
     position: fixed;
     background-color: #FBF7F4;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 400px);
+    height: calc(100% - 60px);
     margin-left: 400px;
     border-radius: 10px;
+    padding: 20px;
+    margin-top: 60px;
+    overflow-y: auto;
 }
 
 .toptext {
@@ -269,6 +260,8 @@ li::marker {
 .topbuttons {
     padding-top: 50px;
     padding-left: 20px;
+    display: flex;
+    gap: 10px;
 }
 
 .buttonspispeople {
@@ -287,29 +280,11 @@ li::marker {
     cursor: pointer;
 }
 
-.savebutton {
-    height: 50px;
-    width: 220px;
-    background-color: #3D70F5;
-    margin-left: 750px;
-    border-radius: 10px;
-    border-color: #3D70F5;
-    color: white;
-    font-family: Bahnschrift;
-    font-size: 18px;
-    border: none;
-}
-
-.savebutton:hover {
-    cursor: pointer;
-}
-
 .buttonsend {
     transition-property: background;
     transition-duration: 0.3s;
     border: none;
     background-color: #3D70F5;
-    margin-left: 1070px;
     border-radius: 10px;
     border-color: #3D70F5;
     color: white;
@@ -325,12 +300,10 @@ li::marker {
     background: white;
 }
 
-.buttonadd {
-    margin-top: 0px;
+.buttonadd, .buttonrecommend {
     transition-property: background;
     transition-duration: 0.3s;
     background-color: #ebecec;
-    margin-left: 120px;
     border-radius: 10px;
     border: none;
     color: black;
@@ -341,7 +314,7 @@ li::marker {
     padding: 16px;
 }
 
-.buttonadd:hover {
+.buttonadd:hover, .buttonrecommend:hover {
     cursor: pointer;
     color: #ebecec;
     background-color: black;
@@ -349,7 +322,7 @@ li::marker {
 
 .tablespisok {
     margin-top: 60px;
-    height: 212px;
+    height: auto;
     width: 1750px;
     margin-left: 20px;
     border-radius: 5px;
@@ -386,7 +359,6 @@ li::marker {
 }
 
 #textychenik {
-
     margin-left: 110px;
 }
 
@@ -422,8 +394,6 @@ li::marker {
     background-color: #ffff;
     border: 1px solid #434343;
     border-radius: 5px;
-
-
 }
 
 .namegender {
@@ -456,7 +426,6 @@ li::marker {
     width: 600px;
     height: 80px;
     margin-left: 340px;
-
 }
 
 .tableolimps td th {
@@ -495,7 +464,6 @@ li::marker {
 #zagolovokdeistie {
     position: relative;
     right: 480px;
-
 }
 
 .nameid {
@@ -539,4 +507,3 @@ li::marker {
     cursor: pointer;
     color: #000000;
 }
-
