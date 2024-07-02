@@ -249,80 +249,79 @@ class import_users(View):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['file']
-            self.import_data(file)  # Вызов статического метода
+            import_data(file)
             return redirect('docs:succes_import')
 
-    @staticmethod
-    def import_data(file):
-        df = pd.read_excel(file)
+def import_data(file):
+    df = pd.read_excel(file)
 
-        for index, row in df.iterrows():
-            if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
-                continue
+    for index, row in df.iterrows():
+        if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
+            continue
 
-            # Проверка на наличие почты
-            if pd.notna(row['почта']):
-                user, created = User.objects.update_or_create(
-                    username=row['имя_пользователя'],
-                    defaults={
-                        'first_name': row['имя'],
-                        'last_name': row['фамилия'],
-                        'surname': row['отчество'],
-                        'email': row['почта'],
-                        'birth_date': row['дата_рождения'],
-                        'gender': row['пол'],
-                        'is_teacher': row['учитель'] == 1,
-                        'is_child': row['ученик'] == 1,
-                        'is_admin': row['администратор'] == 1,
-                    }
-                )
+        # Проверка на наличие почты
+        if not pd.notna(row['почта']):
+            user, created = User.objects.update_or_create(
+                username=row['имя_пользователя'],
+                defaults={
+                    'first_name': row['имя'],
+                    'last_name': row['фамилия'],
+                    'surname': row['отчество'],
+                    'email': row['почта'],
+                    'birth_date': row['дата_рождения'],
+                    'gender': row['пол'],
+                    'is_teacher': row['учитель'] == 1,
+                    'is_child': row['ученик'] == 1,
+                    'is_admin': row['администратор'] == 1,
+                }
+            )
 
-                if created and 'пароль' in row and pd.notna(row['пароль']):
-                    user.set_password(row['пароль'])
-                    user.save()
+            if created and 'пароль' in row and pd.notna(row['пароль']):
+                user.set_password(row['пароль'])
+                user.save()
 
-                if pd.notna(row['классное_руководство']):  # классное_руководство
+            # Обработка классного руководства
+            if pd.notna(row['классное_руководство']):
+                number, letter = parse_classroom(row['классное_руководство'])
+                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                if created or classroom_guide.teacher is None:
+                    classroom_guide.teacher = user
+                    classroom_guide.save()
+                user.classroom_guide = classroom_guide
+                user.save()
+
+            # Обработка учеников
+            if pd.notna(row['класс']):
+                number, letter = parse_classroom(row['класс'])
+                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                user.classroom = classroom
+                user.save()
+                classroom.child.add(user)
+                classroom.save()
+
+            if pd.notna(row['предметы']):  # предметы
+                subjects = row['предметы'].split(',')
+                for subject in subjects:
                     try:
-                        number, letter = parse_classroom(row['классное_руководство'])
-                        classroom_guide = Classroom.objects.get(number=number, letter=letter)
-                        user.classroom_guide = classroom_guide
-                    except Classroom.DoesNotExist:
-                        pass  # Если класс не найден, пропускаем
-                    user.save()
+                        subject_obj = Subject.objects.get(name=subject.strip())
+                        user.subject.add(subject_obj)
+                    except Subject.DoesNotExist:
+                        pass  # Если предмет не найден, пропускаем
 
-                if pd.notna(row['класс']):  # класс
+            if pd.notna(row['должности']):  # должности
+                posts = row['должности'].split(',')
+                for post in posts:
                     try:
-                        number, letter = parse_classroom(row['класс'])
-                        classroom = Classroom.objects.get(number=number, letter=letter)
-                        user.classroom = classroom
-                    except Classroom.DoesNotExist:
-                        pass  # Если класс не найден, пропускаем
-                    user.save()
+                        post_obj = Post.objects.get(name=post.strip())
+                        user.post_job_teacher.add(post_obj)
+                    except Post.DoesNotExist:
+                        pass  # Если должность не найдена, пропускаем
 
-                if pd.notna(row['предметы']):  # предметы
-                    subjects = row['предметы'].split(',')
-                    for subject in subjects:
-                        try:
-                            subject_obj = Subject.objects.get(name=subject.strip())
-                            user.subject.add(subject_obj)
-                        except Subject.DoesNotExist:
-                            pass  # Если предмет не найден, пропускаем
-
-                if pd.notna(row['должности']):  # должности
-                    posts = row['должности'].split(',')
-                    for post in posts:
-                        try:
-                            post_obj = Post.objects.get(name=post.strip())
-                            user.post_job_teacher.add(post_obj)
-                        except Post.DoesNotExist:
-                            pass  # Если должность не найдена, пропускаем
-
-
-class parse_classroom():
-    def post(self, classroom_str):
-        number = int(''.join(filter(str.isdigit, classroom_str)))
-        letter = ''.join(filter(str.isalpha, classroom_str))
-        return number, letter
+# Вспомогательная функция для разбора класса
+def parse_classroom(classroom_str):
+    number = ''.join(filter(str.isdigit, classroom_str))
+    letter = ''.join(filter(str.isalpha, classroom_str))
+    return number, letter
 
 
 class DashboardView(AdminRequiredMixin, ListView):
