@@ -8,24 +8,22 @@ html {
 }
 
 .main {
-    position: fixed;
+       position: fixed;
     background-color: #FBF7F4;
-    width: calc(100% - 400px); /* Учесть ширину navbar */
-    height: calc(100% - 60px); /* Учесть высоту header */
+    width: 100%;
+    height: 100%;
     margin-left: 400px;
     border-radius: 10px;
-    padding: 20px;
-    margin-top: 60px;
-    overflow-y: auto;
+    padding-left: 20px;
 }
 
 .auditbox {
     margin: 20px 0;
-    background-color: #ffffff;
+    /*background-color: #ffffff;*/
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    width: 100%;
+    width: 78%;
     overflow-x: auto;
 }
 
@@ -61,7 +59,7 @@ html {
 #audittable th {
     padding-top: 12px;
     padding-bottom: 12px;
-    background-color: #4CAF50;
+    background-color: #0077FF;
     color: white;
 }
 
