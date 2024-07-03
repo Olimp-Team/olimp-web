@@ -1,13 +1,14 @@
+
+
 .golova {
     width: 1800%;
     background-color: white;
 }
 
-
 .wordhead {
     user-select: none;
     padding: 0;
-    position: fixed;
+    position: absolute;
     left: 450px;
     top: 15px;
     font-size: 18px;

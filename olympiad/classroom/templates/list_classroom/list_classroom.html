@@ -16,14 +16,14 @@
 {% endblock %}
 {% include 'navbar/navbar.html' %}
 {% block content %}
+    <p class="wordhead">Список классов</p>
 {% endblock %}
 
 <div class="main">
-    <div class="classes">Классы</div>
-    <a class="addclass" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
-    <a class="promote-all" href="{% url 'classroom:promote_all_classrooms' %}">Продвинуть все классы</a>
+<div class="switch-buttons">
+    <a class="switch-button" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
+    <a class="switch-button" href="{% url 'classroom:promote_all_classrooms' %}">Продвинуть все классы</a>
 
-    <div class="switch-buttons">
         <a class="switch-button" href="{% url 'classroom:list_classroom' %}?graduated=0">Текущие классы</a>
         <a class="switch-button" href="{% url 'classroom:list_classroom' %}?graduated=1">Выпустившиеся классы</a>
     </div>
@@ -35,16 +35,16 @@
         <div class="pole">
             <div class="class">{{ classroom.number }}{{ classroom.letter }} </div>
             <div class="clasruk">
-                <div class="classruk">Классный руководитель:</div>
+                <div class="classruk">Классный руководитель</div>
                 <div class="rukovoditel">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}</div>
             </div>
             <div class="kolvo">Класс: {{ classroom.child.count }}/30 учеников</div>
             {% if graduated %}
             <div class="grad-year">Год выпуска: {{ classroom.graduation_year }}</div>
             {% endif %}
-            <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="watchinfo" type="button">Посмотреть участников</a>
-            <a href="{% url 'classroom:classroom_update' classroom.pk %}" class="watchinfo" type="button">Изменить</a>
-            <a href="{% url 'classroom:classroom_delete' classroom.pk %}" class="watchinfo" type="button">Удалить</a>
+            <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="watchinfo w1" type="button">Посмотреть участников</a>
+            <a href="{% url 'classroom:classroom_update' classroom.pk %}" class="watchinfo w2" type="button">Изменить</a>
+            <a href="{% url 'classroom:classroom_delete' classroom.pk %}" class="w3" type="button">Удалить</a>
         </div>
         {% endfor %}
     </div>

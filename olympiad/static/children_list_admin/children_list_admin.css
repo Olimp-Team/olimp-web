@@ -1,221 +1,14 @@
 html {
     font-family: Bahnschrift;
-    overflow: auto;
+    overflow: hidden;
     max-width: 100%;
     max-height: 100%;
     user-select: none;
     zoom: 85%;
 }
 
-.golova {
-    background-color: white;
-}
-
-.logo {
-    width: 75px;
-    height: 75px;
-    padding: 0;
-}
-
-.logoword {
-    padding: 0;
-    position: fixed;
-    left: 80px;
-    top: 15px;
-    font-weight: bold;
-    font-size: 22px;
-}
-
-.wordhead {
-    padding: 0;
-    position: fixed;
-    left: 450px;
-    top: 15px;
-    font-size: 18px;
-    color: gray;
-}
-
-#sun {
-    right: 135px;
-    position: fixed;
-    margin-top: -65px;
-    border: none;
-    text-align: right;
-    float: right;
-    padding-right: 10px;
-}
-
-#sun:hover {
-    cursor: pointer;
-}
-
-.solnce {
-    border: none;
-    background-color: white;
-}
-
-.solnce:hover {
-    cursor: pointer;
-}
-
-.avatarka {
-    right: 10px;
-    position: fixed;
-    margin-top: -77.5px;
-    border: none;
-    text-align: right;
-    float: right;
-    padding-right: 10px;
-    background-color: white;
-}
-
-.avatarka:hover {
-    cursor: pointer;
-}
-
-.chatik {
-    right: 85px;
-    position: fixed;
-    margin-top: -65px;
-    border: none;
-    text-align: right;
-    float: right;
-    padding-right: 10px;
-    background-color: white;
-}
-
-.chatik:hover {
-    cursor: pointer;
-}
-
-.spisok li {
-    margin-bottom: 75px;
-}
-
-li::marker {
-    content: '';
-}
-
-#mainpage {
-    text-decoration: none;
-    color: #000;
-    position: fixed;
-    left: 60px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-#mainpageimg {
-    position: fixed;
-    left: 30px;
-}
-
-#register {
-    text-decoration: none;
-    color: #000;
-    position: fixed;
-    left: 60px;
-    font-size: 24px;
-}
-
-#registerimg {
-    position: fixed;
-    left: 25px;
-}
-
-#rezultatimg {
-    position: fixed;
-    left: 25px;
-}
-
-#rezultat {
-    text-decoration: none;
-    color: #000;
-    position: fixed;
-    left: 60px;
-    font-size: 24px;
-}
-
-#historyimg {
-    position: fixed;
-    left: 25px;
-}
-
-#history {
-    text-decoration: none;
-    color: #000;
-    position: fixed;
-    left: 60px;
-    font-size: 24px;
-}
-
-#datesimg {
-    position: fixed;
-    left: 25px;
-}
-
-#dates {
-    text-decoration: none;
-    color: #000;
-    position: fixed;
-    left: 60px;
-    font-size: 24px;
-}
-
-#settingimg {
-    position: fixed;
-    left: 25px;
-}
-
-#setting {
-    text-decoration: none;
-    color: #000;
-    position: fixed;
-    left: 60px;
-    font-size: 24px;
-}
-
-#spis:after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50px;
-    border-top: 50px solid green;
-    border-top-color: inherit;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-}
-
-.exitbutton {
-    transition-property: background;
-    transition-duration: 0.3s;
-    width: 183.822px;
-    height: 20px;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
-    border-radius: 8px;
-    border: 1.5px solid #000;
-    color: #000;
-    text-decoration: none;
-    background: #FFF;
-    position: fixed;
-    left: 110px;
-    bottom: 10px;
-    font-family: Bahnschrift;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    text-align: center;
-    padding-top: 17px;
-    padding-bottom: 17px;
-}
-
-.exitbutton:hover {
-    cursor: pointer;
-    color: #FFFFFF;
-    background-color: #333333;
+::-webkit-scrollbar {
+  width: 0;
 }
 
 .main {
@@ -224,9 +17,9 @@ li::marker {
     background-color: #FBF7F4;
     width: 100%;
     height: calc(100% - 100px); /* Adjust the height based on your header and footer */
-    overflow-y: auto; /* Enable vertical scrolling */
     margin-left: 400px;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .toptext {
@@ -312,15 +105,19 @@ li::marker {
 .buttonadd:hover {
     cursor: pointer;
 }
-
+thead {
+    position: fixed;
+    margin: -50px 0 20px -5px;
+}
 .tablespisok {
-    margin-top: 60px;
+    margin-top: 90px;
     max-height: calc(100% - 120px); /* Adjust based on other elements' heights */
     width: 1750px;
     margin-left: 20px;
     border-radius: 5px;
     overflow-y: auto; /* Enable vertical scrolling for the table container */
     margin-bottom: 30px;
+    height: 650px;
 }
 
 .zagolovok, .mainspisokpoeple {
@@ -361,17 +158,25 @@ li::marker {
     width: 100px; /* Fixed width for ID */
 }
 
-#textsurname, .name {
+ .name {
     width: calc(100% - 360px); /* Remaining space */
 }
-
-#textgender, .gender {
+#textsurname {
+    margin-left: 625px;
+}
+.gender {
     width: 100px; /* Fixed width */
 }
+#textgender {
+    margin-left: 665px;
+}
 
-#textbirth, .birth {
+ .birth {
     width: 150px; /* Fixed width */
 }
+ #textbirth {
+     margin-left: 40px;
+ }
 
 .buttonedit {
     flex: 0 0 100px; /* Fixed width */
