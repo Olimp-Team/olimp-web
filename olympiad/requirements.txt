@@ -9,6 +9,7 @@ pandas
 openpyxl
 django-filter
 channels
+channels_redis
 schedule
 pymorphy3
 reportlab
@@ -19,3 +20,5 @@ django-friendship
 unicorn
 unicorn[standart]
 websocket
+daphne
+redis
