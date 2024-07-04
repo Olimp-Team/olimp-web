@@ -1,25 +1,12 @@
-from django.views import View
-from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import MessageForm
+# chat/views.py
 
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 
-class InboxView(LoginRequiredMixin, View):
-    def get(self, request):
-        messages = Message.objects.filter(recipient=request.user)
-        return render(request, 'chat/inbox.html', {'messages': messages})
+User = get_user_model()
 
-
-class SendMessageView(LoginRequiredMixin, View):
-    def get(self, request):
-        form = MessageForm()
-        return render(request, 'chat/send_message.html', {'form': form})
-
-    def post(self, request):
-        form = MessageForm(request.POST)
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.sender = request.user
-            message.save()
-            return redirect('inbox')
-        return render(request, 'chat/send_message.html', {'form': form})
+@login_required
+def chat_view(request, username):
+    other_user = get_object_or_404(User, username=username)
+    return render(request, 'chat/chat.html', {'other_user': other_user})

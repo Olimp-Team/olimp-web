@@ -1,0 +1,386 @@
+html {
+    overflow: hidden;
+    font-family: Bahnschrift;
+    zoom: 85%;
+    max-width: 100%;
+    max-height: 100%;
+    animation: anim-navbar 0.3s linear;
+
+}
+
+.main {
+    position: fixed;
+    background-color: #FBF7F4;
+    width: 100%;
+    height: 100%;
+    margin-left: 400px;
+    border-radius: 10px;
+    padding-left: 100px;
+}
+
+#infotext {
+    user-select: none;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+    margin-left: -60px;
+    top: 60px;
+    padding-top: 1px;
+
+}
+
+.infobox {
+    position: fixed;
+    margin-left: -90px;
+    margin-top: 30px;
+    width: 550px;
+    height: 200px;
+    background-color: white;
+    border-radius: 35px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    padding-left: 20px;
+    padding-top: 40px;
+}
+
+.imgpers {
+    margin-top: 68px;
+    position: absolute;
+    max-width: 90px;
+    max-height: 110px;
+    height: 90px;
+    border-radius: 50%;
+    z-index: 2;
+    margin-left: -60px;
+}
+
+.imgocontovka {
+    margin-left: -80px;
+    margin-top: 50px;
+    position: absolute;
+    height: 130px;
+    width: 130px;
+    z-index: 3;
+}
+
+.textinfo {
+    position: fixed;
+    margin-left: 160px;
+    margin-top: -250px;
+    user-select: none;
+}
+
+.fioinfo {
+    user-select: none;
+    margin-left: -105px;
+    margin-top: 330px;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 0;
+}
+
+.classinfo {
+    user-select: none;
+    opacity: 30%;
+    margin-left: -103px;
+    font-size: 20px;
+    margin-top: -15px;
+}
+
+table {
+    margin-left: 5px;
+}
+
+td, th {
+
+    padding: 8px;
+    text-align: left;
+    font-size: 18px;
+    width: var(--numbers-height-width, 40px);
+    height: var(--numbers-height-width, 40px);
+    border-radius: 8px;
+    background: var(--colors-color-background-primary-default, #F7F7F7);
+    margin-left: 20px;
+    align-items: center;
+    align-content: center;
+    gap: 8px;
+    align-self: stretch;
+    flex-wrap: wrap row;
+}
+
+th {
+    background-color: white;
+    font-weight: bold;
+    color: var(--colors-color-text-day, #AAA);
+    font-weight: 400;
+    line-height: 130%;
+    text-align: left;
+    font-family: Bahnschrift;
+    font-style: normal;
+}
+
+.wrapper {
+    margin-top: -10px;
+    position: fixed;
+    left: 1105px;;
+    width: 430px;
+    border-radius: 35px;
+    height: 550px;
+    background: #fff;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    font-family: Bahnschrift;
+}
+
+.text {
+    padding-top: 30px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.wrapper header {
+    padding-left: 27px;
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+header .icons {
+    display: flex;
+}
+
+header .icons span {
+    height: 38px;
+    width: 38px;
+
+    cursor: pointer;
+    color: #878787;
+    text-align: center;
+    line-height: 38px;
+    font-size: 1.9rem;
+    user-select: none;
+    border-radius: 50%;
+}
+
+.icons span:last-child {
+    margin-right: 10px;
+}
+
+header .icons span:hover {
+    background: #f2f2f2;
+}
+
+header .current-date {
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+
+.calendar {
+    margin-left: -50px;
+    padding: 20px;
+}
+
+.calendar ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    text-align: center;
+}
+
+.calendar .days {
+    margin-bottom: 20px;
+}
+
+.calendar li {
+    color: #333;
+    width: calc(100% / 7);
+    font-size: 1.07rem;
+}
+
+.calendar .weeks li {
+    opacity: 50%;
+    font-weight: 500;
+    cursor: default;
+}
+
+.calendar .days li {
+    z-index: 1;
+    cursor: pointer;
+    position: relative;
+    margin-top: 30px;
+}
+
+.days li.inactive {
+    color: #aaa;
+}
+
+.days li.active {
+    color: #fff;
+}
+
+.days li::before {
+    position: absolute;
+    content: "";
+    left: 50%;
+    top: 50%;
+    height: 40px;
+    width: 40px;
+    z-index: -1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.days li.active::before {
+    background: #186F65;
+}
+
+.days li:not(.active):hover::before {
+    border: 1px solid #aaa;
+    background: #f2f2f2;
+}
+
+.logsbox {
+
+    position: relative;
+    font-size: 20px;
+    top: 20px;
+    left: 1670px;
+    width: 385px;
+    height: 700px;
+    background-color: white;
+    border-radius: 35px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    padding-left: 20px;
+    margin-top: -10px;
+}
+
+.rezultlast {
+    margin-bottom: 25px;
+}
+
+.rezultlast1 {
+    margin-bottom: 25px;
+}
+
+.rezultlast2 {
+    margin-bottom: 25px;
+}
+
+.rezultlast3 {
+    margin-bottom: 25px;
+}
+
+#tableinfo td {
+    background-color: none;
+    text-align: left;
+    padding-left: 20px;
+    position: relative;
+    left: -25px;
+    top: -30px;
+    height: 1px;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Bahnschrift;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 8.5px;
+}
+
+#tableinfo th {
+    text-align: left;
+    padding-left: 20px;
+    position: relative;
+    left: -23px;
+    top: -35px;
+    background-color: none;
+    height: 1px;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: Bahnschrift;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 8.5px;
+}
+
+#vseros {
+    color: #000000;
+
+}
+
+#ball {
+    color: #2A3EF3;
+}
+
+#math {
+    color: #2A3EF3;
+}
+
+#school {
+    color: black;
+}
+
+#school2 {
+    color: #2A3EF3;
+}
+
+#oput {
+    color: #2A3EF3;
+}
+
+#tableinfocol {
+    color: #333333;
+    opacity: 60%;
+}
+
+#tableinfocol2 {
+    color: #333333;
+    opacity: 60%;
+}
+
+
+#tableinfo1 {
+    margin-left: 200px;
+}
+
+.rezultlast1 {
+    margin-top: 1px;
+}
+
+#pokazat {
+    cursor: pointer;
+    position: relative;
+    top: -10px;
+    color: #0077FF;
+    margin-bottom: 20px;
+    margin-left: 270px;
+    border: none;
+    font-size: 14px;
+    font-family: Bahnschrift;
+    background-color: white;
+}
+
+.h {
+    white-space: nowrap;
+}
+
+#nedav {
+    user-select: none;
+    left: 2px;
+    position: relative;
+    top: 14px;
+    color: black;
+    font-weight: bold;
+    font-size: 23.5px;
+}
+.logsbox tr td {
+    background-color: white;
+}
+@keyframes anim-navbar {
+    0%{
+        opacity: 0;
+    }
+    
+    100%{
+        opacity: 100;
+    }
+    }

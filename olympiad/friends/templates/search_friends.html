@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
-
+{% extends 'base_friends.html' %}
+{% load static %}
 {% block content %}
     <h2>Поиск друзей</h2>
-    <form method="get" action="{% url 'search_friends' %}">
+    <form method="get" action="{% url 'friends:search_friends' %}">
         <input type="text" name="q" placeholder="Введите имя пользователя" value="{{ query }}">
         <button type="submit">Поиск</button>
     </form>
@@ -13,15 +13,15 @@
                 {% if user.image %}
                     <img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" width="50">
                 {% else %}
-                    <img src="{% static 'default_avatar.png' %}" alt="{{ user.get_full_name }}" width="50">
+                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" width="50">
                 {% endif %}
-                <a href="{% url 'profile' user_id=user.id %}">{{ user.get_full_name }}</a> ({{ user.username }})
+                <a href="{% url 'users:profile' user_id=user.id %}">{{ user.get_full_name }}</a> ({{ user.username }})
                 {% if user in friends %}
                     - Ваш друг
                 {% elif user in friend_requests %}
                     - Ожидание подтверждения
                 {% else %}
-                    <a class="friend-button" href="{% url 'add_friend' user.id %}">Добавить в друзья</a>
+                    <a class="friend-button" href="{% url 'friends:add_friend' user.id %}">Добавить в друзья</a>
                 {% endif %}
             </li>
             {% empty %}

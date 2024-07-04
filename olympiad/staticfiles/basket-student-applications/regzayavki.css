@@ -1,0 +1,628 @@
+html {
+    font-family: Bahnschrift;
+    overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+    zoom: 85%;
+}
+
+.golova {
+    background-color: white;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wordhead {
+    padding: 0;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: gray;
+}
+
+#sun {
+    right: 135px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+#sun:hover {
+    cursor: pointer;
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+
+}
+
+.solnce:hover {
+    cursor: pointer;
+}
+
+.avatarka {
+    right: 10px;
+    position: fixed;
+    margin-top: -51px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+
+}
+
+.avatarka:hover {
+    cursor: pointer;
+}
+
+.chatik {
+    right: 85px;
+    position: fixed;
+    margin-top: -39.5px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.chatik:hover {
+    cursor: pointer;
+}
+
+#spis {
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok li {
+    margin-bottom: 75px;
+}
+
+li::marker {
+    content: '';
+}
+
+#mainpage {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultat {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#history {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#datesimg {
+    position: fixed;
+    left: 25px;
+}
+
+#dates {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+
+#setting {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#spis:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+.main {
+    position: fixed;
+    background-color: #FBF7F4;
+    width: 100%;
+    height: 100%;
+    margin-left: 400px;
+    border-radius: 10px;
+}
+
+.toptext {
+    font-family: Bahnschrift;
+    padding-left: 20px;
+    padding-top: 60px;
+}
+
+.toptext1 {
+    font-family: Bahnschrift;
+    color: #474747;
+}
+
+.toptext2 {
+    font-family: Bahnschrift;
+    opacity: 30%;
+}
+
+.topbuttons {
+    padding-top: 50px;
+    padding-left: 20px;
+}
+
+.buttonspispeople {
+    height: 50px;
+    width: 220px;
+    background-color: #000;
+    border-radius: 10px;
+    color: white;
+    font-family: Bahnschrift;
+    font-size: 18px;
+    border: none;
+}
+
+.savebutton {
+    height: 50px;
+    width: 220px;
+    background-color: #3D70F5;
+    margin-left: 780px;
+    border-radius: 10px;
+    border-color: #3D70F5;
+    color: white;
+    font-family: Bahnschrift;
+    font-size: 18px;
+    border: none;
+}
+
+.savebutton:hover {
+    cursor: pointer;
+}
+
+#buttons {
+    position: fixed;
+    margin-left: 1300px;
+    bottom: 40px;
+}
+
+.trigger {
+    border: 2px solid #3D70F5;
+    color: #FFFFFF;
+    transition-property: background;
+    transition-duration: 0.3s;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 20px;
+    margin-top: 30px;
+    height: 50px;
+    width: 190px;
+    padding-top: 17px;
+    padding-bottom: 40px;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #3D70F5;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+}
+
+.trigger:hover {
+    font-weight: bold;
+    border: 2px solid #3D70F5;
+    cursor: pointer;
+    color: #3D70F5;
+    background-color: #FFFFFF;
+}
+
+.buttonadd {
+    border: 2px solid black;
+    color: #272626;
+    transition-property: background;
+    transition-duration: 0.3s;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 40px;
+    height: 50px;
+    width: 190px;
+    padding-top: 17px;
+    padding-bottom: 19.7px;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #FFFFFF;
+    text-align: center;
+    position: relative;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+}
+
+.buttonadd:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #272626;
+}
+
+.tablespisok {
+    margin-top: 60px;
+    height: 270px;
+    width: 1750px;
+    margin-left: 20px;
+
+}
+
+.zagolovok {
+    height: 55px;
+    width: 100%;
+    background-color: #F1F1F1;
+    border-top: 1px solid #D9D9D9;
+    border-left: 1px solid #D9D9D9;
+    border-right: 1px solid #D9D9D9;
+    border-radius: 5px;
+}
+
+.mainzagolovoktext tr th {
+    padding: 28px;
+    font-weight: 400;
+}
+
+.mainspisokpoepletable {
+    padding-top: 18px;
+    font-size: 18px;
+    padding-left: 28px;
+
+}
+.mainspisokpoepletable th {
+    padding-top: 16px;
+
+}
+#textid {
+    padding-left: 35px;
+}
+#textstage {
+    margin-left: 15px;
+}
+.mainspisokpoeple ul li {
+    margin-left: -40px;
+    margin-top: -32px;
+    border-top: 1px solid #D9D9D9;
+    border-left: 1px solid #D9D9D9;
+    border-right: 1px solid #D9D9D9;
+    padding-left: 10px;
+    padding-top: 25px;
+
+}
+.mainspisokpoeple ul li:last-child { border-bottom: 1px solid #D9D9D9; }
+
+.mainspisokpoeple {
+    padding-top: 15px;
+    height: 50px;
+    /*border-bottom: 1px solid #D9D9D9;*/
+
+
+}
+
+#textychenik {
+
+    margin-left: 130px;
+}
+
+#textolimp {
+    margin-left: 220px;
+    width: 100px;
+}
+
+#textstage {
+    margin-left: 465px;
+}
+
+#textgender {
+    margin-left: 100px;
+}
+
+#textdate {
+    margin-left: 130px;
+}
+
+#textdeistie {
+    margin-left: 130px;
+}
+
+.namedate {
+    text-align: center;
+    position: absolute;
+    margin-top: -80px;
+    margin-left: 1320px;
+    font-family: Bahnschrift;
+    font-size: 17px;
+    padding: 6px;
+    background-color: #ffff;
+    border: 1px solid #434343;
+    border-radius: 5px;
+
+
+}
+
+.namegender {
+    text-align: center;
+    position: absolute;
+    margin-top: -80px;
+    margin-left: 1170px;
+    font-family: Bahnschrift;
+    font-size: 17px;
+    padding: 6px;
+    background-color: #ffff;
+    border: 1px solid #434343;
+    border-radius: 5px;
+}
+
+.namestage {
+    text-align: center;
+    position: absolute;
+    margin-top: -80px;
+    margin-left: 995px;
+    font-family: Bahnschrift;
+    font-size: 17px;
+    padding: 6px;
+    background-color: #ffff;
+    border: 1px solid #434343;
+    border-radius: 5px;
+}
+
+.olimps {
+    width: 600px;
+    height: 80px;
+    margin-left: 340px;
+
+}
+
+.tableolimps td th {
+    margin-left: 50px;
+}
+
+.nameolimp1 {
+    width: 300px;
+    text-align: center;
+    position: absolute;
+    margin-top: -3px;
+    font-family: Bahnschrift;
+    font-size: 17px;
+    font-weight: 400;
+    padding: 6px;
+    background-color: #ffff;
+    border: 1px solid #b3b2b2;
+    border-radius: 10px;
+}
+
+.namefio {
+    text-align: center;
+    position: absolute;
+    margin-top: 0px;
+    font-weight: 400;
+    font-family: Bahnschrift;
+    font-size: 18px;
+    margin-left: 90px;
+    padding: 6px;
+    max-width: 210px;
+
+    border-radius: 5px;
+}
+
+#zagolovokdeistie {
+    position: relative;
+    right: 480px;
+
+}
+
+.nameid {
+    text-align: center;
+    position: absolute;
+    margin-top: 0px;
+    font-weight: 400;
+    font-family: Bahnschrift;
+    font-size: 18px;
+    margin-left: 20px;
+    padding: 6px;
+    max-width: 210px;
+
+    border-radius: 5px;
+}
+
+.buttonedit {
+    position: absolute;
+    margin-left: 1560px;
+    margin-top: -80px;
+    height: 28px;
+    width: 150px;
+    border-radius: 5px;
+    text-decoration: none;
+    background-color: #eceaea;
+    text-align: center;
+    padding-top: 7px;
+    color: #2C62EE;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: Bahnschrift;
+    border: none;
+}
+
+.buttonedit:hover {
+    cursor: pointer;
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 1rem 1.5rem;
+    width: 24rem;
+    border-radius: 0.5rem;
+}
+
+.close-button {
+    float: right;
+    width: 1.5rem;
+    line-height: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: lightgray;
+}
+
+.close-button:hover {
+    background-color: darkgray;
+}
+
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}

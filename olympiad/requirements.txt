@@ -16,3 +16,5 @@ djangorestframework-simplejwt
 prompt-toolkit
 XlsxWriter
 django-friendship
+unicorn
+websocket

@@ -1,0 +1,368 @@
+html {
+    font-family: Bahnschrift, serif;
+    line-height: normal;
+    font-style: normal;
+    letter-spacing: -1px
+
+}
+
+body {
+    background-color: rgb(29, 29, 29);
+    color: #FFFFFF;
+}
+
+.logo {
+    z-index: 1000;
+    position: fixed;
+    width: 34px;
+    height: 34px;
+    padding: 4px;
+    margin-top: -6px;
+    left: -1px;
+}
+
+.head {
+    position: fixed;
+    color: black;
+    font-size: 20px;
+    font-weight: 700;
+    word-wrap: break-word;
+    margin-top: 10px;
+
+}
+
+.logohead {
+    user-select: none;
+    cursor: default;
+    color: #FBF6EE;
+    position: fixed;
+    font-weight: bold;
+    left: 47px;
+    margin-top: 3px;
+    margin-bottom: -120px;
+    margin-right: 5px;
+}
+
+
+#sunw {
+    margin-left: 96.9%;
+    margin-top: -1px;
+    position: fixed;
+    border: none;
+    text-align: right;
+    float: right;
+    width: 28px;
+    height: 28px;
+}
+
+.solnce {
+    background-color: rgb(29, 29, 29);
+    position: fixed;
+    border: none;
+}
+
+.container {
+    border-radius: 5%;
+    position: fixed;
+    width: 500px;
+    padding-left: 10px;
+    text-align: center;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 14%;
+    margin-left: 36%;
+    text-align: center;
+}
+
+#formain {
+    user-select: none;
+    position: relative;
+    width: 100%;
+    padding: 0;
+    text-align: left;
+    font-style: normal;
+    line-height: normal;
+    font-size: 48px;
+    margin-left: 78px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+
+}
+
+#gosus {
+    position: relative;
+    border-radius: 12px;
+    background: #D9D9D9;
+    backdrop-filter: blur(2px);
+    width: 490px;
+    height: 60px;
+    text-align: left;
+    border: none;
+    line-height: 20px;
+    font-size: 18px;
+    font-weight: initial;
+}
+
+#gosus:hover {
+    cursor: pointer;
+}
+
+#gosus1 {
+    color: #333333;
+    padding-top: 20px;
+    position: relative;
+    padding-left: 175px;
+}
+
+#gosus2 {
+    position: relative;
+    padding: 0;
+    color: #0065B1;
+    font-weight: bold;
+    margin-top: -38px;
+    padding-left: 227px;
+}
+
+#gosus3 {
+    position: relative;
+    padding: 0;
+    font-weight: bold;
+    color: #EE3F58;
+    margin-top: -38px;
+    padding-left: 251px;
+}
+
+.ctroka_c_razdeleniem {
+    overflow: hidden;
+    position: fixed;
+    color: #000;
+    line-height: normal;
+    background-color: #333333;
+    width: 220px;
+    height: 2px;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.ctroka_c_razdeleniem2 {
+    overflow: hidden;
+    position: fixed;
+    color: #000;
+    line-height: normal;
+    background-color: #333333;
+    width: 220px;
+    height: 2px;
+    padding: 0;
+    margin-left: 267px;
+    margin-top: -11px;
+}
+
+.str {
+    margin-top: 20px;
+    position: relative;
+    padding: 0;
+    text-align: left;
+    font-size: 18px;
+    margin-left: 228.5px;
+    user-select: none;
+}
+
+.name {
+    user-select: none;
+    position: relative;
+    width: 50%;
+    padding: 0;
+    text-align: left;
+    font-style: normal;
+    line-height: normal;
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+
+}
+
+#login-input {
+    padding-left: 10px;
+    margin-left: 40%;
+    position: relative;
+    border-radius: 12px;
+    background: #D9D9D9;
+    backdrop-filter: blur(2px);
+    width: 480px;
+    height: 60px;
+    text-align: left;
+    border: none;
+    line-height: 20px;
+    font-size: 18px;
+    font-weight: initial;
+    margin-left: -7px;
+}
+
+#password-input {
+    padding-left: 10px;
+    position: relative;
+    border-radius: 12px;
+    background: #D9D9D9;
+    backdrop-filter: blur(2px);
+    width: 480px;
+    height: 60px;
+    text-align: left;
+    border: none;
+    line-height: 20px;
+    font-size: 18px;
+    font-weight: initial;
+    margin-left: -7px;
+}
+
+.password-control {
+    position: absolute;
+    top: 342px;
+    right: 20px;
+    display: inline-block;
+    width: 33px;
+    height: 33px;
+    background: url(https://snipp.ru/demo/495/view.svg) 0 0 no-repeat;
+}
+
+.password-control.view {
+    background: url(https://snipp.ru/demo/495/no-view.svg) 0 0 no-repeat;
+}
+
+.lname {
+    user-select: none;
+    margin-top: 10px;
+    margin-bottom: 2px;
+    position: relative;
+    width: 50%;
+    padding: 0;
+    text-align: left;
+    font-style: normal;
+    line-height: normal;
+    font-size: 18px;
+}
+
+.checkbox {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.checkbox__input {
+    -webkit-appearance: none;
+    appearance: none;
+    position: absolute;
+}
+
+.checkbox__label {
+    user-select: none;
+    margin-left: 111px;
+    padding-top: 8.5px;
+    font-size: 22px;
+    color: #fafafa;
+    cursor: pointer;
+}
+
+.checkbox__label:before {
+    margin-top: 5px;
+    margin-left: -32px;
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+
+    border: 3px solid #000000;
+    background-color: #fafafa;
+    border-radius: 7px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    transition: background .1s linear, border .1s linear;
+}
+
+.checkbox__label:after {
+    margin-top: 4px;
+    margin-left: -49px;
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+
+    background: url(https://htmlbase.ru/storage/app/media/checkbox/check.svg) no-repeat;
+    background-size: 15px 15px;
+    opacity: 0;
+
+    position: absolute;
+    top: 5px;
+    left: 22px;
+    z-index: 2;
+
+    transition: opacity .1s linear;
+}
+
+
+.checkbox__input:checked + .checkbox__label:before {
+    background-color: #000000;
+}
+
+.checkbox__input:checked + .checkbox__label:after {
+    opacity: 1;
+}
+
+#ycl {
+    user-select: none;
+
+    font-size: 18px;
+    margin-left: -220px;
+    text-align: left;
+    position: fixed;
+    color: #FFF;
+    opacity: 80%;
+}
+
+#zabul {
+    user-select: none;
+    margin-top: 10px;
+    margin-left: 385px;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    opacity: 0.5;
+    color: #FFF;
+}
+
+#href {
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+#ctrelka {
+    background-color: #272626;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    margin-top: 27px;
+    margin-left: 212px;
+}
+
+#ctrelka:hover {
+    cursor: pointer;
+}
+
+#knopka {
+    cursor: pointer;
+}
+
+#buutt-strelka {
+    background-color: rgb(29, 29, 29);
+    border: none;
+    opacity: 120%;
+}
+
+#buutt-strelka:hover {
+    cursor: pointer;
+}

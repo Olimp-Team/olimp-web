@@ -1,0 +1,441 @@
+html {
+    font-family: Bahnschrift;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+    zoom: 85%;
+    z-index: 3;
+}
+
+.golova {
+    position: fixed;
+    z-index: 3;
+}
+
+.logo {
+    position: fixed;
+    width: 75px;
+    height: 75px;
+    padding: 0;
+    margin-top: -90px;
+
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+
+}
+
+.wordhead {
+    padding: 0;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: #808080;
+
+}
+
+#sun {
+    right: 135px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+#sun:hover {
+    cursor: pointer;
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+
+}
+
+.solnce:hover {
+    cursor: pointer;
+}
+
+.avatarka {
+    right: 10px;
+    position: fixed;
+    margin-top: -51px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+
+}
+
+.avatarka:hover {
+    cursor: pointer;
+}
+
+.chatik {
+    right: 85px;
+    position: fixed;
+    margin-top: -39.5px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.chatik:hover {
+    cursor: pointer;
+}
+
+#spis {
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok {
+    margin-top: 100px;
+    z-index: 1;
+
+}
+
+.spisok li {
+    margin-bottom: 75px;
+
+}
+
+li::marker {
+    content: '';
+}
+
+#mainpage {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultat {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#history {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#datesimg {
+    position: fixed;
+    left: 25px;
+}
+
+#dates {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+
+#setting {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#spis:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+.main {
+    position: absolute;
+    background-color: #FBF7F4;
+    width: 100%;
+    height: 100%;
+    margin-top: -10px;
+    border-radius: 10px;
+    margin-left: 400px;
+    z-index: 0;
+
+}
+
+.add_newstudents_text {
+    position: relative;
+    left: 35px;
+    top: 70px;
+    font-family: Bahnschrift;
+    color: #474747;
+    font-size: 36px;
+    font-weight: 500;
+}
+
+.spisokreg {
+    position: relative;
+    top: 90px;
+    left: 80px;
+}
+
+.spisokreg li {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: -20px;
+}
+
+h2 {
+    position: relative;
+    font-family: Bahnschrift;
+    color: #474747;
+    font-size: 29px;
+    font-weight: 500;
+
+}
+
+.vvodinfo {
+    position: relative;
+    top: -20px;
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid #D7D7D7;
+    width: 224px;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+#spisokmain {
+    color: #808080FF;
+}
+
+#spisokmain * {
+    position: relative;
+    margin-top: -100px;
+    border: 3px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 100px;
+}
+
+.randombutton {
+    position: relative;
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    width: 176px;
+    border-radius: 7px;
+    border: 1px solid #000;
+    top: -20px;
+    left: 20px;
+    text-decoration: none;
+    color: #000000;
+    transition: 0.5s;
+
+}
+
+.randombutton:hover {
+    background-color: #000;
+    color: #FFFFFF;
+    transition: 0.5s;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.selected {
+    display: none;
+}
+
+.right {
+    position: relative;
+    margin-top: -800px;
+    margin-left: 600px;
+}
+
+.imgocontovka {
+    position: relative;
+    margin-left: 500px;
+}
+
+.imgpers {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    margin-top: 15px;
+    margin-left: 515px;
+}
+
+.savenewphoto {
+    position: relative;
+    top: 50px;
+    height: 56px;
+    width: 176px;
+    left: -275px;
+    background-color: #000000;
+    color: #FFFFFF;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.5s;
+
+}
+
+.savenewphoto:hover {
+    cursor: pointer;
+    background-color: #FFFFFF;
+    color: #000;
+    transition: 0.5s;
+}
+
+.delbutton {
+    position: relative;
+    top: 50px;
+    height: 56px;
+    width: 176px;
+    left: -200px;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    transition: 0.5s;
+
+}
+
+.delbutton:hover {
+    cursor: pointer;
+    background-color: #000;
+    color: #FFFFFF;
+    transition: 0.5s;
+}
+
+.savebutton {
+    position: fixed;
+
+    margin-left: 800px;
+    margin-top: 700px;
+    padding: 13px 142px 13px 142px;
+    background-color: #3D70F5;
+    border: 2px solid #3D70F5;
+    color: white;
+    font-weight: 200;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+.savebutton:hover {
+    cursor: pointer;
+    background-color: #FFFFFF;
+    border: 2px solid #3D70F5;
+    color: #3D70F5;
+    transition: 0.5s;
+}

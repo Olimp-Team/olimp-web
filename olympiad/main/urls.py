@@ -1,5 +1,7 @@
-from django.urls import path
+from django.urls import path, re_path
 from .views import *
+from django.contrib.staticfiles.views import serve
+from django.conf import settings
 
 app_name = 'main'
 
@@ -15,5 +17,6 @@ urlpatterns = [
     path('olympiad/edit/<int:pk>/', OlympiadUpdateView.as_view(), name='olympiad_update'),
     path('olympiad/delete/<int:pk>/', OlympiadDeleteView.as_view(), name='olympiad_delete'),
     path('audit/', AuditLogView.as_view(), name='audit_log'),
+
 
 ]
