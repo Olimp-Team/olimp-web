@@ -19,12 +19,14 @@
     background-color: white;
     border: none;
 }
+
 #yourlogo {
     position: absolute;
     display: flex;
     right: 10px;
     top: 15px;
 }
+
 #chat {
     position: absolute;
     display: flex;
@@ -38,6 +40,7 @@
     right: 150px;
     top: 25px;
 }
+
 #avatarka {
     width: 55px;
     height: 55px;

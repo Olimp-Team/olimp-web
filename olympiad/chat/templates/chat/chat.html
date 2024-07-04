@@ -2,31 +2,34 @@
 {% load static %}
 {% block content %}
 <h2>Чат с {{ other_user.username }}</h2>
-<div id="chat-log-container" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
-    <ul id="chat-log" style="list-style: none; padding: 0;">
+<div id="chat-log-container" class="chat-log-container">
+    <ul id="chat-log" class="chat-log">
         {% for message in messages %}
-            <li id="message-{{ message.id }}" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <li id="message-{{ message.id }}" class="chat-message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
                 {% if message.sender.image %}
-                    <img src="{{ message.sender.image.url }}" alt="{{ message.sender.username }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                    <img src="{{ message.sender.image.url }}" alt="{{ message.sender.username }}" class="chat-avatar">
                 {% else %}
-                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ message.sender.username }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ message.sender.username }}" class="chat-avatar">
                 {% endif %}
-                <div>
+                <div class="message-content-container">
                     <strong>{{ message.sender.username }}:</strong>
                     <span class="message-content">{{ message.content }}</span>
                     <small>({{ message.timestamp }})</small>
                 </div>
-                {% if message.sender == request.user %}
-                    <i class="fas fa-edit" onclick="enableEditMessage({{ message.id }})" style="font-size: small; cursor: pointer; margin-left: 10px;"></i>
-                    <i class="fas fa-trash-alt" onclick="deleteMessage({{ message.id }}, '{% url 'chat:delete_message' message.id %}')" style="font-size: small; cursor: pointer; margin-left: 5px;"></i>
-                    <i class="fas fa-save" id="save-button-{{ message.id }}" onclick="saveEditMessage({{ message.id }}, '{% url 'chat:update_message' message.id %}')" style="display:none; font-size: small; cursor: pointer; margin-left: 5px;"></i>
-                {% endif %}
             </li>
         {% endfor %}
     </ul>
 </div>
-<input id="chat-message-input" type="text" size="100" style="width: calc(100% - 110px);">
-<button id="chat-message-submit" style="width: 100px;">Отправить</button>
+<input id="chat-message-input" type="text" class="chat-input">
+<button id="chat-message-submit" class="chat-submit">Отправить</button>
+
+<div id="context-menu" class="context-menu">
+    <ul>
+        <li id="reply">Ответить</li>
+        <li id="edit">Изменить</li>
+        <li id="delete">Удалить</li>
+    </ul>
+</div>
 
 <script>
     const roomName = "{{ other_user.username }}";
@@ -39,28 +42,18 @@
         const chatLog = document.getElementById('chat-log');
         const messageElement = document.createElement('li');
         messageElement.id = `message-${data.id}`;
-        messageElement.style.display = 'flex';
-        messageElement.style.alignItems = 'center';
-        messageElement.style.marginBottom = '10px';
+        messageElement.className = `chat-message ${data.sender === "{{ request.user.username }}" ? 'sent' : 'received'}`;
 
-        const avatarUrl = data.avatar ? data.avatar : '{% static "images/default-avatar.png" %}';
+        const avatarUrl = data.avatar ? data.avatar : '{% static "homepage/img/default-ava.png" %}';
         const updateUrl = '{% url "chat:update_message" 0 %}'.replace('0', data.id);
         const deleteUrl = '{% url "chat:delete_message" 0 %}'.replace('0', data.id);
 
         messageElement.innerHTML = `
-            <img src="${avatarUrl}" alt="${data.sender}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-            <div>
+            <img src="${avatarUrl}" alt="${data.sender}" class="chat-avatar">
+            <div class="message-content-container">
                 <strong>${data.sender}:</strong> <span class="message-content">${data.message}</span> <small>(${new Date().toLocaleString()})</small>
             </div>
         `;
-
-        if (data.sender === "{{ request.user.username }}") {
-            messageElement.innerHTML += `
-                <i class="fas fa-edit" onclick="enableEditMessage(${data.id})" style="font-size: small; cursor: pointer; margin-left: 10px;"></i>
-                <i class="fas fa-trash-alt" onclick="deleteMessage(${data.id}, '${deleteUrl}')" style="font-size: small; cursor: pointer; margin-left: 5px;"></i>
-                <i class="fas fa-save" id="save-button-${data.id}" onclick="saveEditMessage(${data.id}, '${updateUrl}')" style="display:none; font-size: small; cursor: pointer; margin-left: 5px;"></i>
-            `;
-        }
 
         chatLog.appendChild(messageElement);
     };
@@ -104,23 +97,9 @@
 
     function enableEditMessage(messageId) {
         const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
-        const saveButton = document.getElementById(`save-button-${messageId}`);
-        const editButton = document.querySelector(`#message-${messageId} .fa-edit`);
-        
-        messageContentElement.contentEditable = "true";
-        messageContentElement.focus();
-        saveButton.style.display = 'inline';
-        editButton.style.display = 'none';
-    }
-
-    function saveEditMessage(messageId, url) {
-        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
-        const newContent = messageContentElement.innerText;
-        const saveButton = document.getElementById(`save-button-${messageId}`);
-        const editButton = document.querySelector(`#message-${messageId} .fa-edit`);
-
+        const newContent = prompt("Введите новое сообщение:", messageContentElement.innerText);
         if (newContent) {
-            fetch(url, {
+            fetch(`{% url 'chat:update_message' 0 %}`.replace('0', messageId), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -131,12 +110,49 @@
               .then(data => {
                 if (data.status === 'ok') {
                     messageContentElement.innerText = data.content;
-                    messageContentElement.contentEditable = "false";
-                    saveButton.style.display = 'none';
-                    editButton.style.display = 'inline';
                 }
             });
         }
     }
+
+    function replyMessage(messageId) {
+        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
+        const messageInputDom = document.getElementById('chat-message-input');
+        messageInputDom.value = `@${messageContentElement.previousElementSibling.innerText.trim()}: ${messageContentElement.innerText}\n` + messageInputDom.value;
+        messageInputDom.focus();
+    }
+
+    // Context menu
+    const contextMenu = document.getElementById('context-menu');
+    let contextMessageId = null;
+
+    document.addEventListener('contextmenu', function(event) {
+        const messageElement = event.target.closest('.chat-message');
+        if (messageElement) {
+            event.preventDefault();
+            contextMessageId = messageElement.id.split('-')[1];
+            contextMenu.style.top = `${event.pageY}px`;
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.classList.add('active');
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('#context-menu')) {
+            contextMenu.classList.remove('active');
+        }
+    });
+
+    document.getElementById('delete').onclick = function() {
+        deleteMessage(contextMessageId, `{% url 'chat:delete_message' 0 %}`.replace('0', contextMessageId));
+    };
+
+    document.getElementById('edit').onclick = function() {
+        enableEditMessage(contextMessageId);
+    };
+
+    document.getElementById('reply').onclick = function() {
+        replyMessage(contextMessageId);
+    };
 </script>
 {% endblock %}
