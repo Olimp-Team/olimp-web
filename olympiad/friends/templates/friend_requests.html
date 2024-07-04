@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="{% static 'friends.css' %}">
+</head>
+
+<body>
+<h2>Запросы в друзья</h2>
+<ul>
+    {% for request in friend_requests %}
+        <li>
+            {{ request.from_user.get_full_name }}
+            <a href="{% url 'friends:accept_friend_request' request.id %}">Принять</a>
+            <a href="{% url 'friends:reject_friend_request' request.id %}">Отклонить</a>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>

@@ -41,7 +41,8 @@ class AuthLogin(View):
 
 
 class ProfileView(LoginRequiredMixin, View):
-    def get(self, request):
+    def get(self, request, user_id):
+        user = User.objects.get(id=user_id)
         form = UserProfileForm(instance=request.user)
         context = {'form': form}
         return render(request, 'profile/profile.html', context)

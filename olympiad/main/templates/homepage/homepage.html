@@ -20,7 +20,7 @@
         <div class="infobox">
         </div>
         <p id="infotext">Информация о вас</p>
-        <form action="{% url 'users:profile' %}" method="post" enctype="multipart/form-data">
+        <form action="{% url 'users:profile' user.id %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div>
                 <img class="imgocontovka" src="{% static 'homepage/img/Base.png' %}" alt="">
