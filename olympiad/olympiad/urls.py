@@ -20,6 +20,7 @@ urlpatterns = [
     # Приложения авторизации
     path('users/', include('users.urls', namespace='users')),
     path('api/', include('api.urls', namespace='api')),
+    path('friends/', include('friends.urls', namespace='friends')),
     path('chat/', include('chat.urls')),
 ]
 

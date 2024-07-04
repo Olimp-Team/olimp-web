@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'schedule',
     'calendar_olimp',
     'corsheaders',
+    'friendship',
+    'friends',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,16 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 
 ]
+
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: 'debug',
+    message_constants.INFO: 'info',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR: 'danger',
+}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5174",
