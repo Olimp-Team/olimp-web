@@ -1,36 +1,52 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Добавить рекомендацию | Olimp</title>
+    <link rel="stylesheet" href="{% static 'add_recommendation.css' %}">
+    <link rel="stylesheet" href="{% static 'header/header.css' %}">
+    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
 </head>
 <body>
-<h1>Добавить рекомендацию</h1>
-<form method="post">
-    {% csrf_token %}
-    <label for="recommended_to">Отправитель:</label>
-    <select name="recommended_to" id="recommended_to">
-        {% for teacher in teachers %}
-            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
-        {% endfor %}
-    </select>
+{% include 'header/header.html' %}
+{% include 'navbar/navbar.html' %}
 
-    <label for="child">Ученик:</label>
-    <select name="child" id="child">
-        {% for student in students %}
-            <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-        {% endfor %}
-    </select>
+<div class="main">
+    <div class="container">
+        <h1>Добавить рекомендацию</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="recommended_to">Отправитель:</label>
+                <select name="recommended_to" id="recommended_to">
+                    {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    <label for="olympiad">Олимпиада:</label>
-    <select name="olympiad" id="olympiad">
-        {% for olympiad in olympiads %}
-            <option value="{{ olympiad.id }}">{{ olympiad.name }}</option>
-        {% endfor %}
-    </select>
+            <div class="form-group">
+                <label for="child">Ученик:</label>
+                <select name="child" id="child">
+                    {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-    <button type="submit">Добавить рекомендацию</button>
-</form>
+            <div class="form-group">
+                <label for="olympiad">Олимпиада:</label>
+                <select name="olympiad" id="olympiad">
+                    {% for olympiad in olympiads %}
+                        <option value="{{ olympiad.id }}">{{ olympiad.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <button type="submit" class="btn">Добавить рекомендацию</button>
+        </form>
+    </div>
+</div>
 </body>
 </html>

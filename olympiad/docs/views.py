@@ -252,15 +252,15 @@ class import_users(View):
             import_data(file)
             return redirect('docs:succes_import')
 
+def import_data(file):
+    df = pd.read_excel(file)
 
-class import_data():
-    def post(self, file):
-        df = pd.read_excel(file)
+    for index, row in df.iterrows():
+        if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
+            continue
 
-        for index, row in df.iterrows():
-            if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
-                continue
-
+        # Проверка на наличие почты
+        if not pd.notna(row['почта']):
             user, created = User.objects.update_or_create(
                 username=row['имя_пользователя'],
                 defaults={
@@ -280,23 +280,24 @@ class import_data():
                 user.set_password(row['пароль'])
                 user.save()
 
-            if pd.notna(row['классное_руководство']):  # классное_руководство
-                try:
-                    number, letter = parse_classroom(row['классное_руководство'])
-                    classroom_guide = Classroom.objects.get(number=number, letter=letter)
-                    user.classroom_guide = classroom_guide
-                except Classroom.DoesNotExist:
-                    pass  # Если класс не найден, пропускаем
+            # Обработка классного руководства
+            if pd.notna(row['классное_руководство']):
+                number, letter = parse_classroom(row['классное_руководство'])
+                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                if created or classroom_guide.teacher is None:
+                    classroom_guide.teacher = user
+                    classroom_guide.save()
+                user.classroom_guide = classroom_guide
                 user.save()
 
-            if pd.notna(row['класс']):  # класс
-                try:
-                    number, letter = parse_classroom(row['класс'])
-                    classroom = Classroom.objects.get(number=number, letter=letter)
-                    user.classroom = classroom
-                except Classroom.DoesNotExist:
-                    pass  # Если класс не найден, пропускаем
+            # Обработка учеников
+            if pd.notna(row['класс']):
+                number, letter = parse_classroom(row['класс'])
+                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                user.classroom = classroom
                 user.save()
+                classroom.child.add(user)
+                classroom.save()
 
             if pd.notna(row['предметы']):  # предметы
                 subjects = row['предметы'].split(',')
@@ -316,12 +317,11 @@ class import_data():
                     except Post.DoesNotExist:
                         pass  # Если должность не найдена, пропускаем
 
-
-class parse_classroom():
-    def post(self, classroom_str):
-        number = int(''.join(filter(str.isdigit, classroom_str)))
-        letter = ''.join(filter(str.isalpha, classroom_str))
-        return number, letter
+# Вспомогательная функция для разбора класса
+def parse_classroom(classroom_str):
+    number = ''.join(filter(str.isdigit, classroom_str))
+    letter = ''.join(filter(str.isalpha, classroom_str))
+    return number, letter
 
 
 class DashboardView(AdminRequiredMixin, ListView):
@@ -430,6 +430,9 @@ class ExportExcelView(AdminRequiredMixin, ListView):
 
 def create_pdf_for_student(student, olympiads, output_path):
     font_path = os.path.join('static', 'fonts', 'timesnewromanpsmt.ttf')
+    if not os.path.exists(font_path):
+        raise FileNotFoundError(f"Font file not found: {font_path}")
+
     pdfmetrics.registerFont(TTFont('timesnewromanpsmt', font_path))
 
     pdf_canvas = canvas.Canvas(output_path, pagesize=A4)

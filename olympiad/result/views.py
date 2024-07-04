@@ -1,5 +1,6 @@
 import pandas as pd
-from django.http import HttpResponse
+from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.http import HttpResponse, HttpResponseForbidden
 from django.views.generic import ListView
 from django_filters.views import FilterView
 from .models import Result
@@ -18,65 +19,86 @@ from users.mixins import AdminRequiredMixin
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from main.models import Classroom
+from django.utils.timezone import make_naive
+import io
 
 
-class ExportResultsView(AdminRequiredMixin, View):
+class ExportResultsView(View):
     def get(self, request, *args, **kwargs):
-        filter_set = ResultFilter(request.GET, queryset=Result.objects.all())
-        results = filter_set.qs.values(
-            'info_children__last_name',
-            'info_children__first_name',
-            'info_children__surname',
-            'info_olympiad__name',
-            'points',
-            'status_result',
-            'date_added'
-        )
+        if not request.user.is_admin:
+            return HttpResponseForbidden()
 
-        # Создаем DataFrame для экспорта
-        df = pd.DataFrame(results)
+        results = Result.objects.select_related('info_children', 'info_olympiad').all()
 
-        # Переименовываем столбцы для удобства
-        df.columns = ['Фамилия', 'Имя', 'Отчество', 'Название олимпиады', 'Количество очков', 'Статус результата',
-                      'Дата']
+        # Создаем DataFrame вручную, чтобы использовать get_full_name
+        data = []
+        for result in results:
+            user = result.info_children
+            olympiad = result.info_olympiad
+            data.append({
+                'ФИО': user.get_full_name(),
+                'Название олимпиады': olympiad.name,
+                'Количество очков': result.points,
+                'Статус результата': result.get_status_result_display(),
+                'Дата добавления': make_naive(result.date_added)
+            })
 
-        # Преобразуем столбец 'Дата' в неявные объекты datetime без учета часового пояса
-        df['Даtта'] = df['Дата'].dt.tz_convert(None)
+        df = pd.DataFrame(data)
 
-        # Создаем HTTP-ответ с файлом Excel
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        buffer = io.BytesIO()
+        with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False, sheet_name='Results')
+
+        buffer.seek(0)
+        response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=results.xlsx'
-
-        # Записываем DataFrame в файл Excel
-        df.to_excel(response, index=False)
-
         return response
 
 
-class ImportResultsView(AdminRequiredMixin, View):
+class ImportResultsView(View):
     def get(self, request, *args, **kwargs):
+        if not request.user.is_admin:
+            return HttpResponseForbidden()
+
         users = User.objects.all()
         olympiads = Olympiad.objects.all()
-        return render(request, 'result_list.html', {'users': users, 'olympiads': olympiads})
+        return render(request, 'result/result.html', {'users': users, 'olympiads': olympiads})
 
     def post(self, request, *args, **kwargs):
-        excel_file = request.FILES['excel_file']
+        if not request.user.is_admin:
+            return HttpResponseForbidden()
+
+        excel_file = request.FILES.get('excel_file')
+        if not excel_file:
+            return render(request, 'result/result.html', {'error': 'Файл не выбран'})
+
         df = pd.read_excel(excel_file)
+        errors = []
 
         for index, row in df.iterrows():
-            # Получаем отдельные части имени
-            last_name, first_name, middle_name = row['Фамилия'], row['Имя'], row['Отчество']
-            # Находим или создаем объект User
-            user, created = User.objects.get_or_create(
-                last_name=last_name,
-                first_name=first_name,
-                surname=middle_name
-            )
+            last_name, first_name, surname = row['Фамилия'], row['Имя'], row['Отчество']
+            try:
+                user = User.objects.get(
+                    last_name=last_name,
+                    first_name=first_name,
+                    surname=surname
+                )
+            except MultipleObjectsReturned:
+                users = User.objects.filter(
+                    last_name=last_name,
+                    first_name=first_name,
+                    surname=surname
+                )
+                user = users.first()  # Выбираем первого найденного пользователя
+                errors.append(
+                    f'Найдено несколько пользователей с именем {last_name} {first_name} {surname}. Использован первый найденный.')
 
-            # Находим объект Olympiad по названию
-            olympiad = Olympiad.objects.get(name=row['Название олимпиады'])
+            try:
+                olympiad = Olympiad.objects.get(name=row['Название олимпиады'])
+            except ObjectDoesNotExist:
+                errors.append(f'Олимпиада с названием {row["Название олимпиады"]} не найдена.')
+                continue
 
-            # Создаем или обновляем результат
             Result.objects.update_or_create(
                 info_children=user,
                 info_olympiad=olympiad,
@@ -86,7 +108,10 @@ class ImportResultsView(AdminRequiredMixin, View):
                 }
             )
 
-        return redirect('results_list')
+        if errors:
+            return render(request, 'result/result.html', {'errors': errors})
+
+        return redirect('result:results_list')
 
 
 class ResultListView(FilterView):
@@ -105,7 +130,7 @@ class OlympiadResultCreateView(AdminRequiredMixin, View):
         form = OlympiadResultForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('success_page')  # Замените 'success_page' на ваш URL для успешного добавления
+            return redirect('result:results_list')
         return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
 
 

@@ -1,5 +1,7 @@
 from django.db import models
 
+from datetime import datetime
+
 
 class Classroom(models.Model):
     """Модель учебных классов
@@ -14,9 +16,29 @@ class Classroom(models.Model):
     teacher = models.ForeignKey(to='users.User', blank=True, null=True, on_delete=models.CASCADE,
                                 related_name='teacher')
     child = models.ManyToManyField(to='users.User', blank=True, related_name='Child')
+    is_graduated = models.BooleanField('Выпустился', default=False)
+    graduation_year = models.IntegerField('Год выпуска', blank=True, null=True)
 
     def __str__(self):
         return f'{self.number} {self.letter} - {self.teacher}'
+
+    def promote(self):
+        if self.number < 11:
+            self.number += 1
+        else:
+            self.is_graduated = True
+            self.graduation_year = datetime.now().year
+        self.save()
+
+
+class AuditLog(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Пользователь')
+    action = models.CharField(max_length=256, verbose_name='Действие')
+    object_name = models.CharField(max_length=256, verbose_name='Объект')
+    timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Время действия')
+
+    def __str__(self):
+        return f'{self.user} - {self.action} - {self.object_name} - {self.timestamp}'
 
 
 class Subject(models.Model):

@@ -1,0 +1,287 @@
+html {
+    overflow: hidden;
+    font-family: Bahnschrift;
+    zoom: 85%;
+    max-width: 100%;
+    max-height: 100%;
+    animation: anim-navbar 0.3s linear;
+
+}
+
+.main {
+    position: fixed;
+    background-color: #FBF7F4;
+    width: 100%;
+    height: 100%;
+    margin-left: 400px;
+    border-radius: 10px;
+
+
+}
+
+.container {
+
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 120px auto 0 600px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.create-button {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.create-button button {
+    background-color: #3D70F5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.create-button button:hover {
+    background-color: #2a56c6;
+}
+
+.admin-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+.admin-list li {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.admin-list li:hover {
+    background-color: #f1f1f1;
+}
+
+/* Styles for header and navbar */
+.golova {
+    background-color: white;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wordhead {
+    margin-top: 10px;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: gray;
+}
+
+#sun {
+    right: 135px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+#sun:hover {
+    cursor: pointer;
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+}
+
+.solnce:hover {
+    cursor: pointer;
+}
+
+.avatarka {
+    right: 10px;
+    position: fixed;
+    margin-top: -51px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.avatarka:hover {
+    cursor: pointer;
+}
+
+.chatik {
+    right: 85px;
+    position: fixed;
+    margin-top: -39.5px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.chatik:hover {
+    cursor: pointer;
+}
+
+#spis {
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok li {
+    margin-bottom: 75px;
+}
+
+li::marker {
+    content: '';
+}
+
+#mainpage {
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultat {
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+    position: fixed;
+    left: 25px;
+}
+
+#history {
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#datesimg {
+    position: fixed;
+    left: 25px;
+}
+
+#dates {
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+
+#setting {
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+.exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
+}

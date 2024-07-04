@@ -14,5 +14,6 @@ urlpatterns = [
     path('olympiad/new/', OlympiadCreateView.as_view(), name='olympiad_create'),
     path('olympiad/edit/<int:pk>/', OlympiadUpdateView.as_view(), name='olympiad_update'),
     path('olympiad/delete/<int:pk>/', OlympiadDeleteView.as_view(), name='olympiad_delete'),
+    path('audit/', AuditLogView.as_view(), name='audit_log'),
 
 ]
