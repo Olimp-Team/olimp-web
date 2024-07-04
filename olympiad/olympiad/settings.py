@@ -132,15 +132,22 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [
                 {
-                    'address': ('147.45.148.142', 6379),
-                    'password': 'WKJ,rdOVdsS0qO',
+                    'address': ('127.0.0.1', 6379),
+                    # 'password': 'WKJ,rdOVdsS0qO',
                     # 'username': 'default'  # Обычно Redis не требует имя пользователя
                 }
             ],
         },
     },
 }
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': ['redis://:WKJ,rdOVdsS0qO@147.45.148.142:6379/0'],
+        },
+    },
+}
 
 LOGIN_URL = 'users:login'
 WSGI_APPLICATION = 'olympiad.wsgi.application'
