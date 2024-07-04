@@ -132,9 +132,9 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [
                 {
-                    'address': ('192.168.0.4', 6379),
-                    'password': '{z4rj2<za1%DYJ',
-                    'username': 'default'  # Обычно Redis не требует имя пользователя
+                    'address': ('147.45.148.142', 6379),
+                    'password': 'WKJ,rdOVdsS0qO',
+                    # 'username': 'default'  # Обычно Redis не требует имя пользователя
                 }
             ],
         },
