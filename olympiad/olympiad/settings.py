@@ -130,7 +130,13 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
+            'hosts': [
+                {
+                    'address': ('192.168.0.4', 6379),
+                    'password': '{z4rj2<za1%DYJ',
+                    'username': 'default'  # Обычно Redis не требует имя пользователя
+                }
+            ],
         },
     },
 }
