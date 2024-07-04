@@ -105,10 +105,8 @@ TEMPLATES = [
 ]
 AUTH_USER_MODEL = 'users.User'
 
-
 SESSION_COOKIE_AGE = 1209600  # 2 недели
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
 
 ASGI_APPLICATION = 'olympiad.asgi.application'
 
@@ -129,8 +127,12 @@ WSGI_APPLICATION = 'olympiad.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'default_db',
+        'USER': 'gen_user',
+        'PASSWORD': '732301papa',
+        'HOST': '93.93.207.149',
+        'PORT': '5432',
     }
 }
 
@@ -151,7 +153,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'  # SMTP-сервер вашего почтового провайдера

@@ -430,6 +430,9 @@ class ExportExcelView(AdminRequiredMixin, ListView):
 
 def create_pdf_for_student(student, olympiads, output_path):
     font_path = os.path.join('static', 'fonts', 'timesnewromanpsmt.ttf')
+    if not os.path.exists(font_path):
+        raise FileNotFoundError(f"Font file not found: {font_path}")
+
     pdfmetrics.registerFont(TTFont('timesnewromanpsmt', font_path))
 
     pdf_canvas = canvas.Canvas(output_path, pagesize=A4)

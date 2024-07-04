@@ -102,17 +102,6 @@
         <div class="editphoto">
             <div>
             {{ form.errors }}
-                <img class="imgpers" src="
-                    
-                        {% if user.image %}{{ user.image.url }}{% else %}{% static 'profile/img/default-ava.png' %}{% endif %}"
-                     alt="">
-
-                <img class="imgocontovka" src="{% static 'profile/img/Base.png' %}"
-                     alt="">
-
-                <input class="savenewphoto" type="submit" value="Загрузить новое фото"/>
-                <input class="delbutton" type="submit" value="Удалить фото"/>
-
             </div>
         </div>
         <button type="submit" class="savebutton">Создать</button>

@@ -54,7 +54,7 @@
             {% for child in child %}
             <div class="mainspisokpoeple">
                 <div class="surname">{{ child.id }}</div>
-                <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
+                <div class="name"> {{ child.first_name }} {{ child.last_name }} {{ child.surname }}</div>
                 <div class="gender">{{ child.gender }}</div>
                 <div class="birth">{{ child.birth_date }}</div>
                 <a class="buttonedit" type="submit" href="{% url 'classroom:child_remove_admin' child.id %}">Удалить</a>

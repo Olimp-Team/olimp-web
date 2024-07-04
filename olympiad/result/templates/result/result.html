@@ -13,81 +13,86 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
 </head>
-{% include 'header/header.html' %}
-<p class="wordhead">Результаты олимпиад</p>
-{% block header %}
-{% endblock %}
-
-{% include 'navbar/navbar.html' %}
-{% block content %}
-{% endblock %}
 <body>
+    {% include 'header/header.html' %}
+    <p class="wordhead">Результаты олимпиад</p>
+    {% block header %}
+    {% endblock %}
+
+    {% include 'navbar/navbar.html' %}
+    {% block content %}
+    {% endblock %}
     <div class="main">
-    <form method="get">
-        <div class="classroom">
-            <h1>Класс:</h1>
-            <div class="cl">{{ filter.form.classroom }}</div>
-        </div>
-        
-        
-            <div class="olympiad">
-            <h1>Олимпиада:</h1>
-            <div class="ol">{{ filter.form.olympiad }} </div>
+        <form method="get">
+            <div class="classroom">
+                <h1>Класс:</h1>
+                <div class="cl">{{ filter.form.classroom }}</div>
             </div>
-        <button type="submit" class="mainbtn" id="filterbtn">Фильтровать</button>
-    </form>
-
-    <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %} " class="input-file">
-        <div class="importblock">
-        {% csrf_token %}
-        <input type="file" name="excel_file" accept=".xlsx">
-        <span >Выберите файл</span>
-        <button type="submit" class="mainbtn">Импортировать результаты</button>
-    </div>
-    </form>
-    <form method="get" action="{% url 'result:export_results' %}">
-        <div class="exportblock">
-        <button type="submit" class="mainbtn">Экспортировать результаты</button>
-    </div>
-    </form>
-    <table border="1">
-        <thead>
-            <tr id="zagolovok">
-                <th>Ученик</th>
-                <th>Класс</th>
-                <th>Олимпиада</th>
-                <th>Результат</th>
-                <th>Статус</th>
-                <th>Дата</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for result in filter.qs %}
-                <tr>
-                    <td>{{ result.info_children.get_full_name }}</td>
-                    <td>{{ result.info_children.classroom }}</td>
-                    <td>{{ result.info_olympiad.name }}</td>
-                    <td>{{ result.points }}</td>
-                    <td>{{ result.get_status_result_display }}</td>
-                    <td>{{ result.date_added }}</td>
+            <div class="olympiad">
+                <h1>Олимпиада:</h1>
+                <div class="ol">{{ filter.form.olympiad }} </div>
+            </div>
+            <button type="submit" class="mainbtn" id="filterbtn">Фильтровать</button>
+        </form>
+        {% if user.is_admin %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %}" class="input-file">
+            <div class="importblock">
+                {% csrf_token %}
+                <input type="file" name="excel_file" accept=".xlsx" id="file-input" class="file-input">
+                <label for="file-input" class="file-label">Выберите файл</label>
+                <button type="submit" class="mainbtn">Импортировать результаты</button>
+            </div>
+        </form>
+        {% endif %}
+        <form method="get" action="{% url 'result:export_results' %}">
+            <div class="exportblock">
+                <button type="submit" class="mainbtn">Экспортировать результаты</button>
+            </div>
+        </form>
+        <table border="1">
+            <thead>
+                <tr id="zagolovok">
+                    <th>Ученик</th>
+                    <th>Класс</th>
+                    <th>Олимпиада</th>
+                    <th>Результат</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for result in filter.qs %}
+                    <tr>
+                        <td>{{ result.info_children.get_full_name }}</td>
+                        <td>{{ result.info_children.classroom }}</td>
+                        <td>{{ result.info_olympiad.name }}</td>
+                        <td>{{ result.points }}</td>
+                        <td>{{ result.get_status_result_display }}</td>
+                        <td>{{ result.date_added }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <script>
-        $(document).ready(function() {
-            $('.classroom-select').select2({
-                placeholder: 'Выберите класс',
-                allowClear: true
-            });
+        <script>
+            $(document).ready(function() {
+                $('.classroom-select').select2({
+                    placeholder: 'Выберите класс',
+                    allowClear: true
+                });
 
-            $('.olympiad-select').select2({
-                placeholder: 'Выберите олимпиаду',
-                allowClear: true
+                $('.olympiad-select').select2({
+                    placeholder: 'Выберите олимпиаду',
+                    allowClear: true
+                });
+
+                // Добавим обработчик событий для кнопки выбора файла
+                $('#file-input').on('change', function() {
+                    var fileName = $(this).val().split('\\').pop();
+                    $(this).next('.file-label').html(fileName);
+                });
             });
-        });
-    </script>
+        </script>
     </div>
 </body>
 </html>

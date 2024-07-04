@@ -59,7 +59,8 @@ class User(AbstractUser):
             return f"Неизвстная роль: {self.last_name} {self.first_name} {self.surname}"
 
     def get_full_name(self):
-        return f"{self.last_name} {self.first_name} {self.surname}"
+        full_name = "%s %s %s" % (self.last_name, self.first_name, self.surname)
+        return full_name.strip()
 
     @staticmethod
     def get_teachers():
