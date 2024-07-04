@@ -1,17 +1,25 @@
 {% extends 'base_friends.html' %}
-
+{% load static %}
 {% block content %}
 <h2>Чат с {{ other_user.username }}</h2>
 <div id="chat-log-container" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
     <ul id="chat-log" style="list-style: none; padding: 0;">
         {% for message in messages %}
-            <li id="message-{{ message.id }}">
-                <strong>{{ message.sender.username }}:</strong>
-                <span class="message-content">{{ message.content }}</span>
-                <small>({{ message.timestamp }})</small>
+            <li id="message-{{ message.id }}" style="display: flex; align-items: center; margin-bottom: 10px;">
+                {% if message.sender.image %}
+                    <img src="{{ message.sender.image.url }}" alt="{{ message.sender.username }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                {% else %}
+                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ message.sender.username }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                {% endif %}
+                <div>
+                    <strong>{{ message.sender.username }}:</strong>
+                    <span class="message-content">{{ message.content }}</span>
+                    <small>({{ message.timestamp }})</small>
+                </div>
                 {% if message.sender == request.user %}
-                    <button onclick="editMessage({{ message.id }}, '{% url 'chat:update_message' message.id %}')">Изменить</button>
-                    <button onclick="deleteMessage({{ message.id }}, '{% url 'chat:delete_message' message.id %}')">Удалить</button>
+                    <i class="fas fa-edit" onclick="enableEditMessage({{ message.id }})" style="font-size: small; cursor: pointer; margin-left: 10px;"></i>
+                    <i class="fas fa-trash-alt" onclick="deleteMessage({{ message.id }}, '{% url 'chat:delete_message' message.id %}')" style="font-size: small; cursor: pointer; margin-left: 5px;"></i>
+                    <i class="fas fa-save" id="save-button-{{ message.id }}" onclick="saveEditMessage({{ message.id }}, '{% url 'chat:update_message' message.id %}')" style="display:none; font-size: small; cursor: pointer; margin-left: 5px;"></i>
                 {% endif %}
             </li>
         {% endfor %}
@@ -31,15 +39,29 @@
         const chatLog = document.getElementById('chat-log');
         const messageElement = document.createElement('li');
         messageElement.id = `message-${data.id}`;
+        messageElement.style.display = 'flex';
+        messageElement.style.alignItems = 'center';
+        messageElement.style.marginBottom = '10px';
+
+        const avatarUrl = data.avatar ? data.avatar : '{% static "images/default-avatar.png" %}';
         const updateUrl = '{% url "chat:update_message" 0 %}'.replace('0', data.id);
         const deleteUrl = '{% url "chat:delete_message" 0 %}'.replace('0', data.id);
-        messageElement.innerHTML = `<strong>${data.sender}:</strong> <span class="message-content">${data.message}</span>`;
+
+        messageElement.innerHTML = `
+            <img src="${avatarUrl}" alt="${data.sender}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+            <div>
+                <strong>${data.sender}:</strong> <span class="message-content">${data.message}</span> <small>(${new Date().toLocaleString()})</small>
+            </div>
+        `;
+
         if (data.sender === "{{ request.user.username }}") {
             messageElement.innerHTML += `
-                <button onclick="editMessage(${data.id}, '${updateUrl}')">Изменить</button>
-                <button onclick="deleteMessage(${data.id}, '${deleteUrl}')">Удалить</button>
+                <i class="fas fa-edit" onclick="enableEditMessage(${data.id})" style="font-size: small; cursor: pointer; margin-left: 10px;"></i>
+                <i class="fas fa-trash-alt" onclick="deleteMessage(${data.id}, '${deleteUrl}')" style="font-size: small; cursor: pointer; margin-left: 5px;"></i>
+                <i class="fas fa-save" id="save-button-${data.id}" onclick="saveEditMessage(${data.id}, '${updateUrl}')" style="display:none; font-size: small; cursor: pointer; margin-left: 5px;"></i>
             `;
         }
+
         chatLog.appendChild(messageElement);
     };
 
@@ -80,9 +102,23 @@
         });
     }
 
-    function editMessage(messageId, url) {
+    function enableEditMessage(messageId) {
         const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
-        const newContent = prompt('Введите новое сообщение:', messageContentElement.innerText);
+        const saveButton = document.getElementById(`save-button-${messageId}`);
+        const editButton = document.querySelector(`#message-${messageId} .fa-edit`);
+        
+        messageContentElement.contentEditable = "true";
+        messageContentElement.focus();
+        saveButton.style.display = 'inline';
+        editButton.style.display = 'none';
+    }
+
+    function saveEditMessage(messageId, url) {
+        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
+        const newContent = messageContentElement.innerText;
+        const saveButton = document.getElementById(`save-button-${messageId}`);
+        const editButton = document.querySelector(`#message-${messageId} .fa-edit`);
+
         if (newContent) {
             fetch(url, {
                 method: 'POST',
@@ -95,6 +131,9 @@
               .then(data => {
                 if (data.status === 'ok') {
                     messageContentElement.innerText = data.content;
+                    messageContentElement.contentEditable = "false";
+                    saveButton.style.display = 'none';
+                    editButton.style.display = 'inline';
                 }
             });
         }
