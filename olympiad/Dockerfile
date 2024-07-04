@@ -28,5 +28,5 @@ RUN python manage.py migrate
 # Открываем порт 8000 для доступа к приложению
 EXPOSE 8000
 
-# Запускаем приложение с использованием Uvicorn
-CMD ["uvicorn", "olympiad.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+# Запускаем приложение с использованием Daphne
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "olympiad.asgi:application"]

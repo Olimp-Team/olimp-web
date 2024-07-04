@@ -1,4 +1,4 @@
-{% extends 'base_friends.html' %}
+{% extends 'base.html' %}
 
 {% block content %}
 <h2>Чат с {{ other_user.username }}</h2>
@@ -13,9 +13,9 @@
     // Получение имени комнаты (имя пользователя собеседника)
     const roomName = "{{ other_user.username }}";
 
-    // Создание нового WebSocket соединения
+    // Выбор схемы (ws или wss) в зависимости от протокола текущей страницы
     const chatSocket = new WebSocket(
-        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + roomName + '/'
     );
 
     // Обработчик получения сообщения от WebSocket
