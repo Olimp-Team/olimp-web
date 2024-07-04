@@ -14,6 +14,12 @@
                 <li>
                     <div class="mainpage">
                         <img id="mainpageimg" src="{% static 'profile/img/home.png' %}"><a
+                            href="{% url 'chat:chat_list' %}" id="mainpage">Сообщения</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="mainpage">
+                        <img id="mainpageimg" src="{% static 'profile/img/home.png' %}"><a
                             href="{% url 'friends:view_friends' %}" id="mainpage">Мои друзья</a>
                     </div>
                 </li>
