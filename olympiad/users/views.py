@@ -42,19 +42,20 @@ class AuthLogin(View):
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
-        user = User.objects.get(id=user_id)
-        form = UserProfileForm(instance=request.user)
-        context = {'form': form}
+        user = get_object_or_404(User, id=user_id)
+        form = UserProfileForm(instance=user)
+        context = {'form': form, 'user': user}
         return render(request, 'profile/profile.html', context)
 
-    def post(self, request):
-        form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
+    def post(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        form = UserProfileForm(instance=user, data=request.POST, files=request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('users:profile'))
+            return redirect(reverse('profile', kwargs={'user_id': user.id}))
         else:
             print(form.errors)
-        context = {'form': form}
+        context = {'form': form, 'user': user}
         return render(request, 'profile/profile.html', context)
 
 
