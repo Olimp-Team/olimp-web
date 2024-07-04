@@ -19,7 +19,7 @@ def add_friend(request, user_id):
     if existing_request:
         # Обработать случай, когда запрос уже существует
         messages.warning(request, 'Вы уже отправили запрос на добавление в друзья этому пользователю.')
-        return redirect('profile', user_id=user_id)
+        return redirect('users:profile', user_id=user_id)
 
     try:
         Friend.objects.add_friend(

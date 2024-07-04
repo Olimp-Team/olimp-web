@@ -4,56 +4,100 @@
 <h2>Чат с {{ other_user.username }}</h2>
 <div id="chat-log-container" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
     <ul id="chat-log" style="list-style: none; padding: 0;">
+        {% for message in messages %}
+            <li id="message-{{ message.id }}">
+                <strong>{{ message.sender.username }}:</strong>
+                <span class="message-content">{{ message.content }}</span>
+                <small>({{ message.timestamp }})</small>
+                {% if message.sender == request.user %}
+                    <button onclick="editMessage({{ message.id }}, '{% url 'chat:update_message' message.id %}')">Изменить</button>
+                    <button onclick="deleteMessage({{ message.id }}, '{% url 'chat:delete_message' message.id %}')">Удалить</button>
+                {% endif %}
+            </li>
+        {% endfor %}
     </ul>
 </div>
 <input id="chat-message-input" type="text" size="100" style="width: calc(100% - 110px);">
 <button id="chat-message-submit" style="width: 100px;">Отправить</button>
 
 <script>
-    // Получение имени комнаты (имя пользователя собеседника)
     const roomName = "{{ other_user.username }}";
-
-    // Выбор схемы (ws или wss) в зависимости от протокола текущей страницы
     const chatSocket = new WebSocket(
         (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + roomName + '/'
     );
 
-    // Обработчик получения сообщения от WebSocket
     chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);  // Парсинг JSON данных
-        const chatLog = document.getElementById('chat-log');  // Получение элемента для лога сообщений
-        const messageElement = document.createElement('li');  // Создание нового элемента для сообщения
-        messageElement.textContent = `${data.sender}: ${data.message}`;  // Установка текста сообщения
-        chatLog.appendChild(messageElement);  // Добавление сообщения в лог
+        const data = JSON.parse(e.data);
+        const chatLog = document.getElementById('chat-log');
+        const messageElement = document.createElement('li');
+        messageElement.id = `message-${data.id}`;
+        const updateUrl = '{% url "chat:update_message" 0 %}'.replace('0', data.id);
+        const deleteUrl = '{% url "chat:delete_message" 0 %}'.replace('0', data.id);
+        messageElement.innerHTML = `<strong>${data.sender}:</strong> <span class="message-content">${data.message}</span>`;
+        if (data.sender === "{{ request.user.username }}") {
+            messageElement.innerHTML += `
+                <button onclick="editMessage(${data.id}, '${updateUrl}')">Изменить</button>
+                <button onclick="deleteMessage(${data.id}, '${deleteUrl}')">Удалить</button>
+            `;
+        }
+        chatLog.appendChild(messageElement);
     };
 
-    // Обработчик закрытия WebSocket соединения
     chatSocket.onclose = function(e) {
         console.error('Chat socket closed unexpectedly');
     };
 
-    // Фокусировка на поле ввода сообщения при загрузке страницы
     document.getElementById('chat-message-input').focus();
-
-    // Обработчик нажатия клавиши в поле ввода сообщения
     document.getElementById('chat-message-input').onkeyup = function(e) {
-        // Проверка, если нажата клавиша Enter
         if (e.keyCode === 13) {
-            document.getElementById('chat-message-submit').click();  // Имитируем клик по кнопке отправки сообщения
+            document.getElementById('chat-message-submit').click();
         }
     };
 
-    // Обработчик клика по кнопке отправки сообщения
     document.getElementById('chat-message-submit').onclick = function(e) {
-        const messageInputDom = document.getElementById('chat-message-input');  // Получение элемента ввода сообщения
-        const message = messageInputDom.value;  // Получение значения (текста) сообщения
-
-        // Отправка сообщения через WebSocket
-        chatSocket.send(JSON.stringify({
-            'message': message
-        }));
-
-        messageInputDom.value = '';  // Очистка поля ввода после отправки сообщения
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            const messageInputDom = document.getElementById('chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        } else {
+            console.error('WebSocket is not open.');
+        }
     };
+
+    function deleteMessage(messageId, url) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                document.getElementById(`message-${messageId}`).remove();
+            }
+        });
+    }
+
+    function editMessage(messageId, url) {
+        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
+        const newContent = prompt('Введите новое сообщение:', messageContentElement.innerText);
+        if (newContent) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `content=${encodeURIComponent(newContent)}`
+            }).then(response => response.json())
+              .then(data => {
+                if (data.status === 'ok') {
+                    messageContentElement.innerText = data.content;
+                }
+            });
+        }
+    }
 </script>
 {% endblock %}
