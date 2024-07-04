@@ -1,0 +1,24 @@
+{% extends 'base_friends.html' %}
+{% load static %}
+{% block content %}
+<h2>Профиль пользователя</h2>
+<div class="profile">
+    {% if user.image %}
+        <img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" width="150">
+    {% else %}
+        <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" width="150">
+    {% endif %}
+    <p>Имя: {{ user.get_full_name }}</p>
+    <p>Логин: {{ user.username }}</p>
+    <p>Дата рождения: {{ user.birth_date }}</p>
+    <p>Пол: {{ user.get_gender_display }}</p>
+
+    {% if is_owner %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Сохранить изменения</button>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

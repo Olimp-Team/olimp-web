@@ -24,6 +24,8 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+
 ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net", "olimp-olympiad.ru"]
 CSRF_TRUSTED_ORIGINS = ["https://*", "http://*", 'https://*.olimp-olympiad.ru', 'https://*.127.0.0.1',
                         'http://*.olimp-olympiad.ru']
@@ -128,10 +130,11 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            'hosts': [('127.0.0.1', 6379)],
         },
     },
 }
+
 
 LOGIN_URL = 'users:login'
 WSGI_APPLICATION = 'olympiad.wsgi.application'
@@ -200,7 +203,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Укажите путь к директории, куда будут собираться статические файлы для продакшена
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

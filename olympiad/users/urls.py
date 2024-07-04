@@ -2,6 +2,7 @@ from django.urls import path, reverse_lazy
 from .views import *
 from django.contrib.auth import views as auth_views
 from .forms import *
+from friends.views import *
 
 app_name = 'users'
 

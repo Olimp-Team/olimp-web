@@ -1,0 +1,59 @@
+{% extends 'base_friends.html' %}
+
+{% block content %}
+<h2>Чат с {{ other_user.username }}</h2>
+<div id="chat-log-container" style="border: 1px solid #ccc; padding: 10px; height: 300px; overflow-y: scroll;">
+    <ul id="chat-log" style="list-style: none; padding: 0;">
+    </ul>
+</div>
+<input id="chat-message-input" type="text" size="100" style="width: calc(100% - 110px);">
+<button id="chat-message-submit" style="width: 100px;">Отправить</button>
+
+<script>
+    // Получение имени комнаты (имя пользователя собеседника)
+    const roomName = "{{ other_user.username }}";
+
+    // Создание нового WebSocket соединения
+    const chatSocket = new WebSocket(
+        'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
+
+    // Обработчик получения сообщения от WebSocket
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);  // Парсинг JSON данных
+        const chatLog = document.getElementById('chat-log');  // Получение элемента для лога сообщений
+        const messageElement = document.createElement('li');  // Создание нового элемента для сообщения
+        messageElement.textContent = `${data.sender}: ${data.message}`;  // Установка текста сообщения
+        chatLog.appendChild(messageElement);  // Добавление сообщения в лог
+    };
+
+    // Обработчик закрытия WebSocket соединения
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    // Фокусировка на поле ввода сообщения при загрузке страницы
+    document.getElementById('chat-message-input').focus();
+
+    // Обработчик нажатия клавиши в поле ввода сообщения
+    document.getElementById('chat-message-input').onkeyup = function(e) {
+        // Проверка, если нажата клавиша Enter
+        if (e.keyCode === 13) {
+            document.getElementById('chat-message-submit').click();  // Имитируем клик по кнопке отправки сообщения
+        }
+    };
+
+    // Обработчик клика по кнопке отправки сообщения
+    document.getElementById('chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.getElementById('chat-message-input');  // Получение элемента ввода сообщения
+        const message = messageInputDom.value;  // Получение значения (текста) сообщения
+
+        // Отправка сообщения через WebSocket
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';  // Очистка поля ввода после отправки сообщения
+    };
+</script>
+{% endblock %}
