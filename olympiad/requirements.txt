@@ -17,4 +17,5 @@ prompt-toolkit
 XlsxWriter
 django-friendship
 unicorn
+unicorn[standart]
 websocket
