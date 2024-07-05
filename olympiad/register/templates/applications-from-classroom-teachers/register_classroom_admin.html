@@ -14,6 +14,7 @@
 </head>
 {% include 'header/header.html' %}
 {% block header %}
+    <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
 {% endblock %}
 
 
@@ -23,12 +24,9 @@
 {% endblock %}
 <body>
 <div class="main">
-    <div class="toptext">
-        <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>
-    </div>
     <a class="buttonedit" type="submit" value="Изменить"
        href="{% url 'docs:export_excel' %}">Скачать все заявки</a>
-    <a href="{% url 'docs:download_applications_zip' %}" class="btn btn-primary">Скачать все согласия (ZIP)</a>
+    <a href="{% url 'docs:download_applications_zip' %}" class="buttonedit buttonzip">Скачать все согласия (ZIP)</a>
     <div class="mainblock">
         <div class="tablespisok">
             {% for classroom, registers in grouped_registers.items %}
