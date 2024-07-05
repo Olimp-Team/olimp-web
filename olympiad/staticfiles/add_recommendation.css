@@ -5,26 +5,19 @@ html {
     max-width: 100%;
     max-height: 100%;
     animation: anim-navbar 0.3s linear;
-}
 
-body {
-    font-family: Bahnschrift;
-    margin: 0;
-    padding: 0;
-    background-color: #FBF7F4;
 }
 
 .main {
     position: fixed;
     background-color: #FBF7F4;
-    width: calc(100% - 400px); /* Учесть ширину navbar */
-    height: calc(100% - 60px); /* Учесть высоту header */
+
     margin-left: 400px;
     border-radius: 10px;
-    padding: 20px;
-    margin-top: 60px;
-    overflow-y: auto;
+    padding-left: 100px;
 }
+
+
 
 .container {
     max-width: 600px;
@@ -34,7 +27,18 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
-
+.select2-container--default .select2-selection--single {
+            height: 38px;
+            padding: 5px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            line-height: 28px;
+        }
+        .select2-container .select2-selection--single .select2-selection__arrow {
+            height: 36px;
+        }
 h1 {
     text-align: center;
     color: #333;

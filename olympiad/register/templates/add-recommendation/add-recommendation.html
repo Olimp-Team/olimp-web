@@ -8,25 +8,18 @@
     <link rel="stylesheet" href="{% static 'header/header.css' %}">
     <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <style>
-        /* Добавляем стиль для формы */
-        .select2-container--default .select2-selection--single {
-            height: 38px;
-            padding: 5px 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-        }
-        .select2-container .select2-selection--single .select2-selection__rendered {
-            line-height: 28px;
-        }
-        .select2-container .select2-selection--single .select2-selection__arrow {
-            height: 36px;
-        }
-    </style>
 </head>
 <body>
 {% include 'header/header.html' %}
+{% block header %}
+    <p class="wordhead">Добавиление рекомендации</p>
+{% endblock %}
+
+
 {% include 'navbar/navbar.html' %}
+{% block content %}
+
+{% endblock %}
 
 <div class="main">
     <div class="container">
