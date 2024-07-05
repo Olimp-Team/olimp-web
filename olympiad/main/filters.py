@@ -6,7 +6,7 @@ class OlympiadFilter(django_filters.FilterSet):
     class Meta:
         model = Olympiad
         fields = {
-            'date': ['exact', 'year__gt'],
+            'date': ['exact'],
             'category': ['exact'],
             'stage': ['exact'],
         }

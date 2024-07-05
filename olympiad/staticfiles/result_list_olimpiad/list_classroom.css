@@ -1,0 +1,413 @@
+
+html {
+    overflow: hidden;
+    font-family: Bahnschrift;
+    zoom: 85%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.golova {
+    width: 1800%;
+    background-color: white;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.wordhead {
+    padding: 0;
+    position: fixed;
+    left: 450px;
+    top: 15px;
+    font-size: 18px;
+    color: gray;
+}
+
+#sun {
+    right: 135px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+}
+
+#sun:hover {
+    cursor: pointer;
+}
+
+.solnce {
+    border: none;
+    background-color: white;
+
+}
+
+.solnce:hover {
+    cursor: pointer;
+}
+
+.avatarka {
+    right: 10px;
+    position: fixed;
+    margin-top: -77.5px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+
+
+}
+
+.avatarka:hover {
+    cursor: pointer;
+}
+
+.chatik {
+    right: 85px;
+    position: fixed;
+    margin-top: -65px;
+    border: none;
+    text-align: right;
+    float: right;
+    padding-right: 10px;
+    background-color: white;
+}
+
+.chatik:hover {
+    cursor: pointer;
+}
+
+#spis {
+
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok li {
+    margin-bottom: 75px;
+}
+
+li::marker {
+    content: '';
+}
+
+#mainpage {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+#register {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+
+    left: 60px;
+    font-size: 24px;
+}
+
+#registerimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#rezultatimg {
+    position: fixed;
+    left: 25px;
+}
+
+#rezultat {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+}
+
+#historyimg {
+    position: fixed;
+    left: 25px;
+
+}
+
+#history {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#datesimg {
+    position: fixed;
+    left: 25px;
+}
+
+#dates {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#settingimg {
+    position: fixed;
+    left: 25px;
+}
+
+#setting {
+
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+
+}
+
+#spis:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50px;
+    border-top: 50px solid green;
+    border-top-color: inherit;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+}
+
+.exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+.main {
+    background-color: #f7f7f7;
+    margin-left: 400px;
+    padding-bottom: 100%;
+
+}
+
+.classes {
+    font-size: 30px;
+    margin-left: 30px;
+    padding-top: 30px;
+    font-family: Bahnschrift;
+}
+
+.sha {
+    margin-left: 50px;
+    margin-top: 50px;
+    font-size: 20px;
+    text-decoration: none;
+    color: blue;
+
+}
+
+.do {
+    margin-left: 250px;
+    font-size: 20px;
+    margin-top: -23px;
+    opacity: 0.5;
+}
+
+
+.addclass {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 56px;
+    padding: 16px;
+    padding-top: -20px;
+    margin-left: 1200px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #3d70f5;
+    text-decoration: none;
+    color: #FFFFFF;
+    background: #3d70f5;
+    left: 500px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.addclass:hover {
+    background-color: #FFFFFF;
+    color: #3d70f5;
+
+}
+
+.poisk {
+    margin-left: 1000px;
+    margin-top: -20px;
+
+}
+
+.pole {
+    border: 1.5px solid #000000;
+    border-radius: 10px;
+    width: 361px;
+    height: 331px;
+    background-color: #FFFFFF;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.class {
+    font-size: 25px;
+    padding-top: 20px;
+    padding-left: 20px;
+    margin-left: 10px;
+
+}
+
+.clasruk {
+    margin-left: 25px;
+    width: 233px;
+    margin-top: 30px;
+    border: 1.5px solid black;
+    border-radius: 5px;
+    padding-left: 5px;
+
+}
+
+.classruk {
+    opacity: 0.5;
+    margin-left: 2px;
+}
+
+.rukovoditel {
+    margin-left: 2px;
+}
+
+.kolvo {
+    margin-left: 25px;
+    border: 1.5px solid gray;
+    border-radius: 5px;
+    background-color: #DDE1FF;
+    color: #0047ff;
+    width: 269px;
+    margin-top: 18px;
+    height: 28px;
+    padding-top: 10px;
+    padding-left: 5px;
+    margin-bottom: 30px;
+}
+
+.watchinfo {
+    transition-property: background;
+    transition-duration: 0.3s;
+
+    width: 307px;
+    margin-top: 60px;
+    margin-left: 25px;
+    height: 44px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 1.5px solid #000000;
+    color: white;
+    background: #000000;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+}
+
+.watchinfo:hover {
+    color: black;
+    background-color: white;
+}
+
+.search-form {
+    border: none;
+    display: inline-flex;
+    margin-top: 100px;
+
+    margin-left: -528px;
+
+}
+
+.search-form__txt {
+    border: none;
+    font-size: 20px;
+    width: 100px;
+    height: 20px;
+    background: #f7f7f7;
+}

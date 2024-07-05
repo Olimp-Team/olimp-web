@@ -1,0 +1,12 @@
+<!-- templates/chat/create_group.html -->
+
+{% extends 'base_friends.html' %}
+
+{% block content %}
+<h2>Создать группу</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Создать</button>
+</form>
+{% endblock %}

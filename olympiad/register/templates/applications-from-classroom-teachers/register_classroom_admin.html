@@ -14,6 +14,7 @@
 </head>
 {% include 'header/header.html' %}
 {% block header %}
+    <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
 {% endblock %}
 
 
@@ -23,80 +24,31 @@
 {% endblock %}
 <body>
 <div class="main">
-    <div class="toptext">
-        <h1 class="toptext1">Заявки на регистрацию учебных классов от классных руководителей</h1>
-    </div>
     <a class="buttonedit" type="submit" value="Изменить"
        href="{% url 'docs:export_excel' %}">Скачать все заявки</a>
-    <a href="{% url 'docs:download_applications_zip' %}" class="btn btn-primary">Скачать все согласия (ZIP)</a>
+    <a href="{% url 'docs:download_applications_zip' %}" class="buttonedit buttonzip">Скачать все согласия (ZIP)</a>
     <div class="mainblock">
         <div class="tablespisok">
             {% for classroom, registers in grouped_registers.items %}
-                <h2>Класс: {{ classroom }}</h2>
+                <h2>{{ classroom.teacher.get_full_name }} - {{ classroom.number }} {{ classroom.letter }}</h2>
                 <a class="buttonedittrue" type="submit"
                    href="{% url 'docs:excel_classroom' classroom.id %}" class="btn btn-primary">Скачать excel файл</a>
                 <ul>
-                    {% for register in registers %}
                         <li>
-                            Ученик: {{ register.child_admin }},
-                            Олимпиада: {{ register.Olympiad_admin.name }},
+                            <div class="textzag">
+                            Ученик
+                             <div class="olympiadzag">Олимпиада</div>
+                            </div>
+                        </li>
+                    {% for register in registers %}
+                        <li id="studentinfo">
+                            {{ register.child_admin }}
+                            <div class="olympiad">{{ register.Olympiad_admin.name }}</div>
                         </li>
                     {% endfor %}
                 </ul>
             {% endfor %}
-            {#            <div class="zagolovok">#}
-            {##}
-            {#                <table class="mainspisokpoepletable">#}
-            {#                    <th>#}
-            {#                        <div id="textid">ID</div>#}
-            {#                    </th>#}
-            {#                    <th>#}
-            {#                        <div id="textteacher">Информация об учителе</div>#}
-            {#                    </th>#}
-            {#                    <th>#}
-            {#                        <div id="textklass">Класс</div>#}
-            {#                    </th>#}
-            {#                    <th>#}
-            {#                        <div id="textsendz">Дата отправки заявки</div>#}
-            {#                    </th>#}
-            {#                    <th>#}
-            {#                        <div id="textinfoolimp">Информация об олимпиаде</div>#}
-            {#                    </th>#}
-            {#                    <th>#}
-            {#                        <div id="textstatus">Файл</div>#}
-            {#                    </th>#}
-            {##}
-            {#                </table>#}
-            {##}
-            {#            </div>#}
-            {##}
-            {#            <div class="mainspisokpoeple">#}
-            {##}
-            {#                <ul>#}
-            {#                    <li id="utka">#}
-            {#                        {% for register in register %}#}
-            {#                            <div class="stroka">#}
-            {#                                <div class="nameid">{{ register.child_admin.id }}</div>#}
-            {#                                <div class="namefio">#}
-            {#                                    {{ register.teacher_admin.last_name }} {{ register.teacher_admin.first_name }} {{ register.teacher_admin.surname }}#}
-            {#                                </div>#}
-            {#                                <div class="olimps">#}
-            {#                                    <div class="nameolimp1">#}
-            {#                                        {{ register.teacher_admin.classroom_guide.number }}{{ register.teacher_admin.classroom_guide.letter }}#}
-            {#                                    </div>#}
-            {#                                </div>#}
-            {#                                <div class="namestage">19.01.2024</div>#}
-            {##}
-            {#                                <div class="namegender">{{ register.Olympiad_admin.name }}</div>#}
-            {#                                <a class="buttonedittrue" type="submit"#}
-            {#                                   href="{% url 'docs:excel_classroom' register.child_admin.classroom.id %}">Скачать#}
-            {#                                    excel файл</a>#}
-            {#                            </div>#}
-            {#                        {% endfor %}#}
-            {#                    </li>#}
-            {#                </ul>#}
-            {#            </div>#}
-            {#        </div>#}
+
         </div>
     </div>
 </div>

@@ -7,10 +7,19 @@
     <link rel="stylesheet" href="{% static 'add_recommendation.css' %}">
     <link rel="stylesheet" href="{% static 'header/header.css' %}">
     <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
 {% include 'header/header.html' %}
+{% block header %}
+    <p class="wordhead">Добавиление рекомендации</p>
+{% endblock %}
+
+
 {% include 'navbar/navbar.html' %}
+{% block content %}
+
+{% endblock %}
 
 <div class="main">
     <div class="container">
@@ -28,7 +37,7 @@
 
             <div class="form-group">
                 <label for="child">Ученик:</label>
-                <select name="child" id="child">
+                <select name="child" id="child" class="select2">
                     {% for student in students %}
                         <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
                     {% endfor %}
@@ -48,5 +57,16 @@
         </form>
     </div>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Выберите ученика",
+            allowClear: true
+        });
+    });
+</script>
 </body>
 </html>

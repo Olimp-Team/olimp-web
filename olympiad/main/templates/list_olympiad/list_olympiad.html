@@ -13,62 +13,66 @@
 </head>
 {% include 'header/header.html' %}
 {% block header %}
+    <p class="wordhead">Список олимпиад</p>
 {% endblock %}
 {% include 'navbar/navbar.html' %}
 {% block content %}
 {% endblock %}
 <body>
 <div class="main">
-    <h1>Олимпиады</h1>
 
     <div class="filtr">
         <form method="get">
             <div class="filters">
-                {{ filterset.form.as_p }}
+                <div class="dateolympiad">
+                    <p>Дата проведения:</p>
+                {{ filterset.form.date }}
+                </div>
+
+                <div class="categoryolympiad">
+                    <p>Категория олимпиады:</p>
+                {{ filterset.form.category }}
+                    </div>
+
+                <div class="stageolympiad">
+                    <p>Название этапа:</p>
+                {{ filterset.form.stage }}
+                    </div>
+
             </div>
         </form>
     </div>
-    <a class="add" href="{% url 'main:olympiad_create' %}">+ Добавить новую олимпиаду</a>
+    <a class="add" href="{% url 'main:olympiad_create' %}">Добавить новую олимпиаду</a>
 
     <div class="tablica">
         <div class="oformlenie">
-            <div class="jpg">Изображение</div>
-            <div class="name">Название</div>
-            <div class="kategoriya">Категория</div>
-            <div class="stage">Этап</div>
-            <div class="level">Уровень</div>
-            <div class="date">Дата проведения</div>
-            <div class="actions">Действия</div>
+            <div class="zag z1">Название</div>
+            <div class="zag">Категория</div>
+            <div class="zag">Этап</div>
+            <div class="zag">Уровень</div>
+            <div class="zag">Дата проведения</div>
+            <div class="zag">Действия</div>
         </div>
         {% for olympiad in olympiads %}
             <div class="primer">
-                <img class="jpg" src="">
-                <div class="name">{{ olympiad.name }}</div>
-                <div class="kategoriya">{{ olympiad.category }}</div>
-                <div class="stage">{{ olympiad.stage }}</div>
-                <div class="level">{{ olympiad.level }}</div>
-                <div class="date">{{ olympiad.date }}</div>
+                <div class="name p1">{{ olympiad.name }}</div>
+                <div class="kategoriya p1">{{ olympiad.category }}</div>
+                <div class="stage p1">{{ olympiad.stage }}</div>
+                <div class="level p1">{{ olympiad.level }}</div>
+                <div class="date p1 ">{{ olympiad.date }}</div>
+                <div class="deistivie">
                 <a class="action">
                     <a class="pencil" href="{% url 'main:olympiad_update' olympiad.pk %}"><img
                             src="{% static 'list-olympiad/img/pencil-write.png' %}"> </a>
                     <a class="bin" href="{% url 'main:olympiad_delete' olympiad.pk %}"><img
                             src="{% static 'list-olympiad/img/bin.png' %}"></a>
-                </a>
+                </a></div>
             </div>
         {% endfor %}
     </div>
 
-    <div class="otobrajenie">
-        Отображается 1-9 из 78
-    </div>
-    <div class="strelki">
-        <a class="vlevo" href="">
-            <img src="{% static 'list-olympiad/img/ic-keyboard-arrow-left-24px.png' %}">
-        </a>
-        <a class="vpravo" href="">
-            <img src="{% static 'list-olympiad/img/ic-keyboard-arrow-left-24px%20(1).png' %}">
-        </a>
-    </div>
+
+
 </div>
 </body>
 </html>

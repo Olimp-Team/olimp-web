@@ -20,9 +20,9 @@
 {% endblock %}
 
 <div class="main">
-<div class="switch-buttons">
-    <a class="switch-button" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
-    <a class="switch-button" href="{% url 'classroom:promote_all_classrooms' %}">Продвинуть все классы</a>
+    <div class="switch-buttons">
+        <a class="switch-button" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
+        <a class="switch-button" href="{% url 'classroom:promote_all_classrooms' %}">Продвинуть все классы</a>
 
         <a class="switch-button" href="{% url 'classroom:list_classroom' %}?graduated=0">Текущие классы</a>
         <a class="switch-button" href="{% url 'classroom:list_classroom' %}?graduated=1">Выпустившиеся классы</a>

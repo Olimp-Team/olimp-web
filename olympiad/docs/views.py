@@ -3,7 +3,7 @@ import pymorphy3
 import zipfile
 import tempfile
 import pandas as pd
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponseBadRequest
 from django.views.generic import View, ListView
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
@@ -546,7 +546,7 @@ class create_zip_archive(View):
 
 
 class create_zip_archive_for_teacher(View):
-    def post(self, request):
+    def get(self, request):
         if not request.user.is_teacher:
             return HttpResponseForbidden()
 

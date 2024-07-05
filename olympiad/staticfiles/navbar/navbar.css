@@ -1,0 +1,103 @@
+
+#spis {
+    padding-top: -2px;
+    padding-left: 20px;
+    text-align: left;
+    position: fixed;
+    float: left;
+    width: 200px;
+    height: 100%;
+    background-color: white;
+}
+
+.spisok li {
+    margin-bottom: 75px;
+}
+
+li::marker {
+    content: '';
+}
+
+/* .mainpage {
+    animation: anim-navbar 3s linear;
+
+} */
+
+.mainpage a{
+    text-decoration: none;
+    color: #000;
+    position: fixed;
+    left: 60px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+#mainpageimg {
+    position: fixed;
+    left: 30px;
+}
+
+.logo {
+    width: 75px;
+    height: 75px;
+    padding: 0;
+}
+
+.logoword {
+
+    padding: 0;
+    position: fixed;
+    left: 80px;
+    top: 15px;
+    font-weight: bold;
+    font-size: 22px;
+    user-select: none;
+}
+
+.exitbutton {
+    transition-property: background;
+    transition-duration: 0.3s;
+    width: 183.822px;
+    height: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1.5px solid #000;
+    color: #000;
+    text-decoration: none;
+    background: #FFF;
+    position: fixed;
+    left: 110px;
+    bottom: 10px;
+    font-family: Bahnschrift;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    padding-top: 17px;
+    padding-bottom: 17px;
+}
+
+.exitbutton:hover {
+    cursor: pointer;
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+#textexit {
+    position: relative;
+    font-size: 20px;
+    user-select: none;
+}
+@keyframes anim-navbar {
+0%{
+    opacity: 0;
+}
+
+100%{
+    opacity: 100;
+}
+}

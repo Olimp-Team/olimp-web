@@ -9,6 +9,7 @@ pandas
 openpyxl
 django-filter
 channels
+channels_redis
 schedule
 pymorphy3
 reportlab
@@ -16,3 +17,8 @@ djangorestframework-simplejwt
 prompt-toolkit
 XlsxWriter
 django-friendship
+unicorn
+unicorn[standart]
+websocket
+daphne
+redis

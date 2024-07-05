@@ -1,9 +1,15 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.views.generic.base import View
 from friendship.exceptions import AlreadyExistsError
 from friendship.models import Friend, FriendshipRequest
 from users.models import User
 from django.contrib import messages
+
+from users.forms import UserProfileForm
+
 
 @login_required
 def add_friend(request, user_id):
@@ -13,7 +19,7 @@ def add_friend(request, user_id):
     if existing_request:
         # Обработать случай, когда запрос уже существует
         messages.warning(request, 'Вы уже отправили запрос на добавление в друзья этому пользователю.')
-        return redirect('profile', user_id=user_id)
+        return redirect('users:profile', user_id=user_id)
 
     try:
         Friend.objects.add_friend(
@@ -74,3 +80,25 @@ def search_friends(request):
         'query': query,
     }
     return render(request, 'search_friends.html', context)
+
+
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        form = UserProfileForm(instance=user) if request.user == user else None
+        context = {'form': form, 'user': user, 'is_owner': request.user == user}
+        return render(request, 'profile.html', context)
+
+    def post(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+        if request.user != user:
+            return redirect(reverse('profile', kwargs={'user_id': user.id}))
+
+        form = UserProfileForm(instance=user, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('users:profile', kwargs={'user_id': user.id}))
+        else:
+            print(form.errors)
+        context = {'form': form, 'user': user, 'is_owner': True}
+        return render(request, 'profile.html', context)
