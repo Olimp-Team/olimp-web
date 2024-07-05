@@ -8,7 +8,7 @@ from django.db.models import Q, Max, F
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from friendship.models import Friend, FriendshipRequest
-
+from .forms import *
 User = get_user_model()
 
 
@@ -83,3 +83,22 @@ def chat_list_view(request):
 def start_chat(request, username):
     other_user = get_object_or_404(User, username=username)
     return redirect('chat:chat', username=other_user.username)
+
+
+@login_required
+def create_group(request):
+    if request.method == 'POST':
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            group = form.save()
+            return redirect('chat:group_detail', group_id=group.id)
+    else:
+        form = GroupForm()
+    return render(request, 'chat/create_group.html', {'form': form})
+
+
+@login_required
+def group_detail(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    messages = GroupMessage.objects.filter(group=group).order_by('timestamp')
+    return render(request, 'chat/group_detail.html', {'group': group, 'messages': messages})

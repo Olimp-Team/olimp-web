@@ -6,6 +6,9 @@
 
 {% block content %}
 <h2>Сообщения</h2>
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'chat:create_group' %}" class="create-group-button">Создать группу</a>
+</div>
 <ul>
     {% for item in friends_with_last_messages %}
     <li>

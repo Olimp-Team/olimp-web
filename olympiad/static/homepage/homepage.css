@@ -372,15 +372,17 @@ header .current-date {
     font-weight: bold;
     font-size: 23.5px;
 }
+
 .logsbox tr td {
     background-color: white;
 }
+
 @keyframes anim-navbar {
-    0%{
+    0% {
         opacity: 0;
     }
-    
-    100%{
+
+    100% {
         opacity: 100;
     }
-    }
+}

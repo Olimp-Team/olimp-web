@@ -1,0 +1,181 @@
+<!-- templates/chat/group_detail.html -->
+
+{% extends 'base_friends.html' %}
+{% load static %}
+{% block content %}
+<h2>Группа: {{ group.name }}</h2>
+<div id="chat-log-container" class="chat-log-container">
+    <ul id="chat-log" class="chat-log">
+        {% for message in messages %}
+            <li id="message-{{ message.id }}" class="chat-message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
+                {% if message.sender.image %}
+                    <img src="{{ message.sender.image.url }}" alt="{{ message.sender.username }}" class="chat-avatar">
+                {% else %}
+                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ message.sender.username }}" class="chat-avatar">
+                {% endif %}
+                <div class="message-content-container">
+                    <strong>{{ message.sender.username }}:</strong>
+                    {% if message.reply_to %}
+                        <div class="reply-message">
+                            <strong>{{ message.reply_to.sender.username }}</strong>: {{ message.reply_to.content|truncatechars:50 }}
+                        </div>
+                    {% endif %}
+                    <span class="message-content">{{ message.content }}</span>
+                    <small>({{ message.timestamp }})</small>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+<input id="chat-message-input" type="text" class="chat-input">
+<button id="chat-message-submit" class="chat-submit">Отправить</button>
+
+<div id="context-menu" class="context-menu">
+    <ul>
+        <li id="reply">Ответить</li>
+        <li id="edit">Изменить</li>
+        <li id="delete">Удалить</li>
+    </ul>
+</div>
+
+<script>
+    const groupId = "{{ group.id }}";
+    const chatSocket = new WebSocket(
+        (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/group/' + groupId + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.getElementById('chat-log');
+        const messageElement = document.createElement('li');
+        messageElement.id = `message-${data.id}`;
+        messageElement.className = `chat-message ${data.sender === "{{ request.user.username }}" ? 'sent' : 'received'}`;
+
+        const avatarUrl = data.avatar ? data.avatar : '{% static "homepage/img/default-ava.png" %}';
+        const updateUrl = '{% url "chat:update_message" 0 %}'.replace('0', data.id);
+        const deleteUrl = '{% url "chat:delete_message" 0 %}'.replace('0', data.id);
+
+        let replyMessageHtml = '';
+        if (data.reply_to) {
+            replyMessageHtml = `
+                <div class="reply-message">
+                    <strong>${data.reply_to.sender}</strong>: ${data.reply_to.content}
+                </div>
+            `;
+        }
+
+        messageElement.innerHTML = `
+            <img src="${avatarUrl}" alt="${data.sender}" class="chat-avatar">
+            <div class="message-content-container">
+                <strong>${data.sender}:</strong>
+                ${replyMessageHtml}
+                <span class="message-content">${data.message}</span>
+                <small>(${new Date().toLocaleString()})</small>
+            </div>
+        `;
+
+        chatLog.appendChild(messageElement);
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.getElementById('chat-message-input').focus();
+    document.getElementById('chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {
+            document.getElementById('chat-message-submit').click();
+        }
+    };
+
+    document.getElementById('chat-message-submit').onclick = function(e) {
+        if (chatSocket.readyState === WebSocket.OPEN) {
+            const messageInputDom = document.getElementById('chat-message-input');
+            const message = messageInputDom.value;
+            const replyToMessageId = messageInputDom.getAttribute('data-reply-to');
+
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'reply_to': replyToMessageId
+            }));
+
+            messageInputDom.value = '';
+            messageInputDom.removeAttribute('data-reply-to');
+        } else {
+            console.error('WebSocket is not open.');
+        }
+    };
+
+    function deleteMessage(messageId, url) {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                document.getElementById(`message-${messageId}`).remove();
+            }
+        });
+    }
+
+    function enableEditMessage(messageId) {
+        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
+        const newContent = prompt("Введите новое сообщение:", messageContentElement.innerText);
+        if (newContent) {
+            fetch(`{% url 'chat:update_message' 0 %}`.replace('0', messageId), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `content=${encodeURIComponent(newContent)}`
+            }).then(response => response.json())
+              .then(data => {
+                if (data.status === 'ok') {
+                    messageContentElement.innerText = data.content;
+                }
+            });
+        }
+    }
+
+    function replyMessage(messageId) {
+        const messageInputDom = document.getElementById('chat-message-input');
+        messageInputDom.setAttribute('data-reply-to', messageId);
+        messageInputDom.focus();
+    }
+
+    // Context menu
+    const contextMenu = document.getElementById('context-menu');
+    let contextMessageId = null;
+
+    document.addEventListener('contextmenu', function(event) {
+        const messageElement = event.target.closest('.chat-message');
+        if (messageElement) {
+            event.preventDefault();
+            contextMessageId = messageElement.id.split('-')[1];
+            contextMenu.style.top = `${event.pageY}px`;
+            contextMenu.style.left = `${event.pageX}px`;
+            contextMenu.classList.add('active');
+        }
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('#context-menu')) {
+            contextMenu.classList.remove('active');
+        }
+    });
+
+    document.getElementById('delete').onclick = function() {
+        deleteMessage(contextMessageId, `{% url 'chat:delete_message' 0 %}`.replace('0', contextMessageId));
+    };
+
+    document.getElementById('edit').onclick = function() {
+        enableEditMessage(contextMessageId);
+    };
+
+    document.getElementById('reply').onclick = function() {
+        replyMessage(contextMessageId);
+    };
+</script>
+{% endblock %}
