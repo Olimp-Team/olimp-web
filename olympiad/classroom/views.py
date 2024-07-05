@@ -41,10 +41,10 @@ class ClassroomListView(View):
     def get(self, request):
         graduated = request.GET.get('graduated') == '1'
         if graduated:
-            classrooms = Classroom.objects.filter(is_graduated=True)
+            classrooms = Classroom.objects.filter(is_graduated=True).order_by('number', 'letter')
             context_title = "Выпустившиеся классы"
         else:
-            classrooms = Classroom.objects.filter(is_graduated=False)
+            classrooms = Classroom.objects.filter(is_graduated=False).order_by('number', 'letter')
             context_title = "Текущие классы"
         return render(request, 'list_classroom/list_classroom.html', {
             'classrooms': classrooms,

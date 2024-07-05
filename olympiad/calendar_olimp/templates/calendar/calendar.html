@@ -12,7 +12,6 @@
     <style>
         body {
             font-family: Bahnschrift;
-
             margin: 0;
             padding: 0;
         }
@@ -58,6 +57,59 @@
             background-color: #2980b9;
             border-color: #2980b9;
         }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .modal-header, .modal-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -66,16 +118,33 @@
                 initialView: 'dayGridMonth',
                 locale: 'ru',
                 events: '{% url "calendar_olimp:olympiad_events" %}',
-                eventRender: function(info) {
-                    var tooltip = new Tooltip(info.el, {
-                        title: info.event.extendedProps.description,
-                        placement: 'top',
-                        trigger: 'hover',
-                        container: 'body'
-                    });
+                eventClick: function(info) {
+                    document.getElementById('modal-title').innerText = info.event.title;
+                    document.getElementById('modal-description').innerText = info.event.extendedProps.description;
+                    document.getElementById('modal-location').innerText = info.event.extendedProps.location;
+                    document.getElementById('modal-date').innerText = info.event.start.toLocaleString();
+                    document.getElementById('myModal').style.display = "block";
                 }
             });
             calendar.render();
+
+            // Get the modal
+            var modal = document.getElementById("myModal");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
         });
     </script>
 </head>
@@ -89,5 +158,23 @@
 <body>
     <h1>Календарь Олимпиад</h1>
     <div id="calendar"></div>
+
+    <!-- Модальное окно -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p><strong>Описание:</strong> <span id="modal-description"></span></p>
+                <p><strong>Место:</strong> <span id="modal-location"></span></p>
+                <p><strong>Дата и время:</strong> <span id="modal-date"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="document.getElementById('myModal').style.display='none'">Закрыть</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

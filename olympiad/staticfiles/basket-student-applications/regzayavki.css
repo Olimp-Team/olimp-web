@@ -405,16 +405,20 @@ li::marker {
     padding-left: 28px;
 
 }
+
 .mainspisokpoepletable th {
     padding-top: 16px;
 
 }
+
 #textid {
     padding-left: 35px;
 }
+
 #textstage {
     margin-left: 15px;
 }
+
 .mainspisokpoeple ul li {
     margin-left: -40px;
     margin-top: -32px;
@@ -425,7 +429,10 @@ li::marker {
     padding-top: 25px;
 
 }
-.mainspisokpoeple ul li:last-child { border-bottom: 1px solid #D9D9D9; }
+
+.mainspisokpoeple ul li:last-child {
+    border-bottom: 1px solid #D9D9D9;
+}
 
 .mainspisokpoeple {
     padding-top: 15px;
@@ -625,4 +632,102 @@ li::marker {
     visibility: visible;
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+/* Новые стили для рекомендаций */
+.recommendations {
+    margin-top: 30px;
+}
+
+.recommendations h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.recommendations-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.recommendations-table th,
+.recommendations-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+}
+
+.recommendations-table th {
+    background-color: #f2f2f2;
+}
+
+.recommendations-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.buttonaccept, .buttondecline {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 12px;
+}
+
+.buttonaccept {
+    background-color: #28a745;
+    color: white;
+}
+
+.buttonaccept:hover {
+    background-color: #218838;
+}
+
+.buttondecline {
+    background-color: #dc3545;
+    color: white;
+}
+
+.buttondecline:hover {
+    background-color: #c82333;
+}
+/* Новые стили для отправленных заявок */
+.sent-requests {
+    margin-top: 30px;
+}
+
+.sent-requests h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.sent-requests-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.sent-requests-table th,
+.sent-requests-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 14px;
+}
+
+.sent-requests-table th {
+    background-color: #f2f2f2;
+}
+
+.sent-requests-table td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

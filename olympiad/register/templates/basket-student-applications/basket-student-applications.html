@@ -15,7 +15,6 @@
 {% block header %}
 {% endblock %}
 
-
 {% include 'navbar/navbar.html' %}
 {% block content %}
 
@@ -54,17 +53,14 @@
                     <div id="textdeistie">Действие</div>
                 </th>
             </table>
-
         </div>
 
         <div class="mainspisokpoeple">
-
             <ul>
                 {% for register in register %}
                 <li>
                     <div class="nameid">{{ register.id }}</div>
-                    <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}
-                    </div>
+                    <div class="namefio">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
                     <div class="olimps">
                         <table class="tableolimps">
                             <th>
@@ -75,18 +71,76 @@
                     <div class="namestage">{{ register.Olympiad.stage }}</div>
                     <div class="namegender">{{ register.child.gender }}</div>
                     <div class="namedate">{{ register.child.birth_date }}</div>
-                    <a class="buttonedit" type="submit" value="Изменить"
-                       href="{% url 'register:register_remove' register.id %}">Удалить</a>
+                    <a class="buttonedit" type="submit" value="Изменить" href="{% url 'register:register_remove' register.id %}">Удалить</a>
                 </li>
                 {% endfor %}
             </ul>
-
         </div>
-
     </div>
+
+    <div class="recommendations">
+        <h2>Рекомендации</h2>
+        <table class="recommendations-table">
+            <thead>
+                <tr>
+                    <th>Ученик</th>
+                    <th>Олимпиада</th>
+                    <th>Рекомендовано</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for recommendation in recommendations %}
+                <tr>
+                    <td>{{ recommendation.child.last_name }} {{ recommendation.child.first_name }} {{ recommendation.child.surname }}</td>
+                    <td>{{ recommendation.Olympiad.name }}</td>
+                    <td>{{ recommendation.recommended_by.first_name }} {{ recommendation.recommended_by.last_name }}</td>
+                    <td>
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="recommendation_id" value="{{ recommendation.id }}">
+                            <input type="hidden" name="action" value="accept">
+                            <button type="submit" class="buttonaccept">Принять</button>
+                        </form>
+                        <form method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="recommendation_id" value="{{ recommendation.id }}">
+                            <input type="hidden" name="action" value="decline">
+                            <button type="submit" class="buttondecline">Отклонить</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="sent-requests">
+        <h2>Отправленные заявки</h2>
+        <table class="sent-requests-table">
+            <thead>
+                <tr>
+                    <th>Ученик</th>
+                    <th>Олимпиада</th>
+                    <th>Этап</th>
+                    <th>Дата отправки</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for register_send in register_sends %}
+                <tr>
+                    <td>{{ register_send.child_send.last_name }} {{ register_send.child_send.first_name }} {{ register_send.child_send.surname }}</td>
+                    <td>{{ register_send.Olympiad_send.name }}</td>
+                    <td>{{ register_send.Olympiad_send.stage }}</td>
+                    <td>{{ register_send.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
     <div id="buttons">
-        <a class="buttonadd" href="{% url 'register:register-olympiad' %}" type="submit" value="Добавить олимпиаду">Добавить
-            олимпиаду</a>
+        <a class="buttonadd" href="{% url 'register:register-olympiad' %}" type="submit" value="Добавить олимпиаду">Добавить олимпиаду</a>
         <a class="trigger" type="submit">Отправить заявку</a>
     </div>
 </div>
