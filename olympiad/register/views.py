@@ -112,6 +112,7 @@ class BasketStudentApp(ChildRequiredMixin, View):
             context = {
                 'register': Register.objects.filter(child=request.user, status_send=False),
                 'recommendations': Recommendation.objects.filter(child=request.user, status=False),
+                'register_sends': Register_send.objects.filter(child_send=request.user)  # Добавляем отправленные заявки
             }
             return render(request, 'basket-student-applications/basket-student-applications.html', context)
         else:
@@ -232,7 +233,7 @@ class AddRecommendation(TeacherRequiredMixin, View):
     def get(self, request):
         if request.user.is_teacher:
             context = {
-                'students': User.objects.filter(is_child=True, classroom__teacher=request.user),
+                'students': User.objects.filter(is_child=True),
                 'olympiads': Olympiad.objects.all(),
                 'teachers': User.objects.filter(is_teacher=True)
             }
@@ -261,7 +262,6 @@ class AddRecommendation(TeacherRequiredMixin, View):
             return HttpResponseRedirect(reverse_lazy('main:home'))
         else:
             return HttpResponseForbidden()
-
 
 
 class ProcessRecommendation(TeacherRequiredMixin, View):

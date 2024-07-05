@@ -1,0 +1,19 @@
+{% extends 'base_friends.html' %}
+{% load static %}
+{% block content %}
+<h2>Мои друзья</h2>
+<ul>
+    {% for friend in friends %}
+    <li class="user-item">
+        {% if friend.image %}
+        <img src="{{ friend.image.url }}" alt="{{ friend.get_full_name }}" width="50">
+        {% else %}
+        <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ friend.get_full_name }}" width="50">
+        {% endif %}
+        <a href="{% url 'users:profile' user_id=friend.id %}">{{ friend.get_full_name }}</a> ({{ friend.username }})
+    </li>
+    {% empty %}
+    <li>У вас нет друзей.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

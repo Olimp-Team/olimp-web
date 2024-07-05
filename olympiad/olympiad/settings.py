@@ -24,6 +24,8 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+
 ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net", "olimp-olympiad.ru"]
 CSRF_TRUSTED_ORIGINS = ["https://*", "http://*", 'https://*.olimp-olympiad.ru', 'https://*.127.0.0.1',
                         'http://*.olimp-olympiad.ru']
@@ -56,6 +58,8 @@ INSTALLED_APPS = [
     'schedule',
     'calendar_olimp',
     'corsheaders',
+    'friendship',
+    'friends',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +75,16 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 
 ]
+
+from django.contrib.messages import constants as message_constants
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: 'debug',
+    message_constants.INFO: 'info',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR: 'danger',
+}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5174",
@@ -116,7 +130,21 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            'hosts': [
+                {
+                    'address': ('127.0.0.1', 6379),
+                    # 'password': 'WKJ,rdOVdsS0qO',
+                    # 'username': 'default'  # Обычно Redis не требует имя пользователя
+                }
+            ],
+        },
+    },
+}
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': ['redis://:WKJ,rdOVdsS0qO@147.45.148.142:6379/0'],
         },
     },
 }
@@ -188,7 +216,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Укажите путь к директории, куда будут собираться статические файлы для продакшена
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 

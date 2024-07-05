@@ -1,0 +1,29 @@
+<!-- chat/templates/chat/chat_list.html -->
+
+{% extends 'base_friends.html' %}
+{% load static %}
+{% block title %}Сообщения{% endblock %}
+
+{% block content %}
+<h2>Сообщения</h2>
+<div style="margin-bottom: 20px;">
+    <a href="{% url 'chat:create_group' %}" class="create-group-button">Создать группу</a>
+</div>
+<ul>
+    {% for item in friends_with_last_messages %}
+    <li>
+        <img src="{% if item.friend.image %}{{ item.friend.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}" alt="{{ item.friend.get_full_name }}" style="width: 50px; height: 50px; border-radius: 50%;">
+        <strong>{{ item.friend.get_full_name }}</strong><br>
+        {% if item.last_message %}
+        <small>{{ item.last_message.timestamp }}: {{ item.last_message.content|truncatechars:30 }}</small><br>
+        {% else %}
+        <small>Нет сообщений</small><br>
+        {% endif %}
+        <form action="{% url 'chat:start_chat' item.friend.username %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Начать чат</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

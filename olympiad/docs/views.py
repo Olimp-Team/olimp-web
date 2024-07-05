@@ -3,7 +3,7 @@ import pymorphy3
 import zipfile
 import tempfile
 import pandas as pd
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponseBadRequest
 from django.views.generic import View, ListView
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
@@ -430,6 +430,9 @@ class ExportExcelView(AdminRequiredMixin, ListView):
 
 def create_pdf_for_student(student, olympiads, output_path):
     font_path = os.path.join('static', 'fonts', 'timesnewromanpsmt.ttf')
+    if not os.path.exists(font_path):
+        raise FileNotFoundError(f"Font file not found: {font_path}")
+
     pdfmetrics.registerFont(TTFont('timesnewromanpsmt', font_path))
 
     pdf_canvas = canvas.Canvas(output_path, pagesize=A4)
@@ -543,7 +546,7 @@ class create_zip_archive(View):
 
 
 class create_zip_archive_for_teacher(View):
-    def post(self, request):
+    def get(self, request):
         if not request.user.is_teacher:
             return HttpResponseForbidden()
 

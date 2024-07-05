@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    command: daphne -b 0.0.0.0 -p 8000 olympiad.asgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - DEBUG=1
+      - DJANGO_SETTINGS_MODULE=olympiad.settings
