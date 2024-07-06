@@ -168,7 +168,7 @@ class get_students(View):
         if classroom_id:
             classroom = Classroom.objects.get(id=classroom_id)
             students = classroom.child.all()
-            html = render_to_string('students_list.html', {'students': students})
+            html = render_to_string('students_list/students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
 

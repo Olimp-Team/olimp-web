@@ -1,110 +1,62 @@
+{% extends 'base_olimp.html' %}
+{% load form_filters %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'add_teacher/add_teacher_light.css' %}" id="them">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="icon" href="{% static 'add_teacher/img/logoolimp.jpg' %}">
-
-    <title>Olimp | Создание нового учителя</title>
-</head>
-
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-<body>
-
-{% include 'navbar/navbar.html' %}
 {% block content %}
 
-    <img class="logo" id="l-tip" src="{% static 'add_teacher/img/logoolimp.jpg' %}">
-    <p class="logoword">Olimp</p>
-{% endblock %}
-
-<div class="main">
-
-    <h1 class="add_newstudents_text">Создание нового учителя</h1>
-    <ul class="spisokreg">
-        <li>
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="divFam">
-                    <h2>Фамилия</h2>
-                    {{ form.last_name }}
-                    {#                <input type=search class="vvodinfo" placeholder="Введите фамилию ученика">#}
-                </div>
-        </li>
-        <li>
-            <div class="divName">
-                <h2>Имя</h2>
-                {{ form.first_name }}
-                {#                <input type=search class="vvodinfo" placeholder="Введите имя ученика">#}
-            </div>
-        </li>
-        <li>
-            <div class="divOtch">
-                <h2>Отчество</h2>
-                {{ form.surname }}
-                {#                <input type=search class="vvodinfo" placeholder="Введите отчество ученика">#}
-            </div>
-        </li>
-        <li>
-            <div class="divDate">
-                <h2>Дата рождения</h2>
-                {{ form.birth_date }}
-                {#                <input type=search class="vvodinfo" placeholder="Введите дату рождения ученика">#}
-            </div>
-        </li>
-        <li>
-            <div class="divGen">
-                <h2>Пол</h2>
-                {{ form.gender }}
-            </div>
-        </li>
-        <li>
-            <div class="divsubject">
-                <h2>Какие предметы преподает</h2>
-                {{ form.subject }}
-            </div>
-        </li>
-        <li>
-            <div class="divGen">
-                <h2>Должность</h2>
-                {{ form.post_job_teacher }}
-            </div>
-        </li>
-        <li>
-            <div class="divGen">
-                <h2>Классное руководство</h2>
-                {{ form.classroom_guide }}
-            </div>
-        </li>
-        <li>
-            <div class="divLogin">
-                <h2>Логин</h2>
-                {{ form.username }}
-            </div>
-        </li>
-        <li>
-            <div class="divPassword">
-                <h2>Пароль</h2>
-                {{ form.password }}
-            </div>
-        </li>
-    </ul>
-    <form class="right">
-        <div class="editphoto">
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-6">Создание нового учителя</h1>
+    <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div class="space-y-4">
             <div>
-            {{ form.errors }}
+                <label class="block text-gray-700 font-bold mb-2" for="last_name">Фамилия</label>
+                {{ form.last_name|add_class:"block w-full p-2 border rounded" }}
             </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="first_name">Имя</label>
+                {{ form.first_name|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="surname">Отчество</label>
+                {{ form.surname|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="birth_date">Дата рождения</label>
+                {{ form.birth_date|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="gender">Пол</label>
+                {{ form.gender|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="subject">Какие предметы преподает</label>
+                {{ form.subject|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="post_job_teacher">Должность</label>
+                {{ form.post_job_teacher|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="classroom_guide">Классное руководство</label>
+                {{ form.classroom_guide|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="username">Логин</label>
+                {{ form.username|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2" for="password">Пароль</label>
+                {{ form.password|add_class:"block w-full p-2 border rounded" }}
+            </div>
+            {% if form.errors %}
+            <div class="text-red-500 mt-2">{{ form.errors }}</div>
+            {% endif %}
         </div>
-        <button type="submit" class="savebutton">Создать</button>
+        <div class="text-right mt-4">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Создать</button>
+        </div>
     </form>
 </div>
-
 
 <script>
     var modal = document.querySelector(".modal");
@@ -121,10 +73,8 @@
         }
     }
 
-    trigger.addEventListener("click", toggleModal);
-    closeButton.addEventListener("click", toggleModal);
+    if (trigger) trigger.addEventListener("click", toggleModal);
+    if (closeButton) closeButton.addEventListener("click", toggleModal);
     window.addEventListener("click", windowOnClick);
 </script>
-</div>
-</body>
-</html>
+{% endblock %}

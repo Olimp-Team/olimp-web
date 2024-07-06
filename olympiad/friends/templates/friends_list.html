@@ -1,19 +1,27 @@
-{% extends 'base_friends.html' %}
+{% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-<h2>Мои друзья</h2>
-<ul>
-    {% for friend in friends %}
-    <li class="user-item">
-        {% if friend.image %}
-        <img src="{{ friend.image.url }}" alt="{{ friend.get_full_name }}" width="50">
-        {% else %}
-        <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ friend.get_full_name }}" width="50">
-        {% endif %}
-        <a href="{% url 'users:profile' user_id=friend.id %}">{{ friend.get_full_name }}</a> ({{ friend.username }})
-    </li>
-    {% empty %}
-    <li>У вас нет друзей.</li>
-    {% endfor %}
-</ul>
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Мои друзья</h2>
+        <ul class="space-y-4">
+            {% for friend in friends %}
+                <li class="flex items-center space-x-4">
+                    {% if friend.image %}
+                        <img src="{{ friend.image.url }}" alt="{{ friend.get_full_name }}"
+                             class="w-12 h-12 rounded-full">
+                    {% else %}
+                        <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ friend.get_full_name }}"
+                             class="w-12 h-12 rounded-full">
+                    {% endif %}
+                    <div>
+                        <a href="{% url 'users:profile' user_id=friend.id %}"
+                           class="text-lg font-semibold text-blue-500 hover:underline">{{ friend.get_full_name }}</a>
+                        <p class="text-gray-600">({{ friend.username }})</p>
+                    </div>
+                </li>
+                {% empty %}
+                <li class="text-gray-600">У вас нет друзей.</li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

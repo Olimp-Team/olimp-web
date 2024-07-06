@@ -1,50 +1,30 @@
-
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Olimp | Список учебных классов</title>
-    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="shortcut-icon" href="{% static 'list_classroom/img/shortcuticon.png' %}">
-    <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
-</head>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-{% include 'navbar/navbar.html' %}
 {% block content %}
-{% endblock %}
-<body>
-<div class="main">
-    <div class="classes">Классы</div>
-<!--    {#-->
-<!--    <div class="search-form">#}-->
-<!--        {# <input type="text" class="search-form__txt" placeholder="Поиск...">#}-->
-<!--        {#-->
-<!--    </div>-->
-<!--    #}-->
-    <div class="sha">Текущие классы</div>
-    <div class="do">Выпустившиеся классы</div>
-
-    {% for classroom_teacher in classroom_teacher %}
-    <div class="pole">
-        <div class="class">{{ classroom_teacher.number }}{{ classroom_teacher.letter }}</div>
-        <div class="clasruk">
-            <div class="classruk">Классный руководитель:</div>
-            <div class="rukovoditel">{{ classroom_teacher.teacher.last_name }} {{ classroom_teacher.teacher.first_name }} {{ classroom_teacher.teacher.surname }}
-            </div>
+    <div class="flex justify-between mb-4">
+        <div class="flex space-x-4">
+            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:TeacherClassroomGuide' %}?graduated=0">Текущие классы</a>
         </div>
-        <div class="kolvo">Класс: {{ classroom_teacher.child.count }}/30 учеников</div>
-        <a href="{% url 'classroom:ChildrenListTeacher' classroom_teacher.id %}" class="watchinfo" type="button">Посмотреть
-            участников</a>
-        {# <input href="#" class="watchinfo" type="button" value="Посмотреть информацию">#}
     </div>
-    {% endfor %}
 
+    <div class="text-2xl font-bold mb-4">{{ context_title }}</div>
 
-</div>
-</body>
-</html>
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {% for classroom in classrooms %}
+            <div class="bg-white p-4 rounded shadow">
+                <div class="text-xl font-semibold">{{ classroom.number }}{{ classroom.letter }}</div>
+                <div class="mt-2">
+                    <div class="text-gray-600">Классный руководитель</div>
+                    <div class="text-gray-800">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}</div>
+                </div>
+                <div class="mt-2">Класс: {{ classroom.child.count }}/30 учеников</div>
+                {% if graduated %}
+                    <div class="mt-2">Год выпуска: {{ classroom.graduation_year }}</div>
+                {% endif %}
+                <div class="mt-4 flex space-x-2">
+                    <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Посмотреть участников</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

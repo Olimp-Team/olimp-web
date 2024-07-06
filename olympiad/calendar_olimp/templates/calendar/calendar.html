@@ -1,216 +1,68 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Календарь Олимпиад</title>
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
-    <link href="olympiad.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
-    <style>
-        html {
 
-    overflow: hidden;
-    font-family: Bahnschrift;
-    zoom: 85%;
-    max-width: 100%;
-    max-height: 100%;
-
-}  .main {
-    background-color: #f7f7f7;
-    margin-left: 400px;
-    padding-bottom: 500px;
-    width: 80%;
-    overflow: auto;
-    border-radius:15px;
-    padding-left: -20px;
-    padding-right: 55px;
-    zoom: 100%;
-
-
-}
-body {
-            font-family: Bahnschrift;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-top: 20px;
-        }
-
-        #calendar {
-            max-width: 1120px;
-            margin: 40px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        .fc-toolbar-title {
-            font-size: 15px;
-            color: #2c3e50;
-        }
-
-        .fc-daygrid-event {
-            background-color: #3498db;
-            border: none;
-            color: #fff;
-            padding: 5px;
-            border-radius: 4px;
-        }
-
-        .fc-daygrid-event:hover {
-            background-color: #2980b9;
-        }
-
-        .fc-button-primary {
-            background-color: #3498db;
-            border-color: #3498db;
-        }
-
-        .fc-button-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
-        }
-
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            padding-top: 60px;
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 8px;
-        }
-
-        .modal-header, .modal-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-        }
-
-        .modal-header {
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .modal-footer {
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
-
-</head>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-
-{% include 'navbar/navbar.html' %}
 {% block content %}
-{% endblock %}
-<body>
-<div class="main">
-    <h1>Календарь Олимпиад</h1>
-    <div id="calendar"></div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                locale: 'ru',
-                events: '{% url "calendar_olimp:olympiad_events" %}',
-                eventClick: function(info) {
-                    document.getElementById('modal-title').innerText = info.event.title;
-                    document.getElementById('modal-description').innerText = info.event.extendedProps.description;
-                    document.getElementById('modal-location').innerText = info.event.extendedProps.location;
-                    document.getElementById('modal-date').innerText = info.event.start.toLocaleString();
-                    document.getElementById('myModal').style.display = "block";
-                }
-            });
-            calendar.render();
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales-all.min.js"></script>
 
-            // Get the modal
-            var modal = document.getElementById("myModal");
+<div class="p-4">
+    <h1 class="text-3xl font-bold text-center mb-6">Календарь Олимпиад</h1>
+    <div id="calendar" class="max-w-4xl mx-auto bg-white p-6 shadow-lg rounded-lg"></div>
+</div>
 
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'ru',
+            events: '{% url "calendar_olimp:olympiad_events" %}',
+            eventClick: function (info) {
+                document.getElementById('modal-title').innerText = info.event.title;
+                document.getElementById('modal-description').innerText = info.event.extendedProps.description;
+                document.getElementById('modal-location').innerText = info.event.extendedProps.location;
+                document.getElementById('modal-date').innerText = info.event.start.toLocaleString();
+                document.getElementById('myModal').classList.remove('hidden');
             }
         });
-    </script>
-</div>
-</head>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
+        calendar.render();
 
-{% include 'navbar/navbar.html' %}
-{% block content %}
-{% endblock %}
-<body>
-    <h1>Календарь Олимпиад</h1>
-    <div id="calendar"></div>
+        // Get the modal
+        var modal = document.getElementById("myModal");
 
-    <!-- Модальное окно -->
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title"></h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p><strong>Описание:</strong> <span id="modal-description"></span></p>
-                <p><strong>Место:</strong> <span id="modal-location"></span></p>
-                <p><strong>Дата и время:</strong> <span id="modal-date"></span></p>
-            </div>
-            <div class="modal-footer">
-                <button onclick="document.getElementById('myModal').style.display='none'">Закрыть</button>
-            </div>
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.classList.add('hidden');
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.classList.add('hidden');
+            }
+        }
+    });
+</script>
+
+<!-- Модальное окно -->
+<div id="myModal" class="modal fixed z-50 inset-0 hidden overflow-y-auto">
+    <div class="modal-content bg-white mx-auto my-8 p-6 rounded-lg shadow-lg max-w-lg w-full">
+        <div class="modal-header flex justify-between items-center border-b pb-2">
+            <h2 id="modal-title" class="text-xl font-bold"></h2>
+            <span class="close text-gray-500 text-2xl cursor-pointer">&times;</span>
+        </div>
+        <div class="modal-body mt-4">
+            <p><strong>Описание:</strong> <span id="modal-description"></span></p>
+            <p><strong>Место:</strong> <span id="modal-location"></span></p>
+            <p><strong>Дата и время:</strong> <span id="modal-date"></span></p>
+        </div>
+        <div class="modal-footer flex justify-end border-t pt-2 mt-4">
+            <button onclick="document.getElementById('myModal').classList.add('hidden')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Закрыть</button>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

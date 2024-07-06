@@ -1,56 +1,34 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olimp | Заявки на регистрацию учебных классов</title>
-    <link rel="stylesheet" href="{% static 'applications-from-classroom-teachers/applications-from-classroom-teachers.css' %}" id="them">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
+{% block content %}
     <link rel="shortcut-icon" href="{% static 'applications-from-classroom-teachers/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
 
-</head>
-{% include 'header/header.html' %}
-{% block header %}
-    <p class="wordhead">Заявки на регистрацию учебных классов от классных руководителей</p>
-{% endblock %}
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div class="flex justify-between mb-4">
+            <a href="{% url 'docs:export_excel' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Скачать все заявки</a>
+            <a href="{% url 'docs:download_applications_zip' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Скачать все согласия (ZIP)</a>
+        </div>
 
-
-{% include 'navbar/navbar.html' %}
-{% block content %}
-
-{% endblock %}
-<body>
-<div class="main">
-    <a class="buttonedit" type="submit" value="Изменить"
-       href="{% url 'docs:export_excel' %}">Скачать все заявки</a>
-    <a href="{% url 'docs:download_applications_zip' %}" class="buttonedit buttonzip">Скачать все согласия (ZIP)</a>
-    <div class="mainblock">
-        <div class="tablespisok">
+        <div class="space-y-6">
             {% for classroom, registers in grouped_registers.items %}
-                <h2>{{ classroom.teacher.get_full_name }} - {{ classroom.number }} {{ classroom.letter }}</h2>
-                <a class="buttonedittrue" type="submit"
-                   href="{% url 'docs:excel_classroom' classroom.id %}" class="btn btn-primary">Скачать excel файл</a>
-                <ul>
-                        <li>
-                            <div class="textzag">
-                            Ученик
-                             <div class="olympiadzag">Олимпиада</div>
-                            </div>
+                <div class="bg-gray-100 p-4 rounded-lg shadow-inner">
+                    <h2 class="text-xl font-bold mb-2">{{ classroom.teacher.get_full_name }} - {{ classroom.number }} {{ classroom.letter }}</h2>
+                    <a href="{% url 'docs:excel_classroom' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 inline-block">Скачать excel файл</a>
+                    <ul class="space-y-2">
+                        <li class="flex justify-between bg-gray-200 p-2 rounded-lg">
+                            <div class="text-gray-700 font-bold">Ученик</div>
+                            <div class="text-gray-700 font-bold">Олимпиада</div>
                         </li>
-                    {% for register in registers %}
-                        <li id="studentinfo">
-                            {{ register.child_admin }}
-                            <div class="olympiad">{{ register.Olympiad_admin.name }}</div>
-                        </li>
-                    {% endfor %}
-                </ul>
+                        {% for register in registers %}
+                            <li class="flex justify-between bg-white p-2 rounded-lg shadow">
+                                <div class="text-gray-700">{{ register.child_admin }}</div>
+                                <div class="text-gray-700">{{ register.Olympiad_admin.name }}</div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             {% endfor %}
-
         </div>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

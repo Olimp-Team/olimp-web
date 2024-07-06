@@ -1,123 +1,70 @@
+{% extends 'base_olimp.html' %}
+{% load form_filters %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'add_students/add_students_light.css' %}" id="them">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="icon" href="{% static 'add_students/img/logoolimp.jpg' %}">
-
-    <title>Olimp | Создание нового ученика</title>
-</head>
-
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-
-
-{% include 'navbar/navbar.html' %}
 {% block content %}
 
-{% endblock %}
-<body>
-<div class="main">
-
-    <h1 class="add_newstudents_text">Создание нового ученика</h1>
-    <ul class="spisokreg">
-        <li>
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-
-                <div class="divFam">
-                    <h2>Фамилия</h2>
-                    {{ form.last_name }}
-                    {# <input type=search class="vvodinfo" placeholder="Введите фамилию ученика">#}
-                </div>
-        </li>
-        <li>
-            <div class="divName">
-                <h2>Имя</h2>
-                {{ form.first_name }}
-                {# <input type=search class="vvodinfo" placeholder="Введите имя ученика">#}
-            </div>
-        </li>
-        <li>
-            <div class="divOtch">
-                <h2>Отчество</h2>
-                {{ form.surname }}
-            </div>
-        </li>
-        <li>
-            <div class="divDate">
-                <h2>Дата рождения</h2>
-                {{ form.birth_date }}
-                {# <input type=search class="vvodinfo" placeholder="Введите дату рождения ученика">#}
-            </div>
-        </li>
-        <li>
-            <div class="divGen">
-                <h2>Пол</h2>
-                {{ form.gender }}
-            </div>
-        </li>
-        <li>
-            <div class="divClass">
-                <h2>Учебный класс</h2>
-                {{ form.classroom }}
-                {# <input type=search class="vvodinfo" placeholder="Введите учебный класс ученика">#}
-            </div>
-        </li>
-        <li>
-            <div class="divLogin">
-                <h2>Логин</h2>
-                {{ form.username }}
-                {# <input type=search class="vvodinfo" placeholder="Введите логин ученика">#}
-
-            </div>
-        </li>
-        <li>
-            <div class="divPassword">
-                <h2>Пароль</h2>
-                {{ form.password }}
-                <!--                <input type=search class="vvodinfo" placeholder="Введите пароль ученика">-->
-            </div>
-        </li>
-
-    </ul>
-
-    <div class="right">
-        <div class="editphoto">
-            <div>
-                {{ form.errors }}
-
-            </div>
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-6">Создание нового ученика</h1>
+    <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="last_name">Фамилия</label>
+            {{ form.last_name|add_class:"block w-full p-2 border rounded" }}
         </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="first_name">Имя</label>
+            {{ form.first_name|add_class:"block w-full p-2 border rounded" }}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="surname">Отчество</label>
+            {{ form.surname|add_class:"block w-full p-2 border rounded" }}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="birth_date">Дата рождения</label>
+            {{ form.birth_date|add_class:"block w-full p-2 border rounded" }}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="gender">Пол</label>
+            {{ form.gender|add_class:"block w-full p-2 border rounded" }}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="classroom">Учебный класс</label>
+            {{ form.classroom|add_class:"block w-full p-2 border rounded" }}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="username">Логин</label>
+            {{ form.username|add_class:"block w-full p-2 border rounded" }}
+        </div>
+        <div>
+            <label class="block text-gray-700 font-bold mb-2" for="password">Пароль</label>
+            {{ form.password|add_class:"block w-full p-2 border rounded" }}
+            {% if form.errors %}
+            <div class="text-red-500 mt-2">{{ form.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="text-right">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Создать</button>
+        </div>
+    </form>
+</div>
 
+<script>
+    var modal = document.querySelector(".modal");
+    var trigger = document.querySelector(".trigger");
+    var closeButton = document.querySelector(".btn-sm");
 
-        <button type="submit" class="savebutton">Создать</button>
-        </form>
-    </div>
+    function toggleModal() {
+        modal.classList.toggle("show-modal");
+    }
 
-
-    <script>
-        var modal = document.querySelector(".modal");
-        var trigger = document.querySelector(".trigger");
-        var closeButton = document.querySelector(".btn-sm");
-
-        function toggleModal() {
-            modal.classList.toggle("show-modal");
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
         }
+    }
 
-        function windowOnClick(event) {
-            if (event.target === modal) {
-                toggleModal();
-            }
-        }
-
-        trigger.addEventListener("click", toggleModal);
-        closeButton.addEventListener("click", toggleModal);
-        window.addEventListener("click", windowOnClick);
-    </script>
-</body>
-</html>
+    if (trigger) trigger.addEventListener("click", toggleModal);
+    if (closeButton) closeButton.addEventListener("click", toggleModal);
+    window.addEventListener("click", windowOnClick);
+</script>
+{% endblock %}

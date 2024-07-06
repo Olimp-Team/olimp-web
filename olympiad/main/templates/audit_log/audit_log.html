@@ -1,40 +1,29 @@
+{% extends 'base_olimp.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Olimp | Журнал действий сотрудников</title>
-    <link rel="stylesheet" href="{% static 'audit/audit_log.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-</head>
-<body>
-{% include 'header/header.html' %}
-{% include 'navbar/navbar.html' %}
-
-<div class="main">
-    <div class="auditbox">
-        <div id="audit">Журнал действий сотрудников</div>
-        <div class="auditlast">
-            <table id="audittable">
-                <tr id="audittablecol">
-                    <th>Сотрудник</th>
-                    <th>Действие</th>
-                    <th>Объект</th>
-                    <th>Дата</th>
-                </tr>
-                {% for log in audit_logs %}
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Журнал действий сотрудников</h2>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <td>{{ log.user.get_full_name }}</td>
-                    <td>{{ log.action }}</td>
-                    <td>{{ log.object_name }}</td>
-                    <td>{{ log.timestamp }}</td>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сотрудник</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действие</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Объект</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
                 </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for log in audit_logs %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ log.user.get_full_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ log.action }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ log.object_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ log.timestamp }}</td>
+                    </tr>
                 {% endfor %}
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
 </div>
-
-</body>
-</html>
+{% endblock %}

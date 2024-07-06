@@ -1,15 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1> Создать/Изменить учебный класс</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
-</form>
-</body>
-</html>
+{% extends 'base_olimp.html' %}
+{% load form_filters %}
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center">Создать/Изменить учебный класс</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-3 gap-4">
+            <!-- Общий список учеников -->
+            <div>
+                <label for="all_students" class="block text-sm font-medium text-gray-700">Все ученики</label>
+                <select id="all_students" multiple class="block w-full mt-1 p-2 border rounded h-64">
+                    {% for student in all_students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <!-- Кнопки перемещения -->
+            <div class="flex flex-col justify-center items-center">
+                <button type="button" id="move_to_class" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-2">&rarr;</button>
+                <button type="button" id="move_to_all" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">&larr;</button>
+            </div>
+            <!-- Список учеников класса -->
+            <div>
+                <label for="class_students" class="block text-sm font-medium text-gray-700">Ученики класса</label>
+                <select id="class_students" name="child" multiple class="block w-full mt-1 p-2 border rounded h-64">
+                    {% for student in class_students %}
+                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div>
+            <label for="id_number" class="block text-sm font-medium text-gray-700">Цифра</label>
+            {{ form.number|add_class:"block w-full mt-1 p-2 border rounded" }}
+        </div>
+        <div>
+            <label for="id_letter" class="block text-sm font-medium text-gray-700">Буква</label>
+            {{ form.letter|add_class:"block w-full mt-1 p-2 border rounded" }}
+        </div>
+        <div>
+            <label for="id_teacher" class="block text-sm font-medium text-gray-700">Классный руководитель</label>
+            {{ form.teacher|add_class:"block w-full mt-1 p-2 border rounded" }}
+        </div>
+        <div class="flex items-center space-x-4">
+            <label for="id_is_graduated" class="text-sm font-medium text-gray-700">Выпустился</label>
+            {{ form.is_graduated|add_class:"form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" }}
+        </div>
+        <div>
+            <label for="id_graduation_year" class="block text-sm font-medium text-gray-700">Год выпуска</label>
+            {{ form.graduation_year|add_class:"block w-full mt-1 p-2 border rounded" }}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const moveToClassButton = document.getElementById('move_to_class');
+    const moveToAllButton = document.getElementById('move_to_all');
+    const allStudentsSelect = document.getElementById('all_students');
+    const classStudentsSelect = document.getElementById('class_students');
+
+    moveToClassButton.addEventListener('click', function () {
+        moveSelectedOptions(allStudentsSelect, classStudentsSelect);
+    });
+
+    moveToAllButton.addEventListener('click', function () {
+        moveSelectedOptions(classStudentsSelect, allStudentsSelect);
+    });
+
+    function moveSelectedOptions(fromSelect, toSelect) {
+        const selectedOptions = Array.from(fromSelect.selectedOptions);
+        selectedOptions.forEach(option => {
+            toSelect.appendChild(option);
+        });
+    }
+});
+</script>
+{% endblock %}

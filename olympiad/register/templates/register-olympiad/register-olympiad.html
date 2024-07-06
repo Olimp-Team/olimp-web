@@ -1,69 +1,58 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olimp | Регистрация на олимпиаду</title>
-    <link rel="stylesheet" href="{% static 'register-olympiad/style.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="shortcut-icon" href="{% static 'register-olympiad/img/shortcuticon.png' %}">
-    <link rel="icon" href="{% static 'register-olympiad/img/logoolimp.jpg' %}">
-</head>
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center" id="maintext">Регистрация на олимпиаду</h1>
 
-<body>
-{% include 'header/header.html' %}
-{% include 'navbar/navbar.html' %}
-
-<div class="main">
-    <h1 id="maintext">Регистрация на олимпиаду</h1>
-
-    <div class="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{% static 'register-olympiad/img/linii.png' %}" alt="Olimpiad Image" class="newsimg">
-                <p id="newsdate">{{ olympiads_last.date_olympiad }}</p>
-                <h1 id="newsolympiad">Открыта регистрация на {{ olympiads_last.name }}</h1>
-                <p id="newsogran">Поторопись, количество участников ограничено!</p>
-                <div class="registerbut">
-                    <a id="newsknopka" class="registerbutton" href="#" onclick="registerForOlympiad('{{ olympiads_last.id }}', '{{ olympiads_last.name }}')">Зарегистрироваться</a>
+    <div class="carousel relative mb-8">
+        <div class="carousel-inner relative overflow-hidden w-full">
+            <div class="carousel-item active absolute w-full">
+                <img src="{% static 'register-olympiad/img/linii.png' %}" alt="Olimpiad Image" class="w-full h-64 object-cover">
+                <div class="absolute bottom-0 bg-gradient-to-t from-black to-transparent p-4 w-full text-white">
+                    <p class="text-sm" id="newsdate">{{ olympiads_last.date_olympiad }}</p>
+                    <h1 class="text-xl font-bold" id="newsolympiad">Открыта регистрация на {{ olympiads_last.name }}</h1>
+                    <p class="text-sm" id="newsogran">Поторопись, количество участников ограничено!</p>
+                    <div class="mt-4">
+                        <a id="newsknopka" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="#" onclick="registerForOlympiad('{{ olympiads_last.id }}', '{{ olympiads_last.name }}')">Зарегистрироваться</a>
+                    </div>
                 </div>
             </div>
             {% for olympiad in olympiads %}
-            <div class="carousel-item">
-                <img src="{% static 'register-olympiad/img/linii.png' %}" alt="Olimpiad Image" class="newsimg">
-                <p id="newsdate">{{ olympiad.date_olympiad }}</p>
-                <h1 id="newsolympiad">Открыта регистрация на {{ olympiad.name }}</h1>
-                <p id="newsogran">Поторопись, количество участников ограничено!</p>
-                <div class="registerbut">
-                    <a id="newsknopka" class="registerbutton" href="#" onclick="registerForOlympiad('{{ olympiad.id }}', '{{ olympiad.name }}')">Зарегистрироваться</a>
+            <div class="carousel-item absolute w-full">
+                <img src="{% static 'register-olympiad/img/linii.png' %}" alt="Olimpiad Image" class="w-full h-64 object-cover">
+                <div class="absolute bottom-0 bg-gradient-to-t from-black to-transparent p-4 w-full text-white">
+                    <p class="text-sm" id="newsdate">{{ olympiad.date_olympiad }}</p>
+                    <h1 class="text-xl font-bold" id="newsolympiad">Открыта регистрация на {{ olympiad.name }}</h1>
+                    <p class="text-sm" id="newsogran">Поторопись, количество участников ограничено!</p>
+                    <div class="mt-4">
+                        <a id="newsknopka" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="#" onclick="registerForOlympiad('{{ olympiad.id }}', '{{ olympiad.name }}')">Зарегистрироваться</a>
+                    </div>
                 </div>
             </div>
             {% endfor %}
         </div>
-        <a class="carousel-control-prev" role="button" onclick="prevSlide()">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <a class="carousel-control-prev absolute top-0 bottom-0 left-0 flex items-center justify-center p-4 cursor-pointer" role="button" onclick="prevSlide()">
+            <span class="carousel-control-prev-icon bg-gray-800 text-white rounded-full px-2 py-1" aria-hidden="true">&lt;</span>
         </a>
-        <a class="carousel-control-next" role="button" onclick="nextSlide()">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <a class="carousel-control-next absolute top-0 bottom-0 right-0 flex items-center justify-center p-4 cursor-pointer" role="button" onclick="nextSlide()">
+            <span class="carousel-control-next-icon bg-gray-800 text-white rounded-full px-2 py-1" aria-hidden="true">&gt;</span>
         </a>
     </div>
 
-    <h2 id="allolympiads">Все олимпиады</h2>
-    <div class="olympiads">
+    <h2 class="text-xl font-bold mb-4 text-center" id="allolympiads">Все олимпиады</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% for olympiad in olympiads %}
-        <div class="firstolympiad">
-            <h2 id="olympiadtext">{{ olympiad.name }}</h2>
-            <h3 id="openreg">Регистрация открыта!</h3>
-            <h3 id="datesreg">{{ olympiad.date_olympiad }}</h3>
-            <a href="#" class="trigger" onclick="registerForOlympiad('{{ olympiad.id }}', '{{ olympiad.name }}')">Зарегистрироваться</a>
+        <div class="bg-gray-100 p-4 rounded-lg shadow">
+            <h2 class="text-lg font-bold mb-2" id="olympiadtext">{{ olympiad.name }}</h2>
+            <h3 class="text-sm text-green-500 mb-2" id="openreg">Регистрация открыта!</h3>
+            <h3 class="text-sm text-gray-700 mb-4" id="datesreg">{{ olympiad.date_olympiad }}</h3>
+            <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="registerForOlympiad('{{ olympiad.id }}', '{{ olympiad.name }}')">Зарегистрироваться</a>
         </div>
         {% endfor %}
     </div>
 
     <!-- Уведомление -->
-    <div id="successNotification" class="notification">
+    <div id="successNotification" class="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded shadow hidden">
         <p id="notificationMessage"></p>
     </div>
 </div>
@@ -97,11 +86,11 @@
             const notification = document.getElementById('successNotification');
             const message = document.getElementById('notificationMessage');
             message.textContent = notificationMessage;
-            notification.classList.add('show-notification');
+            notification.classList.remove('hidden');
 
             // Удаление сообщения из localStorage через 3 секунды
             setTimeout(() => {
-                notification.classList.remove('show-notification');
+                notification.classList.add('hidden');
                 localStorage.removeItem('notificationMessage');
             }, 3000);
         }
@@ -115,5 +104,5 @@
         window.location.href = `/register/olympiad/add/${olympiadId}/`;
     }
 </script>
-</body>
-</html>
+
+{% endblock %}

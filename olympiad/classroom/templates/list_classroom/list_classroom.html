@@ -1,53 +1,35 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Olimp | Список учебных классов</title>
-    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="shortcut-icon" href="{% static 'list_classroom/img/shortcuticon.png' %}">
-    <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
-</head>
-<body>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-{% include 'navbar/navbar.html' %}
 {% block content %}
-    <p class="wordhead">Список классов</p>
-{% endblock %}
-
-<div class="main">
-    <div class="switch-buttons">
-        <a class="switch-button" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
-        <a class="switch-button" href="{% url 'classroom:promote_all_classrooms' %}">Продвинуть все классы</a>
-
-        <a class="switch-button" href="{% url 'classroom:list_classroom' %}?graduated=0">Текущие классы</a>
-        <a class="switch-button" href="{% url 'classroom:list_classroom' %}?graduated=1">Выпустившиеся классы</a>
+    <div class="flex justify-between mb-4">
+        <div class="flex space-x-4">
+            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:classroom_create' %}">Добавить класс</a>
+            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:promote_all_classrooms' %}">Продвинуть все классы</a>
+            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:list_classroom' %}?graduated=0">Текущие классы</a>
+            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:list_classroom' %}?graduated=1">Выпустившиеся классы</a>
+        </div>
     </div>
 
-    <div class="sha">{{ context_title }}</div>
+    <div class="text-2xl font-bold mb-4">{{ context_title }}</div>
 
-    <div class="class-grid">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {% for classroom in classrooms %}
-        <div class="pole">
-            <div class="class">{{ classroom.number }}{{ classroom.letter }} </div>
-            <div class="clasruk">
-                <div class="classruk">Классный руководитель</div>
-                <div class="rukovoditel">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}</div>
+            <div class="bg-white p-4 rounded shadow">
+                <div class="text-xl font-semibold">{{ classroom.number }}{{ classroom.letter }}</div>
+                <div class="mt-2">
+                    <div class="text-gray-600">Классный руководитель</div>
+                    <div class="text-gray-800">{{ classroom.teacher.last_name }} {{ classroom.teacher.first_name }} {{ classroom.teacher.surname }}</div>
+                </div>
+                <div class="mt-2">Класс: {{ classroom.child.count }}/30 учеников</div>
+                {% if graduated %}
+                    <div class="mt-2">Год выпуска: {{ classroom.graduation_year }}</div>
+                {% endif %}
+                <div class="mt-4 flex space-x-2">
+                    <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Посмотреть участников</a>
+                    <a href="{% url 'classroom:classroom_update' classroom.pk %}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Изменить</a>
+                    <a href="{% url 'classroom:classroom_delete' classroom.pk %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Удалить</a>
+                </div>
             </div>
-            <div class="kolvo">Класс: {{ classroom.child.count }}/30 учеников</div>
-            {% if graduated %}
-            <div class="grad-year">Год выпуска: {{ classroom.graduation_year }}</div>
-            {% endif %}
-            <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="watchinfo w1" type="button">Посмотреть участников</a>
-            <a href="{% url 'classroom:classroom_update' classroom.pk %}" class="watchinfo w2" type="button">Изменить</a>
-            <a href="{% url 'classroom:classroom_delete' classroom.pk %}" class="w3" type="button">Удалить</a>
-        </div>
         {% endfor %}
     </div>
-</div>
-</body>
-</html>
+{% endblock %}
