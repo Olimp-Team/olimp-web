@@ -22,3 +22,6 @@ unicorn[standart]
 websocket
 daphne
 redis
+django-friendship
+mysqlclient
+pymysql
