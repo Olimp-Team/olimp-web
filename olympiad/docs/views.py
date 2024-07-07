@@ -20,7 +20,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from users.mixins import AdminRequiredMixin
 from django.http import HttpResponse
-
+import logging
 
 class ExcelClassroom(AdminRequiredMixin, View):
     def get(self, request, Classroom_id):
@@ -252,6 +252,7 @@ class import_users(View):
             import_data(file)
             return redirect('docs:succes_import')
 
+
 def import_data(file):
     df = pd.read_excel(file)
 
@@ -316,6 +317,7 @@ def import_data(file):
                         user.post_job_teacher.add(post_obj)
                     except Post.DoesNotExist:
                         pass  # Если должность не найдена, пропускаем
+
 
 # Вспомогательная функция для разбора класса
 def parse_classroom(classroom_str):
@@ -602,21 +604,45 @@ class import_olympiads(View):
         if form.is_valid():
             excel_file = request.FILES['file']
             df = pd.read_excel(excel_file)
+
             for index, row in df.iterrows():
-                category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
-                level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
-                stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
-                subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
-                Olympiad.objects.create(
-                    name=row['Название олимпиады'],
-                    description=row['Описание олимпиады'],
-                    category=category,
-                    level=level,
-                    stage=stage,
-                    subject=subject,
-                    class_olympiad=row['Класс олимпиады']
-                )
-            return HttpResponseRedirect('/success_url/')
+                try:
+                    category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
+                    level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
+                    stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
+                    subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
+
+                    # Проверяем и преобразуем дату
+                    date = None
+                    if pd.notna(row['Дата проведения']):
+                        date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
+
+                    # Проверяем и преобразуем время
+                    time = None
+                    if pd.notna(row['Время проведения']):
+                        time = datetime.strptime(str(row['Время проведения']), '%H:%M:%S').time()
+
+                    # Проверяем место проведения
+                    location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
+
+                    Olympiad.objects.create(
+                        name=row['Название олимпиады'],
+                        description=row['Описание олимпиады'],
+                        category=category,
+                        level=level,
+                        stage=stage,
+                        subject=subject,
+                        class_olympiad=row['Класс олимпиады'],
+                        date=date,
+                        time=time,
+                        location=location
+                    )
+                except Exception as e:
+                    # Логирование ошибки и продолжение цикла
+                    logging.error(f"Ошибка в строке {index}: {e}")
+                    continue
+
+            return HttpResponseRedirect('docs:succes_import_olympiad')
 
     def get(self, request):
         form = UploadFileForm()

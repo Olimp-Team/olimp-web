@@ -1,0 +1,7 @@
+{% extends 'base_olimp.html' %}
+{% load static %}
+{% block content %}
+    <h1>Импорт завершен успешно</h1>
+    <p>Пользователи успешно импортированы в базу данных.</p>
+    <a href="{% url 'docs:import_users' %}">Вернуться к форме импорта</a>
+{% endblock content %}
