@@ -1,29 +1,35 @@
-<!-- chat/templates/chat/chat_list.html -->
-
-{% extends 'base_friends.html' %}
+{% extends 'base_olimp.html' %}
 {% load static %}
 {% block title %}Сообщения{% endblock %}
 
 {% block content %}
-<h2>Сообщения</h2>
-<div style="margin-bottom: 20px;">
-    <a href="{% url 'chat:create_group' %}" class="create-group-button">Создать группу</a>
-</div>
-<ul>
-    {% for item in friends_with_last_messages %}
-    <li>
-        <img src="{% if item.friend.image %}{{ item.friend.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}" alt="{{ item.friend.get_full_name }}" style="width: 50px; height: 50px; border-radius: 50%;">
-        <strong>{{ item.friend.get_full_name }}</strong><br>
-        {% if item.last_message %}
-        <small>{{ item.last_message.timestamp }}: {{ item.last_message.content|truncatechars:30 }}</small><br>
-        {% else %}
-        <small>Нет сообщений</small><br>
-        {% endif %}
-        <form action="{% url 'chat:start_chat' item.friend.username %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">Начать чат</button>
-        </form>
-    </li>
-    {% endfor %}
-</ul>
+    <h2 class="text-2xl font-bold mb-4">Сообщения</h2>
+    <div class="mb-6">
+        <a href="{% url 'chat:create_group' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Создать
+            группу</a>
+    </div>
+    <ul class="space-y-4">
+        {% for item in friends_with_last_messages %}
+            <li class="flex items-center space-x-4">
+                <img src="
+                        {% if item.friend.image %}{{ item.friend.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
+                     alt="{{ item.friend.get_full_name }}" class="w-12 h-12 rounded-full">
+                <div>
+                    <strong>{{ item.friend.get_full_name }}</strong><br>
+                    {% if item.last_message %}
+                        <small class="text-gray-600">{{ item.last_message.timestamp }}:
+                            {{ item.last_message.content|truncatechars:30 }}</small><br>
+                    {% else %}
+                        <small class="text-gray-600">Нет сообщений</small><br>
+                    {% endif %}
+                    <form action="{% url 'chat:start_chat' item.friend.username %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600">
+                            Начать чат
+                        </button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

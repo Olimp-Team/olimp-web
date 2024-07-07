@@ -1,31 +1,38 @@
-{% extends 'base_friends.html' %}
+{% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-    <h2>Поиск друзей</h2>
-    <form method="get" action="{% url 'friends:search_friends' %}">
-        <input type="text" name="q" placeholder="Введите имя пользователя" value="{{ query }}">
-        <button type="submit">Поиск</button>
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Поиск друзей</h2>
+    <form method="get" action="{% url 'friends:search_friends' %}" class="mb-6 flex">
+        <input type="text" name="q" placeholder="Введите имя пользователя" value="{{ query }}" class="flex-grow p-2 border border-gray-300 rounded-l">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Поиск</button>
     </form>
 
-    <ul>
+    <ul class="space-y-4">
         {% for user in users %}
-            <li class="user-item">
+            <li class="flex items-center space-x-4 p-4 border-b border-gray-200">
                 {% if user.image %}
-                    <img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" width="50">
+                    <img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" class="w-12 h-12 rounded-full">
                 {% else %}
-                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" width="50">
+                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" class="w-12 h-12 rounded-full">
                 {% endif %}
-                <a href="{% url 'users:profile' user_id=user.id %}">{{ user.get_full_name }}</a> ({{ user.username }})
-                {% if user in friends %}
-                    - Ваш друг
-                {% elif user in friend_requests %}
-                    - Ожидание подтверждения
-                {% else %}
-                    <a class="friend-button" href="{% url 'friends:add_friend' user.id %}">Добавить в друзья</a>
-                {% endif %}
+                <div>
+                    <a href="{% url 'users:profile' user_id=user.id %}" class="text-lg font-semibold text-blue-500 hover:underline">{{ user.get_full_name }}</a>
+                    <p class="text-gray-600">({{ user.username }})</p>
+                </div>
+                <div>
+                    {% if user in friends %}
+                        <span class="text-green-500">- Ваш друг</span>
+                    {% elif user in friend_requests %}
+                        <span class="text-yellow-500">- Ожидание подтверждения</span>
+                    {% else %}
+                        <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{% url 'friends:add_friend' user.id %}">Добавить в друзья</a>
+                    {% endif %}
+                </div>
             </li>
-            {% empty %}
-            <li>Пользователи не найдены.</li>
+        {% empty %}
+            <li class="text-gray-600">Пользователи не найдены.</li>
         {% endfor %}
     </ul>
+</div>
 {% endblock %}

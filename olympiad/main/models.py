@@ -123,18 +123,14 @@ class Olympiad(models.Model):
 
     name = models.CharField('Название олимпиады', max_length=256)
     description = models.TextField('Описание олимпиады', blank=True, null=True)
-    category = models.ForeignKey(to='categories', on_delete=models.CASCADE, verbose_name='Категория олимпиады',
-                                 max_length=256)
-    level = models.ForeignKey(to='Level_olympiad', on_delete=models.CASCADE, verbose_name='Название уровня',
-                              max_length=256)
-    # next_stage = models.ForeignKey('Stage', on_delete=models.SET_NULL, null=True, blank=True,
-    #                                related_name='next_olympiads', verbose_name='Следующий этап')
-    stage = models.ForeignKey(to='Stage', on_delete=models.CASCADE, verbose_name='Название этапа', max_length=256)
+    category = models.ForeignKey(to='categories', on_delete=models.CASCADE, verbose_name='Категория олимпиады')
+    level = models.ForeignKey(to='Level_olympiad', on_delete=models.CASCADE, verbose_name='Название уровня')
+    stage = models.ForeignKey(to='Stage', on_delete=models.CASCADE, verbose_name='Название этапа')
     subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name='Название школьного предмета')
     class_olympiad = models.IntegerField('Класс олимпиады')
-    date = models.DateField('Дата проведения')
-    time = models.TimeField('Время проведения')
-    location = models.CharField('Место проведения олимпиады', max_length=256)
+    date = models.DateField('Дата проведения', blank=True, null=True)
+    time = models.TimeField('Время проведения', blank=True, null=True)
+    location = models.CharField('Место проведения олимпиады', max_length=256, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name} {self.category} {self.level} {self.stage} {self.subject} {self.class_olympiad}'

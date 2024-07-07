@@ -155,10 +155,21 @@ WSGI_APPLICATION = 'olympiad.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'default_db',
+        'USER': 'gen_user',
+        'PASSWORD': 'b2PO;m\h)UOzpT',
+        'HOST': '147.45.184.229',
+        'PORT': '3306',
     }
 }
 

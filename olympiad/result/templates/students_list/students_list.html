@@ -1,21 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-{% for student in students %}
-    <div class="student-result">
-        <label>{{ student }}</label>
-        <input type="number" name="score" class="score-input" placeholder="Введите результат" required/>
-        <select name="status" class="status-select">
+{% extends 'base_olimp.html' %}
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    {% for student in students %}
+    <div class="student-result flex items-center space-x-4 mb-4">
+        <label class="w-1/4">{{ student }}</label>
+        <input type="number" name="score" class="score-input w-1/4 p-2 border rounded" placeholder="Введите результат" required/>
+        <select name="status" class="status-select w-1/4 p-2 border rounded">
             <option value="participant">Участник</option>
             <option value="winner">Победитель</option>
             <option value="prizewinner">Призер</option>
         </select>
     </div>
-{% endfor %}
-</body>
-</html>
+    {% endfor %}
+</div>
+{% endblock %}

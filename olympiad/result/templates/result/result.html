@@ -1,98 +1,95 @@
+{% extends 'base_olimp.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olimp | Результаты олимпиад</title>
-    <link rel="stylesheet" href="{% static 'result/result.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
-</head>
-<body>
-<p class="wordhead">Результаты олимпиад</p>
-    {% include 'header/header.html' %}
-    {% block header %}
-    {% endblock %}
+{% load form_filters %}
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <form method="get" class="space-y-6">
+        <div class="classroom">
+            <h1 class="text-xl font-bold mb-2">Класс:</h1>
+            <div class="cl">{{ filter.form.classroom|add_class:"block w-full mt-1 p-2 border rounded classroom-select" }}</div>
+        </div>
+        <div class="olympiad">
+            <h1 class="text-xl font-bold mb-2">Олимпиада:</h1>
+            <div class="ol">{{ filter.form.olympiad|add_class:"block w-full mt-1 p-2 border rounded olympiad-select" }}</div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Фильтровать</button>
+        </div>
+    </form>
 
-    {% include 'navbar/navbar.html' %}
-    {% block content %}
-    {% endblock %}
-    <div class="main">
-        <form method="get">
-            <div class="classroom">
-                <h1>Класс:</h1>
-                <div class="cl">{{ filter.form.classroom }}</div>
+    {% if user.is_admin %}
+    <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %}" class="input-file space-y-6 mt-6">
+        <div class="importblock">
+            {% csrf_token %}
+            <input type="file" name="excel_file" accept=".xlsx" id="file-input" class="hidden">
+            <label for="file-input" class="block bg-gray-200 text-gray-700 px-4 py-2 rounded cursor-pointer">Выберите файл</label>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Импортировать результаты</button>
             </div>
-            <div class="olympiad">
-                <h1>Олимпиада:</h1>
-                <div class="ol">{{ filter.form.olympiad }} </div>
-            </div>
-            <button type="submit" class="mainbtn" id="filterbtn">Фильтровать</button>
-        </form>
-        {% if user.is_admin %}
-        <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %}" class="input-file">
-            <div class="importblock">
-                {% csrf_token %}
-                <input type="file" name="excel_file" accept=".xlsx" id="file-input" class="file-input">
-                <label for="file-input" class="file-label">Выберите файл</label>
-                <button type="submit" class="mainbtn">Импортировать результаты</button>
-            </div>
-        </form>
-        {% endif %}
-        <form method="get" action="{% url 'result:export_results' %}">
-            <div class="exportblock">
-                <button type="submit" class="mainbtn">Экспортировать результаты</button>
-            </div>
-        </form>
-        <table border="1">
-            <thead>
-                <tr id="zagolovok">
-                    <th>Ученик</th>
-                    <th>Класс</th>
-                    <th>Олимпиада</th>
-                    <th>Результат</th>
-                    <th>Статус</th>
-                    <th>Дата</th>
+        </div>
+    </form>
+    {% endif %}
+
+    <form method="get" action="{% url 'result:export_results' %}" class="space-y-6 mt-6">
+        <div class="text-center">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Экспортировать результаты</button>
+        </div>
+    </form>
+
+    <div class="text-center mt-6 space-x-4">
+        <a href="{% url 'result:add_result_class' %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты классу</a>
+        <a href="{% url 'result:add_result' %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты ученику</a>
+    </div>
+
+    <div class="overflow-x-auto mt-6">
+        <table class="min-w-full bg-white">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="w-1/6 py-2">Ученик</th>
+                    <th class="w-1/6 py-2">Класс</th>
+                    <th class="w-1/6 py-2">Олимпиада</th>
+                    <th class="w-1/6 py-2">Результат</th>
+                    <th class="w-1/6 py-2">Статус</th>
+                    <th class="w-1/6 py-2">Дата</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-gray-700">
                 {% for result in filter.qs %}
-                    <tr>
-                        <td>{{ result.info_children.get_full_name }}</td>
-                        <td>{{ result.info_children.classroom }}</td>
-                        <td>{{ result.info_olympiad.name }}</td>
-                        <td>{{ result.points }}</td>
-                        <td>{{ result.get_status_result_display }}</td>
-                        <td>{{ result.date_added }}</td>
-                    </tr>
+                <tr>
+                    <td class="border px-4 py-2">{{ result.info_children.get_full_name }}</td>
+                    <td class="border px-4 py-2">{{ result.info_children.classroom }}</td>
+                    <td class="border px-4 py-2">{{ result.info_olympiad.name }}</td>
+                    <td class="border px-4 py-2">{{ result.points }}</td>
+                    <td class="border px-4 py-2">{{ result.get_status_result_display }}</td>
+                    <td class="border px-4 py-2">{{ result.date_added }}</td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        <script>
-            $(document).ready(function() {
-                $('.classroom-select').select2({
-                    placeholder: 'Выберите класс',
-                    allowClear: true
-                });
-
-                $('.olympiad-select').select2({
-                    placeholder: 'Выберите олимпиаду',
-                    allowClear: true
-                });
-
-                // Добавим обработчик событий для кнопки выбора файла
-                $('#file-input').on('change', function() {
-                    var fileName = $(this).val().split('\\').pop();
-                    $(this).next('.file-label').html(fileName);
-                });
-            });
-        </script>
     </div>
-</body>
-</html>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.classroom-select').select2({
+            placeholder: 'Выберите класс',
+            allowClear: true
+        });
+
+        $('.olympiad-select').select2({
+            placeholder: 'Выберите олимпиаду',
+            allowClear: true
+        });
+
+        // Добавим обработчик событий для кнопки выбора файла
+        $('#file-input').on('change', function () {
+            var fileName = $(this).val().split('\\').pop();
+            $(this).next('.file-label').html(fileName);
+        });
+    });
+</script>
+{% endblock %}

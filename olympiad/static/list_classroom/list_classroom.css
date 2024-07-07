@@ -2,7 +2,7 @@
 html {
     overflow: auto;
     font-family: Bahnschrift;
-    zoom: 85%;
+    /*zoom: 85%;*/
     max-width: 100%;
     max-height: 100%;
 }

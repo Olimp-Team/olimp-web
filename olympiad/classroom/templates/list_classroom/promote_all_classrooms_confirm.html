@@ -1,20 +1,21 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Подтверждение массового продвижения классов</title>
-    <link rel="stylesheet" href="{% static 'list_classroom/list_classroom.css' %}">
-</head>
-<body>
-<div class="container">
-    <h1>Подтверждение массового продвижения классов</h1>
-    <p>Вы уверены, что хотите продвинуть все текущие классы на следующий год?</p>
+
+{% block content %}
+
+
+<div class="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+    <h1 class="text-2xl font-bold mb-4">Подтверждение массового продвижения классов</h1>
+    <p class="mb-6">Вы уверены, что хотите продвинуть все текущие классы на следующий год?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Да, продвинуть все классы</button>
-        <a href="{% url 'classroom:list_classroom' %}">Отмена</a>
+        <div class="flex justify-between">
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Да, продвинуть все
+                классы
+            </button>
+            <a href="{% url 'classroom:list_classroom' %}"
+               class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Отмена</a>
+        </div>
     </form>
 </div>
-</body>
-</html>
+{% endblock %}

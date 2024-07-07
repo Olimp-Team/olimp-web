@@ -1,158 +1,158 @@
-{% extends 'base_friends.html' %}
+{% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-<h2>Чат с {{ other_user.username }}</h2>
-<div id="chat-log-container" class="chat-log-container">
-    <ul id="chat-log" class="chat-log">
-        {% for message in messages %}
-            <li id="message-{{ message.id }}" class="chat-message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                {% if message.sender.image %}
-                    <img src="{{ message.sender.image.url }}" alt="{{ message.sender.username }}" class="chat-avatar">
-                {% else %}
-                    <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ message.sender.username }}" class="chat-avatar">
-                {% endif %}
-                <div class="message-content-container">
-                    <strong>{{ message.sender.username }}:</strong>
-                    <span class="message-content">{{ message.content }}</span>
-                    <small>({{ message.timestamp }})</small>
+    <h2 class="text-2xl font-bold mb-4">Чат с {{ other_user.username }}</h2>
+    <div id="chat-log-container" class="overflow-y-scroll h-96 bg-white p-4 rounded shadow">
+        <ul id="chat-log" class="space-y-4">
+            {% for message in messages %}
+                <li id="message-{{ message.id }}"
+                    class="flex items-start space-x-4 {% if message.sender == request.user %}justify-end{% else %}justify-start{% endif %}">
+                    <img src=" {% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}""
+                         alt="{{ message.sender.username }}" class="w-12 h-12 rounded-full">
+                    <div class="max-w-xs bg-gray-200 p-2 rounded shadow-md">
+                        <div class="font-semibold">{{ message.sender.username }}</div>
+                        <div>{{ message.content }}</div>
+                        <small class="text-gray-500">{{ message.timestamp }}</small>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="mt-4 flex">
+        <input id="chat-message-input" type="text" class="flex-1 border border-gray-300 p-2 rounded-l-lg focus:outline-none" placeholder="Введите сообщение...">
+        <button id="chat-message-submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600">Отправить</button>
+    </div>
+
+    <div id="context-menu" class="hidden fixed bg-white border border-gray-300 rounded shadow-lg z-50">
+        <ul class="py-1">
+            <li id="reply" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Ответить</li>
+            <li id="edit" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Изменить</li>
+            <li id="delete" class="px-4 py-2 hover:bg-gray-200 cursor-pointer">Удалить</li>
+        </ul>
+    </div>
+
+    <script>
+        const roomName = "{{ other_user.username }}";
+        const chatSocket = new WebSocket(
+            (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            const chatLog = document.getElementById('chat-log');
+            const messageElement = document.createElement('li');
+            messageElement.id = `message-${data.id}`;
+            messageElement.className = `flex items-start space-x-4 ${data.sender === "{{ request.user.username }}" ? 'justify-end' : 'justify-start'}`;
+
+            const avatarUrl = data.avatar ? data.avatar : '{% static "homepage/img/default-ava.png" %}';
+
+            messageElement.innerHTML = `
+                <img src="${avatarUrl}" alt="${data.sender}" class="w-12 h-12 rounded-full">
+                <div class="max-w-xs bg-gray-200 p-2 rounded shadow-md">
+                    <div class="font-semibold">${data.sender}</div>
+                    <div>${data.message}</div>
+                    <small class="text-gray-500">${new Date(data.timestamp).toLocaleString()}</small>
                 </div>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-<input id="chat-message-input" type="text" class="chat-input">
-<button id="chat-message-submit" class="chat-submit">Отправить</button>
+            `;
 
-<div id="context-menu" class="context-menu">
-    <ul>
-        <li id="reply">Ответить</li>
-        <li id="edit">Изменить</li>
-        <li id="delete">Удалить</li>
-    </ul>
-</div>
+            chatLog.appendChild(messageElement);
+        };
 
-<script>
-    const roomName = "{{ other_user.username }}";
-    const chatSocket = new WebSocket(
-        (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws/chat/' + roomName + '/'
-    );
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
 
-    chatSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        const chatLog = document.getElementById('chat-log');
-        const messageElement = document.createElement('li');
-        messageElement.id = `message-${data.id}`;
-        messageElement.className = `chat-message ${data.sender === "{{ request.user.username }}" ? 'sent' : 'received'}`;
-
-        const avatarUrl = data.avatar ? data.avatar : '{% static "homepage/img/default-ava.png" %}';
-        const updateUrl = '{% url "chat:update_message" 0 %}'.replace('0', data.id);
-        const deleteUrl = '{% url "chat:delete_message" 0 %}'.replace('0', data.id);
-
-        messageElement.innerHTML = `
-            <img src="${avatarUrl}" alt="${data.sender}" class="chat-avatar">
-            <div class="message-content-container">
-                <strong>${data.sender}:</strong> <span class="message-content">${data.message}</span> <small>(${new Date().toLocaleString()})</small>
-            </div>
-        `;
-
-        chatLog.appendChild(messageElement);
-    };
-
-    chatSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
-    };
-
-    document.getElementById('chat-message-input').focus();
-    document.getElementById('chat-message-input').onkeyup = function(e) {
-        if (e.keyCode === 13) {
-            document.getElementById('chat-message-submit').click();
-        }
-    };
-
-    document.getElementById('chat-message-submit').onclick = function(e) {
-        if (chatSocket.readyState === WebSocket.OPEN) {
-            const messageInputDom = document.getElementById('chat-message-input');
-            const message = messageInputDom.value;
-            chatSocket.send(JSON.stringify({
-                'message': message
-            }));
-            messageInputDom.value = '';
-        } else {
-            console.error('WebSocket is not open.');
-        }
-    };
-
-    function deleteMessage(messageId, url) {
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
+        document.getElementById('chat-message-input').focus();
+        document.getElementById('chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {  // Enter key
+                document.getElementById('chat-message-submit').click();
             }
-        }).then(response => {
-            if (response.ok) {
-                document.getElementById(`message-${messageId}`).remove();
-            }
-        });
-    }
+        };
 
-    function enableEditMessage(messageId) {
-        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
-        const newContent = prompt("Введите новое сообщение:", messageContentElement.innerText);
-        if (newContent) {
-            fetch(`{% url 'chat:update_message' 0 %}`.replace('0', messageId), {
+        document.getElementById('chat-message-submit').onclick = function (e) {
+            if (chatSocket.readyState === WebSocket.OPEN) {
+                const messageInputDom = document.getElementById('chat-message-input');
+                const message = messageInputDom.value;
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInputDom.value = '';
+            } else {
+                console.error('WebSocket is not open.');
+            }
+        };
+
+        function deleteMessage(messageId, url) {
+            fetch(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: `content=${encodeURIComponent(newContent)}`
-            }).then(response => response.json())
-              .then(data => {
-                if (data.status === 'ok') {
-                    messageContentElement.innerText = data.content;
+                }
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById(`message-${messageId}`).remove();
                 }
             });
         }
-    }
 
-    function replyMessage(messageId) {
-        const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
-        const messageInputDom = document.getElementById('chat-message-input');
-        messageInputDom.value = `@${messageContentElement.previousElementSibling.innerText.trim()}: ${messageContentElement.innerText}\n` + messageInputDom.value;
-        messageInputDom.focus();
-    }
-
-    // Context menu
-    const contextMenu = document.getElementById('context-menu');
-    let contextMessageId = null;
-
-    document.addEventListener('contextmenu', function(event) {
-        const messageElement = event.target.closest('.chat-message');
-        if (messageElement) {
-            event.preventDefault();
-            contextMessageId = messageElement.id.split('-')[1];
-            contextMenu.style.top = `${event.pageY}px`;
-            contextMenu.style.left = `${event.pageX}px`;
-            contextMenu.classList.add('active');
+        function enableEditMessage(messageId) {
+            const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
+            const newContent = prompt("Введите новое сообщение:", messageContentElement.innerText);
+            if (newContent) {
+                fetch(`{% url 'chat:update_message' 0 %}`.replace('0', messageId), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: `content=${encodeURIComponent(newContent)}`
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'ok') {
+                            messageContentElement.innerText = data.content;
+                        }
+                    });
+            }
         }
-    });
 
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('#context-menu')) {
-            contextMenu.classList.remove('active');
+        function replyMessage(messageId) {
+            const messageContentElement = document.querySelector(`#message-${messageId} .message-content`);
+            const messageInputDom = document.getElementById('chat-message-input');
+            messageInputDom.value = `@${messageContentElement.previousElementSibling.innerText.trim()}: ${messageContentElement.innerText}\n` + messageInputDom.value;
+            messageInputDom.focus();
         }
-    });
 
-    document.getElementById('delete').onclick = function() {
-        deleteMessage(contextMessageId, `{% url 'chat:delete_message' 0 %}`.replace('0', contextMessageId));
-    };
+        // Context menu
+        const contextMenu = document.getElementById('context-menu');
+        let contextMessageId = null;
 
-    document.getElementById('edit').onclick = function() {
-        enableEditMessage(contextMessageId);
-    };
+        document.addEventListener('contextmenu', function (event) {
+            const messageElement = event.target.closest('.chat-message');
+            if (messageElement) {
+                event.preventDefault();
+                contextMessageId = messageElement.id.split('-')[1];
+                contextMenu.style.top = `${event.pageY}px`;
+                contextMenu.style.left = `${event.pageX}px`;
+                contextMenu.classList.add('active');
+            }
+        });
 
-    document.getElementById('reply').onclick = function() {
-        replyMessage(contextMessageId);
-    };
-</script>
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('#context-menu')) {
+                contextMenu.classList.remove('active');
+            }
+        });
+
+        document.getElementById('delete').onclick = function () {
+            deleteMessage(contextMessageId, `{% url 'chat:delete_message' 0 %}`.replace('0', contextMessageId));
+        };
+
+        document.getElementById('edit').onclick = function () {
+            enableEditMessage(contextMessageId);
+        };
+
+        document.getElementById('reply').onclick = function () {
+            replyMessage(contextMessageId);
+        };
+    </script>
 {% endblock %}

@@ -1,31 +1,14 @@
+{% extends 'base_olimp.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="{% static 'upload/upload.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
-    <title>Olimp | Импорт пользователей</title>
-</head>
-{% include 'header/header.html' %}
-<p class="wordhead">Импорт пользователей из Excel</p>
-{% block header %}
-{% endblock %}
-
-{% include 'navbar/navbar.html' %}
 {% block content %}
-{% endblock %}
-<body>
-    <div class="main">
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <h1>File</h1>
-    {{ form.file }}
-    <button type="submit" class="save">Загрузить</button>
-</form>
-{#<a href="{% url 'docs:generate_pdf' %}" class="btn btn-primary">Сгенерировать PDF</a>#}
-
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-4">Загрузить файл</h1>
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        <div>
+            {{ form.file }}
+        </div>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Загрузить</button>
+    </form>
 </div>
-</body>
-</html>
+{% endblock %}

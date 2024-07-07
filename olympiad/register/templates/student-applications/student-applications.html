@@ -1,72 +1,82 @@
+{% extends 'base_olimp.html' %}
 {% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'student-applications/student-applications.css' %}" id="them">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <title>Olimp | Заявки вашего класса</title>
-</head>
-<body>
-{% include 'header/header.html' %}
-{% include 'navbar/navbar.html' %}
-
-<div class="main">
-    <div class="toptext">
-        <h1 class="toptext1">Заявки учеников</h1>
-        <a href="{% url 'docs:download_teacher_applications_zip' %}" class="btn btn-primary">Скачать заявки класса (ZIP)</a>
-        <h2 class="toptext2">Класс {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }}</h2>
-    </div>
-    <div class="topbuttons">
-        <a class="buttonspispeople" type="submit">Список участников</a>
-        <a class="buttonsend" href="{% url 'register:register_send_teacher' %}">Отправить заявку</a>
-        <a class="buttonrecommend" href="{% url 'register:add_recommendation' %}">Добавить рекомендацию</a>
-    </div>
-    <div class="tablespisok">
-        <div class="zagolovok">
-            <table class="mainspisokpoepletable">
-                <thead>
-                    <tr>
-                        <th><div id="textid">ID</div></th>
-                        <th><div id="textychenik">Ученик</div></th>
-                        <th><div id="textolimp">Олимпиада</div></th>
-                        <th><div id="textstage">Этап</div></th>
-                        <th><div id="textgender">Пол</div></th>
-                        <th><div id="textdate">Дата рождения</div></th>
-                        <th><div id="textdeistie">Действие</div></th>
-                    </tr>
-                </thead>
-            </table>
+{% block content %}
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div class="toptext mb-6">
+            <h1 class="text-2xl font-bold mb-4">Заявки учеников</h1>
+            <a href="{% url 'docs:download_teacher_applications_zip' %}"
+               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Скачать заявки класса (ZIP)</a>
+            <h2 class="text-lg text-gray-700 mt-4">Класс
+                {{ user.classroom_guide.number }}{{ user.classroom_guide.letter }}</h2>
         </div>
-
-        {% for student, olympiads in student_olympiads.items %}
-        <div class="mainspisokpoeple">
-            <div class="nameid">{{ student.id }}</div>
-            <div class="namefio">{{ student.last_name }} {{ student.first_name }} {{ student.surname }}</div>
-            <table class="tableolimps">
-                <tbody>
-                    {% for olympiad in olympiads %}
+        <div class="topbuttons flex space-x-4 mb-6">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Список участников</button>
+            <a href="{% url 'register:register_send_teacher' %}"
+               class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Отправить заявку</a>
+            <a href="{% url 'register:add_recommendation' %}"
+               class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Добавить рекомендацию</a>
+        </div>
+        <div class="tablespisok">
+            <div class="zagolovok mb-4">
+                <table class="min-w-full bg-white divide-y divide-gray-200">
+                    <thead>
                     <tr>
-                        <td>
-                            <div class="olimps">
-                                <li>
-                                    {{ olympiad.name }} (ID: {{ olympiad.id }})
-                                    <form method="post" action="{% url 'register:delete_register' olympiad.id student.id %}" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button type="submit">Удалить</button>
-                                    </form>
-                                </li>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Ученик
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Олимпиада
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Этап
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Пол
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата
+                            рождения
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Действие
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+
+            {% for student, olympiads in student_olympiads.items %}
+                <div class="mainspisokpoeple mb-6">
+                    <div class="bg-gray-100 p-4 rounded-lg shadow mb-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="nameid w-1/12">{{ student.id }}</div>
+                            <div class="namefio w-4/12">{{ student.last_name }} {{ student.first_name }} {{ student.surname }}</div>
+                            <div class="w-7/12">
+                                <table class="min-w-full bg-white divide-y divide-gray-200">
+                                    <tbody>
+                                    {% for olympiad in olympiads %}
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                                {{ olympiad.name }} (ID: {{ olympiad.id }})
+                                                <form method="post"
+                                                      action="{% url 'register:delete_register' olympiad.id student.id %}"
+                                                      class="inline-block ml-4">
+                                                    {% csrf_token %}
+                                                    <button type="submit"
+                                                            class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
+                                                        Удалить
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

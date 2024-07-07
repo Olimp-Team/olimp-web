@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import *
 from users.models import User
@@ -32,7 +32,7 @@ class TeacherClassroomGuide(View, LoginRequiredMixin):
         if request.user.is_teacher:
             classroom_teacher = Classroom.objects.filter(teacher__classroom_guide=request.user.classroom_guide)
             context = {
-                'classroom_teacher': classroom_teacher
+                'classrooms': classroom_teacher
             }
             return render(request, 'list_classroom_teacher/list_classroom.html', context)
 
@@ -91,6 +91,19 @@ class ClassroomCreateView(CreateView):
     form_class = ClassroomForm
     template_name = 'classroom_add/classroom_form.html'
     success_url = reverse_lazy('classroom:list_classroom')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_students'] = User.objects.filter(is_child=True)  # Фильтрация только учеников
+        context['class_students'] = self.get_class_students()
+        return context
+
+    def get_class_students(self):
+        classroom_id = self.kwargs.get('pk')
+        if classroom_id:
+            classroom = get_object_or_404(Classroom, pk=classroom_id)
+            return classroom.child.all()
+        return User.objects.none()
 
 
 class ClassroomUpdateView(UpdateView):

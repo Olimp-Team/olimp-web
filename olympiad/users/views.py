@@ -20,7 +20,7 @@ class AuthLogin(View):
             return HttpResponseRedirect(reverse('main:home'))
         form = UserLoginForm()
         context = {'form': form}
-        return render(request, "auth/auth.html", context)
+        return render(request, "auth/auth 2.html", context)
 
     def post(self, request):
         form = UserLoginForm(data=request.POST)

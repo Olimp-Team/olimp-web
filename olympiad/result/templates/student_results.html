@@ -1,41 +1,29 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Результаты ученика | Olimp</title>
-    <link rel="stylesheet" href="{% static 'student_results.css' %}">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-</head>
-<body>
-{% include 'header/header.html' %}
-{% include 'navbar/navbar.html' %}
-
-<div class="main">
-    <div class="container">
-        <h1>Результаты ученика</h1>
-        <table class="results-table">
-            <thead>
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-2xl font-bold mb-6">Результаты ученика</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th>Олимпиада</th>
-                    <th>Очки</th>
-                    <th>Статус</th>
-                    <th>Дата</th>
+                    <th class="py-2 px-4 border-b">Олимпиада</th>
+                    <th class="py-2 px-4 border-b">Очки</th>
+                    <th class="py-2 px-4 border-b">Статус</th>
+                    <th class="py-2 px-4 border-b">Дата</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="text-gray-700">
                 {% for result in results %}
                 <tr>
-                    <td>{{ result.info_olympiad.name }}</td>
-                    <td>{{ result.points }}</td>
-                    <td>{{ result.get_status_result_display }}</td>
-                    <td>{{ result.date_added|date:"d.m.Y" }}</td>
+                    <td class="py-2 px-4 border-b">{{ result.info_olympiad.name }}</td>
+                    <td class="py-2 px-4 border-b">{{ result.points }}</td>
+                    <td class="py-2 px-4 border-b">{{ result.get_status_result_display }}</td>
+                    <td class="py-2 px-4 border-b">{{ result.date_added|date:"d.m.Y" }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-</body>
-</html>
+{% endblock %}

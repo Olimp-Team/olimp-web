@@ -1,66 +1,58 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="{% static 'children_list_admin/children_list_admin.css' %}" id="them">
-    <link rel="stylesheet" href="{% static 'header/header.css' %}">
-    <link rel="stylesheet" href="{% static 'navbar/navbar.css' %}">
-    <link rel="icon" href="{% static 'list_classroom/img/logoolimp.jpg' %}">
-    <title>Olimp | Список учеников</title>
-</head>
-{% include 'header/header.html' %}
-{% block header %}
-{% endblock %}
-{% include 'navbar/navbar.html' %}
 {% block content %}
+    <div class="mb-4">
+        <h1 class="text-3xl font-bold">Список учеников</h1>
+        <h2 class="text-xl text-gray-600">Класс: {{ classroom.number }}{{ classroom.letter }}</h2>
+    </div>
+
+    <div class="flex justify-between mb-4">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Список участников</button>
+        <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{% url 'users:CreateChild' %}">Добавить ученика</a>
+    </div>
+
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ID
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        ФИО
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Пол
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Дата рождения
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Действия
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for child in child %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ child.id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ child.first_name }} {{ child.last_name }} {{ child.surname }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ child.gender }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ child.birth_date }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <a href="{% url 'classroom:child_remove_admin' child.id %}" class="text-red-600 hover:text-red-900">Удалить</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
-<body>
-
-
-
-<div class="main">
-    <div class="toptext">
-        <h1 class="toptext1">Список учеников</h1>
-        <h2 class="toptext2">Класс: {{ classroom.number }}{{ classroom.letter }}</h2>
-    </div>
-    <div class="topbuttons">
-        <input class="buttonspispeople" type="submit" value="Список участников"/>
-    </div>
-    <div class="tablespisok">
-        <div class="zagolovok">
-            <table class="mainspisokpoepletable">
-                <th>
-                    <div id="id">ID</div>
-                </th>
-                <th>
-                    <div id="textsurname">ФИО</div>
-                </th>
-                <th>
-                    <div id="textgender">Пол</div>
-                </th>
-                <th>
-                    <div id="textbirth">Дата рождения</div>
-                </th>
-
-            </table>
-
-        </div>
-        {% for child in child %}
-        <div class="mainspisokpoeple">
-            <div class="surname">{{ child.id }}</div>
-            <div class="name">{{ child.last_name }} {{ child.first_name }} {{ child.surname }}</div>
-            <div class="gender">{{ child.gender }}</div>
-            <div class="birth">{{ child.birth_date }}</div>
-
-
-            <a class="buttonedit" type="submit" value="Изменить"
-               href="{% url 'classroom:child_remove_admin' child.id %}">Удалить</a>
-
-        </div>
-        {% endfor %}
-
-    </div>
-</div>
-</body>
-</html>

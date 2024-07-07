@@ -16,9 +16,11 @@ from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequired
 class RegisterPage(ChildRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_child:
+            # Предположим, что значение для школьного этапа - "Школьный этап"
+            school_stage = Stage.objects.get(name='Школьный')
             context = {
-                'olympiads': Olympiad.objects.filter(class_olympiad=request.user.classroom.number),
-                'olympiads_last': Olympiad.objects.filter(class_olympiad=request.user.classroom.number).last()
+                'olympiads': Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage),
+                'olympiads_last': Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage).last()
             }
             return render(request, 'register-olympiad/register-olympiad.html', context)
         else:
@@ -29,6 +31,7 @@ class RegisterPage(ChildRequiredMixin, View):
             pass
         else:
             return HttpResponseForbidden()
+
 
 
 class RegisterAdd(ChildRequiredMixin, View):
@@ -232,9 +235,10 @@ class RegisterSendTeacher(TeacherRequiredMixin, View):
 class AddRecommendation(TeacherRequiredMixin, View):
     def get(self, request):
         if request.user.is_teacher:
+            school_stage = Stage.objects.get(name='Школьный')
             context = {
                 'students': User.objects.filter(is_child=True),
-                'olympiads': Olympiad.objects.all(),
+                'olympiads': Olympiad.objects.all(stage=school_stage),
                 'teachers': User.objects.filter(is_teacher=True)
             }
             return render(request, 'add-recommendation/add-recommendation.html', context)

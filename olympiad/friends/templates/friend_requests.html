@@ -1,23 +1,19 @@
-<!DOCTYPE html>
+{% extends 'base_olimp.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
 
-    <link rel="stylesheet" href="{% static 'friends.css' %}">
-</head>
-
-<body>
-<h2>Запросы в друзья</h2>
-<ul>
-    {% for request in friend_requests %}
-        <li>
-            {{ request.from_user.get_full_name }}
-            <a href="{% url 'friends:accept_friend_request' request.id %}">Принять</a>
-            <a href="{% url 'friends:reject_friend_request' request.id %}">Отклонить</a>
-        </li>
-    {% endfor %}
-</ul>
-</body>
-</html>
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Запросы в друзья</h2>
+    <ul class="space-y-4">
+        {% for request in friend_requests %}
+            <li class="flex justify-between items-center p-4 border-b border-gray-200">
+                <span class="text-lg">{{ request.from_user.get_full_name }}</span>
+                <div class="space-x-2">
+                    <a href="{% url 'friends:accept_friend_request' request.id %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Принять</a>
+                    <a href="{% url 'friends:reject_friend_request' request.id %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Отклонить</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
