@@ -235,9 +235,10 @@ class RegisterSendTeacher(TeacherRequiredMixin, View):
 class AddRecommendation(TeacherRequiredMixin, View):
     def get(self, request):
         if request.user.is_teacher:
+            school_stage = Stage.objects.get(name='Школьный')
             context = {
                 'students': User.objects.filter(is_child=True),
-                'olympiads': Olympiad.objects.all(stage='Школьный'),
+                'olympiads': Olympiad.objects.filter(stage=school_stage),
                 'teachers': User.objects.filter(is_teacher=True)
             }
             return render(request, 'add-recommendation/add-recommendation.html', context)
