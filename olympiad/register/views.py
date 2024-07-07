@@ -237,7 +237,7 @@ class AddRecommendation(TeacherRequiredMixin, View):
         if request.user.is_teacher:
             context = {
                 'students': User.objects.filter(is_child=True),
-                'olympiads': Olympiad.objects.all(),
+                'olympiads': Olympiad.objects.all(stage='Школьный'),
                 'teachers': User.objects.filter(is_teacher=True)
             }
             return render(request, 'add-recommendation/add-recommendation.html', context)
