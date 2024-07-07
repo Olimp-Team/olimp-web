@@ -37,7 +37,7 @@ class AuthLogin(View):
                     request.session.set_expiry(0)  # Закрыть сессию после закрытия браузера
                 return HttpResponseRedirect(reverse('main:home'))
         context = {'form': form}
-        return render(request, "auth/auth.html", context)
+        return render(request, "auth/auth 2.html", context)
 
 
 # class ProfileView(LoginRequiredMixin, View):

@@ -1,4 +1,4 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -20,7 +20,8 @@ class RegisterPage(ChildRequiredMixin, View):
             school_stage = Stage.objects.get(name='Школьный')
             context = {
                 'olympiads': Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage),
-                'olympiads_last': Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage).last()
+                'olympiads_last': Olympiad.objects.filter(class_olympiad=request.user.classroom.number,
+                                                          stage=school_stage).last()
             }
             return render(request, 'register-olympiad/register-olympiad.html', context)
         else:
@@ -31,7 +32,6 @@ class RegisterPage(ChildRequiredMixin, View):
             pass
         else:
             return HttpResponseForbidden()
-
 
 
 class RegisterAdd(ChildRequiredMixin, View):
@@ -115,7 +115,7 @@ class BasketStudentApp(ChildRequiredMixin, View):
             context = {
                 'register': Register.objects.filter(child=request.user, status_send=False),
                 'recommendations': Recommendation.objects.filter(child=request.user, status=False),
-                'register_sends': Register_send.objects.filter(child_send=request.user)  # Добавляем отправленные заявки
+                'register_sends': Register.objects.filter(child=request.user, status_send=True)  # Добавляем отправленные заявки
             }
             return render(request, 'basket-student-applications/basket-student-applications.html', context)
         else:
@@ -266,6 +266,24 @@ class AddRecommendation(TeacherRequiredMixin, View):
             return HttpResponseRedirect(reverse_lazy('main:home'))
         else:
             return HttpResponseForbidden()
+
+
+class GetOlympiadsForStudent(View):
+    def get(self, request):
+        school_stage = Stage.objects.get(name='Школьный')
+        student_id = request.GET.get('student_id')
+        student = User.objects.get(id=student_id)
+        olympiads = Olympiad.objects.filter(class_olympiad=student.classroom.number, stage=school_stage)
+        olympiads_data = [
+            {
+                'id': olympiad.id,
+                'name': olympiad.name,
+                'stage': olympiad.stage.name,
+                'class': olympiad.class_olympiad
+            }
+            for olympiad in olympiads
+        ]
+        return JsonResponse({'olympiads': olympiads_data})
 
 
 class ProcessRecommendation(TeacherRequiredMixin, View):
