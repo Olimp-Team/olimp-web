@@ -28,30 +28,49 @@ class UserLoginForm(AuthenticationForm):
         fields = ('username', 'password')
 
 
-class UserProfileForm(UserChangeForm):
-    # Форма для смены имени пользователя, почты, аватарки на странице профиля
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'type': "input",
-        'id': "nameedit",
-        'placeholder': "Введите имя пользователя",
-        'name': "nameedit",
-    }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'type': "input",
-        'id': "emailedit",
-        'placeholder': "Введите свою почту",
-        'name': "emailedit",
-    }))
-    image = forms.ImageField(widget=forms.FileInput(attrs={
-        'class': "newphoto",
-        # 'type': "button",
-        # 'value': "Загрузить новое фото",
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from .models import User  # Убедитесь, что путь к модели User правильный
 
-    }), required=False)
+
+class UserProfileForm(UserChangeForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50',
+            'placeholder': "Введите имя пользователя"
+        })
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50',
+            'placeholder': "Введите свою почту"
+        })
+    )
+    birth_date = forms.DateField(
+        widget=forms.DateInput(attrs={
+            'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50',
+            'placeholder': "Введите дату рождения",
+            'type': 'date'
+        })
+    )
+    gender = forms.ChoiceField(
+        choices=User.GENDER_CHOICES,
+        widget=forms.Select(attrs={
+            'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50'
+        })
+    )
+    image = forms.ImageField(
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'hidden',
+            'id': 'file-input',
+            'onchange': 'loadFile(event)'
+        })
+    )
 
     class Meta:
         model = User
-        fields = ('image', 'username', 'email')
+        fields = ('username', 'email', 'birth_date', 'gender', 'image')
 
 
 class NewChildForm(forms.ModelForm):

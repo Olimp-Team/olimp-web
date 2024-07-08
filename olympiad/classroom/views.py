@@ -112,9 +112,35 @@ class ClassroomUpdateView(UpdateView):
     template_name = 'classroom_add/classroom_form.html'
     success_url = reverse_lazy('classroom:list_classroom')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_students'] = User.objects.filter(is_child=True)  # Фильтрация только учеников
+        context['class_students'] = self.get_class_students()
+        return context
+
+    def get_class_students(self):
+        classroom_id = self.kwargs.get('pk')
+        if classroom_id:
+            classroom = get_object_or_404(Classroom, pk=classroom_id)
+            return classroom.child.all()
+        return User.objects.none()
+
 
 class ClassroomDeleteView(DeleteView):
     model = Classroom
     form_class = ClassroomForm
     template_name = 'classroom_add/classroom_confirm_delete.html'
     success_url = reverse_lazy('classroom:list_classroom')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['all_students'] = User.objects.filter(is_child=True)  # Фильтрация только учеников
+        context['class_students'] = self.get_class_students()
+        return context
+
+    def get_class_students(self):
+        classroom_id = self.kwargs.get('pk')
+        if classroom_id:
+            classroom = get_object_or_404(Classroom, pk=classroom_id)
+            return classroom.child.all()
+        return User.objects.none()

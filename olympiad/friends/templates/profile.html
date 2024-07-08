@@ -4,11 +4,17 @@
 <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
     <h2 class="text-2xl font-bold mb-4">Профиль пользователя</h2>
     <div class="profile flex flex-col items-center">
-        {% if user.image %}
-            <img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4">
-        {% else %}
-            <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4">
-        {% endif %}
+        <div class="relative">
+            {% if user.image %}
+                <img id="avatar" src="{{ user.image.url }}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4 object-cover">
+            {% else %}
+                <img id="avatar" src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4 object-cover">
+            {% endif %}
+            <label for="file-input" class="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600">
+                <i class="fas fa-camera"></i>
+            </label>
+            {{ form.image }}
+        </div>
         <p class="text-lg"><strong>Имя:</strong> {{ user.get_full_name }}</p>
         <p class="text-lg"><strong>Логин:</strong> {{ user.username }}</p>
         <p class="text-lg"><strong>Дата рождения:</strong> {{ user.birth_date }}</p>
@@ -17,10 +23,85 @@
         {% if is_owner %}
             <form method="post" enctype="multipart/form-data" class="w-full mt-4">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="mb-4">
+                    <label for="username" class="block text-sm font-medium text-gray-700">Имя пользователя</label>
+                    {{ form.username }}
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Электронная почта</label>
+                    {{ form.email }}
+                </div>
+                <div class="mb-4">
+                    <label for="birth_date" class="block text-sm font-medium text-gray-700">Дата рождения</label>
+                    {{ form.birth_date }}
+                </div>
+                <div class="mb-4">
+                    <label for="gender" class="block text-sm font-medium text-gray-700">Пол</label>
+                    {{ form.gender }}
+                </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Сохранить изменения</button>
             </form>
         {% endif %}
     </div>
 </div>
+
+<!-- Модальное окно для обрезки изображения -->
+<div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+            <div class="p-4">
+                <h2 class="text-lg leading-6 font-medium text-gray-900">Обрезка изображения</h2>
+                <div class="mt-2">
+                    <img id="image-cropper" class="w-full">
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button type="button" class="mr-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="closeModal()">Отмена</button>
+                    <button type="button" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" onclick="cropImage()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let cropper;
+    const fileInput = document.getElementById('file-input');
+    const avatar = document.getElementById('avatar');
+    const modal = document.getElementById('modal');
+    const imageCropper = document.getElementById('image-cropper');
+
+    fileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imageCropper.src = e.target.result;
+            openModal();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function openModal() {
+        modal.classList.remove('hidden');
+        cropper = new Cropper(imageCropper, {
+            aspectRatio: 1,
+            viewMode: 1,
+            preview: '.img-preview',
+        });
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+        cropper.destroy();
+    }
+
+    function cropImage() {
+        const canvas = cropper.getCroppedCanvas({
+            width: 300,
+            height: 300,
+        });
+        avatar.src = canvas.toDataURL();
+        closeModal();
+    }
+</script>
 {% endblock %}
