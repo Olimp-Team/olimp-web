@@ -54,7 +54,7 @@ class Recommendation(models.Model):
     recommended_to = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_to')
     child = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_for')
     Olympiad = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE)
-    # created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=False)  # Принята ли рекомендация классным руководителем
 
     class Meta:

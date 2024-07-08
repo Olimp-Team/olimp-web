@@ -37,7 +37,7 @@
 <body class="bg-gray-100 flex flex-col h-screen">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <!-- Шапка (header) -->
-<header class="w-full bg-white p-4 border-b border-gray-200 flex justify-between items-center font-bahnschrift">
+<header class="w-full bg-white p-4 border-b border-gray-200 flex justify-between items-center text-gray-700 ">
     <div class="flex items-center">
         <img class="h-8 w-8" src="{% static 'homepage/img/logoolimp.jpg' %}" alt="Logo">
         <p class="ml-3 text-lg font-semibold text-gray-700">Olimp</p>
@@ -67,36 +67,11 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'chat:chat_list' %}"
-                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-envelope mr-3"></i> Сообщения
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'friends:view_friends' %}"
-                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-user-friends mr-3"></i> Мои друзья
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'friends:view_friend_requests' %}"
-                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-user-plus mr-3"></i> Запросы в друзья
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'friends:search_friends' %}"
-                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-search mr-3"></i> Поиск друзья
-                    </a>
-                </li>
-                <li>
                     <a href="{% url 'users:profile' user.id %}"
                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                         <i class="fas fa-user mr-3"></i> Профиль
                     </a>
                 </li>
-
                 {% if user.is_child %}
                     <li>
                         <button class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
@@ -241,7 +216,30 @@
                         </a>
                     </li>
                 {% endif %}
-
+                <li>
+                    <a href="{% url 'chat:chat_list' %}"
+                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-envelope mr-3"></i> Сообщения
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'friends:view_friends' %}"
+                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-user-friends mr-3"></i> Мои друзья
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'friends:view_friend_requests' %}"
+                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-user-plus mr-3"></i> Запросы в друзья
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'friends:search_friends' %}"
+                       class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-search mr-3"></i> Поиск друзья
+                    </a>
+                </li>
                 <li>
                     <a href="{% url 'users:logout' %}"
                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">

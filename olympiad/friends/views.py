@@ -7,7 +7,10 @@ from friendship.exceptions import AlreadyExistsError
 from friendship.models import Friend, FriendshipRequest
 from users.models import User
 from django.contrib import messages
-
+from django.core.files.base import ContentFile
+import base64
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from users.forms import UserProfileForm
 
 
@@ -98,7 +101,24 @@ class ProfileView(LoginRequiredMixin, View):
         if form.is_valid():
             form.save()
             return redirect(reverse('users:profile', kwargs={'user_id': user.id}))
-        else:
-            print(form.errors)
         context = {'form': form, 'user': user, 'is_owner': True}
         return render(request, 'profile.html', context)
+
+
+@csrf_exempt
+def save_cropped_image(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        image_data = request.POST.get('image')
+        if image_data:
+            format, imgstr = image_data.split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'{request.user.username}_avatar.{ext}')
+
+            user = get_object_or_404(User, id=request.user.id)
+            user.image.save(data.name, data)
+            user.save()
+
+            return JsonResponse({'status': 'success', 'url': user.image.url})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'No image data found.'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request.'})
