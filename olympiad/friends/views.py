@@ -42,7 +42,7 @@ def accept_friend_request(request, request_id):
     """Принятие запроса на добавление в друзья"""
     friend_request = FriendshipRequest.objects.get(id=request_id)
     friend_request.accept()
-    return redirect('friends:friend_requests')
+    return redirect('friends:view_friend_requests')
 
 
 @login_required
