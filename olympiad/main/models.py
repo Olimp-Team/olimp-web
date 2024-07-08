@@ -38,7 +38,7 @@ class AuditLog(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Время действия')
 
     def __str__(self):
-        return f'{self.user} - {self.action} - {self.object_name} - {self.timestamp.strftime('%d-%m-%Y')}'
+        return f'{self.user} - {self.action} - {self.object_name}'
 
 
 class Subject(models.Model):
