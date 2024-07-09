@@ -56,7 +56,11 @@
 <div class="bg-white shadow rounded-lg p-6">
     <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-bold">Недавние результаты</h2>
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Показать все</button>
+        {% if user.is_child or user.is_teacher %}
+            <a href="{% url 'result:student_results' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Показать все</a>
+        {% else %}
+            <a href="{% url 'docs:dashboard' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Показать все</a>
+        {% endif %}
     </div>
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white divide-y divide-gray-200">
