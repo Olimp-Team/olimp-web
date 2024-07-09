@@ -19,12 +19,15 @@ class OlympiadResultForm(forms.ModelForm):
     )
 
 
+from .widgets import CustomModelChoiceField
+
+
 class OlympiadResultClassForm(forms.Form):
     classroom = forms.ModelChoiceField(
         queryset=Classroom.objects.all(),
         widget=forms.Select(attrs={'class': 'classroom-select'})
     )
-    olympiad = forms.ModelChoiceField(
+    olympiad = CustomModelChoiceField(
         queryset=Olympiad.objects.all(),
         widget=forms.Select(attrs={'class': 'olympiad-select'})
     )

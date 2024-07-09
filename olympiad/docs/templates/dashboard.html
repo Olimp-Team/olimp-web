@@ -46,12 +46,14 @@
         <form method="get" id="filterForm" class="space-y-4">
             <div>
                 <label for="start-date" class="block text-gray-700">Начальная дата</label>
-                <input type="text" id="start-date" name="start-date" value="{{ request.GET.start_date }}" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <input type="text" id="start-date" name="start-date" value="{{ request.GET.start_date }}"
+                       class="w-full p-2 border border-gray-300 rounded mt-1">
             </div>
 
             <div>
                 <label for="end-date" class="block text-gray-700">Конечная дата</label>
-                <input type="text" id="end-date" name="end-date" value="{{ request.GET.end_date }}" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <input type="text" id="end-date" name="end-date" value="{{ request.GET.end_date }}"
+                       class="w-full p-2 border border-gray-300 rounded mt-1">
             </div>
 
             <div>
@@ -59,7 +61,8 @@
                 <select id="class" name="class" class="w-full p-2 border border-gray-300 rounded mt-1">
                     <option value="">Выберите класс</option>
                     {% for class in classrooms %}
-                        <option value="{{ class.id }}" {% if class.id|stringformat:"s" == request.GET.class %}selected{% endif %}>
+                        <option value="{{ class.id }}"
+                                {% if class.id|stringformat:"s" == request.GET.class %}selected{% endif %}>
                             {{ class.number }} {{ class.letter }}
                         </option>
                     {% endfor %}
@@ -71,7 +74,8 @@
                 <select id="subject" name="subject" class="w-full p-2 border border-gray-300 rounded mt-1">
                     <option value="">Выберите предмет</option>
                     {% for subject in subjects %}
-                        <option value="{{ subject.id }}" {% if subject.id|stringformat:"s" == request.GET.subject %}selected{% endif %}>
+                        <option value="{{ subject.id }}"
+                                {% if subject.id|stringformat:"s" == request.GET.subject %}selected{% endif %}>
                             {{ subject.name }}
                         </option>
                     {% endfor %}
@@ -80,7 +84,8 @@
 
             <div>
                 <label for="student" class="block text-gray-700">Ученик</label>
-                <input type="text" id="student" name="student" placeholder="Введите имя ученика" value="{{ request.GET.student }}" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <input type="text" id="student" name="student" placeholder="Введите имя ученика"
+                       value="{{ request.GET.student }}" class="w-full p-2 border border-gray-300 rounded mt-1">
             </div>
 
             <div>
@@ -88,16 +93,47 @@
                 <select id="olympiad" name="olympiad" class="w-full p-2 border border-gray-300 rounded mt-1">
                     <option value="">Выберите олимпиаду</option>
                     {% for olympiad in olympiads %}
-                        <option value="{{ olympiad.id }}" {% if olympiad.id|stringformat:"s" == request.GET.olympiad %}selected{% endif %}>
+                        <option value="{{ olympiad.id }}"
+                                {% if olympiad.id|stringformat:"s" == request.GET.olympiad %}selected{% endif %}>
                             {{ olympiad.name }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
+            <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %}"
+                  class="input-file space-y-6 mt-6">
+                <div class="importblock">
+                    {% csrf_token %}
+                    <input type="file" name="excel_file" accept=".xlsx" id="file-input" class="hidden">
+                    <label for="file-input" class="block bg-gray-200 text-gray-700 px-4 py-2 rounded cursor-pointer">Выберите
+                        файл</label>
+                    <div class="text-center">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">
+                            Импортировать результаты
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <form method="get" action="{% url 'result:export_results' %}" class="space-y-6 mt-6">
+                <div class="text-center">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        Экспортировать результаты
+                    </button>
+                </div>
+            </form>
 
+            <div class="text-center mt-6 space-x-4">
+                <a href="{% url 'result:add_result_class' %}"
+                   class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты классу</a>
+                <a href="{% url 'result:add_result' %}"
+                   class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты
+                    ученику</a>
+            </div>
             <div class="flex space-x-4">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Фильтровать</button>
-                <a href="{% url 'classroom:list_classroom' %}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Сбросить</a>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Фильтровать
+                </button>
+                <a href="{% url 'classroom:list_classroom' %}"
+                   class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Сбросить</a>
             </div>
         </form>
 
@@ -109,35 +145,43 @@
             <input type="hidden" name="subject" value="{{ request.GET.subject }}">
             <input type="hidden" name="student" value="{{ request.GET.student }}">
             <input type="hidden" name="olympiad" value="{{ request.GET.olympiad }}">
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Выгрузить в Excel</button>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Выгрузить в
+                Excel
+            </button>
         </form>
 
         <h2 class="text-xl font-bold mt-6 mb-4">Результаты</h2>
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white divide-y divide-gray-200">
                 <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ученик</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Олимпиада</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Предмет</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Класс</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Очки</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
-                    </tr>
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ученик
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Олимпиада
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Предмет
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Класс
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Очки</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
+                </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    {% for result in results %}
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_children.get_full_name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.subject.name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.points }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.get_status_result_display }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.date_added }}</td>
-                        </tr>
-                    {% endfor %}
+                {% for result in results %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_children.get_full_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.subject.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.points }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.get_status_result_display }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.date_added }}</td>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

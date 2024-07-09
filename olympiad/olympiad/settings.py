@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'easy_thumbnails',
 
 ]
+USE_TZ = False
 
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
