@@ -28,7 +28,7 @@
             </div>
         </div>
     </form>
-    {% endif %}
+    
 
     <form method="get" action="{% url 'result:export_results' %}" class="space-y-6 mt-6">
         <div class="text-center">
@@ -40,7 +40,7 @@
         <a href="{% url 'result:add_result_class' %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты классу</a>
         <a href="{% url 'result:add_result' %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты ученику</a>
     </div>
-
+{% endif %}
     <div class="overflow-x-auto mt-6">
         <table class="min-w-full bg-white">
             <thead class="bg-gray-800 text-white">

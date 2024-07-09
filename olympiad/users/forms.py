@@ -2,6 +2,8 @@ from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCr
 from django import forms
 from users.models import User
 from main.models import *
+import base64
+from django.core.files.base import ContentFile
 
 
 class UserLoginForm(AuthenticationForm):
@@ -29,29 +31,31 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserProfileForm(UserChangeForm):
-    # Форма для смены имени пользователя, почты, аватарки на странице профиля
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'type': "input",
-        'id': "nameedit",
-        'placeholder': "Введите имя пользователя",
-        'name': "nameedit",
-    }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'type': "input",
-        'id': "emailedit",
-        'placeholder': "Введите свою почту",
-        'name': "emailedit",
-    }))
-    image = forms.ImageField(widget=forms.FileInput(attrs={
-        'class': "newphoto",
-        # 'type': "button",
-        # 'value': "Загрузить новое фото",
-
-    }), required=False)
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': "Введите имя пользователя"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': "Введите свою почту"}))
+    birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    image = forms.ImageField(widget=forms.FileInput(attrs={'id': "file-input"}), required=False)
 
     class Meta:
         model = User
-        fields = ('image', 'username', 'email')
+        fields = ('image', 'username', 'email', 'birth_date', 'gender')
+
+    # def save(self, commit=True):
+    #     user = super().save(commit=False)
+    #     image_data = self.cleaned_data.get('image')
+    #     if image_data:
+    #         format, imgstr = image_data.split(';base64,')
+    #         ext = format.split('/')[-1]
+    #         data = ContentFile(base64.b64decode(imgstr), name=f'{self.instance.username}.{ext}')
+    #         user.image = data
+    #     if commit:
+    #         user.save()
+    #     return user
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        if self.instance and self.instance.birth_date:
+            self.fields.pop('birth_date')
 
 
 class NewChildForm(forms.ModelForm):
@@ -97,7 +101,7 @@ class NewChildForm(forms.ModelForm):
         'class': "vvodinfo",
         'placeholder': "Введите имя ученика"
     }))
-    gender = forms.ChoiceField(choices=[(gender, gender) for gender in User().get_types()])
+    gender = forms.ChoiceField(choices=User.GENDER_CHOICES)
 
     def save(self, commit=True):
         user = super(NewChildForm, self).save(commit=False)

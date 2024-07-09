@@ -17,4 +17,5 @@ urlpatterns = [
     path('process-recommendation/', ProcessRecommendation.as_view(), name='process_recommendation'),
     path('applications/classroom/teachers/', RegisterListClassroom.as_view(),
          name='applications-from-classroom-teachers'),
+    path('get-olympiads-for-student/', GetOlympiadsForStudent.as_view(), name='get_olympiads_for_student'),
 ]

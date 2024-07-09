@@ -1,70 +1,74 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h1 class="text-2xl font-bold mb-4">Добавить рекомендацию</h1>
-    <form method="post" class="space-y-4">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="recommended_to" class="block text-gray-700">Отправитель:</label>
-            <select name="recommended_to" id="recommended_to" class="w-full p-2 border border-gray-300 rounded mt-1">
-                {% for teacher in teachers %}
-                    <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+    <div class="container mx-auto p-6 max-w-4xl bg-white shadow-md rounded-lg">
+        <h1 class="text-3xl font-bold mb-6 text-center">Добавить рекомендацию</h1>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="recommended_to" class="block text-sm font-medium text-gray-700">Отправитель:</label>
+                <select name="recommended_to" id="recommended_to" class="block w-full mt-1 p-2 border rounded">
+                    {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="child" class="block text-gray-700">Ученик:</label>
-            <select name="child" id="child" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
-                {% for student in students %}
-                    <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="child" class="block text-sm font-medium text-gray-700">Ученик:</label>
+                <select name="child" id="child" class="block w-full mt-1 p-2 border rounded">
+                    <option value="">Выберите ученика</option>
+                    {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="olympiad" class="block text-gray-700">Олимпиада:</label>
-            <select name="olympiad" id="olympiad" class="w-full p-2 border border-gray-300 rounded mt-1">
-                {% for olympiad in olympiads %}
-                    <option value="{{ olympiad.id }}">{{ olympiad.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="olympiad" class="block text-sm font-medium text-gray-700">Олимпиада:</label>
+                <select name="olympiad" id="olympiad" class="block w-full mt-1 p-2 border rounded">
+                    <option value="">Сначала выберите ученика</option>
+                </select>
+            </div>
 
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Добавить рекомендацию</button>
-    </form>
-</div>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Добавить рекомендацию
+            </button>
+        </form>
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-<script>
-    $(document).ready(function () {
-        $('#child').select2({
-            placeholder: "Выберите ученика",
-            allowClear: true,
-            theme: "tailwind"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#recommended_to, #child, #olympiad').select2({
+                width: '100%'
+            });
+
+            $('#child').on('change', function () {
+                const childId = $(this).val();
+                if (childId) {
+                    $.ajax({
+                        url: '{% url "register:get_olympiads_for_student" %}',
+                        data: {'student_id': childId},
+                        success: function (data) {
+                            const olympiadSelect = $('#olympiad');
+                            olympiadSelect.empty().append(new Option('Выберите олимпиаду', ''));
+                            data.olympiads.forEach(olympiad => {
+                                olympiadSelect.append(
+                                    new Option(
+                                        `${olympiad.name} - ${olympiad.stage} - Класс ${olympiad.class}`, 
+                                        olympiad.id
+                                    )
+                                );
+                            });
+                        }
+                    });
+                } else {
+                    $('#olympiad').empty().append(new Option('Сначала выберите ученика', ''));
+                }
+            });
         });
-    });
-</script>
-<style>
-    .select2-container--tailwind .select2-selection--single {
-        height: 2.5rem;
-        padding: 0.5rem;
-        border-radius: 0.375rem;
-        border: 1px solid #d1d5db;
-    }
-    .select2-container--tailwind .select2-selection__rendered {
-        color: #374151;
-        line-height: 2.5rem;
-    }
-    .select2-container--tailwind .select2-selection__arrow {
-        height: 2.5rem;
-    }
-    .select2-container--tailwind .select2-results__option--highlighted {
-        background-color: #3b82f6;
-        color: white;
-    }
-</style>
+    </script>
 {% endblock %}

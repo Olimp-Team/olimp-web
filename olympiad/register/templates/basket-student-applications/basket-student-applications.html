@@ -120,12 +120,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for register_send in register_sends %}
+                {% for register in register_sends %}
                     <tr class="bg-gray-100">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register_send.child_send.last_name }} {{ register_send.child_send.first_name }} {{ register_send.child_send.surname }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register_send.Olympiad_send.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register_send.Olympiad_send.stage }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register_send.created_at }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register.Olympiad.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register.Olympiad.stage }}</td>
+{#                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ register.created_at }}</td>#}
                     </tr>
                 {% endfor %}
                 </tbody>

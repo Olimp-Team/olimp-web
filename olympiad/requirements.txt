@@ -25,3 +25,8 @@ redis
 django-friendship
 mysqlclient
 pymysql
+django-storages
+boto3
+django-image-cropping
+django-imagekit
+easy-thumbnails

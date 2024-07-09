@@ -1,14 +1,21 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
+{% load form_filters %}
 {% block content %}
 <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
     <h2 class="text-2xl font-bold mb-4">Профиль пользователя</h2>
     <div class="profile flex flex-col items-center">
-        {% if user.image %}
-            <img src="{{ user.image.url }}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4">
-        {% else %}
-            <img src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4">
-        {% endif %}
+        <div class="relative">
+            {% if user.image %}
+                <img id="avatar" src="{{ user.image.url }}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4 object-cover">
+            {% else %}
+                <img id="avatar" src="{% static 'homepage/img/default-ava.png' %}" alt="{{ user.get_full_name }}" class="w-36 h-36 rounded-full mb-4 object-cover">
+            {% endif %}
+            <label for="file-input" class="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-600">
+                <i class="fas fa-camera"></i>
+            </label>
+{#            {{ form.image }}#}
+        </div>
         <p class="text-lg"><strong>Имя:</strong> {{ user.get_full_name }}</p>
         <p class="text-lg"><strong>Логин:</strong> {{ user.username }}</p>
         <p class="text-lg"><strong>Дата рождения:</strong> {{ user.birth_date }}</p>
@@ -17,7 +24,28 @@
         {% if is_owner %}
             <form method="post" enctype="multipart/form-data" class="w-full mt-4">
                 {% csrf_token %}
-                {{ form.as_p }}
+                <div class="mb-4">
+                    <label for="id_username" class="block text-sm font-medium text-gray-700">Имя пользователя</label>
+                    {{ form.username|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                </div>
+                <div class="mb-4">
+                    <label for="id_email" class="block text-sm font-medium text-gray-700">Электронная почта</label>
+                    {{ form.email|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                </div>
+                {% if form.birth_date %}
+                <div class="mb-4">
+                    <label for="id_birth_date" class="block text-sm font-medium text-gray-700">Дата рождения</label>
+                    {{ form.birth_date|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                </div>
+                {% endif %}
+                <div class="mb-4">
+                    <label for="id_gender" class="block text-sm font-medium text-gray-700">Пол</label>
+                    {{ form.gender|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                </div>
+                <div class="mb-4">
+                    <label for="id_image" class="block text-sm font-medium text-gray-700">Аватар</label>
+                    {{ form.image|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Сохранить изменения</button>
             </form>
         {% endif %}

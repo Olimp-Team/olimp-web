@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+try:
+    import storages
+except ImportError:
+    raise ImportError("django-storages is not installed or could not be found")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,8 +28,6 @@ SECRET_KEY = 'django-insecure-d!749*23^86bd^dejgv46gw_=^7awa*=v&vnkcecqui&9hpqg$
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-
 
 ALLOWED_HOSTS = ["*", "olimp-team-olimp-web-7d5b.twc1.net", "olimp-olympiad.ru"]
 CSRF_TRUSTED_ORIGINS = ["https://*", "http://*", 'https://*.olimp-olympiad.ru', 'https://*.127.0.0.1',
@@ -60,9 +63,19 @@ INSTALLED_APPS = [
     'corsheaders',
     'friendship',
     'friends',
+    'storages',
+    'image_cropping',
+    'imagekit',
+    'easy_thumbnails',
+
 ]
 
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+)
+
 MIDDLEWARE = [
+    # 'app.SimpleMiddleware.SimpleMiddleware'
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -73,7 +86,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-
 ]
 
 from django.contrib.messages import constants as message_constants
@@ -119,10 +131,8 @@ TEMPLATES = [
 ]
 AUTH_USER_MODEL = 'users.User'
 
-
 SESSION_COOKIE_AGE = 1209600  # 2 недели
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
 
 ASGI_APPLICATION = 'olympiad.asgi.application'
 
@@ -191,7 +201,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'  # SMTP-сервер вашего почтового провайдера
 EMAIL_PORT = 2525  # Порт SMTP-сервера
@@ -221,27 +230,41 @@ DATE_INPUT_FORMATS = '%d-%m-%Y'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+
 
 # Укажите путь к директории, где находятся статические файлы
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# Укажите путь к директории, куда будут собираться статические файлы для продакшена
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Users
+AWS_ACCESS_KEY_ID = 'Q5R69BCKUPU15EFXH076'
+AWS_SECRET_ACCESS_KEY = 'X8dWZD8YTVbjyWgvBtP9igjphuAGG14X5c7TFfZi'
+AWS_STORAGE_BUCKET_NAME = '387f7de3-599caebc-703e-4f34-abb7-b2a53cb494b2'  # замените на имя вашего бакета
+AWS_S3_REGION_NAME = 'ru-1'
+AWS_S3_ENDPOINT_URL = 'https://s3.timeweb.cloud'
 
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.timeweb.cloud'
 
-# Медиа файлы
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
+
+# Ensure to specify path-style addressing
+AWS_S3_ADDRESSING_STYLE = "path"
+
+STATICFILES_LOCATION = 'static'
+MEDIAFILES_LOCATION = 'media'
+
+STATICFILES_STORAGE = 'olympiad.custom_storages.StaticStorage'
+DEFAULT_FILE_STORAGE = 'olympiad.custom_storages.MediaStorage'
+
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 SITE_ID = 1
 

@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from image_cropping import ImageRatioField
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 
 class User(AbstractUser):
@@ -9,25 +12,35 @@ class User(AbstractUser):
     29.11.2007
     Ученик
     Пол мужской"""
+    MALE = 'M'
+    FEMALE = 'F'
+
+    GENDER_CHOICES = [
+        (MALE, 'Мужской'),
+        (FEMALE, 'Женский'),
+    ]
 
     class Meta:
         verbose_name_plural = "Пользователи"
         verbose_name = "Пользователь"
 
-    class Gender(models.TextChoices):
-        MALE = 'М'
-        WOMENS = 'Ж'
-
     # Общие сведения
-    image = models.ImageField(upload_to='users_images', null=True, blank=True)
+    image = ProcessedImageField(
+        upload_to='users_images',
+        processors=[ResizeToFill(150, 150)],
+        format='JPEG',
+        options={'quality': 90},
+        null=True, blank=True
+    )
+    cropping = ImageRatioField('image', '300x300')
     surname = models.CharField(
         "Отчество пользователя (при наличии)", max_length=256, blank=True, null=True
     )
     birth_date = models.DateField('Дата рождения', blank=True, null=True)
-    gender = models.CharField("Пол учителя", max_length=2, choices=Gender.choices, default=Gender.MALE)
+    gender = models.CharField("Пол учителя", max_length=2, choices=GENDER_CHOICES)
 
     def get_types(self):
-        return self.Gender
+        return self.GENDER_CHOICES
 
     # Роль пользователя в системе
     is_teacher = models.BooleanField("Учитель", default=False, blank=True,
