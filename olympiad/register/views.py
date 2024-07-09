@@ -146,7 +146,7 @@ class BasketStudentApp(ChildRequiredMixin, View):
 
 ########################################################################################################################
 # Страницы учителей
-class ChildRegisterList(TeacherRequiredMixin, View):
+class ChildRegisterList(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_teacher:
             # Получаем все заявки учеников, которые связаны с классом текущего учителя
@@ -163,20 +163,20 @@ class ChildRegisterList(TeacherRequiredMixin, View):
                     student_olympiads[register.child_send] = []
                 student_olympiads[register.child_send].append(register.Olympiad_send)
 
-            # Получаем рекомендации для текущего учителя
-            recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False)
-            recommended_students = {}
-            for rec in recommendations:
-                if rec.child not in recommended_students:
-                    recommended_students[rec.child] = []
-                recommended_students[rec.child].append({
-                    'olympiad': rec.Olympiad,
-                    'recommended_by': rec.recommended_by
-                })
+            # # Получаем рекомендации для текущего учителя
+            # recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False)
+            # recommended_students = {}
+            # for rec in recommendations:
+            #     if rec.child not in recommended_students:
+            #         recommended_students[rec.child] = []
+            #     recommended_students[rec.child].append({
+            #         'olympiad': rec.Olympiad,
+            #         'recommended_by': rec.recommended_by
+            #     })
 
             context = {
                 'student_olympiads': student_olympiads,
-                'recommended_students': recommended_students,
+                # 'recommended_students': recommended_students,
             }
             return render(request, 'student-applications/student-applications.html', context)
         else:
