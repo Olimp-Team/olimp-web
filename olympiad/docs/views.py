@@ -618,9 +618,9 @@ class import_olympiads(View):
                         date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
 
                     # Проверяем и преобразуем время
-                    time = None
-                    if pd.notna(row['Время проведения']):
-                        time = datetime.strptime(str(row['Время проведения']), '%H:%M:%S').time()
+                    # time = None
+                    # if pd.notna(row['Время проведения']):
+                    #     time = datetime.strptime(str(row['Время проведения']), '%H:%M:%S').time()
 
                     # Проверяем место проведения
                     location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
@@ -634,7 +634,7 @@ class import_olympiads(View):
                         subject=subject,
                         class_olympiad=row['Класс олимпиады'],
                         date=date,
-                        time=time,
+                        # time=time,
                         location=location
                     )
                 except Exception as e:

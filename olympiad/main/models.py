@@ -133,5 +133,5 @@ class Olympiad(models.Model):
     location = models.CharField('Место проведения олимпиады', max_length=256, blank=True, null=True)
 
     def __str__(self):
-        return f'{self.name} {self.category} {self.level} {self.stage} {self.subject} {self.class_olympiad}'
+        return f'{self.name} - {self.stage} - {self.subject} {self.class_olympiad}'
 
