@@ -23,14 +23,14 @@ class Result(models.Model):
 
     ]
     info_children = models.ForeignKey(to="users.User", on_delete=models.CASCADE,
-                                      verbose_name='Информация об ученике')
+                                      verbose_name='Информация об ученике', blank=True, null=True)
     info_olympiad = models.ForeignKey(to='main.Olympiad', on_delete=models.CASCADE,
-                                      verbose_name='Информация об олимпиаде')
-    points = models.IntegerField(verbose_name='Количество намбранных очков')
+                                      verbose_name='Информация об олимпиаде', blank=True, null=True)
+    points = models.IntegerField(verbose_name='Количество намбранных очков', blank=True, null=True)
     status_result = models.CharField(verbose_name='Статус результата', max_length=256, choices=STATUSRES,
-                                     default=PARTICIPANT)
-    advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап')
-    date_added = models.DateTimeField(auto_now_add=True)
+                                     default=PARTICIPANT, blank=True, null=True)
+    advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап', blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def __str__(self):
         return f'{self.info_children} - {self.info_olympiad} - {self.points}'
