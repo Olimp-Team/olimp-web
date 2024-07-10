@@ -11,12 +11,12 @@
 
         <div class="classroom">
             <h1 class="text-xl font-bold">Класс:</h1>
-            <div class="cl">{{ form.classroom|add_class:"block w-full mt-1 p-2 border rounded classroom-select" }}</div>
+            <div class="cl">{{ form.classroom }}</div>
         </div>
 
         <div class="olympiad">
             <h1 class="text-xl font-bold">Олимпиада:</h1>
-            <div class="ol">{{ form.olympiad|add_class:"block w-full mt-1 p-2 border rounded olympiad-select" }}</div>
+            <div class="ol">{{ form.olympiad }}</div>
         </div>
 
         <div id="students-results">
@@ -56,7 +56,7 @@ $(document).ready(function () {
                 url: '{% url "result:get_students" %}',
                 data: {'classroom_id': classroomId},
                 success: function (data) {
-                    $('#students-results').html(data);
+                    $('#students-results').html(data.html);
                     $('.status-select').select2({
                         placeholder: 'Выберите статус',
                         allowClear: true

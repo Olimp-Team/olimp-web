@@ -49,6 +49,24 @@
                 placeholder: 'Выберите олимпиаду',
                 allowClear: true
             });
+
+            $('.student-select').on('change', function () {
+                var studentId = $(this).val();
+                $.ajax({
+                    url: '{% url 'result:get_olympiads' %}',
+                    data: {
+                        'student_id': studentId
+                    },
+                    success: function (data) {
+                        var olympiadSelect = $('.olympiad-select');
+                        olympiadSelect.empty();
+                        $.each(data, function (key, value) {
+                            olympiadSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
+                        });
+                        olympiadSelect.trigger('change');  // Обновить Select2 виджет
+                    }
+                });
+            });
         });
     </script>
 {% endblock %}

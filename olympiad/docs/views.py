@@ -365,6 +365,21 @@ class DashboardView(AdminRequiredMixin, ListView):
         context['classrooms'] = Classroom.objects.all()
         context['subjects'] = Subject.objects.all()
         context['olympiads'] = Olympiad.objects.all()
+
+        # Подсчет победителей, призеров и участников
+        queryset = self.get_queryset()
+        context['winners_count'] = queryset.filter(status_result=Result.WINNER).count()
+        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE).count()
+        context['participants_count'] = queryset.count()
+
+        # Передача текущих значений фильтров в контекст
+        context['start_date'] = self.request.GET.get('start-date', '')
+        context['end_date'] = self.request.GET.get('end-date', '')
+        context['class_filter'] = self.request.GET.get('class', '')
+        context['subject_filter'] = self.request.GET.get('subject', '')
+        context['student_filter'] = self.request.GET.get('student', '')
+        context['olympiad_filter'] = self.request.GET.get('olympiad', '')
+
         return context
 
 

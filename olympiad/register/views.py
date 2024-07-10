@@ -1,6 +1,6 @@
 from django.http import HttpResponseForbidden, JsonResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from main.models import *
 from register.models import *
@@ -195,9 +195,12 @@ class BasketStudentApp(ChildRequiredMixin, View):
 class ChildRegisterList(View):
     def get(self, request, *args, **kwargs):
         if request.user.is_teacher:
+            # Получаем класс, которым руководит текущий пользователь
+            classroom_guide = request.user.classroom_guide
+
             # Получаем все заявки учеников, которые связаны с классом текущего учителя
             reg = Register_send.objects.filter(
-                teacher_send__classroom_guide=request.user.classroom_guide,
+                teacher_send__classroom_guide=classroom_guide,
                 status_send=False,
                 is_deleted=False,
             )
@@ -209,6 +212,20 @@ class ChildRegisterList(View):
                     student_olympiads[register.child_send] = []
                 student_olympiads[register.child_send].append(register.Olympiad_send)
 
+            # Получаем отправленные заявки для текущего учителя
+            sent_applications = Register_send.objects.filter(
+                teacher_send__classroom_guide=classroom_guide,
+                status_send=True,
+                is_deleted=False,
+            )
+
+            # Создаем словарь, где ключом будет ученик, а значением - список олимпиад
+            sent_applications_dict = {}
+            for application in sent_applications:
+                if application.child_send not in sent_applications_dict:
+                    sent_applications_dict[application.child_send] = []
+                sent_applications_dict[application.child_send].append(application.Olympiad_send)
+
             # Получаем рекомендации для текущего учителя
             recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False)
             recommended_students = {}
@@ -217,20 +234,51 @@ class ChildRegisterList(View):
                     recommended_students[rec.child] = []
                 recommended_students[rec.child].append({
                     'olympiad': rec.Olympiad,
-                    'recommended_by': rec.recommended_by
+                    'recommended_by': rec.recommended_by,
+                    'id': rec.id,
                 })
 
             context = {
                 'student_olympiads': student_olympiads,
                 'recommended_students': recommended_students,
+                'sent_applications': sent_applications_dict,
             }
             return render(request, 'student-applications/student-applications.html', context)
         else:
             return HttpResponseForbidden()
 
     def post(self, request, *args, **kwargs):
-        if request.user.is_teacher:
-            return HttpResponseForbidden()
+        return HttpResponseForbidden()
+
+
+def accept_recommendation(request, recommendation_id):
+    if not request.user.is_teacher:
+        return HttpResponseForbidden()
+
+    recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+
+    Register_send.objects.create(
+        teacher_send=request.user,
+        child_send=recommendation.child,
+        Olympiad_send=recommendation.Olympiad,
+        status_send=False,
+        is_deleted=False,
+    )
+    recommendation.status = True
+    recommendation.save()
+
+    return redirect('register:student-applications')
+
+
+def reject_recommendation(request, recommendation_id):
+    if not request.user.is_teacher:
+        return HttpResponseForbidden()
+
+    recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+    recommendation.status = True
+    recommendation.save()
+
+    return redirect('register:student-applications')
 
 
 class RegisterDeleteTeacher(TeacherRequiredMixin, View):

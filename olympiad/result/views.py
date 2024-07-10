@@ -50,7 +50,8 @@ class ExportResultsView(View):
             df.to_excel(writer, index=False, sheet_name='Results')
 
         buffer.seek(0)
-        response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(buffer,
+                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=results.xlsx'
         return response
 
@@ -114,11 +115,21 @@ class ImportResultsView(View):
         return redirect('result:results_list')
 
 
-class ResultListView(FilterView):
+class ResultListView(ListView):
     model = Result
     template_name = 'result/result.html'
     context_object_name = 'results'
-    filterset_class = ResultFilter
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = ResultFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = self.filterset
+        return context
 
 
 class OlympiadResultCreateView(AdminRequiredMixin, View):
@@ -132,6 +143,17 @@ class OlympiadResultCreateView(AdminRequiredMixin, View):
             form.save()
             return redirect('result:results_list')
         return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
+
+
+class GetOlympiadsView(View):
+    def get(self, request, *args, **kwargs):
+        student_id = request.GET.get('student_id')
+        if student_id:
+            olympiads = Olympiad.objects.filter(Olympiad_admin__child_admin__id=student_id,
+                                                Olympiad_admin__is_deleted=False).distinct()
+            olympiad_list = list(olympiads.values('id', 'name'))
+            return JsonResponse(olympiad_list, safe=False)
+        return JsonResponse([], safe=False)
 
 
 class OlympiadResultClassCreateView(AdminRequiredMixin, View):
@@ -162,12 +184,12 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
                       {'form': form, 'students': students})
 
 
-class get_students(View):
+class GetStudentsView(View):
     def get(self, request):
         classroom_id = request.GET.get('classroom_id')
         if classroom_id:
             classroom = Classroom.objects.get(id=classroom_id)
-            students = classroom.child.all()
+            students = classroom.child_set.filter(id__in=Register_admin.objects.values_list('child_admin_id', flat=True))
             html = render_to_string('students_list/students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
