@@ -126,6 +126,7 @@ class ClassroomUpdateView(UpdateView):
         return User.objects.none()
 
 
+
 class ClassroomDeleteView(DeleteView):
     model = Classroom
     form_class = ClassroomForm

@@ -141,21 +141,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [
-                {
-                    'address': ('127.0.0.1', 6379),
-                    # 'password': 'WKJ,rdOVdsS0qO',
-                    # 'username': 'default'  # Обычно Redis не требует имя пользователя
-                }
-            ],
-        },
-    },
-}
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': ['redis://:WKJ,rdOVdsS0qO@147.45.148.142:6379/0'],
+            'hosts': ['redis://:732301papa@147.45.236.130:6379/0'],
         },
     },
 }
@@ -178,8 +164,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'default_db',
         'USER': 'gen_user',
-        'PASSWORD': 'b2PO;m\h)UOzpT',
-        'HOST': '147.45.184.229',
+        'PASSWORD': "Q/-*PaDx}9OJG#",
+        'HOST': '147.45.236.124',
         'PORT': '3306',
     }
 }

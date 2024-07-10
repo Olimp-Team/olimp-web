@@ -63,6 +63,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const allStudentsSelect = document.getElementById('all_students');
     const classStudentsSelect = document.getElementById('class_students');
 
+    // Выделение всех учеников в классе при загрузке страницы
+    Array.from(classStudentsSelect.options).forEach(option => {
+        option.selected = true;
+    });
+
     moveToClassButton.addEventListener('click', function () {
         moveSelectedOptions(allStudentsSelect, classStudentsSelect);
     });
@@ -75,6 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedOptions = Array.from(fromSelect.selectedOptions);
         selectedOptions.forEach(option => {
             toSelect.appendChild(option);
+            option.selected = true;
         });
     }
 });
