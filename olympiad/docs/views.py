@@ -22,11 +22,12 @@ from users.mixins import AdminRequiredMixin
 from django.http import HttpResponse
 import logging
 
+
 class ExcelClassroom(AdminRequiredMixin, View):
     def get(self, request, Classroom_id):
         if request.user.is_admin:
             queryset = Register_admin.objects.filter(
-                child_admin__classroom__id=Classroom_id)
+                child_admin__classroom__id=Classroom_id, is_deleted=False)
 
             data_classroom = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
@@ -135,7 +136,7 @@ class ExcelClassroom(AdminRequiredMixin, View):
 class ExcelAll(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
-            queryset = Register_admin.objects.all()  # Получаем данные из нашей модели
+            queryset = Register_admin.objects.filter(is_deleted=False)  # Получаем данные из нашей модели
             data_all = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
                  _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
@@ -514,7 +515,7 @@ class create_zip_archive(View):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-                registers = Register_admin.objects.filter(status_admin=False)
+                registers = Register_admin.objects.filter(status_admin=False, is_deleted=False)
                 classes = {}
 
                 for register in registers:
@@ -563,7 +564,7 @@ class create_zip_archive_for_teacher(View):
 
                 # Найти все заявки учеников класса, которым руководит текущий учитель
                 registers = Register_send.objects.filter(
-                    child_send__classroom=request.user.classroom_guide,
+                    child_send__classroom=request.user.classroom_guide, is_deleted=False
                 )
 
                 classes = {}

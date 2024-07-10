@@ -13,23 +13,40 @@ from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequired
 # Страницы учеников
 
 
+# class RegisterPage(ChildRequiredMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         if request.user.is_child:
+#             school_stage = Stage.objects.get(name='Школьный')
+#             olympiads = Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage)
+#             registered_olympiads = Register.objects.filter(child=request.user).values_list('Olympiad_id', flat=True)
+#             context = {
+#                 'olympiads': olympiads,
+#                 'olympiads_last': olympiads.last(),
+#                 'registered_olympiads': registered_olympiads
+#             }
+#             return render(request, 'register-olympiad/register-olympiad.html', context)
+#         else:
+#             return HttpResponseForbidden()
+
+
 class RegisterPage(ChildRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_child:
-            # Предположим, что значение для школьного этапа - "Школьный этап"
             school_stage = Stage.objects.get(name='Школьный')
+            olympiads = Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage)
+
+            # Получаем список олимпиад, на которые ученик зарегистрировался, исключая удаленные заявки
+            registered_olympiads = Register_send.objects.filter(
+                child_send=request.user,
+                is_deleted=False
+            ).values_list('Olympiad_send_id', flat=True)
+
             context = {
-                'olympiads': Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage),
-                'olympiads_last': Olympiad.objects.filter(class_olympiad=request.user.classroom.number,
-                                                          stage=school_stage).last()
+                'olympiads': olympiads,
+                'olympiads_last': olympiads.last(),
+                'registered_olympiads': registered_olympiads
             }
             return render(request, 'register-olympiad/register-olympiad.html', context)
-        else:
-            return HttpResponseForbidden()
-
-    def post(self, request, *args, **kwargs):
-        if request.user.is_child:
-            pass
         else:
             return HttpResponseForbidden()
 
@@ -41,7 +58,19 @@ class RegisterAdd(ChildRequiredMixin, View):
             if olympiad.stage.name != 'Школьный':
                 return HttpResponseForbidden('Регистрация возможна только на школьный этап.')
 
-            register, created = Register.objects.get_or_create(
+            # Проверяем, есть ли удаленная заявка на эту олимпиаду
+            register = Register.objects.filter(child=request.user, Olympiad=olympiad).first()
+            if register and register.status_send:
+                register_send = Register_send.objects.filter(child_send=request.user, Olympiad_send=olympiad).first()
+                if register_send and register_send.is_deleted:
+                    # Обновляем статус удаленной заявки
+                    register_send.is_deleted = False
+                    register_send.status_send = False
+                    register_send.save()
+                    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+            # Создаем или обновляем заявку в Register
+            register, created = Register.objects.update_or_create(
                 child=request.user,
                 Olympiad=olympiad,
                 defaults={'teacher': request.user.classroom.teacher}
@@ -50,12 +79,17 @@ class RegisterAdd(ChildRequiredMixin, View):
             if not created:
                 register.save()
 
+            # Создаем или обновляем заявку в Register_send
+            Register_send.objects.update_or_create(
+                teacher_send=request.user.classroom.teacher,
+                child_send=request.user,
+                Olympiad_send=olympiad,
+                defaults={'is_deleted': False, 'status_send': False, 'status_teacher': False, 'status_admin': False}
+            )
+
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
         else:
             return HttpResponseForbidden()
-
-    def post(self, request):
-        return HttpResponseForbidden()
 
 
 class RegisterDelete(ChildRequiredMixin, View):
@@ -80,26 +114,27 @@ class RegisterSend(ChildRequiredMixin, View):
     def get(self, request):
         if request.user.is_child:
             register_entries = Register.objects.filter(child=request.user, status_send=False)
-            objs = []
             for entry in register_entries:
                 if entry.teacher and entry.child and entry.Olympiad:
-                    logger.debug(
-                        f"Creating Register_send for teacher: {entry.teacher}, child: {entry.child}, Olympiad: {entry.Olympiad}")
-                    objs.append(Register_send(
+                    existing_register_send = Register_send.objects.filter(
                         teacher_send=entry.teacher,
                         child_send=entry.child,
-                        Olympiad_send=entry.Olympiad,
-                    ))
-                else:
-                    logger.warning(
-                        f"Skipping entry due to missing data: teacher={entry.teacher}, child={entry.child}, Olympiad={entry.Olympiad}")
+                        Olympiad_send=entry.Olympiad
+                    ).first()
 
-            if objs:
-                Register_send.objects.bulk_create(objs)
-                register_entries.update(status_send=True)
-                logger.debug(f"Created {len(objs)} Register_send entries and updated register entries.")
-            else:
-                logger.warning("No valid Register_send entries to create.")
+                    if existing_register_send:
+                        existing_register_send.is_deleted = False
+                        existing_register_send.status_send = False
+                        existing_register_send.save()
+                    else:
+                        Register_send.objects.create(
+                            teacher_send=entry.teacher,
+                            child_send=entry.child,
+                            Olympiad_send=entry.Olympiad,
+                            status_send=False
+                        )
+
+            register_entries.update(status_send=True)
 
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
         else:
@@ -115,33 +150,44 @@ class BasketStudentApp(ChildRequiredMixin, View):
             context = {
                 'register': Register.objects.filter(child=request.user, status_send=False),
                 'recommendations': Recommendation.objects.filter(child=request.user, status=False),
-                'register_sends': Register.objects.filter(child=request.user, status_send=True)  # Добавляем отправленные заявки
+                'register_sends': Register_send.objects.filter(child_send=request.user),
+                'deleted_registers': Register_send.objects.filter(child_send=request.user, is_deleted=True),
             }
             return render(request, 'basket-student-applications/basket-student-applications.html', context)
         else:
             return HttpResponseForbidden()
 
     def post(self, request, *args, **kwargs):
-        action = request.POST.get('action')
-        recommendation_id = request.POST.get('recommendation_id')
-        if not action or not recommendation_id:
-            return HttpResponseForbidden("Missing data in form.")
+        if request.user.is_child:
+            action = request.POST.get('action')
+            olympiad_id = request.POST.get('olympiad_id')
+            if not action or not olympiad_id:
+                return HttpResponseForbidden("Missing data in form.")
 
-        recommendation = get_object_or_404(Recommendation, id=recommendation_id)
+            olympiad = get_object_or_404(Olympiad, id=olympiad_id)
 
-        if action == 'accept':
-            Register.objects.create(
-                child=request.user,
-                teacher=request.user.classroom.teacher,
-                Olympiad=recommendation.Olympiad,
-                status_send=False
-            )
-            recommendation.status = True
-            recommendation.save()
-        elif action == 'decline':
-            recommendation.delete()
+            if action == 're-register':
+                # Создаем или обновляем заявку в Register
+                register, created = Register.objects.update_or_create(
+                    child=request.user,
+                    Olympiad=olympiad,
+                    defaults={'teacher': request.user.classroom.teacher}
+                )
 
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+                if not created:
+                    register.save()
+
+                # Также создаем или обновляем заявку в Register_send
+                Register_send.objects.update_or_create(
+                    teacher_send=request.user.classroom.teacher,
+                    child_send=request.user,
+                    Olympiad_send=olympiad,
+                    defaults={'is_deleted': False, 'status_send': False, 'status_teacher': False, 'status_admin': False}
+                )
+
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        else:
+            return HttpResponseForbidden()
 
 
 ########################################################################################################################
@@ -163,20 +209,20 @@ class ChildRegisterList(View):
                     student_olympiads[register.child_send] = []
                 student_olympiads[register.child_send].append(register.Olympiad_send)
 
-            # # Получаем рекомендации для текущего учителя
-            # recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False)
-            # recommended_students = {}
-            # for rec in recommendations:
-            #     if rec.child not in recommended_students:
-            #         recommended_students[rec.child] = []
-            #     recommended_students[rec.child].append({
-            #         'olympiad': rec.Olympiad,
-            #         'recommended_by': rec.recommended_by
-            #     })
+            # Получаем рекомендации для текущего учителя
+            recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False)
+            recommended_students = {}
+            for rec in recommendations:
+                if rec.child not in recommended_students:
+                    recommended_students[rec.child] = []
+                recommended_students[rec.child].append({
+                    'olympiad': rec.Olympiad,
+                    'recommended_by': rec.recommended_by
+                })
 
             context = {
                 'student_olympiads': student_olympiads,
-                # 'recommended_students': recommended_students,
+                'recommended_students': recommended_students,
             }
             return render(request, 'student-applications/student-applications.html', context)
         else:
@@ -222,9 +268,9 @@ class RegisterSendTeacher(TeacherRequiredMixin, View):
                     teacher_admin=register.teacher_send,
                     child_admin=register.child_send,
                     Olympiad_admin=register.Olympiad_send,
-                    defaults={'status_teacher': True, 'status_admin': False}
+                    defaults={'status_teacher': True, 'status_admin': False, 'is_deleted': register.is_deleted}
                 )
-            # Обновляем статус заявок в Register
+            # Обновляем статус заявок в Register_send
             registers.update(status_send=True)
 
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
@@ -345,7 +391,7 @@ class RegisterListClassroom(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
             # Получаем все заявки и группируем их по учебным классам
-            registers = Register_admin.objects.all()
+            registers = Register_admin.objects.filter(is_deleted=False)
             grouped_registers = {}
             for register in registers:
                 classroom = register.child_admin.classroom  # Предполагаем, что у модели child_admin есть поле classroom

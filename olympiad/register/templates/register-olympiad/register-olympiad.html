@@ -13,7 +13,11 @@
                     <h1 class="text-xl font-bold" id="newsolympiad">Открыта регистрация на {{ olympiads_last.name }}</h1>
                     <p class="text-sm" id="newsogran">Поторопись, количество участников ограничено!</p>
                     <div class="mt-4">
+                        {% if olympiads_last.id in registered_olympiads %}
+                        <span class="bg-gray-500 text-white px-4 py-2 rounded">Вы уже зарегистрированы</span>
+                        {% else %}
                         <a id="newsknopka" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="#" onclick="registerForOlympiad('{{ olympiads_last.id }}', '{{ olympiads_last.name }}')">Зарегистрироваться</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -25,7 +29,11 @@
                     <h1 class="text-xl font-bold" id="newsolympiad">Открыта регистрация на {{ olympiad.name }}</h1>
                     <p class="text-sm" id="newsogran">Поторопись, количество участников ограничено!</p>
                     <div class="mt-4">
+                        {% if olympiad.id in registered_olympiads %}
+                        <span class="bg-gray-500 text-white px-4 py-2 rounded">Вы уже зарегистрированы</span>
+                        {% else %}
                         <a id="newsknopka" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="#" onclick="registerForOlympiad('{{ olympiad.id }}', '{{ olympiad.name }}')">Зарегистрироваться</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -46,7 +54,11 @@
             <h2 class="text-lg font-bold mb-2" id="olympiadtext">{{ olympiad.name }}</h2>
             <h3 class="text-sm text-green-500 mb-2" id="openreg">Регистрация открыта!</h3>
             <h3 class="text-sm text-gray-700 mb-4" id="datesreg">{{ olympiad.date_olympiad }}</h3>
+            {% if olympiad.id in registered_olympiads %}
+            <span class="bg-gray-500 text-white px-4 py-2 rounded">Вы уже зарегистрированы</span>
+            {% else %}
             <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" onclick="registerForOlympiad('{{ olympiad.id }}', '{{ olympiad.name }}')">Зарегистрироваться</a>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

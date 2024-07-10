@@ -44,7 +44,7 @@ class Register_admin(models.Model):
     Olympiad_admin = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE, related_name='Olympiad_admin')
     status_admin = models.BooleanField(default=False)
     status_teacher = models.BooleanField(default=False)
-
+    is_deleted = models.BooleanField(default=False)
     def __str__(self):
         return f' | Статус Админ: {self.status_admin}'
 
