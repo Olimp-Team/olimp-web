@@ -7,6 +7,6 @@ class ResultConfig(AppConfig):
 
     def ready(self):
         import result.signals
-        from result.telegram_bot import main as telegram_bot_main
+        from result.telegram_bot import run_telegram_bot
         import asyncio
-        asyncio.run(telegram_bot_main())
+        asyncio.run(run_telegram_bot())

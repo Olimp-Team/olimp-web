@@ -30,3 +30,4 @@ boto3
 django-image-cropping
 django-imagekit
 easy-thumbnails
+asyncio
