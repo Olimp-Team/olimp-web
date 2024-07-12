@@ -38,7 +38,7 @@ class User(AbstractUser):
     )
     birth_date = models.DateField('Дата рождения', blank=True, null=True)
     gender = models.CharField("Пол учителя", max_length=2, choices=GENDER_CHOICES)
-
+    telegram_id = models.CharField(max_length=64, blank=True, null=True, verbose_name="Telegram ID")
     def get_types(self):
         return self.GENDER_CHOICES
 

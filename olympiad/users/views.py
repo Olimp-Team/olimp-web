@@ -158,3 +158,16 @@ class AdminListView(AdminRequiredMixin, View):
         admins = User.objects.filter(is_admin=True)
         context = {'admins': admins}
         return render(request, 'admin_list.html', context)
+
+
+@login_required
+def update_telegram_id(request):
+    if request.method == 'POST':
+        form = TelegramIDForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')  # Или куда хотите перенаправить после сохранения
+    else:
+        form = TelegramIDForm(instance=request.user)
+
+    return render(request, 'update_telegram_id.html', {'form': form})

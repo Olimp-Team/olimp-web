@@ -255,3 +255,12 @@ from django.contrib.auth.forms import PasswordResetForm
 
 class CustomPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
+
+
+class TelegramIDForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['telegram_id']
+        widgets = {
+            'telegram_id': forms.TextInput(attrs={'placeholder': 'Введите ваш Telegram ID'}),
+        }

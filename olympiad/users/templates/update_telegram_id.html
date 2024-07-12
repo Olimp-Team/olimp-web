@@ -1,0 +1,10 @@
+{% extends "base_olimp.html" %}
+
+{% block content %}
+  <h2>Обновить Telegram ID</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить</button>
+  </form>
+{% endblock %}
