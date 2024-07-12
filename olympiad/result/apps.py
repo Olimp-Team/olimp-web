@@ -7,6 +7,3 @@ class ResultConfig(AppConfig):
 
     def ready(self):
         import result.signals
-        from result.telegram_bot import run_telegram_bot
-        import asyncio
-        asyncio.run(run_telegram_bot())
