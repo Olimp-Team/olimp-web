@@ -1,7 +1,6 @@
 from django import forms
 from main.models import Classroom
-from users.models import *
-
+from users.models import User
 
 class ClassroomForm(forms.ModelForm):
     class Meta:
