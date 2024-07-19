@@ -530,7 +530,7 @@ class create_zip_archive(View):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-                registers = Register_admin.objects.filter(status_admin=False, is_deleted=False)
+                registers = Register_admin.objects.filter(is_deleted=False)
                 classes = {}
 
                 for register in registers:
