@@ -6,12 +6,6 @@ from imagekit.processors import ResizeToFill
 
 
 class User(AbstractUser):
-    # Модель пользователей
-    """Пример: Иваницкий Илья Олегович
-    Изображение
-    29.11.2007
-    Ученик
-    Пол мужской"""
     MALE = 'M'
     FEMALE = 'F'
 
@@ -24,7 +18,6 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
         verbose_name = "Пользователь"
 
-    # Общие сведения
     image = ProcessedImageField(
         upload_to='users_images',
         processors=[ResizeToFill(150, 150)],
@@ -39,25 +32,21 @@ class User(AbstractUser):
     birth_date = models.DateField('Дата рождения', blank=True, null=True)
     gender = models.CharField("Пол учителя", max_length=2, choices=GENDER_CHOICES)
     telegram_id = models.CharField(max_length=64, blank=True, null=True, verbose_name="Telegram ID")
+
     def get_types(self):
         return self.GENDER_CHOICES
 
-    # Роль пользователя в системе
-    is_teacher = models.BooleanField("Учитель", default=False, blank=True,
-                                     null=True)  # null ИЗМЕНИТЬ НА FALSE когда будет страница регистрации
-    is_child = models.BooleanField("Ученик", default=False, blank=True,
-                                   null=True)  # null ИЗМЕНИТЬ НА FALSE когда будет страница регистрации
-    is_admin = models.BooleanField("Администратор",
-                                   default=False, blank=True,
-                                   null=True)  # null ИЗМЕНИТЬ НА FALSE когда будет страница регистрации
+    is_teacher = models.BooleanField("Учитель", default=False, blank=True, null=True)
+    is_child = models.BooleanField("Ученик", default=False, blank=True, null=True)
+    is_admin = models.BooleanField("Администратор", default=False, blank=True, null=True)
 
-    # Сведения для учителей
+    is_expelled = models.BooleanField("Исключен", default=False, blank=True, null=True)
+
     classroom_guide = models.ForeignKey('main.Classroom', related_name='classroom_teachers', blank=True,
                                         on_delete=models.CASCADE, null=True)
     subject = models.ManyToManyField(to="main.Subject", verbose_name="Какой предмет ведёт учитель", blank=True)
     post_job_teacher = models.ManyToManyField(to="main.Post", verbose_name="Должность учителя", blank=True)
 
-    # Сведения для учеников
     classroom = models.ForeignKey(to='main.Classroom', on_delete=models.CASCADE, verbose_name='Класс ученика',
                                   blank=True, null=True)
 

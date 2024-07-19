@@ -79,6 +79,22 @@ class ChildClassroomListAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
         pass
 
 
+class ChildExpelAdmin(View, LoginRequiredMixin):
+    def post(self, request, User_id):
+        user = get_object_or_404(User, id=User_id)
+        user.is_expelled = True
+        user.save()
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
+class ChildReinstateAdmin(View, LoginRequiredMixin):
+    def post(self, request, User_id):
+        user = get_object_or_404(User, id=User_id)
+        user.is_expelled = False
+        user.save()
+        return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
 class ChildRemoveAdmin(View, LoginRequiredMixin):
     def get(self, request, User_id):
         user_id = User.objects.get(id=User_id)
@@ -99,11 +115,17 @@ class ClassroomCreateView(CreateView):
         return context
 
     def get_class_students(self):
-        classroom_id = self.kwargs.get('pk')
-        if classroom_id:
-            classroom = get_object_or_404(Classroom, pk=classroom_id)
-            return classroom.child.all()
         return User.objects.none()
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        students_ids = self.request.POST.getlist('students')
+        students = User.objects.filter(id__in=students_ids, is_child=True)
+        self.object.child.set(students)
+        for student in students:
+            student.classroom = self.object
+            student.save()
+        return response
 
 
 class ClassroomUpdateView(UpdateView):
@@ -125,6 +147,15 @@ class ClassroomUpdateView(UpdateView):
             return classroom.child.all()
         return User.objects.none()
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        students_ids = self.request.POST.getlist('students')
+        students = User.objects.filter(id__in=students_ids, is_child=True)
+        self.object.child.set(students)
+        for student in students:
+            student.classroom = self.object
+            student.save()
+        return response
 
 
 class ClassroomDeleteView(DeleteView):

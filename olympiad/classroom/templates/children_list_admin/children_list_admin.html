@@ -8,8 +8,7 @@
 
     <div class="flex justify-between mb-4">
         <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Список участников</button>
-        <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{% url 'users:CreateChild' %}">Добавить
-            ученика</a>
+        <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{% url 'users:CreateChild' %}">Добавить ученика</a>
     </div>
 
     <div class="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -35,12 +34,15 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
             {% for child in child %}
-                <tr>
+                <tr class="{% if child.is_expelled %}bg-gray-300{% endif %}">
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ child.id }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {{ child.last_name }} {{ child.first_name }} {{ child.surname }}
+                        {% if child.is_expelled %}
+                            <span class="text-red-500">(Исключен)</span>
+                        {% endif %}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ child.gender }}
@@ -49,12 +51,46 @@
                         {{ child.birth_date }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="{% url 'classroom:child_remove_admin' child.id %}"
-                           class="text-red-600 hover:text-red-900">Удалить</a>
+                        {% if not child.is_expelled %}
+                            <button onclick="openModal('{{ child.id }}')" class="text-red-600 hover:text-red-900">Исключить</button>
+                        {% else %}
+                            <form method="post" action="{% url 'classroom:child_reinstate_admin' child.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="text-green-600 hover:text-green-900">Восстановить</button>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <!-- Modal -->
+    <div id="expelModal" class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg">
+            <h2 class="text-xl mb-4">Вы уверены, что хотите исключить этого ученика?</h2>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="bg-gray-300 text-black px-4 py-2 rounded mr-2">Отмена</button>
+                <form id="expelForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Исключить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(childId) {
+            const modal = document.getElementById('expelModal');
+            const form = document.getElementById('expelForm');
+            form.action = `{% url 'classroom:child_expel_admin' '0' %}`.replace('0', childId);
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('expelModal');
+            modal.classList.add('hidden');
+        }
+    </script>
 {% endblock %}
