@@ -357,7 +357,7 @@ class AddRecommendation(TeacherRequiredMixin, View):
                 action='Создание рекомендации',
                 object_name=f'Рекомендация ученику {child.get_full_name()} на олимпиаду {olympiad.name}'
             )
-            return HttpResponseRedirect(reverse_lazy('main:home'))
+            return render(request, 'add-recommendation/add-recommendation.html')
         else:
             return HttpResponseForbidden()
 
