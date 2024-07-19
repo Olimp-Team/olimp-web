@@ -31,3 +31,4 @@ django-image-cropping
 django-imagekit
 easy-thumbnails
 asyncio
+python-telegram-bot
