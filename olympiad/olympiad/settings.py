@@ -162,7 +162,7 @@ WSGI_APPLICATION = 'olympiad.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'default_db',
+        'NAME': 'olimp',
         'USER': 'gen_user',
         'PASSWORD': "Q/-*PaDx}9OJG#",
         'HOST': '147.45.236.124',

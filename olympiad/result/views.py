@@ -28,15 +28,17 @@ class ExportResultsView(View):
         if not request.user.is_admin:
             return HttpResponseForbidden()
 
-        results = Result.objects.select_related('info_children', 'info_olympiad').all()
+        results = Result.objects.select_related('info_children__classroom', 'info_olympiad').all()
 
         # Создаем DataFrame вручную, чтобы использовать get_full_name
         data = []
         for result in results:
             user = result.info_children
+            classroom = user.classroom  # Предполагая, что есть связь между User и Classroom
             olympiad = result.info_olympiad
             data.append({
                 'ФИО': user.get_full_name(),
+                'Класс': f"{classroom.number} {classroom.letter}" if classroom else 'Нет данных',
                 'Название олимпиады': olympiad.name,
                 'Количество очков': result.points,
                 'Статус результата': result.get_status_result_display(),
@@ -132,28 +134,38 @@ class ResultListView(ListView):
         return context
 
 
-class OlympiadResultCreateView(AdminRequiredMixin, View):
+class OlympiadResultCreateView(View):
     def get(self, request):
         form = OlympiadResultForm()
-        return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
+        return render(request, 'olympiad_result_list/olympiad_result_form.html', {'form': form})
 
     def post(self, request):
         form = OlympiadResultForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('result:results_list')
-        return render(request, 'olympiad_result_list/olympiad_result_list.html', {'form': form})
+            student = form.cleaned_data['student']
+            olympiad = form.cleaned_data['olympiad']
+            score = form.cleaned_data['score']
+            status = form.cleaned_data['status']
+
+            Result.objects.create(
+                info_children=student,
+                info_olympiad=olympiad,
+                points=score,
+                status_result=status
+            )
+
+            return redirect('result:results_list')  # Замените на ваш URL для успешного добавления
+        return render(request, 'olympiad_result_list/olympiad_result_form.html', {'form': form})
 
 
 class GetOlympiadsView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         student_id = request.GET.get('student_id')
-        if student_id:
-            olympiads = Olympiad.objects.filter(Olympiad_admin__child_admin__id=student_id,
-                                                Olympiad_admin__is_deleted=False).distinct()
-            olympiad_list = list(olympiads.values('id', 'name'))
-            return JsonResponse(olympiad_list, safe=False)
-        return JsonResponse([], safe=False)
+        olympiad_ids = Register_admin.objects.filter(child_admin_id=student_id).values_list('Olympiad_admin_id',
+                                                                                            flat=True)
+        olympiads = Olympiad.objects.filter(id__in=olympiad_ids)
+        olympiad_list = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
+        return JsonResponse(olympiad_list, safe=False)
 
 
 class OlympiadResultClassCreateView(AdminRequiredMixin, View):
@@ -189,7 +201,8 @@ class GetStudentsView(View):
         classroom_id = request.GET.get('classroom_id')
         if classroom_id:
             classroom = Classroom.objects.get(id=classroom_id)
-            students = classroom.child_set.filter(id__in=Register_admin.objects.values_list('child_admin_id', flat=True))
+            students = classroom.child_set.filter(
+                id__in=Register_admin.objects.values_list('child_admin_id', flat=True))
             html = render_to_string('students_list/students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
