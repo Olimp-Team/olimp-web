@@ -2,26 +2,23 @@
 {% load static %}
 {% block content %}
     {% block head_olimp %}
-
-        <link rel="preload" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" as="style"
-              onload="this.onload=null;this.rel='stylesheet'">
-        <noscript>
-            <link src="https://cdn.jsdelivr.net/npm/flatpickr">
-        </noscript>
-        <noscript>
-            <link rel="stylesheet" src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js">
-        </noscript>
-
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'default'
+            });
+
             flatpickr.localize(flatpickr.l10ns.ru);
             flatpickr("#start-date", {
-                dateFormat: "Y-m-d",
+                dateFormat: "d-m-Y",
                 locale: "ru"
             });
             flatpickr("#end-date", {
-                dateFormat: "Y-m-d",
+                dateFormat: "d-m-Y",
                 locale: "ru"
             });
         });
@@ -44,7 +41,7 @@
 
             <div>
                 <label for="class" class="block text-gray-700">Класс</label>
-                <select id="class" name="class" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <select id="class" name="class" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
                     <option value="">Выберите класс</option>
                     {% for class in classrooms %}
                         <option value="{{ class.id }}"
@@ -57,7 +54,7 @@
 
             <div>
                 <label for="subject" class="block text-gray-700">Предмет</label>
-                <select id="subject" name="subject" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <select id="subject" name="subject" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
                     <option value="">Выберите предмет</option>
                     {% for subject in subjects %}
                         <option value="{{ subject.id }}"
@@ -70,13 +67,19 @@
 
             <div>
                 <label for="student" class="block text-gray-700">Ученик</label>
-                <input type="text" id="student" name="student" placeholder="Введите имя ученика"
-                       value="{{ student_filter }}" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <select id="student" name="student" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
+                    <option value="">Выберите ученика</option>
+                    {% for user in students %}
+                        <option value="{{ user.id }}"
+                                {% if user.id|stringformat:"s" == student_filter %}selected{% endif %}>
+                            {{ user.get_full_name }}
+                        </option>
+                    {% endfor %}
+                </select>
             </div>
-
             <div>
                 <label for="olympiad" class="block text-gray-700">Олимпиада</label>
-                <select id="olympiad" name="olympiad" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <select id="olympiad" name="olympiad" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
                     <option value="">Выберите олимпиаду</option>
                     {% for olympiad in olympiads %}
                         <option value="{{ olympiad.id }}"
@@ -86,67 +89,47 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="flex space-x-4">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Фильтровать
-                </button>
-                <a href="{% url 'docs:dashboard' %}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Сбросить</a>
-            </div>
-        </form>
 
-        <form method="get" action="{% url 'docs:export_excel' %}" class="mt-4">
-            <!-- Передача текущих параметров фильтра для выгрузки -->
-            <input type="hidden" name="start-date" value="{{ start_date }}">
-            <input type="hidden" name="end-date" value="{{ end_date }}">
-            <input type="hidden" name="class" value="{{ class_filter }}">
-            <input type="hidden" name="subject" value="{{ subject_filter }}">
-            <input type="hidden" name="student" value="{{ student_filter }}">
-            <input type="hidden" name="olympiad" value="{{ olympiad_filter }}">
-            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Выгрузить в
-                Excel
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+                Применить фильтр
             </button>
+            <a href="{% url 'docs:export_excel' %}?start-date={{ start_date }}&end-date={{ end_date }}&class={{ class_filter }}&subject={{ subject_filter }}&student={{ student_filter }}&olympiad={{ olympiad_filter }}"
+               class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700">
+                Выгрузить Excel
+            </a>
         </form>
+    </div>
 
-        <h2 class="text-xl font-bold mt-6 mb-4">Статистика</h2>
-        <div class="mb-6">
-            <p>Количество победителей: {{ winners_count }}</p>
-            <p>Количество призеров: {{ prizewinners_count }}</p>
-            <p>Количество участников: {{ participants_count }}</p>
-        </div>
-
-        <h2 class="text-xl font-bold mt-6 mb-4">Результаты</h2>
-        <div class="overflow-x-auto">
-            <table class="min-w-full bg-white divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+    <div class="container mx-auto mt-8 bg-white shadow-lg rounded-lg p-6">
+        <h2 class="text-2xl font-bold mb-4">Результаты</h2>
+        <p>Победителей: {{ winners_count }}</p>
+        <p>Призеров: {{ prizewinners_count }}</p>
+        <p>Участников: {{ participants_count }}</p>
+        <table class="min-w-full bg-white">
+            <thead>
+            <tr>
+                <th class="py-2">Ученик</th>
+                <th class="py-2">Олимпиада</th>
+                <th class="py-2">Предмет</th>
+                <th class="py-2">Класс</th>
+                <th class="py-2">Очки</th>
+                <th class="py-2">Статус</th>
+                <th class="py-2">Дата</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for result in results %}
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ученик
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Олимпиада
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Предмет
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Класс
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Очки</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
+                    <td class="py-2">{{ result.info_children.get_full_name }}</td>
+                    <td class="py-2">{{ result.info_olympiad.name }}</td>
+                    <td class="py-2">{{ result.info_olympiad.subject.name }}</td>
+                    <td class="py-2">{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
+                    <td class="py-2">{{ result.points }}</td>
+                    <td class="py-2">{{ result.get_status_result_display }}</td>
+                    <td class="py-2">{{ result.date_added|date:"d-m-Y" }}</td>
                 </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                {% for result in results %}
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_children.get_full_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.subject.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.points }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.get_status_result_display }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.date_added }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}

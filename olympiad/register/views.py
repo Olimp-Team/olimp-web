@@ -285,16 +285,19 @@ class RegisterDeleteTeacher(TeacherRequiredMixin, View):
     def post(self, request, Olympiad_id, student_id):
         if request.user.is_teacher:
             try:
+                # Ищем заявку на конкретную олимпиаду
                 register = Register_send.objects.get(Olympiad_send_id=Olympiad_id, child_send_id=student_id,
                                                      is_deleted=False)
                 register.is_deleted = True
                 register.save()
+
                 # Запись действия в аудит
                 AuditLog.objects.create(
                     user=request.user,
                     action='Удаление заявки',
                     object_name=f'Заявка ученика {register.child_send.get_full_name()} на олимпиаду {register.Olympiad_send.name}'
                 )
+
                 return HttpResponseRedirect(request.META['HTTP_REFERER'])
             except Register_send.DoesNotExist:
                 return HttpResponseForbidden("Заявка не найдена.")

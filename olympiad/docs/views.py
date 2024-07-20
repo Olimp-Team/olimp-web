@@ -343,6 +343,12 @@ class DashboardView(AdminRequiredMixin, ListView):
         student_filter = self.request.GET.get('student')
         olympiad_filter = self.request.GET.get('olympiad')
 
+        # Конвертация формата даты
+        if start_date:
+            start_date = datetime.strptime(start_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+        if end_date:
+            end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+
         if start_date and end_date:
             queryset = queryset.filter(date_added__range=[start_date, end_date])
         if class_filter:
@@ -350,11 +356,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         if subject_filter:
             queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
         if student_filter:
-            queryset = queryset.filter(
-                Q(info_children__first_name__icontains=student_filter) |
-                Q(info_children__last_name__icontains=student_filter) |
-                Q(info_children__surname__icontains=student_filter)
-            )
+            queryset = queryset.filter(info_children__id=student_filter)
         if olympiad_filter:
             queryset = queryset.filter(info_olympiad__id=olympiad_filter)
 
@@ -362,9 +364,20 @@ class DashboardView(AdminRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['classrooms'] = Classroom.objects.all()
+
+        # Получение зарегистрированных олимпиад из Register_admin
+        olympiad_ids = Register_admin.objects.values_list('Olympiad_admin', flat=True)
+        context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids)
+
+        # Получение классов, зарегистрированных в Register_admin
+        class_ids = Register_admin.objects.values_list('child_admin__classroom__id', flat=True).distinct()
+        context['classrooms'] = Classroom.objects.filter(id__in=class_ids).order_by('number', 'letter')
+
         context['subjects'] = Subject.objects.all()
-        context['olympiads'] = Olympiad.objects.all()
+
+        # Получение учеников, зарегистрированных в Register_admin
+        student_ids = Register_admin.objects.values_list('child_admin', flat=True).distinct()
+        context['students'] = User.objects.filter(id__in=student_ids).order_by('last_name', 'first_name')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
@@ -382,66 +395,59 @@ class DashboardView(AdminRequiredMixin, ListView):
 
         return context
 
+class ExportExcelView(View):
 
-class ExportExcelView(AdminRequiredMixin, ListView):
-    model = Result
+    def get(self, request, *args, **kwargs):
+        # Фильтры
+        start_date = request.GET.get('start-date')
+        end_date = request.GET.get('end-date')
+        class_filter = request.GET.get('class')
+        subject_filter = request.GET.get('subject')
+        student_filter = request.GET.get('student')
+        olympiad_filter = request.GET.get('olympiad')
 
-    def get_queryset(self):
+        # Конвертация формата даты
+        if start_date:
+            start_date = datetime.strptime(start_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+        if end_date:
+            end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+
         queryset = Result.objects.all()
 
-        # Фильтры
-        start_date = self.request.GET.get('start-date')
-        end_date = self.request.GET.get('end-date')
-        class_filter = self.request.GET.get('class')
-        subject_filter = self.request.GET.get('subject')
-        student_filter = self.request.GET.get('student')
-        olympiad_filter = self.request.GET.get('olympiad')
-
         if start_date and end_date:
-            queryset = queryset.filter(date_added__date__range=[start_date, end_date])
+            queryset = queryset.filter(date_added__range=[start_date, end_date])
         if class_filter:
             queryset = queryset.filter(info_children__classroom__id=class_filter)
         if subject_filter:
             queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
         if student_filter:
-            queryset = queryset.filter(
-                Q(info_children__first_name__icontains=student_filter) |
-                Q(info_children__last_name__icontains=student_filter) |
-                Q(info_children__surname__icontains=student_filter)
-            )
+            queryset = queryset.filter(info_children__id=student_filter)
         if olympiad_filter:
             queryset = queryset.filter(info_olympiad__id=olympiad_filter)
 
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-
-        # Подготовка данных для выгрузки
-        data = []
-        for result in queryset:
-            data.append([
-                result.info_children.get_full_name(),
-                result.info_olympiad.name,
-                result.info_olympiad.subject.name,
-                f"{result.info_children.classroom.number} {result.info_children.classroom.letter}",
-                result.points,
-                result.get_status_result_display(),
-                result.date_added.replace(tzinfo=None)  # Удаление информации о временной зоне
-            ])
+        # Фильтрация по зарегистрированным олимпиадам
+        olympiad_ids = Register_admin.objects.values_list('Olympiad_admin', flat=True)
+        queryset = queryset.filter(info_olympiad__id__in=olympiad_ids)
 
         # Создание DataFrame
-        df = pd.DataFrame(data, columns=[
-            'Ученик', 'Олимпиада', 'Предмет', 'Класс', 'Очки', 'Статус', 'Дата'
-        ])
+        data = []
+        for result in queryset:
+            data.append({
+                'Ученик': result.info_children.get_full_name(),
+                'Олимпиада': result.info_olympiad.name,
+                'Предмет': result.info_olympiad.subject.name,
+                'Класс': f"{result.info_children.classroom.number} {result.info_children.classroom.letter}",
+                'Очки': result.points,
+                'Статус': result.get_status_result_display(),
+                'Дата': result.date_added.replace(tzinfo=None)  # Убираем временную зону
+            })
 
-        # Создание HttpResponse с заголовками для выгрузки
+        df = pd.DataFrame(data)
+
+        # Создание HTTP ответа с Excel файлом
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=report.xlsx'
-
-        # Сохранение DataFrame в Excel файл
-        with pd.ExcelWriter(response, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Results')
+        response['Content-Disposition'] = 'attachment; filename=results.xlsx'
+        df.to_excel(response, index=False)
 
         return response
 
