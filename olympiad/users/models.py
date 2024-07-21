@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from image_cropping import ImageRatioField
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from school.models import *
 
 
 class User(AbstractUser):
@@ -33,9 +34,6 @@ class User(AbstractUser):
     gender = models.CharField("Пол учителя", max_length=2, choices=GENDER_CHOICES)
     telegram_id = models.CharField(max_length=64, blank=True, null=True, verbose_name="Telegram ID")
 
-    def get_types(self):
-        return self.GENDER_CHOICES
-
     is_teacher = models.BooleanField("Учитель", default=False, blank=True, null=True)
     is_child = models.BooleanField("Ученик", default=False, blank=True, null=True)
     is_admin = models.BooleanField("Администратор", default=False, blank=True, null=True)
@@ -49,6 +47,7 @@ class User(AbstractUser):
 
     classroom = models.ForeignKey(to='main.Classroom', on_delete=models.CASCADE, verbose_name='Класс ученика',
                                   blank=True, null=True)
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, related_name='users')
 
     def __str__(self):
         if self.is_teacher:

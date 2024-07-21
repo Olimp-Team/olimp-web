@@ -12,6 +12,7 @@ class Register(models.Model):
         verbose_name_plural = 'Заявки регистрации на олимпиады'
         verbose_name = 'Заявка регистрации на олимпиаду'
 
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_register')
     teacher = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='', blank=True, null=True)
     child = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='Ученик')
     Olympiad = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE)
@@ -23,6 +24,7 @@ class Register(models.Model):
 
 
 class Register_send(models.Model):
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_register_send')
     teacher_send = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='teacher_send')
     child_send = models.ForeignKey(User, on_delete=models.CASCADE, related_name='child_send')
     Olympiad_send = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE, related_name='Olympiad_send')
@@ -39,6 +41,7 @@ class Register_send(models.Model):
 
 
 class Register_admin(models.Model):
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_register_admin')
     teacher_admin = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='teacher_admin')
     child_admin = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='child_admin')
     Olympiad_admin = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE, related_name='Olympiad_admin')
@@ -50,6 +53,7 @@ class Register_admin(models.Model):
 
 
 class Recommendation(models.Model):
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_recommendation')
     recommended_by = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_by')
     recommended_to = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_to')
     child = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_for')

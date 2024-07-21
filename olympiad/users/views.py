@@ -25,12 +25,13 @@ class AuthLogin(View):
     def post(self, request):
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            remember_me = request.POST.get('remember_me', None)
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            school = form.cleaned_data['school']
             user = auth.authenticate(username=username, password=password)
-            if user:
+            if user and user.school == school:
                 auth.login(request, user)
+                remember_me = request.POST.get('remember_me', None)
                 if remember_me:
                     request.session.set_expiry(1209600)  # 2 недели
                 else:
