@@ -126,7 +126,7 @@ class Olympiad(models.Model):
     subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name='Название школьного предмета')
     class_olympiad = models.IntegerField('Класс олимпиады')
     date = models.DateField('Дата проведения', blank=True, null=True)
-    # time = models.TimeField('Время проведения', blank=True, null=True)
+    time = models.TimeField('Время проведения', blank=True, null=True)
     location = models.CharField('Место проведения олимпиады', max_length=256, blank=True, null=True)
     school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_olympiad')
     def __str__(self):

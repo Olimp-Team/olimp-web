@@ -14,7 +14,7 @@ def register_school(request):
             )
             if admin_user:
                 login(request, admin_user)
-                return redirect('dashboard')  # Замените 'dashboard' на ваш URL для панели администратора
+                return redirect('users:login')  # Замените 'dashboard' на ваш URL для панели администратора
     else:
         form = SchoolRegistrationForm()
     return render(request, 'register_school.html', {'form': form})

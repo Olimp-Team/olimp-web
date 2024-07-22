@@ -4,6 +4,7 @@ import zipfile
 import tempfile
 import pandas as pd
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse
 from django.views.generic import View, ListView
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
@@ -241,6 +242,11 @@ class ExcelAll(AdminRequiredMixin, View):
             return HttpResponseForbidden()
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class import_users(View):
     def get(self, request):
         form = UploadFileForm()
@@ -250,19 +256,23 @@ class import_users(View):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['file']
-            import_data(file)
+            import_data(file, request.user.school)
             return redirect('docs:succes_import')
+        return render(request, 'upload.html', {'form': form})
 
 
-def import_data(file):
+def import_data(file, school):
     df = pd.read_excel(file)
 
     for index, row in df.iterrows():
         if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
             continue
 
-        # Проверка на наличие почты
-        if not pd.notna(row['почта']):
+        try:
+            # Проверка на наличие почты
+            if not pd.notna(row['почта']):
+                continue
+
             user, created = User.objects.update_or_create(
                 username=row['имя_пользователя'],
                 defaults={
@@ -275,6 +285,7 @@ def import_data(file):
                     'is_teacher': row['учитель'] == 1,
                     'is_child': row['ученик'] == 1,
                     'is_admin': row['администратор'] == 1,
+                    'school': school,  # Привязываем пользователя к школе
                 }
             )
 
@@ -285,7 +296,8 @@ def import_data(file):
             # Обработка классного руководства
             if pd.notna(row['классное_руководство']):
                 number, letter = parse_classroom(row['классное_руководство'])
-                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter,
+                                                                           defaults={'school': school})
                 if created or classroom_guide.teacher is None:
                     classroom_guide.teacher = user
                     classroom_guide.save()
@@ -295,7 +307,8 @@ def import_data(file):
             # Обработка учеников
             if pd.notna(row['класс']):
                 number, letter = parse_classroom(row['класс'])
-                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter,
+                                                                     defaults={'school': school})
                 user.classroom = classroom
                 user.save()
                 classroom.child.add(user)
@@ -318,9 +331,11 @@ def import_data(file):
                         user.post_job_teacher.add(post_obj)
                     except Post.DoesNotExist:
                         pass  # Если должность не найдена, пропускаем
+        except Exception as e:
+            logger.error(f"Error processing row {index}: {e}")
+            continue
 
 
-# Вспомогательная функция для разбора класса
 def parse_classroom(classroom_str):
     number = ''.join(filter(str.isdigit, classroom_str))
     letter = ''.join(filter(str.isalpha, classroom_str))
@@ -394,6 +409,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         context['olympiad_filter'] = self.request.GET.get('olympiad', '')
 
         return context
+
 
 class ExportExcelView(View):
 
@@ -620,52 +636,66 @@ class create_zip_archive_for_teacher(View):
             return response
 
 
+logger = logging.getLogger(__name__)
+
+
 class import_olympiads(View):
     def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file = request.FILES['file']
-            df = pd.read_excel(excel_file)
-
-            for index, row in df.iterrows():
-                try:
-                    category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
-                    level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
-                    stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
-                    subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
-
-                    # Проверяем и преобразуем дату
-                    date = None
-                    if pd.notna(row['Дата проведения']):
-                        date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
-
-                    # Проверяем и преобразуем время
-                    # time = None
-                    # if pd.notna(row['Время проведения']):
-                    #     time = datetime.strptime(str(row['Время проведения']), '%H:%M:%S').time()
-
-                    # Проверяем место проведения
-                    location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
-
-                    Olympiad.objects.create(
-                        name=row['Название олимпиады'],
-                        description=row['Описание олимпиады'],
-                        category=category,
-                        level=level,
-                        stage=stage,
-                        subject=subject,
-                        class_olympiad=row['Класс олимпиады'],
-                        date=date,
-                        # time=time,
-                        location=location
-                    )
-                except Exception as e:
-                    # Логирование ошибки и продолжение цикла
-                    logging.error(f"Ошибка в строке {index}: {e}")
-                    continue
-
-            return HttpResponseRedirect('docs:succes_import_olympiad')
+            try:
+                import_olympiads_data(excel_file, request.user.school)
+                return HttpResponseRedirect(reverse('docs:succes_import_olympiad'))
+            except Exception as e:
+                logger.error(f"Ошибка импорта олимпиад: {e}")
+                return render(request, 'import_olympiads.html',
+                              {'form': form, 'error': 'Ошибка импорта олимпиад. Проверьте лог для деталей.'})
+        return render(request, 'import_olympiads.html', {'form': form, 'error': 'Некорректные данные формы.'})
 
     def get(self, request):
         form = UploadFileForm()
         return render(request, 'import_olympiads.html', {'form': form})
+
+
+def import_olympiads_data(file, school):
+    df = pd.read_excel(file)
+    logger.info(f"Начало импорта олимпиад для школы: {school}")
+
+    for index, row in df.iterrows():
+        try:
+            category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
+            level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
+            stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
+            subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
+
+            # Проверяем и преобразуем дату
+            date = None
+            if pd.notna(row['Дата проведения']):
+                date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
+
+            # Проверяем место проведения
+            location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
+
+            olympiad, created = Olympiad.objects.get_or_create(
+                name=row['Название олимпиады'],
+                defaults={
+                    'description': row['Описание олимпиады'],
+                    'category': category,
+                    'level': level,
+                    'stage': stage,
+                    'subject': subject,
+                    'class_olympiad': row['Класс олимпиады'],
+                    'date': date,
+                    'location': location,
+                    'school': school
+                }
+            )
+            if created:
+                logger.info(f"Олимпиада '{olympiad.name}' создана для школы {school}")
+            else:
+                logger.info(f"Олимпиада '{olympiad.name}' уже существует и была пропущена")
+
+        except Exception as e:
+            logger.error(f"Ошибка в строке {index}: {e}")
+            continue

@@ -12,9 +12,9 @@ from django.contrib import messages
 
 class ChildrenListTeacher(View, LoginRequiredMixin):
     def get(self, request, Classroom_id):
-        if request.user.teacher:
-            classroom = Classroom.objects.get(id=Classroom_id)
-            classroom_children = User.objects.filter(classroom_id=Classroom_id)
+        if request.user.is_teacher:
+            classroom = get_object_or_404(Classroom, id=Classroom_id, school=request.user.school)
+            classroom_children = User.objects.filter(classroom_id=Classroom_id, school=request.user.school)
             context = {
                 'classroom': classroom,
                 'child': classroom_children
@@ -30,7 +30,8 @@ class ChildrenListTeacher(View, LoginRequiredMixin):
 class TeacherClassroomGuide(View, LoginRequiredMixin):
     def get(self, request, *args, **kwargs):
         if request.user.is_teacher:
-            classroom_teacher = Classroom.objects.filter(teacher__classroom_guide=request.user.classroom_guide)
+            classroom_teacher = Classroom.objects.filter(teacher__classroom_guide=request.user.classroom_guide,
+                                                         school=request.user.school)
             context = {
                 'classrooms': classroom_teacher
             }
@@ -40,12 +41,9 @@ class TeacherClassroomGuide(View, LoginRequiredMixin):
 class ClassroomListView(View):
     def get(self, request):
         graduated = request.GET.get('graduated') == '1'
-        if graduated:
-            classrooms = Classroom.objects.filter(is_graduated=True).order_by('number', 'letter')
-            context_title = "Выпустившиеся классы"
-        else:
-            classrooms = Classroom.objects.filter(is_graduated=False).order_by('number', 'letter')
-            context_title = "Текущие классы"
+        classrooms = Classroom.objects.filter(is_graduated=graduated, school=request.user.school).order_by('number',
+                                                                                                           'letter')
+        context_title = "Выпустившиеся классы" if graduated else "Текущие классы"
         return render(request, 'list_classroom/list_classroom.html', {
             'classrooms': classrooms,
             'graduated': graduated,
@@ -58,7 +56,7 @@ class PromoteAllClassroomsView(View):
         return render(request, 'list_classroom/promote_all_classrooms_confirm.html')
 
     def post(self, request):
-        classrooms = Classroom.objects.filter(is_graduated=False)
+        classrooms = Classroom.objects.filter(is_graduated=False, school=request.user.school)
         for classroom in classrooms:
             classroom.promote()
         messages.success(request, 'Все классы успешно продвинуты.')
@@ -67,8 +65,8 @@ class PromoteAllClassroomsView(View):
 
 class ChildClassroomListAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
     def get(self, request, Classroom_id):
-        classroom = Classroom.objects.get(id=Classroom_id)
-        classroom_children = User.objects.filter(classroom_id=Classroom_id)
+        classroom = get_object_or_404(Classroom, id=Classroom_id, school=request.user.school)
+        classroom_children = User.objects.filter(classroom_id=Classroom_id, school=request.user.school)
         context = {
             'classroom': classroom,
             'child': classroom_children
@@ -81,7 +79,7 @@ class ChildClassroomListAdmin(View, LoginRequiredMixin, AdminRequiredMixin):
 
 class ChildExpelAdmin(View, LoginRequiredMixin):
     def post(self, request, User_id):
-        user = get_object_or_404(User, id=User_id)
+        user = get_object_or_404(User, id=User_id, school=request.user.school)
         user.is_expelled = True
         user.save()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
@@ -89,7 +87,7 @@ class ChildExpelAdmin(View, LoginRequiredMixin):
 
 class ChildReinstateAdmin(View, LoginRequiredMixin):
     def post(self, request, User_id):
-        user = get_object_or_404(User, id=User_id)
+        user = get_object_or_404(User, id=User_id, school=request.user.school)
         user.is_expelled = False
         user.save()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
@@ -97,8 +95,8 @@ class ChildReinstateAdmin(View, LoginRequiredMixin):
 
 class ChildRemoveAdmin(View, LoginRequiredMixin):
     def get(self, request, User_id):
-        user_id = User.objects.get(id=User_id)
-        user_id.delete()
+        user = get_object_or_404(User, id=User_id, school=request.user.school)
+        user.delete()
         return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
@@ -110,7 +108,7 @@ class ClassroomCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['all_students'] = User.objects.filter(is_child=True)  # Фильтрация только учеников
+        context['all_students'] = User.objects.filter(is_child=True, school=self.request.user.school)
         context['class_students'] = self.get_class_students()
         return context
 
@@ -118,9 +116,10 @@ class ClassroomCreateView(CreateView):
         return User.objects.none()
 
     def form_valid(self, form):
+        form.instance.school = self.request.user.school
         response = super().form_valid(form)
         students_ids = self.request.POST.getlist('students')
-        students = User.objects.filter(id__in=students_ids, is_child=True)
+        students = User.objects.filter(id__in=students_ids, is_child=True, school=self.request.user.school)
         self.object.child.set(students)
         for student in students:
             student.classroom = self.object
@@ -136,21 +135,22 @@ class ClassroomUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['all_students'] = User.objects.filter(is_child=True)  # Фильтрация только учеников
+        context['all_students'] = User.objects.filter(is_child=True, school=self.request.user.school)
         context['class_students'] = self.get_class_students()
         return context
 
     def get_class_students(self):
         classroom_id = self.kwargs.get('pk')
         if classroom_id:
-            classroom = get_object_or_404(Classroom, pk=classroom_id)
+            classroom = get_object_or_404(Classroom, pk=classroom_id, school=self.request.user.school)
             return classroom.child.all()
         return User.objects.none()
 
     def form_valid(self, form):
+        form.instance.school = self.request.user.school
         response = super().form_valid(form)
         students_ids = self.request.POST.getlist('students')
-        students = User.objects.filter(id__in=students_ids, is_child=True)
+        students = User.objects.filter(id__in=students_ids, is_child=True, school=self.request.user.school)
         self.object.child.set(students)
         for student in students:
             student.classroom = self.object
@@ -166,13 +166,13 @@ class ClassroomDeleteView(DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['all_students'] = User.objects.filter(is_child=True)  # Фильтрация только учеников
+        context['all_students'] = User.objects.filter(is_child=True, school=self.request.user.school)
         context['class_students'] = self.get_class_students()
         return context
 
     def get_class_students(self):
         classroom_id = self.kwargs.get('pk')
         if classroom_id:
-            classroom = get_object_or_404(Classroom, pk=classroom_id)
+            classroom = get_object_or_404(Classroom, pk=classroom_id, school=self.request.user.school)
             return classroom.child.all()
         return User.objects.none()

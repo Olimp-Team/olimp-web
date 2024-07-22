@@ -1,3 +1,5 @@
+# users/views.py
+
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -41,29 +43,6 @@ class AuthLogin(View):
         return render(request, "auth/auth 2.html", context)
 
 
-# class ProfileView(LoginRequiredMixin, View):
-#     def get(self, request, user_id):
-#         user = get_object_or_404(User, id=user_id)
-#         form = UserProfileForm(instance=user)
-#         context = {'form': form, 'user': user}
-#         return render(request, 'profile/profile.html', context)
-#
-#     def post(self, request, user_id):
-#         user = get_object_or_404(User, id=user_id)
-#         form = UserProfileForm(instance=user, data=request.POST, files=request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect(reverse('profile', kwargs={'user_id': user.id}))
-#         else:
-#             print(form.errors)
-#         context = {'form': form, 'user': user}
-#         return render(request, 'profile/profile.html', context)
-
-
-# def redirect(request):
-#     """Модель представления для перенаправления с главной страницы на страницу авторизации"""
-#     return HttpResponseRedirect(reverse('users:login'))
-
 class start_page(View):
     def get(self, request):
         return render(request, 'start_page/start_page.html')
@@ -104,6 +83,7 @@ class CreateAdmin(AdminRequiredMixin, View):
         if form.is_valid():
             admin = form.save(commit=False)
             admin.is_admin = True
+            admin.school = request.user.school
             admin.save()
             return HttpResponseRedirect(reverse('users:admin_list'))
         context = {'form': form}
@@ -121,6 +101,7 @@ class CreateChild(AdminRequiredMixin, View):
         if form.is_valid():
             child = form.save(commit=False)
             child.is_child = True
+            child.school = request.user.school
             child.save()
             classroom = form.cleaned_data['classroom']
             Classroom.objects.get(id=classroom.id).child.add(child)
@@ -140,6 +121,7 @@ class CreateTeacher(AdminRequiredMixin, View):
         if form.is_valid():
             teacher = form.save(commit=False)
             teacher.is_teacher = True
+            teacher.school = request.user.school
             teacher.save()
             form.save_m2m()  # Ensure M2M fields are saved
             return HttpResponseRedirect(reverse('users:teacher_list'))
@@ -149,14 +131,14 @@ class CreateTeacher(AdminRequiredMixin, View):
 
 class TeacherListView(AdminRequiredMixin, View):
     def get(self, request):
-        teachers = User.objects.filter(is_teacher=True)
+        teachers = User.objects.filter(is_teacher=True, school=request.user.school)
         context = {'teachers': teachers}
         return render(request, 'teacher_list.html', context)
 
 
 class AdminListView(AdminRequiredMixin, View):
     def get(self, request):
-        admins = User.objects.filter(is_admin=True)
+        admins = User.objects.filter(is_admin=True, school=request.user.school)
         context = {'admins': admins}
         return render(request, 'admin_list.html', context)
 

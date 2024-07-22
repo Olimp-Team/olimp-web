@@ -42,12 +42,15 @@ class User(AbstractUser):
 
     classroom_guide = models.ForeignKey('main.Classroom', related_name='classroom_teachers', blank=True,
                                         on_delete=models.CASCADE, null=True)
-    subject = models.ManyToManyField(to="main.Subject", verbose_name="Какой предмет ведёт учитель", blank=True)
-    post_job_teacher = models.ManyToManyField(to="main.Post", verbose_name="Должность учителя", blank=True)
+    subject = models.ManyToManyField(to="main.Subject", verbose_name="Какой предмет ведёт учитель",
+                                     blank=True, max_length=256)
+    post_job_teacher = models.ManyToManyField(to="main.Post", verbose_name="Должность учителя",
+                                              blank=True)
 
     classroom = models.ForeignKey(to='main.Classroom', on_delete=models.CASCADE, verbose_name='Класс ученика',
                                   blank=True, null=True)
-    school = models.ForeignKey('school.School', on_delete=models.CASCADE, related_name='users')
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, related_name='users',
+                               blank=True, null=True)
 
     def __str__(self):
         if self.is_teacher:

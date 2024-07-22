@@ -1,4 +1,5 @@
-import pandas as pd
+# result/views.py
+
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseForbidden
 from django.views.generic import ListView
@@ -28,13 +29,13 @@ class ExportResultsView(View):
         if not request.user.is_admin:
             return HttpResponseForbidden()
 
-        results = Result.objects.select_related('info_children__classroom', 'info_olympiad').all()
+        results = Result.objects.filter(info_children__school=request.user.school).select_related(
+            'info_children__classroom', 'info_olympiad')
 
-        # Создаем DataFrame вручную, чтобы использовать get_full_name
         data = []
         for result in results:
             user = result.info_children
-            classroom = user.classroom  # Предполагая, что есть связь между User и Classroom
+            classroom = user.classroom
             olympiad = result.info_olympiad
             data.append({
                 'ФИО': user.get_full_name(),
@@ -42,7 +43,7 @@ class ExportResultsView(View):
                 'Название олимпиады': olympiad.name,
                 'Количество очков': result.points,
                 'Статус результата': result.get_status_result_display(),
-                'Дата добавления': make_naive(result.date_added)
+                'Дата добавления': result.date_added
             })
 
         df = pd.DataFrame(data)
@@ -63,8 +64,8 @@ class ImportResultsView(View):
         if not request.user.is_admin:
             return HttpResponseForbidden()
 
-        users = User.objects.all()
-        olympiads = Olympiad.objects.all()
+        users = User.objects.filter(school=request.user.school)
+        olympiads = Olympiad.objects.filter(school=request.user.school)
         return render(request, 'result/result.html', {'users': users, 'olympiads': olympiads})
 
     def post(self, request, *args, **kwargs):
@@ -84,20 +85,22 @@ class ImportResultsView(View):
                 user = User.objects.get(
                     last_name=last_name,
                     first_name=first_name,
-                    surname=surname
+                    surname=surname,
+                    school=request.user.school
                 )
             except MultipleObjectsReturned:
                 users = User.objects.filter(
                     last_name=last_name,
                     first_name=first_name,
-                    surname=surname
+                    surname=surname,
+                    school=request.user.school
                 )
-                user = users.first()  # Выбираем первого найденного пользователя
+                user = users.first()
                 errors.append(
                     f'Найдено несколько пользователей с именем {last_name} {first_name} {surname}. Использован первый найденный.')
 
             try:
-                olympiad = Olympiad.objects.get(name=row['Название олимпиады'])
+                olympiad = Olympiad.objects.get(name=row['Название олимпиады'], school=request.user.school)
             except ObjectDoesNotExist:
                 errors.append(f'Олимпиада с названием {row["Название олимпиады"]} не найдена.')
                 continue
@@ -124,7 +127,7 @@ class ResultListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(info_children__school=self.request.user.school)
         self.filterset = ResultFilter(self.request.GET, queryset=queryset)
         return self.filterset.qs
 
@@ -154,16 +157,16 @@ class OlympiadResultCreateView(View):
                 status_result=status
             )
 
-            return redirect('result:results_list')  # Замените на ваш URL для успешного добавления
+            return redirect('result:results_list')
         return render(request, 'olympiad_result_list/olympiad_result_form.html', {'form': form})
 
 
 class GetOlympiadsView(View):
     def get(self, request):
         student_id = request.GET.get('student_id')
-        olympiad_ids = Register_admin.objects.filter(child_admin_id=student_id).values_list('Olympiad_admin_id',
-                                                                                            flat=True)
-        olympiads = Olympiad.objects.filter(id__in=olympiad_ids)
+        olympiad_ids = Register_admin.objects.filter(child_admin_id=student_id, school=request.user.school).values_list(
+            'Olympiad_admin_id', flat=True)
+        olympiads = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
         olympiad_list = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
         return JsonResponse(olympiad_list, safe=False)
 
@@ -190,7 +193,7 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
                     status_result=status[idx]
                 )
 
-            return redirect('success_page')  # Замените 'success_page' на ваш URL для успешного добавления
+            return redirect('success_page')
         students = form.cleaned_data['classroom'].child.all() if 'classroom' in form.cleaned_data else []
         return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
                       {'form': form, 'students': students})
@@ -200,9 +203,10 @@ class GetStudentsView(View):
     def get(self, request):
         classroom_id = request.GET.get('classroom_id')
         if classroom_id:
-            classroom = Classroom.objects.get(id=classroom_id)
+            classroom = get_object_or_404(Classroom, id=classroom_id, school=request.user.school)
             students = classroom.child_set.filter(
-                id__in=Register_admin.objects.values_list('child_admin_id', flat=True))
+                id__in=Register_admin.objects.filter(school=request.user.school).values_list('child_admin_id',
+                                                                                             flat=True))
             html = render_to_string('students_list/students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
@@ -214,4 +218,4 @@ class StudentResultListView(LoginRequiredMixin, ListView):
     context_object_name = 'results'
 
     def get_queryset(self):
-        return Result.objects.filter(info_children=self.request.user)
+        return Result.objects.filter(info_children=self.request.user, info_children__school=self.request.user.school)
