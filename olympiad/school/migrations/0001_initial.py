@@ -12,14 +12,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name='School',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField()),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                ('name', models.CharField(max_length=255, unique=True)),
+                ('address', models.CharField(max_length=255)),
+                ('contact_email', models.EmailField(max_length=254)),
+                ('contact_phone', models.CharField(max_length=20)),
             ],
-            options={
-                'ordering': ['timestamp'],
-            },
         ),
     ]

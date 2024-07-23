@@ -26,25 +26,31 @@
                 {% csrf_token %}
                 <div class="mb-4">
                     <label for="id_username" class="block text-sm font-medium text-gray-700">Имя пользователя</label>
-                    {{ form.username|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                    {{ form.username|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
                 </div>
                 <div class="mb-4">
                     <label for="id_email" class="block text-sm font-medium text-gray-700">Электронная почта</label>
-                    {{ form.email|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                    {{ form.email|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
                 </div>
                 {% if form.birth_date %}
                 <div class="mb-4">
                     <label for="id_birth_date" class="block text-sm font-medium text-gray-700">Дата рождения</label>
-                    {{ form.birth_date|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                    {{ form.birth_date|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
                 </div>
                 {% endif %}
                 <div class="mb-4">
                     <label for="id_gender" class="block text-sm font-medium text-gray-700">Пол</label>
-                    {{ form.gender|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                    {{ form.gender|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
                 </div>
                 <div class="mb-4">
                     <label for="id_image" class="block text-sm font-medium text-gray-700">Аватар</label>
-                    {{ form.image|add_class:"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" }}
+                    {{ form.image|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
+{#                    <style>#}
+{#                        #file-upload-button {#}
+{#   opacity: 0;#}
+{#   position: absolute;#}
+{#   z-index: -1;#}
+{#                    </style>#}
                 </div>
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Сохранить изменения</button>
             </form>

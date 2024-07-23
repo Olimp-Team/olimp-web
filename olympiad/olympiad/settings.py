@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'image_cropping',
     'imagekit',
     'easy_thumbnails',
+    'school'
 
 ]
 USE_TZ = False
@@ -162,14 +163,20 @@ WSGI_APPLICATION = 'olympiad.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'default_db',
+        'NAME': 'olimp_olympiad',
         'USER': 'gen_user',
         'PASSWORD': "Q/-*PaDx}9OJG#",
         'HOST': '147.45.236.124',
         'PORT': '3306',
     }
 }
-
+### TEST DATEBASES IF DEBUG or CODING TRUE ###
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

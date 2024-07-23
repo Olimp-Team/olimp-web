@@ -15,6 +15,7 @@ urlpatterns = [
     path('docs/', include('docs.urls', namespace='docs')),
     path('register/', include('register.urls', namespace='register')),
     path('result/', include('result.urls', namespace='result')),
+    path('school/', include('school.urls', namespace='school')),
     path('classroom/', include('classroom.urls', namespace='classroom')),
     path('calendar/', include('calendar_olimp.urls', namespace='calendar')),
     # Приложения авторизации

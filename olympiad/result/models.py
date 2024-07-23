@@ -33,6 +33,6 @@ class Result(models.Model):
                                      default=PARTICIPANT, blank=True, null=True)
     advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_result')
     def __str__(self):
         return f'{self.info_children} - {self.info_olympiad} - {self.points}'

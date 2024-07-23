@@ -4,6 +4,7 @@ import zipfile
 import tempfile
 import pandas as pd
 from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponseBadRequest
+from django.urls import reverse
 from django.views.generic import View, ListView
 from django.utils.translation import gettext as _
 from excel_response import ExcelResponse
@@ -27,7 +28,7 @@ class ExcelClassroom(AdminRequiredMixin, View):
     def get(self, request, Classroom_id):
         if request.user.is_admin:
             queryset = Register_admin.objects.filter(
-                child_admin__classroom__id=Classroom_id, is_deleted=False)
+                child_admin__classroom__id=Classroom_id, is_deleted=False, school=request.user.school)
 
             data_classroom = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
@@ -136,7 +137,8 @@ class ExcelClassroom(AdminRequiredMixin, View):
 class ExcelAll(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
-            queryset = Register_admin.objects.filter(is_deleted=False)  # Получаем данные из нашей модели
+            queryset = Register_admin.objects.filter(is_deleted=False,
+                                                     school=request.user.school)  # Получаем данные из нашей модели
             data_all = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
                  _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
@@ -241,6 +243,11 @@ class ExcelAll(AdminRequiredMixin, View):
             return HttpResponseForbidden()
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class import_users(View):
     def get(self, request):
         form = UploadFileForm()
@@ -250,19 +257,23 @@ class import_users(View):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['file']
-            import_data(file)
+            import_data(file, request.user.school)
             return redirect('docs:succes_import')
+        return render(request, 'upload.html', {'form': form})
 
 
-def import_data(file):
+def import_data(file, school):
     df = pd.read_excel(file)
 
     for index, row in df.iterrows():
         if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
             continue
 
-        # Проверка на наличие почты
-        if not pd.notna(row['почта']):
+        try:
+            # Проверка на наличие почты
+            if not pd.notna(row['почта']):
+                continue
+
             user, created = User.objects.update_or_create(
                 username=row['имя_пользователя'],
                 defaults={
@@ -275,6 +286,7 @@ def import_data(file):
                     'is_teacher': row['учитель'] == 1,
                     'is_child': row['ученик'] == 1,
                     'is_admin': row['администратор'] == 1,
+                    'school': school,  # Привязываем пользователя к школе
                 }
             )
 
@@ -285,7 +297,8 @@ def import_data(file):
             # Обработка классного руководства
             if pd.notna(row['классное_руководство']):
                 number, letter = parse_classroom(row['классное_руководство'])
-                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter,
+                                                                           defaults={'school': school})
                 if created or classroom_guide.teacher is None:
                     classroom_guide.teacher = user
                     classroom_guide.save()
@@ -295,7 +308,8 @@ def import_data(file):
             # Обработка учеников
             if pd.notna(row['класс']):
                 number, letter = parse_classroom(row['класс'])
-                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter)
+                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter,
+                                                                     defaults={'school': school})
                 user.classroom = classroom
                 user.save()
                 classroom.child.add(user)
@@ -318,9 +332,11 @@ def import_data(file):
                         user.post_job_teacher.add(post_obj)
                     except Post.DoesNotExist:
                         pass  # Если должность не найдена, пропускаем
+        except Exception as e:
+            logger.error(f"Error processing row {index}: {e}")
+            continue
 
 
-# Вспомогательная функция для разбора класса
 def parse_classroom(classroom_str):
     number = ''.join(filter(str.isdigit, classroom_str))
     letter = ''.join(filter(str.isalpha, classroom_str))
@@ -343,6 +359,12 @@ class DashboardView(AdminRequiredMixin, ListView):
         student_filter = self.request.GET.get('student')
         olympiad_filter = self.request.GET.get('olympiad')
 
+        # Конвертация формата даты
+        if start_date:
+            start_date = datetime.strptime(start_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+        if end_date:
+            end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+
         if start_date and end_date:
             queryset = queryset.filter(date_added__range=[start_date, end_date])
         if class_filter:
@@ -350,11 +372,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         if subject_filter:
             queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
         if student_filter:
-            queryset = queryset.filter(
-                Q(info_children__first_name__icontains=student_filter) |
-                Q(info_children__last_name__icontains=student_filter) |
-                Q(info_children__surname__icontains=student_filter)
-            )
+            queryset = queryset.filter(info_children__id=student_filter)
         if olympiad_filter:
             queryset = queryset.filter(info_olympiad__id=olympiad_filter)
 
@@ -362,14 +380,30 @@ class DashboardView(AdminRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['classrooms'] = Classroom.objects.all()
-        context['subjects'] = Subject.objects.all()
-        context['olympiads'] = Olympiad.objects.all()
+
+        # Получение зарегистрированных олимпиад из Register_admin
+        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin',
+                                                                                             flat=True)
+        context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
+
+        # Получение классов, зарегистрированных в Register_admin
+        class_ids = Register_admin.objects.filter(school=request.user.school).values_list('child_admin__classroom__id',
+                                                                                          flat=True).distinct()
+        context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=request.user.school).order_by(
+            'number', 'letter')
+
+        context['subjects'] = Subject.objects.filter(school=request.user.school)
+
+        # Получение учеников, зарегистрированных в Register_admin
+        student_ids = Register_admin.objects.filter(school=request.user.school).values_list('child_admin',
+                                                                                            flat=True).distinct()
+        context['students'] = User.objects.filter(id__in=student_ids, school=request.user.school).order_by('last_name',
+                                                                                                           'first_name')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
-        context['winners_count'] = queryset.filter(status_result=Result.WINNER).count()
-        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE).count()
+        context['winners_count'] = queryset.filter(status_result=Result.WINNER, school=request.user.school).count()
+        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE, school=request.user.school).count()
         context['participants_count'] = queryset.count()
 
         # Передача текущих значений фильтров в контекст
@@ -383,65 +417,60 @@ class DashboardView(AdminRequiredMixin, ListView):
         return context
 
 
-class ExportExcelView(AdminRequiredMixin, ListView):
-    model = Result
-
-    def get_queryset(self):
-        queryset = Result.objects.all()
-
-        # Фильтры
-        start_date = self.request.GET.get('start-date')
-        end_date = self.request.GET.get('end-date')
-        class_filter = self.request.GET.get('class')
-        subject_filter = self.request.GET.get('subject')
-        student_filter = self.request.GET.get('student')
-        olympiad_filter = self.request.GET.get('olympiad')
-
-        if start_date and end_date:
-            queryset = queryset.filter(date_added__date__range=[start_date, end_date])
-        if class_filter:
-            queryset = queryset.filter(info_children__classroom__id=class_filter)
-        if subject_filter:
-            queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
-        if student_filter:
-            queryset = queryset.filter(
-                Q(info_children__first_name__icontains=student_filter) |
-                Q(info_children__last_name__icontains=student_filter) |
-                Q(info_children__surname__icontains=student_filter)
-            )
-        if olympiad_filter:
-            queryset = queryset.filter(info_olympiad__id=olympiad_filter)
-
-        return queryset
+class ExportExcelView(View):
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        # Фильтры
+        start_date = request.GET.get('start-date')
+        end_date = request.GET.get('end-date')
+        class_filter = request.GET.get('class')
+        subject_filter = request.GET.get('subject')
+        student_filter = request.GET.get('student')
+        olympiad_filter = request.GET.get('olympiad')
 
-        # Подготовка данных для выгрузки
-        data = []
-        for result in queryset:
-            data.append([
-                result.info_children.get_full_name(),
-                result.info_olympiad.name,
-                result.info_olympiad.subject.name,
-                f"{result.info_children.classroom.number} {result.info_children.classroom.letter}",
-                result.points,
-                result.get_status_result_display(),
-                result.date_added.replace(tzinfo=None)  # Удаление информации о временной зоне
-            ])
+        # Конвертация формата даты
+        if start_date:
+            start_date = datetime.strptime(start_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+        if end_date:
+            end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+
+        queryset = Result.objects.all()
+
+        if start_date and end_date:
+            queryset = queryset.filter(date_added__range=[start_date, end_date], school=request.user.school)
+        if class_filter:
+            queryset = queryset.filter(info_children__classroom__id=class_filter, school=request.user.school)
+        if subject_filter:
+            queryset = queryset.filter(info_olympiad__subject__id=subject_filter, school=request.user.school)
+        if student_filter:
+            queryset = queryset.filter(info_children__id=student_filter, school=request.user.school)
+        if olympiad_filter:
+            queryset = queryset.filter(info_olympiad__id=olympiad_filter, school=request.user.school)
+
+        # Фильтрация по зарегистрированным олимпиадам
+        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin',
+                                                                                             flat=True)
+        queryset = queryset.filter(info_olympiad__id__in=olympiad_ids, school=request.user.school)
 
         # Создание DataFrame
-        df = pd.DataFrame(data, columns=[
-            'Ученик', 'Олимпиада', 'Предмет', 'Класс', 'Очки', 'Статус', 'Дата'
-        ])
+        data = []
+        for result in queryset:
+            data.append({
+                'Ученик': result.info_children.get_full_name(),
+                'Олимпиада': result.info_olympiad.name,
+                'Предмет': result.info_olympiad.subject.name,
+                'Класс': f"{result.info_children.classroom.number} {result.info_children.classroom.letter}",
+                'Очки': result.points,
+                'Статус': result.get_status_result_display(),
+                'Дата': result.date_added.replace(tzinfo=None)  # Убираем временную зону
+            })
 
-        # Создание HttpResponse с заголовками для выгрузки
+        df = pd.DataFrame(data)
+
+        # Создание HTTP ответа с Excel файлом
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=report.xlsx'
-
-        # Сохранение DataFrame в Excel файл
-        with pd.ExcelWriter(response, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Results')
+        response['Content-Disposition'] = 'attachment; filename=results.xlsx'
+        df.to_excel(response, index=False)
 
         return response
 
@@ -530,7 +559,7 @@ class create_zip_archive(View):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-                registers = Register_admin.objects.filter(status_admin=False, is_deleted=False)
+                registers = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
                 classes = {}
 
                 for register in registers:
@@ -579,8 +608,7 @@ class create_zip_archive_for_teacher(View):
 
                 # Найти все заявки учеников класса, которым руководит текущий учитель
                 registers = Register_send.objects.filter(
-                    child_send__classroom=request.user.classroom_guide, is_deleted=False
-                )
+                    child_send__classroom=request.user.classroom_guide, is_deleted=False, school=request.user.school)
 
                 classes = {}
 
@@ -614,52 +642,66 @@ class create_zip_archive_for_teacher(View):
             return response
 
 
+logger = logging.getLogger(__name__)
+
+
 class import_olympiads(View):
     def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file = request.FILES['file']
-            df = pd.read_excel(excel_file)
-
-            for index, row in df.iterrows():
-                try:
-                    category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
-                    level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
-                    stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
-                    subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
-
-                    # Проверяем и преобразуем дату
-                    date = None
-                    if pd.notna(row['Дата проведения']):
-                        date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
-
-                    # Проверяем и преобразуем время
-                    # time = None
-                    # if pd.notna(row['Время проведения']):
-                    #     time = datetime.strptime(str(row['Время проведения']), '%H:%M:%S').time()
-
-                    # Проверяем место проведения
-                    location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
-
-                    Olympiad.objects.create(
-                        name=row['Название олимпиады'],
-                        description=row['Описание олимпиады'],
-                        category=category,
-                        level=level,
-                        stage=stage,
-                        subject=subject,
-                        class_olympiad=row['Класс олимпиады'],
-                        date=date,
-                        # time=time,
-                        location=location
-                    )
-                except Exception as e:
-                    # Логирование ошибки и продолжение цикла
-                    logging.error(f"Ошибка в строке {index}: {e}")
-                    continue
-
-            return HttpResponseRedirect('docs:succes_import_olympiad')
+            try:
+                import_olympiads_data(excel_file, request.user.school)
+                return HttpResponseRedirect(reverse('docs:succes_import_olympiad'))
+            except Exception as e:
+                logger.error(f"Ошибка импорта олимпиад: {e}")
+                return render(request, 'import_olympiads.html',
+                              {'form': form, 'error': 'Ошибка импорта олимпиад. Проверьте лог для деталей.'})
+        return render(request, 'import_olympiads.html', {'form': form, 'error': 'Некорректные данные формы.'})
 
     def get(self, request):
         form = UploadFileForm()
         return render(request, 'import_olympiads.html', {'form': form})
+
+
+def import_olympiads_data(file, school):
+    df = pd.read_excel(file)
+    logger.info(f"Начало импорта олимпиад для школы: {school}")
+
+    for index, row in df.iterrows():
+        try:
+            category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
+            level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
+            stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
+            subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
+
+            # Проверяем и преобразуем дату
+            date = None
+            if pd.notna(row['Дата проведения']):
+                date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
+
+            # Проверяем место проведения
+            location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
+
+            olympiad, created = Olympiad.objects.get_or_create(
+                name=row['Название олимпиады'],
+                defaults={
+                    'description': row['Описание олимпиады'],
+                    'category': category,
+                    'level': level,
+                    'stage': stage,
+                    'subject': subject,
+                    'class_olympiad': row['Класс олимпиады'],
+                    'date': date,
+                    'location': location,
+                    'school': school
+                }
+            )
+            if created:
+                logger.info(f"Олимпиада '{olympiad.name}' создана для школы {school}")
+            else:
+                logger.info(f"Олимпиада '{olympiad.name}' уже существует и была пропущена")
+
+        except Exception as e:
+            logger.error(f"Ошибка в строке {index}: {e}")
+            continue

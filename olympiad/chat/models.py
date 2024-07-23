@@ -11,7 +11,7 @@ class Message(models.Model):
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, related_name='school_chat')
     class Meta:
         ordering = ['timestamp']
 

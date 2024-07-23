@@ -5,7 +5,7 @@
     <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
         <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
 
-        <form method="post" class="space-y-6">
+        <form method="post" id="olympiad-result-form" class="space-y-6" action="{% url 'result:add_result' %}">
             {% csrf_token %}
 
             <div class="infochildren">
@@ -28,9 +28,10 @@
                 {{ form.status_result|add_class:"block w-full mt-1 p-2 border rounded" }}
             </div>
 
+            <div id="form-errors" class="text-red-500"></div>
+
             <div class="text-center">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить
-                </button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
             </div>
         </form>
     </div>
@@ -60,10 +61,36 @@
                     success: function (data) {
                         var olympiadSelect = $('.olympiad-select');
                         olympiadSelect.empty();
+                        olympiadSelect.append('<option value="">Выберите олимпиаду</option>');
                         $.each(data, function (key, value) {
                             olympiadSelect.append('<option value="' + value.id + '">' + value.name + '</option>');
                         });
-                        olympiadSelect.trigger('change');  // Обновить Select2 виджет
+                        olympiadSelect.val('').trigger('change');  // Обновить Select2 виджет
+                    }
+                });
+            });
+
+            $('#olympiad-result-form').on('submit', function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = "{% url 'result:results_list' %}";
+                        } else {
+                            var errors = response.errors;
+                            var errorsHtml = '';
+                            for (var field in errors) {
+                                errorsHtml += '<p>' + errors[field].join(', ') + '</p>';
+                            }
+                            $('#form-errors').html(errorsHtml);
+                        }
+                    },
+                    error: function (response) {
+                        console.log('Ошибка отправки формы');
                     }
                 });
             });
