@@ -1,5 +1,5 @@
 # register/views.py
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from main.models import *
@@ -12,12 +12,15 @@ from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequired
 class RegisterPage(ChildRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_child:
-            school_stage = Stage.objects.get(name='Школьный')
+            try:
+                school_stage = Stage.objects.get(name='Школьный')
+            except Stage.DoesNotExist:
+                raise Http404("Stage not found")
+
             olympiads = Olympiad.objects.filter(class_olympiad=request.user.classroom.number, stage=school_stage,
                                                 school=request.user.school)
-            registered_olympiads = Register_send.objects.filter(child_send=request.user,
-                                                                school=request.user.school).values_list(
-                'Olympiad_send_id', flat=True)
+            registered_olympiads = Register.objects.filter(child=request.user, school=request.user.school,
+                                                           status_send=False).values_list('Olympiad_id', flat=True)
             context = {
                 'olympiads': olympiads,
                 'olympiads_last': olympiads.last(),
@@ -38,13 +41,14 @@ class RegisterAdd(ChildRequiredMixin, View):
             register, created = Register.objects.update_or_create(
                 child=request.user,
                 Olympiad=olympiad,
-                defaults={'teacher': request.user.classroom.teacher, 'school': request.user.school}
+                defaults={'teacher': request.user.classroom.teacher, 'school': request.user.school, 'is_deleted': False,
+                          'status_send': False}
             )
 
-            Register_send.objects.update_or_create(
-                teacher_send=request.user.classroom.teacher,
-                child_send=request.user,
-                Olympiad_send=olympiad,
+            Register.objects.update_or_create(
+                teacher=request.user.classroom.teacher,
+                child=request.user,
+                Olympiad=olympiad,
                 defaults={'is_deleted': False, 'status_send': False, 'status_teacher': False, 'status_admin': False,
                           'school': request.user.school}
             )
@@ -62,9 +66,6 @@ class RegisterDelete(ChildRequiredMixin, View):
             return HttpResponseRedirect(request.META['HTTP_REFERER'])
         else:
             return HttpResponseForbidden()
-
-    def post(self, request, *args, **kwargs):
-        pass
 
 
 class RegisterSend(ChildRequiredMixin, View):
@@ -223,19 +224,25 @@ class RegisterDeleteTeacher(TeacherRequiredMixin, View):
     def post(self, request, Olympiad_id, student_id):
         if request.user.is_teacher:
             try:
-                register = Register_send.objects.get(Olympiad_send_id=Olympiad_id, child_send_id=student_id,
-                                                     is_deleted=False, school=request.user.school)
-                register.is_deleted = True
-                register.save()
+                register_send = Register_send.objects.get(Olympiad_send_id=Olympiad_id, child_send_id=student_id,
+                                                          school=request.user.school)
+                register_send.delete()
+
+                register = Register.objects.get(Olympiad_id=Olympiad_id, child_id=student_id,
+                                                school=request.user.school)
+                register.delete()
 
                 AuditLog.objects.create(
                     user=request.user,
                     action='Удаление заявки',
-                    object_name=f'Заявка ученика {register.child_send.get_full_name()} на олимпиаду {register.Olympiad_send.name}'
+                    school=request.user.school,
+                    object_name=f'Заявка ученика {register.child.get_full_name()} на олимпиаду {register.Olympiad.name}'
                 )
 
                 return HttpResponseRedirect(request.META['HTTP_REFERER'])
             except Register_send.DoesNotExist:
+                return HttpResponseForbidden("Заявка не найдена.")
+            except Register.DoesNotExist:
                 return HttpResponseForbidden("Заявка не найдена.")
         else:
             return HttpResponseForbidden()

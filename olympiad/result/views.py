@@ -7,7 +7,7 @@ from django_filters.views import FilterView
 from .models import Result
 from .filters import ResultFilter
 from .forms import OlympiadResultForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from main.models import *
@@ -154,7 +154,8 @@ class OlympiadResultCreateView(View):
                 info_children=student,
                 info_olympiad=olympiad,
                 points=score,
-                status_result=status
+                status_result=status,
+                school=request.user.school
             )
 
             return redirect('result:results_list')
@@ -190,7 +191,8 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
                     info_children=student,
                     info_olympiad=olympiad,
                     points=score[idx],
-                    status_result=status[idx]
+                    status_result=status[idx],
+                    school=request.user.school,
                 )
 
             return redirect('success_page')

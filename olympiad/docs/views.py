@@ -28,7 +28,7 @@ class ExcelClassroom(AdminRequiredMixin, View):
     def get(self, request, Classroom_id):
         if request.user.is_admin:
             queryset = Register_admin.objects.filter(
-                child_admin__classroom__id=Classroom_id, is_deleted=False)
+                child_admin__classroom__id=Classroom_id, is_deleted=False, school=request.user.school)
 
             data_classroom = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
@@ -137,7 +137,8 @@ class ExcelClassroom(AdminRequiredMixin, View):
 class ExcelAll(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
-            queryset = Register_admin.objects.filter(is_deleted=False)  # Получаем данные из нашей модели
+            queryset = Register_admin.objects.filter(is_deleted=False,
+                                                     school=request.user.school)  # Получаем данные из нашей модели
             data_all = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
                  _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
@@ -381,23 +382,28 @@ class DashboardView(AdminRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         # Получение зарегистрированных олимпиад из Register_admin
-        olympiad_ids = Register_admin.objects.values_list('Olympiad_admin', flat=True)
-        context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids)
+        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin',
+                                                                                             flat=True)
+        context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
 
         # Получение классов, зарегистрированных в Register_admin
-        class_ids = Register_admin.objects.values_list('child_admin__classroom__id', flat=True).distinct()
-        context['classrooms'] = Classroom.objects.filter(id__in=class_ids).order_by('number', 'letter')
+        class_ids = Register_admin.objects.filter(school=request.user.school).values_list('child_admin__classroom__id',
+                                                                                          flat=True).distinct()
+        context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=request.user.school).order_by(
+            'number', 'letter')
 
-        context['subjects'] = Subject.objects.all()
+        context['subjects'] = Subject.objects.filter(school=request.user.school)
 
         # Получение учеников, зарегистрированных в Register_admin
-        student_ids = Register_admin.objects.values_list('child_admin', flat=True).distinct()
-        context['students'] = User.objects.filter(id__in=student_ids).order_by('last_name', 'first_name')
+        student_ids = Register_admin.objects.filter(school=request.user.school).values_list('child_admin',
+                                                                                            flat=True).distinct()
+        context['students'] = User.objects.filter(id__in=student_ids, school=request.user.school).order_by('last_name',
+                                                                                                           'first_name')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
-        context['winners_count'] = queryset.filter(status_result=Result.WINNER).count()
-        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE).count()
+        context['winners_count'] = queryset.filter(status_result=Result.WINNER, school=request.user.school).count()
+        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE, school=request.user.school).count()
         context['participants_count'] = queryset.count()
 
         # Передача текущих значений фильтров в контекст
@@ -431,19 +437,20 @@ class ExportExcelView(View):
         queryset = Result.objects.all()
 
         if start_date and end_date:
-            queryset = queryset.filter(date_added__range=[start_date, end_date])
+            queryset = queryset.filter(date_added__range=[start_date, end_date], school=request.user.school)
         if class_filter:
-            queryset = queryset.filter(info_children__classroom__id=class_filter)
+            queryset = queryset.filter(info_children__classroom__id=class_filter, school=request.user.school)
         if subject_filter:
-            queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
+            queryset = queryset.filter(info_olympiad__subject__id=subject_filter, school=request.user.school)
         if student_filter:
-            queryset = queryset.filter(info_children__id=student_filter)
+            queryset = queryset.filter(info_children__id=student_filter, school=request.user.school)
         if olympiad_filter:
-            queryset = queryset.filter(info_olympiad__id=olympiad_filter)
+            queryset = queryset.filter(info_olympiad__id=olympiad_filter, school=request.user.school)
 
         # Фильтрация по зарегистрированным олимпиадам
-        olympiad_ids = Register_admin.objects.values_list('Olympiad_admin', flat=True)
-        queryset = queryset.filter(info_olympiad__id__in=olympiad_ids)
+        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin',
+                                                                                             flat=True)
+        queryset = queryset.filter(info_olympiad__id__in=olympiad_ids, school=request.user.school)
 
         # Создание DataFrame
         data = []
@@ -552,7 +559,7 @@ class create_zip_archive(View):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-                registers = Register_admin.objects.filter(is_deleted=False)
+                registers = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
                 classes = {}
 
                 for register in registers:
@@ -601,8 +608,7 @@ class create_zip_archive_for_teacher(View):
 
                 # Найти все заявки учеников класса, которым руководит текущий учитель
                 registers = Register_send.objects.filter(
-                    child_send__classroom=request.user.classroom_guide, is_deleted=False
-                )
+                    child_send__classroom=request.user.classroom_guide, is_deleted=False, school=request.user.school)
 
                 classes = {}
 

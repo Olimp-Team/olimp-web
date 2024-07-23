@@ -17,7 +17,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Получение последних 10 результатов для текущего пользователя
-        recent_results = Result.objects.filter(info_children=self.request.user).order_by('-date_added')[:10]
+        recent_results = Result.objects.filter(info_children=self.request.user, school=request.user.school).order_by('-date_added')[:10]
         context['recent_results'] = recent_results
         return context
 
@@ -31,7 +31,7 @@ class AuditLogView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # Отображаем только для администраторов
         if self.request.user.is_admin:
-            return super().get_queryset()
+            return super().get_queryset().filter(school=self.request.user.school)
         else:
             return AuditLog.objects.none()
 

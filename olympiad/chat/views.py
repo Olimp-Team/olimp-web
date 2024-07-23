@@ -13,7 +13,7 @@ User = get_user_model()
 
 @login_required
 def chat_view(request, username):
-    other_user = get_object_or_404(User, username=username, school=request.user.school)
+    other_user = get_object_or_404(User, username=username)
     messages = Message.objects.filter(
         (Q(sender=request.user) & Q(recipient=other_user)) |
         (Q(sender=other_user) & Q(recipient=request.user))
@@ -28,7 +28,7 @@ def chat_view(request, username):
 @login_required
 @require_POST
 def delete_message(request, message_id):
-    message = get_object_or_404(Message, id=message_id, sender=request.user, sender__school=request.user.school)
+    message = get_object_or_404(Message, id=message_id, sender=request.user)
     message.delete()
     return JsonResponse({'status': 'ok'})
 
@@ -36,7 +36,7 @@ def delete_message(request, message_id):
 @login_required
 @require_POST
 def update_message(request, message_id):
-    message = get_object_or_404(Message, id=message_id, sender=request.user, sender__school=request.user.school)
+    message = get_object_or_404(Message, id=message_id, sender=request.user)
     new_content = request.POST.get('content')
     if new_content:
         message.content = new_content
@@ -47,7 +47,7 @@ def update_message(request, message_id):
 @login_required
 def chat_list_view(request):
     current_user = request.user
-    friends = Friend.objects.friends(current_user).filter(school=current_user.school)
+    friends = Friend.objects.friends(current_user)
 
     last_messages = (
         Message.objects
@@ -75,7 +75,7 @@ def chat_list_view(request):
 
 @login_required
 def start_chat(request, username):
-    other_user = get_object_or_404(User, username=username, school=request.user.school)
+    other_user = get_object_or_404(User, username=username)
     return redirect('chat:chat', username=other_user.username)
 
 
@@ -93,6 +93,6 @@ def create_group(request):
 
 @login_required
 def group_detail(request, group_id):
-    group = get_object_or_404(Group, id=group_id, members__school=request.user.school)
+    group = get_object_or_404(Group, id=group_id)
     messages = GroupMessage.objects.filter(group=group).order_by('timestamp')
     return render(request, 'chat/group_detail.html', {'group': group, 'messages': messages})
