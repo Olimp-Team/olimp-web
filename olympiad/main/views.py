@@ -17,7 +17,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Получение последних 10 результатов для текущего пользователя
-        recent_results = Result.objects.filter(info_children=self.request.user, school=request.user.school).order_by('-date_added')[:10]
+        recent_results = Result.objects.filter(info_children=self.request.user, school=self.request.user.school).order_by('-date_added')[:10]
         context['recent_results'] = recent_results
         return context
 
