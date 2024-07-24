@@ -1,5 +1,5 @@
 # register/views.py
-from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from main.models import *
@@ -7,6 +7,7 @@ from register.models import *
 from django.views.generic import *
 from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
+from .form import *
 
 
 class RegisterPage(ChildRequiredMixin, View):
@@ -95,41 +96,12 @@ class BasketStudentApp(ChildRequiredMixin, View):
         if request.user.is_child:
             context = {
                 'register': Register.objects.filter(child=request.user, status_send=False, school=request.user.school),
-                'recommendations': Recommendation.objects.filter(child=request.user, status=False,
-                                                                 school=request.user.school),
+                'recommendations': Recommendation.objects.filter(child=request.user, school=request.user.school, status=Recommendation.PENDING),
                 'register_sends': Register_send.objects.filter(child_send=request.user, school=request.user.school),
                 'deleted_registers': Register_send.objects.filter(child_send=request.user, is_deleted=True,
                                                                   school=request.user.school),
             }
             return render(request, 'basket-student-applications/basket-student-applications.html', context)
-        else:
-            return HttpResponseForbidden()
-
-    def post(self, request, *args, **kwargs):
-        if request.user.is_child:
-            action = request.POST.get('action')
-            olympiad_id = request.POST.get('olympiad_id')
-            if not action or not olympiad_id:
-                return HttpResponseForbidden("Missing data in form.")
-
-            olympiad = get_object_or_404(Olympiad, id=olympiad_id, school=request.user.school)
-
-            if action == 're-register':
-                register, created = Register.objects.update_or_create(
-                    child=request.user,
-                    Olympiad=olympiad,
-                    defaults={'teacher': request.user.classroom.teacher, 'school': request.user.school}
-                )
-
-                Register_send.objects.update_or_create(
-                    teacher_send=request.user.classroom.teacher,
-                    child_send=request.user,
-                    Olympiad_send=olympiad,
-                    defaults={'is_deleted': False, 'status_send': False, 'status_teacher': False, 'status_admin': False,
-                              'school': request.user.school}
-                )
-
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
             return HttpResponseForbidden()
 
@@ -164,21 +136,9 @@ class ChildRegisterList(TeacherRequiredMixin, View):
                     sent_applications_dict[application.child_send] = []
                 sent_applications_dict[application.child_send].append(application.Olympiad_send)
 
-            recommendations = Recommendation.objects.filter(recommended_to=request.user, status=False,
-                                                            school=request.user.school)
-            recommended_students = {}
-            for rec in recommendations:
-                if rec.child not in recommended_students:
-                    recommended_students[rec.child] = []
-                recommended_students[rec.child].append({
-                    'olympiad': rec.Olympiad,
-                    'recommended_by': rec.recommended_by,
-                    'id': rec.id,
-                })
-
             context = {
                 'student_olympiads': student_olympiads,
-                'recommended_students': recommended_students,
+
                 'sent_applications': sent_applications_dict,
             }
             return render(request, 'student-applications/student-applications.html', context)
@@ -190,34 +150,35 @@ class ChildRegisterList(TeacherRequiredMixin, View):
 
 
 def accept_recommendation(request, recommendation_id):
-    if not request.user.is_teacher:
+    if not request.user.is_child:
         return HttpResponseForbidden()
 
     recommendation = get_object_or_404(Recommendation, id=recommendation_id, school=request.user.school)
-
-    Register_send.objects.create(
-        teacher_send=request.user,
-        child_send=recommendation.child,
-        Olympiad_send=recommendation.Olympiad,
-        status_send=False,
-        is_deleted=False,
-        school=request.user.school
+    Register.objects.update_or_create(
+        teacher=recommendation.recommended_by,
+        child=recommendation.child,
+        Olympiad=recommendation.Olympiad,
+        defaults={
+            'status_send': False,
+            'is_deleted': False,
+            'school': request.user.school
+        }
     )
-    recommendation.status = True
+    recommendation.status = Recommendation.ACCEPTED
     recommendation.save()
 
-    return redirect('register:student-applications')
+    return redirect('register:basket-student-applications')
 
 
 def reject_recommendation(request, recommendation_id):
-    if not request.user.is_teacher:
+    if not request.user.is_child:
         return HttpResponseForbidden()
 
     recommendation = get_object_or_404(Recommendation, id=recommendation_id, school=request.user.school)
-    recommendation.status = True
+    recommendation.status = Recommendation.DECLINED
     recommendation.save()
 
-    return redirect('register:student-applications')
+    return redirect('register:basket-student-applications')
 
 
 class RegisterDeleteTeacher(TeacherRequiredMixin, View):
@@ -273,11 +234,10 @@ class RegisterSendTeacher(TeacherRequiredMixin, View):
 class AddRecommendation(TeacherRequiredMixin, View):
     def get(self, request):
         if request.user.is_teacher:
-            school_stage = Stage.objects.get(name='Школьный')
+            students = User.objects.filter(is_child=True, school=request.user.school)
             context = {
-                'students': User.objects.filter(is_child=True, school=request.user.school),
-                'olympiads': Olympiad.objects.filter(stage=school_stage, school=request.user.school),
-                'teachers': User.objects.filter(is_teacher=True, school=request.user.school)
+                'students': students,
+                'user': request.user,
             }
             return render(request, 'add-recommendation/add-recommendation.html', context)
         else:
@@ -285,11 +245,17 @@ class AddRecommendation(TeacherRequiredMixin, View):
 
     def post(self, request):
         if request.user.is_teacher:
-            recommended_to = get_object_or_404(User, id=request.POST['recommended_to'], school=request.user.school)
-            child = get_object_or_404(User, id=request.POST['child'], school=request.user.school)
-            olympiad = get_object_or_404(Olympiad, id=request.POST['olympiad'], school=request.user.school)
+            recommended_to = request.user
+            child_id = request.POST.get('child')
+            olympiad_id = request.POST.get('olympiad')
 
-            Recommendation.objects.create(
+            if not child_id or not olympiad_id:
+                return HttpResponseForbidden("Missing child or olympiad data")
+
+            child = get_object_or_404(User, id=child_id, school=request.user.school)
+            olympiad = get_object_or_404(Olympiad, id=olympiad_id)
+
+            recommendation = Recommendation.objects.create(
                 recommended_by=request.user,
                 recommended_to=recommended_to,
                 child=child,
@@ -298,84 +264,73 @@ class AddRecommendation(TeacherRequiredMixin, View):
             )
             AuditLog.objects.create(
                 user=request.user,
+                school=request.user.school,
                 action='Создание рекомендации',
                 object_name=f'Рекомендация ученику {child.get_full_name()} на олимпиаду {olympiad.name}'
             )
-            return render(request, 'add-recommendation/add-recommendation.html')
+            return redirect('teacher_recommendations')
         else:
             return HttpResponseForbidden()
 
 
 class GetOlympiadsForStudent(View):
     def get(self, request):
-        school_stage = Stage.objects.get(name='Школьный')
         student_id = request.GET.get('student_id')
-        student = get_object_or_404(User, id=student_id, school=request.user.school)
-        olympiads = Olympiad.objects.filter(class_olympiad=student.classroom.number, stage=school_stage,
-                                            school=request.user.school)
-        olympiads_data = [
-            {
-                'id': olympiad.id,
-                'name': olympiad.name,
-                'stage': olympiad.stage.name,
-                'class': olympiad.class_olympiad
-            }
-            for olympiad in olympiads
-        ]
-        return JsonResponse({'olympiads': olympiads_data})
+        if student_id:
+            student = get_object_or_404(User, pk=student_id, is_child=True, school=request.user.school)
+            olympiads = Olympiad.objects.filter(class_olympiad=student.classroom.number, stage__name='Школьный')
+            olympiads_data = [
+                {
+                    'id': olympiad.id,
+                    'name': olympiad.name,
+                    'stage': olympiad.stage.name,
+                    'class_olympiad': olympiad.class_olympiad
+                }
+                for olympiad in olympiads
+            ]
+            return JsonResponse({'olympiads': olympiads_data})
+        else:
+            return JsonResponse({'olympiads': []})
 
 
-class ProcessRecommendation(TeacherRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_teacher:
-            return HttpResponseForbidden("Permission denied.")
-
-        student_id = request.POST.get('student_id')
-        recommended_by_id = request.POST.get('recommended_by_id')
-        olympiad_id = request.POST.get('olympiad_id')
-        action = request.POST.get('action')
-
-        if not student_id:
-            return HttpResponseForbidden("Missing student_id")
-        if not recommended_by_id:
-            return HttpResponseForbidden("Missing recommended_by_id")
-        if not olympiad_id:
-            return HttpResponseForbidden("Missing olympiad_id")
-        if not action:
-            return HttpResponseForbidden("Missing action")
-
-        student = get_object_or_404(User, pk=student_id, school=request.user.school)
-        recommended_by = get_object_or_404(User, pk=recommended_by_id, school=request.user.school)
-        olympiad = get_object_or_404(Olympiad, pk=olympiad_id, school=request.user.school)
-
-        if action == 'accept':
-            Register_send.objects.create(
-                teacher_send=request.user,
-                child_send=student,
-                Olympiad_send=olympiad,
-                status_send=False,
-                school=request.user.school
-            )
-            recommendation = get_object_or_404(
-                Recommendation,
-                recommended_by=recommended_by,
-                recommended_to=request.user,
-                child=student,
-                Olympiad=olympiad,
-                school=request.user.school
-            )
-            recommendation.status = True
-            recommendation.save()
-        elif action == 'decline':
-            Recommendation.objects.filter(
-                recommended_by=recommended_by,
-                recommended_to=request.user,
-                child=student,
-                Olympiad=olympiad,
-                school=request.user.school
-            ).delete()
-
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+# class ProcessRecommendation(View):
+#     def post(self, request, *args, **kwargs):
+#         if not request.user.is_child:
+#             return HttpResponseForbidden("Permission denied.")
+#
+#         student_id = request.POST.get('student_id')
+#         recommended_by_id = request.POST.get('recommended_by_id')
+#         olympiad_id = request.POST.get('olympiad_id')
+#         action = request.POST.get('action')
+#
+#         if not student_id:
+#             return HttpResponseForbidden("Missing student_id")
+#         if not recommended_by_id:
+#             return HttpResponseForbidden("Missing recommended_by_id")
+#         if not olympiad_id:
+#             return HttpResponseForbidden("Missing olympiad_id")
+#         if not action:
+#             return HttpResponseForbidden("Missing action")
+#
+#         student = get_object_or_404(User, pk=student_id, school=request.user.school)
+#         recommended_by = get_object_or_404(User, pk=recommended_by_id, school=request.user.school)
+#         olympiad = get_object_or_404(Olympiad, pk=olympiad_id)
+#
+#         recommendation = get_object_or_404(
+#             Recommendation,
+#             recommended_by=recommended_by,
+#             recommended_to=request.user,
+#             child=student,
+#             Olympiad=olympiad,
+#             school=request.user.school
+#         )
+#
+#         if action == 'accept':
+#             recommendation.status = True
+#         elif action == 'decline':
+#             recommendation.status = False
+#         recommendation.save()
+#         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 class RegisterListClassroom(AdminRequiredMixin, View):
@@ -395,3 +350,38 @@ class RegisterListClassroom(AdminRequiredMixin, View):
             return render(request, 'applications-from-classroom-teachers/register_classroom_admin.html', context)
         else:
             return HttpResponseForbidden()
+
+
+class TeacherRecommendationsView(TeacherRequiredMixin, View):
+    def get(self, request):
+        if request.user.is_teacher:
+            recommendations = Recommendation.objects.filter(recommended_by=request.user)
+            context = {
+                'recommendations': recommendations,
+            }
+            return render(request, 'recommendations/recommendations.html', context)
+        else:
+            return HttpResponseForbidden()
+
+    def post(self, request):
+        if request.user.is_teacher:
+            recommendation_id = request.POST.get('recommendation_id')
+            action = request.POST.get('action')
+            try:
+                recommendation = Recommendation.objects.get(id=recommendation_id, recommended_by=request.user)
+                if action == 'delete':
+                    recommendation.delete()
+                    return HttpResponseRedirect(request.path_info)
+            except Recommendation.DoesNotExist:
+                return HttpResponseForbidden("Recommendation not found.")
+        return HttpResponseForbidden()
+
+
+class GetOlympiadsForStudent(View):
+    def get(self, request, *args, **kwargs):
+        student_id = request.GET.get('student_id')
+        student = get_object_or_404(User, pk=student_id, school=request.user.school)
+        school_stage = get_object_or_404(Stage, name='Школьный')
+        olympiads = Olympiad.objects.filter(class_olympiad=student.classroom.number, stage=school_stage)
+        olympiads_data = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
+        return JsonResponse({'olympiads': olympiads_data})

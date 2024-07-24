@@ -646,64 +646,31 @@ class create_zip_archive_for_teacher(View):
 
 logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
-class import_olympiads(View):
+
+class ImportOlympiadsView(View):
     def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             excel_file = request.FILES['file']
-            try:
-                import_olympiads_data(excel_file, request.user.school)
-                return HttpResponseRedirect(reverse('docs:succes_import_olympiad'))
-            except Exception as e:
-                logger.error(f"Ошибка импорта олимпиад: {e}")
-                return render(request, 'import_olympiads.html',
-                              {'form': form, 'error': 'Ошибка импорта олимпиад. Проверьте лог для деталей.'})
-        return render(request, 'import_olympiads.html', {'form': form, 'error': 'Некорректные данные формы.'})
+            df = pd.read_excel(excel_file)
+            for index, row in df.iterrows():
+                category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
+                level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
+                stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
+                subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
+                Olympiad.objects.create(
+                    name=row['Название олимпиады'],
+                    description=row['Описание олимпиады'],
+                    category=category,
+                    level=level,
+                    stage=stage,
+                    subject=subject,
+                    class_olympiad=row['Класс олимпиады']
+                )
+            return HttpResponseRedirect('/success_url/')
 
     def get(self, request):
         form = UploadFileForm()
         return render(request, 'import_olympiads.html', {'form': form})
-
-
-def import_olympiads_data(file, school):
-    df = pd.read_excel(file)
-    logger.info(f"Начало импорта олимпиад для школы: {school}")
-
-    for index, row in df.iterrows():
-        try:
-            category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
-            level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
-            stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
-            subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
-
-            # Проверяем и преобразуем дату
-            date = None
-            if pd.notna(row['Дата проведения']):
-                date = datetime.strptime(str(row['Дата проведения']), '%Y-%m-%d').date()
-
-            # Проверяем место проведения
-            location = row['Место проведения олимпиады'] if pd.notna(row['Место проведения олимпиады']) else ''
-
-            olympiad, created = Olympiad.objects.get_or_create(
-                name=row['Название олимпиады'],
-                defaults={
-                    'description': row['Описание олимпиады'],
-                    'category': category,
-                    'level': level,
-                    'stage': stage,
-                    'subject': subject,
-                    'class_olympiad': row['Класс олимпиады'],
-                    'date': date,
-                    'location': location,
-                    'school': school
-                }
-            )
-            if created:
-                logger.info(f"Олимпиада '{olympiad.name}' создана для школы {school}")
-            else:
-                logger.info(f"Олимпиада '{olympiad.name}' уже существует и была пропущена")
-
-        except Exception as e:
-            logger.error(f"Ошибка в строке {index}: {e}")
-            continue

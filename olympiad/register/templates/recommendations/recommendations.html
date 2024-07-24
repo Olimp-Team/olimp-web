@@ -1,0 +1,36 @@
+{% extends 'base_olimp.html' %}
+
+{% block content %}
+<div class="container mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-4">Рекомендации</h2>
+    <a href="{% url 'register:add_recommendation' %}"
+       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-6 inline-block">Создать рекомендацию</a>
+    <h3 class="text-xl font-semibold mb-4">Отправленные рекомендации</h3>
+    <ul class="space-y-4">
+        {% for recommendation in recommendations %}
+            <li class="p-4 rounded-lg shadow bg-white text-black">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="font-bold">{{ recommendation.child.get_full_name }}
+                            - {{ recommendation.Olympiad.name }}</p>
+                        <p class="text-sm">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                {% if recommendation.status == 'accepted' %}bg-green-100 text-green-800{% endif %}
+                                {% if recommendation.status == 'declined' %}bg-red-100 text-red-800{% endif %}
+                                {% if recommendation.status == 'pending' %}bg-yellow-100 text-yellow-800{% endif %}">
+                                {{ recommendation.get_status_display }}
+                            </span>
+                        </p>
+                    </div>
+                    <form method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="recommendation_id" value="{{ recommendation.id }}">
+                        <input type="hidden" name="action" value="delete">
+                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Удалить</button>
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
