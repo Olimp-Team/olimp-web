@@ -4,20 +4,13 @@ from datetime import datetime
 
 
 class Classroom(models.Model):
-    """Модель учебных классов
-    Пример: 10 А - Иваницкий Илья Олегович"""
-
-    class Meta:
-        verbose_name_plural = "Учебные классы"
-        verbose_name = 'Учебный класс'
-
     number = models.IntegerField('Цифра', blank=True, null=True)
     letter = models.CharField('Буква', max_length=1, blank=True, null=True)
-    teacher = models.ForeignKey(to='users.User', blank=True, null=True, on_delete=models.CASCADE,
-                                related_name='teacher')
-    child = models.ManyToManyField(to='users.User', blank=True, related_name='Child')
+    teacher = models.ForeignKey('users.User', blank=True, null=True, on_delete=models.CASCADE, related_name='teacher')
+    child = models.ManyToManyField('users.User', blank=True, related_name='Child')
     is_graduated = models.BooleanField('Выпустился', default=False)
     graduation_year = models.IntegerField('Год выпуска', blank=True, null=True)
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_classroom')
 
     def __str__(self):
         return f'{self.number} {self.letter} - {self.teacher}'
@@ -36,7 +29,7 @@ class AuditLog(models.Model):
     action = models.CharField(max_length=256, verbose_name='Действие')
     object_name = models.CharField(max_length=256, verbose_name='Объект')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Время действия')
-
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_audit')
     def __str__(self):
         return f'{self.user} - {self.action} - {self.object_name}'
 
@@ -49,6 +42,7 @@ class Subject(models.Model):
         verbose_name_plural = "Школьные предметы"
         verbose_name = 'Школьный предмет'
 
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_subject')
     name = models.CharField('Название школьного предмета', max_length=256, unique=True)
 
     def __str__(self):
@@ -64,7 +58,7 @@ class categories(models.Model):
         verbose_name = 'Категория олимпиад'
 
     name = models.CharField('Название категории', max_length=256)
-
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='schoolcat')
     def __str__(self):
         return self.name
 
@@ -77,6 +71,7 @@ class Level_olympiad(models.Model):
         verbose_name_plural = "Уровень олимпиад"
         verbose_name = 'Уровень олимпиад'
 
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_level_olympiad')
     name = models.CharField('Название уровня', max_length=256)
 
     def __str__(self):
@@ -91,6 +86,7 @@ class Stage(models.Model):
         verbose_name_plural = "Этапы олимпиад"
         verbose_name = 'Этап олимпиады'
 
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_stage')
     name = models.CharField('Название категории', max_length=256)
 
     def __str__(self):
@@ -105,6 +101,7 @@ class Post(models.Model):
         verbose_name_plural = "Должности"
         verbose_name = 'Должность'
 
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_post')
     name = models.CharField('Должность', max_length=512)
 
     def __str__(self):
@@ -129,9 +126,9 @@ class Olympiad(models.Model):
     subject = models.ForeignKey('Subject', on_delete=models.CASCADE, verbose_name='Название школьного предмета')
     class_olympiad = models.IntegerField('Класс олимпиады')
     date = models.DateField('Дата проведения', blank=True, null=True)
-    # time = models.TimeField('Время проведения', blank=True, null=True)
+    time = models.TimeField('Время проведения', blank=True, null=True)
     location = models.CharField('Место проведения олимпиады', max_length=256, blank=True, null=True)
-
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_olympiad')
     def __str__(self):
         return f'{self.name} - {self.stage} - {self.subject} {self.class_olympiad}'
 

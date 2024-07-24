@@ -12,6 +12,7 @@ urlpatterns = [
     path('download/zip/', create_zip_archive.as_view(), name='download_applications_zip'),
     path('download/teacher/zip/', create_zip_archive_for_teacher.as_view(), name='download_teacher_applications_zip'),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('dashboard/export/', ExportExcelView.as_view(), name='export_excel'),
     path('success/', lambda request: render(request, 'docs/succes_import.html'), name='succes_import'),
     path('success/olympiad', lambda request: render(request, 'docs/succes_import_olympiad.html'), name='succes_import_olympiad'),
 

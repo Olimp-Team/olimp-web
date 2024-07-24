@@ -1,0 +1,38 @@
+{% extends 'base_olimp.html' %}
+{% load form_filters %}
+{% load static %}
+{% block content %}
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <link rel="icon" href="{% static 'homepage/img/logoolimp.jpg' %}">
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="student">
+                <h1 class="text-xl font-bold mb-2">Ученик:</h1>
+                {{ form.student|add_class:"block w-full mt-1 p-2 border rounded student-select" }}
+            </div>
+
+            <div class="olympiad">
+                <h1 class="text-xl font-bold mb-2">Олимпиада:</h1>
+                {{ form.olympiad|add_class:"block w-full mt-1 p-2 border rounded olympiad-select" }}
+            </div>
+
+            <div class="score">
+                <h1 class="text-xl font-bold mb-2">Результат:</h1>
+                {{ form.score|add_class:"block w-full mt-1 p-2 border rounded" }}
+            </div>
+
+            <div class="status">
+                <h1 class="text-xl font-bold mb-2">Статус:</h1>
+                {{ form.status|add_class:"block w-full mt-1 p-2 border rounded" }}
+            </div>
+
+            <div id="form-errors" class="text-red-500"></div>
+
+            <div class="text-center">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
