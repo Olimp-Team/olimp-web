@@ -268,7 +268,7 @@ class AddRecommendation(TeacherRequiredMixin, View):
                 action='Создание рекомендации',
                 object_name=f'Рекомендация ученику {child.get_full_name()} на олимпиаду {olympiad.name}'
             )
-            return redirect('teacher_recommendations')
+            return redirect('register:teacher_recommendations')
         else:
             return HttpResponseForbidden()
 

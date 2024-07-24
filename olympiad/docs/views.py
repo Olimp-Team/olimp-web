@@ -7,22 +7,20 @@ from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpRespons
 from django.urls import reverse
 from django.views.generic import View, ListView
 from django.utils.translation import gettext as _
-from excel_response import ExcelResponse
 from main.models import *
 from register.models import *
 from result.models import *
 from users.models import *
 from django.shortcuts import render, redirect
 from .forms import UploadFileForm
-from django.db.models import Q
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from users.mixins import AdminRequiredMixin
 from django.http import HttpResponse
-import logging
 from django.db import transaction
+from openpyxl import Workbook
 
 
 class ExcelClassroom(AdminRequiredMixin, View):
@@ -130,16 +128,27 @@ class ExcelClassroom(AdminRequiredMixin, View):
                     subjects["НШ: русский язык (4)"],
                 ])
 
-            return ExcelResponse(data_classroom, f'register_classroom')
+            return self.generate_excel_response(data_classroom, 'register_classroom')
         else:
             return HttpResponseForbidden()
+
+    def generate_excel_response(self, data, filename):
+        wb = Workbook()
+        ws = wb.active
+
+        for row in data:
+            ws.append(row)
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename={filename}.xlsx'
+        wb.save(response)
+        return response
 
 
 class ExcelAll(AdminRequiredMixin, View):
     def get(self, request):
         if request.user.is_admin:
-            queryset = Register_admin.objects.filter(is_deleted=False,
-                                                     school=request.user.school)  # Получаем данные из нашей модели
+            queryset = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
             data_all = [
                 [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
                  _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
@@ -157,7 +166,6 @@ class ExcelAll(AdminRequiredMixin, View):
                  _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
                  _("НШ: окружающий мир (4)"), _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"),
                  _("Кол-во заявлений"), ],
-                # Заголовки столбцов
             ]
 
             student_data = {}
@@ -239,9 +247,21 @@ class ExcelAll(AdminRequiredMixin, View):
                     subjects["НШ: русский язык (4)"],
                 ])
 
-            return ExcelResponse(data_all, 'register_all')  # Имя файла Excel
+            return self.generate_excel_response(data_all, 'register_all')
         else:
             return HttpResponseForbidden()
+
+    def generate_excel_response(self, data, filename):
+        wb = Workbook()
+        ws = wb.active
+
+        for row in data:
+            ws.append(row)
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = f'attachment; filename={filename}.xlsx'
+        wb.save(response)
+        return response
 
 
 import logging
@@ -384,28 +404,27 @@ class DashboardView(AdminRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         # Получение зарегистрированных олимпиад из Register_admin
-        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin',
+        olympiad_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('Olympiad_admin',
                                                                                              flat=True)
-        context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
-
+        context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids)
         # Получение классов, зарегистрированных в Register_admin
-        class_ids = Register_admin.objects.filter(school=request.user.school).values_list('child_admin__classroom__id',
+        class_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('child_admin__classroom__id',
                                                                                           flat=True).distinct()
-        context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=request.user.school).order_by(
+        context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=self.request.user.school).order_by(
             'number', 'letter')
 
-        context['subjects'] = Subject.objects.filter(school=request.user.school)
+        context['subjects'] = Subject.objects.filter()
 
         # Получение учеников, зарегистрированных в Register_admin
-        student_ids = Register_admin.objects.filter(school=request.user.school).values_list('child_admin',
+        student_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('child_admin',
                                                                                             flat=True).distinct()
-        context['students'] = User.objects.filter(id__in=student_ids, school=request.user.school).order_by('last_name',
+        context['students'] = User.objects.filter(id__in=student_ids, school=self.request.user.school).order_by('last_name',
                                                                                                            'first_name')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
-        context['winners_count'] = queryset.filter(status_result=Result.WINNER, school=request.user.school).count()
-        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE, school=request.user.school).count()
+        context['winners_count'] = queryset.filter(status_result=Result.WINNER, school=self.request.user.school).count()
+        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE, school=self.request.user.school).count()
         context['participants_count'] = queryset.count()
 
         # Передача текущих значений фильтров в контекст

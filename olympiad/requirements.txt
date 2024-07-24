@@ -1,7 +1,6 @@
 Django
 django-debug-toolbar
 djangorestframework
-django-excel-response
 six
 pillow
 django-cors-headers
@@ -32,3 +31,4 @@ django-imagekit
 easy-thumbnails
 asyncio
 python-telegram-bot
+django-excel-response2

@@ -101,7 +101,6 @@ class Post(models.Model):
         verbose_name_plural = "Должности"
         verbose_name = 'Должность'
 
-
     name = models.CharField('Должность', max_length=512)
 
     def __str__(self):
@@ -128,7 +127,6 @@ class Olympiad(models.Model):
     date = models.DateField('Дата проведения', blank=True, null=True)
     time = models.TimeField('Время проведения', blank=True, null=True)
     location = models.CharField('Место проведения олимпиады', max_length=256, blank=True, null=True)
-
 
     def __str__(self):
         return f'{self.name} - {self.stage} - {self.subject} {self.class_olympiad}'
