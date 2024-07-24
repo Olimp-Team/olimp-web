@@ -22,6 +22,7 @@ from reportlab.pdfbase import pdfmetrics
 from users.mixins import AdminRequiredMixin
 from django.http import HttpResponse
 import logging
+from django.db import transaction
 
 
 class ExcelClassroom(AdminRequiredMixin, View):
@@ -248,7 +249,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class import_users(View):
+class ImportUsersView(View):
     def get(self, request):
         form = UploadFileForm()
         return render(request, 'upload.html', {'form': form})
@@ -257,84 +258,85 @@ class import_users(View):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES['file']
-            import_data(file, request.user.school)
-            return redirect('docs:succes_import')
+            try:
+                import_data(file, request.user.school)
+            except Exception as e:
+                print(f"Error importing data: {e}")
+            return redirect('docs:success_import')
         return render(request, 'upload.html', {'form': form})
 
 
 def import_data(file, school):
     df = pd.read_excel(file)
 
-    for index, row in df.iterrows():
-        if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
-            continue
-
-        try:
-            # Проверка на наличие почты
-            if not pd.notna(row['почта']):
+    with transaction.atomic():
+        for index, row in df.iterrows():
+            if row['имя_пользователя'] == "имя_пользователя":  # Пропускаем заголовок
                 continue
 
-            user, created = User.objects.update_or_create(
-                username=row['имя_пользователя'],
-                defaults={
-                    'first_name': row['имя'],
-                    'last_name': row['фамилия'],
-                    'surname': row['отчество'],
-                    'email': row['почта'],
-                    'birth_date': row['дата_рождения'],
-                    'gender': row['пол'],
-                    'is_teacher': row['учитель'] == 1,
-                    'is_child': row['ученик'] == 1,
-                    'is_admin': row['администратор'] == 1,
-                    'school': school,  # Привязываем пользователя к школе
-                }
-            )
+            try:
+                user, created = User.objects.update_or_create(
+                    username=row['имя_пользователя'],
+                    defaults={
+                        'first_name': row['имя'],
+                        'last_name': row['фамилия'],
+                        'surname': row['отчество'],
+                        'email': row['почта'],
+                        'birth_date': row['дата_рождения'],
+                        'gender': row['пол'],
+                        'is_teacher': row['учитель'] == 1,
+                        'is_child': row['ученик'] == 1,
+                        'is_admin': row['администратор'] == 1,
+                        'school': school,
+                    }
+                )
 
-            if created and 'пароль' in row and pd.notna(row['пароль']):
-                user.set_password(row['пароль'])
-                user.save()
+                if created and 'пароль' in row and pd.notna(row['пароль']):
+                    user.set_password(row['пароль'])
+                    user.save()
 
-            # Обработка классного руководства
-            if pd.notna(row['классное_руководство']):
-                number, letter = parse_classroom(row['классное_руководство'])
-                classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter,
-                                                                           defaults={'school': school})
-                if created or classroom_guide.teacher is None:
-                    classroom_guide.teacher = user
-                    classroom_guide.save()
-                user.classroom_guide = classroom_guide
-                user.save()
+                # Обработка классного руководства
+                if pd.notna(row['классное_руководство']):
+                    number, letter = parse_classroom(row['классное_руководство'])
+                    classroom_guide, created = Classroom.objects.get_or_create(number=number, letter=letter,
+                                                                               school=school)
+                    if created or classroom_guide.teacher is None:
+                        classroom_guide.teacher = user
+                        classroom_guide.save()
+                    user.classroom_guide = classroom_guide
+                    user.save()
 
-            # Обработка учеников
-            if pd.notna(row['класс']):
-                number, letter = parse_classroom(row['класс'])
-                classroom, created = Classroom.objects.get_or_create(number=number, letter=letter,
-                                                                     defaults={'school': school})
-                user.classroom = classroom
-                user.save()
-                classroom.child.add(user)
-                classroom.save()
+                # Обработка учеников
+                if pd.notna(row['класс']):
+                    number, letter = parse_classroom(row['класс'])
+                    classroom, created = Classroom.objects.get_or_create(number=number, letter=letter, school=school)
+                    user.classroom = classroom
+                    user.save()
+                    classroom.child.add(user)
+                    classroom.save()
 
-            if pd.notna(row['предметы']):  # предметы
-                subjects = row['предметы'].split(',')
-                for subject in subjects:
-                    try:
-                        subject_obj = Subject.objects.get(name=subject.strip())
-                        user.subject.add(subject_obj)
-                    except Subject.DoesNotExist:
-                        pass  # Если предмет не найден, пропускаем
+                if pd.notna(row['предметы']):  # предметы
+                    subjects = row['предметы'].split(',')
+                    for subject in subjects:
+                        try:
+                            subject_obj = Subject.objects.get(name=subject.strip())
+                            user.subject.add(subject_obj)
+                        except Subject.DoesNotExist:
+                            print(f"Subject '{subject}' does not exist.")
+                            pass  # Если предмет не найден, пропускаем
 
-            if pd.notna(row['должности']):  # должности
-                posts = row['должности'].split(',')
-                for post in posts:
-                    try:
-                        post_obj = Post.objects.get(name=post.strip())
-                        user.post_job_teacher.add(post_obj)
-                    except Post.DoesNotExist:
-                        pass  # Если должность не найдена, пропускаем
-        except Exception as e:
-            logger.error(f"Error processing row {index}: {e}")
-            continue
+                if pd.notna(row['должности']):  # должности
+                    posts = row['должности'].split(',')
+                    for post in posts:
+                        try:
+                            post_obj = Post.objects.get(name=post.strip())
+                            user.post_job_teacher.add(post_obj)
+                        except Post.DoesNotExist:
+                            print(f"Post '{post}' does not exist.")
+                            pass  # Если должность не найдена, пропускаем
+            except Exception as e:
+                print(f"Error processing row {index}: {e}")
+                continue
 
 
 def parse_classroom(classroom_str):
