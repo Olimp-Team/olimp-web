@@ -17,7 +17,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Получение последних 10 результатов для текущего пользователя
-        recent_results = Result.objects.filter(info_children=self.request.user).order_by('-date_added')[:10]
+        recent_results = Result.objects.filter(info_children=self.request.user, school=self.request.user.school).order_by('-date_added')[:10]
         context['recent_results'] = recent_results
         return context
 
@@ -31,7 +31,7 @@ class AuditLogView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         # Отображаем только для администраторов
         if self.request.user.is_admin:
-            return super().get_queryset()
+            return super().get_queryset().filter(school=self.request.user.school)
         else:
             return AuditLog.objects.none()
 
@@ -42,7 +42,7 @@ class OlympiadListView(ListView):
     context_object_name = 'olympiads'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(school=self.request.user.school)
         self.filterset = OlympiadFilter(self.request.GET, queryset=queryset)
         return self.filterset.qs
 
@@ -52,21 +52,32 @@ class OlympiadListView(ListView):
         return context
 
 
-class OlympiadCreateView(CreateView):
+class OlympiadCreateView(LoginRequiredMixin, CreateView):
     model = Olympiad
     form_class = OlympiadForm
     template_name = 'list_olympiad/olympiad_form.html'
     success_url = reverse_lazy('main:list_olympiad')
 
+    def form_valid(self, form):
+        form.instance.school = self.request.user.school
+        return super().form_valid(form)
 
-class OlympiadUpdateView(UpdateView):
+
+class OlympiadUpdateView(LoginRequiredMixin, UpdateView):
     model = Olympiad
     form_class = OlympiadForm
     template_name = 'list_olympiad/olympiad_form.html'
     success_url = reverse_lazy('main:list_olympiad')
 
+    def form_valid(self, form):
+        form.instance.school = self.request.user.school
+        return super().form_valid(form)
 
-class OlympiadDeleteView(DeleteView):
+
+class OlympiadDeleteView(LoginRequiredMixin, DeleteView):
     model = Olympiad
     template_name = 'list_olympiad/olympiad_confirm_delete.html'
     success_url = reverse_lazy('main:list_olympiad')
+
+    def get_queryset(self):
+        return super().get_queryset().filter(school=self.request.user.school)
