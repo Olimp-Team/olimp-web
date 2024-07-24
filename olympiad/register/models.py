@@ -55,17 +55,25 @@ class Register_admin(models.Model):
 
 
 class Recommendation(models.Model):
-    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа',
-                               related_name='school_recommendation')
+    PENDING = 'pending'
+    ACCEPTED = 'accepted'
+    DECLINED = 'declined'
+
+    STATUS_CHOICES = [
+        (PENDING, 'В ожидании'),
+        (ACCEPTED, 'Принято'),
+        (DECLINED, 'Отказано учеником'),
+    ]
+
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, related_name='school_recommendation')
     recommended_by = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_by')
     recommended_to = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_to')
     child = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='recommendations_for')
     Olympiad = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE)
-    # created_at = models.DateTimeField(auto_now_add=True)
-    status = models.BooleanField(default=False)  # Принята ли рекомендация классным руководителем
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
 
     class Meta:
         unique_together = ('recommended_by', 'recommended_to', 'child', 'Olympiad')
 
     def __str__(self):
-        return f'Recommendation from {self.recommended_by} to {self.recommended_to} for {self.child} to join {self.Olympiad}'
+        return f'Рекомендация от {self.recommended_by} для {self.recommended_to} для участия {self.child} в {self.Olympiad}'

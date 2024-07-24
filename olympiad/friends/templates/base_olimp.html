@@ -54,18 +54,22 @@
 <!-- Шапка (header) -->
 <header class="w-full bg-white p-4 border-b border-gray-200 flex justify-between items-center text-gray-700 ">
     <div class="flex items-center">
-        <img class="h-8 w-8" src="{% static 'homepage/img/logoolimp.jpg' %}" alt="Logo">
+        <a href="{% url 'main:home' %}">
+            <img class="h-8 w-8" src="{% static 'homepage/img/logoolimp.jpg' %}" alt="Logo">
+        </a>
         <p class="ml-3 text-lg font-semibold text-gray-700">Olimp</p>
     </div>
-    <div class="relative user-menu">
-        <img class="h-8 w-8 rounded-full cursor-pointer" src="
+    <div class="flex items-center">
+
+        <div class="relative user-menu">
+            <img class="h-8 w-8 rounded-full cursor-pointer" src="
                 {% if user.image %}{{ user.image.url }}{% else %}{% static 'homepage/img/default-ava.png' %}{% endif %}"
-             alt="User Avatar">
-        <div class="user-menu-content">
-            <a href="{% url 'users:profile' user.id %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Перейти
-                в профиль</a>
-            {#            <a href="{% url 'users:settings' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Настройки</a>#}
-            <a href="{% url 'users:logout' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Выйти</a>
+                 alt="User Avatar">
+            <div class="user-menu-content">
+                <a href="{% url 'users:profile' user.id %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Перейти
+                    в профиль</a>
+                <a href="{% url 'users:logout' %}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Выйти</a>
+            </div>
         </div>
     </div>
 </header>
@@ -153,6 +157,12 @@
                         <a href="{% url 'register:student-applications' %}"
                            class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
                             <i class="fas fa-file-alt mr-3"></i> Заявки учеников
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'register:teacher_recommendations' %}"
+                           class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                            <i class="fas fa-comment-alt mr-3"></i> Ваши рекомендации
                         </a>
                     </li>
                 {% endif %}
@@ -253,7 +263,7 @@
                 <li>
                     <a href="{% url 'friends:search_friends' %}"
                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
-                        <i class="fas fa-search mr-3"></i> Поиск друзья
+                        <i class="fas fa-search mr-3"></i> Поиск друзей
                     </a>
                 </li>
                 <li>
@@ -283,6 +293,10 @@
     <div class="flex-1 p-6">
         {% block content %}
         {% endblock content %}
+    </div>
+    <div class="bg-gray-100">
+        {% block content_daisy %}
+        {% endblock content_daisy %}
     </div>
 </div>
 
