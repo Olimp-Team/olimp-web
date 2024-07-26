@@ -13,8 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import NewChildForm
 from .mixins import AdminRequiredMixin
 from main.models import *
-from main.models import Classroom
-
+from classroom.models import *
 
 class AuthLogin(View):
     def get(self, request):

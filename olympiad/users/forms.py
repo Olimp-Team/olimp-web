@@ -3,6 +3,7 @@ from django import forms
 from users.models import User
 from main.models import *
 from school.models import *
+from classroom.models import *
 import base64
 from django.core.files.base import ContentFile
 
@@ -45,18 +46,6 @@ class UserProfileForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('image', 'username', 'email', 'birth_date', 'gender')
-
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     image_data = self.cleaned_data.get('image')
-    #     if image_data:
-    #         format, imgstr = image_data.split(';base64,')
-    #         ext = format.split('/')[-1]
-    #         data = ContentFile(base64.b64decode(imgstr), name=f'{self.instance.username}.{ext}')
-    #         user.image = data
-    #     if commit:
-    #         user.save()
-    #     return user
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)

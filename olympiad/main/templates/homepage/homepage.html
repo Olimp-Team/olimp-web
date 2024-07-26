@@ -27,41 +27,84 @@
 </div>
 
 <div class="bg-white shadow rounded-lg p-6 mb-6">
-    <h2 class="text-xl font-bold mb-4">Расписание ближайших олимпиад</h2>
-    <div class="flex justify-between items-center mb-4">
-        <p class="text-gray-600 current-date"></p>
-        <div class="flex space-x-2">
-            <button id="prev" class="focus:outline-none">
-                <img src="{% static 'homepage/img/Group289724.png' %}" alt="Previous">
-            </button>
-            <button id="next" class="focus:outline-none">
-                <img src="{% static 'homepage/img/Group289723.png' %}" alt="Next">
-            </button>
+    <h2 class="text-xl font-bold mb-4">Ваш рейтинг и лига</h2>
+    <div class="flex items-center">
+        <p class="text-lg font-semibold mr-4">Рейтинг: {{ user_rating.points }}</p>
+    </div>
+    <div class="mt-4 p-4 bg-gray-50 rounded-lg shadow">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="font-semibold">{{ league }}</p>
+                <p class="text-gray-600">
+                    {% if league == 'Бронзовая лига' %} от 0 до 150
+                    {% elif league == 'Серебряная лига' %} от 151 до 500
+                    {% elif league == 'Золотая лига' %} от 501 до 1000
+                    {% elif league == 'Платиновая лига' %} от 1001 до 2000
+                    {% elif league == 'Рубиновая лига' %} от 2001 до 3500
+                    {% elif league == 'Алмазная лига' %} 3501+
+                    {% endif %}
+                </p>
+                {% if points_to_next > 0 %}
+                    <p class="text-gray-600 mt-2">Осталось до следующей лиги: {{ points_to_next }}</p>
+                {% else %}
+                    <p class="text-gray-600 mt-2">Вы достигли максимальной лиги!</p>
+                {% endif %}
+            </div>
+            <div class="flex items-center">
+                {% if league == 'Бронзовая лига' %}
+                    <img class="w-15 h-15" src="{% static 'homepage/img/bronze_league.png' %}" alt="Бронзовая лига">
+                {% elif league == 'Серебряная лига' %}
+                    <img class="w-15 h-15" src="{% static 'homepage/img/silver_league.png' %}" alt="Серебряная лига">
+                {% elif league == 'Золотая лига' %}
+                    <img class="w-15 h-15" src="{% static 'homepage/img/gold_league.png' %}" alt="Золотая лига">
+                {% elif league == 'Платиновая лига' %}
+                    <img class="w-15 h-15" src="{% static 'homepage/img/platinum_league.png' %}" alt="Платиновая лига">
+                {% elif league == 'Рубиновая лига' %}
+                    <img class="w-15 h-15" src="{% static 'homepage/img/ruby_league.png' %}" alt="Рубиновая лига">
+                {% elif league == 'Алмазная лига' %}
+                    <img class="w-15 h-15" src="{% static 'homepage/img/diamond_league.png' %}" alt="Алмазная лига">
+                {% endif %}
+            </div>
         </div>
     </div>
-    <div class="calendar">
-        <ul class="flex justify-between grid grid-cols-7 gap-1 mb-8 text-center text-gray-600 text-xl font-medium">
-            <li class="">Пн</li>
-            <li class="">Вт</li>
-            <li class="">Ср</li>
-            <li class="">Чт</li>
-            <li class="">Пт</li>
-            <li class="text-red-500">Сб</li>
-            <li class="text-red-500">Вс</li>
-        </ul>
-        <ul class=""><li class="grid grid-cols-7 gap-1 text-center days"></li></ul>
+</div>
+
+<div class="bg-white shadow rounded-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-4">Ваши медали</h2>
+    <div class="flex flex-wrap">
+        {% for medal in user_medals %}
+            <div class="m-2 text-center bg-gray-50 p-4 rounded-lg shadow">
+                <img class="w-15 h-15 mx-auto mb-2" src="{% if medal.type == 'Бронзовая' %}{% static 'homepage/img/bronze.png' %}{% elif medal.type == 'Серебряная' %}{% static 'homepage/img/silver.png' %}{% elif medal.type == 'Золотая' %}{% static 'homepage/img/gold.png' %}{% elif medal.type == 'Платиновая' %}{% static 'homepage/img/platinum.png' %}{% elif medal.type == 'Алмазная' %}{% static 'homepage/img/diamond.png' %}{% elif medal.type == 'Рубиновая' %}{% static 'homepage/img/ruby.png' %}{% endif %}" alt="{{ medal.type }}">
+                <p class="text-base font-semibold">{{ medal.olympiad.name }}</p>
+                <p class="text-sm mt-2 py-1 px-3 rounded-full
+                    {% if medal.type == 'Бронзовая' %}
+                        text-yellow-800 bg-yellow-100
+                    {% elif medal.type == 'Серебряная' %}
+                        text-gray-600 bg-gray-200
+                    {% elif medal.type == 'Золотая' %}
+                        text-yellow-500 bg-yellow-100
+                    {% elif medal.type == 'Платиновая' %}
+                        text-gray-500 bg-gray-100
+                    {% elif medal.type == 'Алмазная' %}
+                        text-blue-500 bg-blue-100
+                    {% elif medal.type == 'Рубиновая' %}
+                        text-red-500 bg-red-100
+                    {% endif %}
+                ">{{ medal.type }} медаль</p>
+            </div>
+        {% endfor %}
+        {% for personal_medal in user_personal_medals %}
+            <div class="m-2 text-center bg-gray-50 p-4 rounded-lg shadow">
+                <img class="w-12 h-12 mx-auto mb-2" src="{% static 'homepage/img/personal.png' %}" alt="Именная медаль">
+                <p class="text-base font-semibold">{{ personal_medal.name }}</p>
+                <p class="text-sm text-yellow-500 mt-2 py-1 px-3 bg-yellow-100 rounded-full">Именная медаль</p>
+            </div>
+        {% endfor %}
     </div>
 </div>
 
 <div class="bg-white shadow rounded-lg p-6">
-    <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">Недавние результаты</h2>
-        {% if user.is_child or user.is_teacher %}
-            <a href="{% url 'result:student_results' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Показать все</a>
-        {% else %}
-            <a href="{% url 'docs:dashboard' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Показать все</a>
-        {% endif %}
-    </div>
+    <h2 class="text-xl font-bold mb-4">Недавние результаты</h2>
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white divide-y divide-gray-200">
             <thead>

@@ -19,9 +19,10 @@ from users.models import User
 from users.mixins import AdminRequiredMixin
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-from main.models import Classroom
+from classroom.models import *
 from django.utils.timezone import make_naive
 import io
+import pandas as pd
 
 
 class ExportResultsView(View):
@@ -196,7 +197,9 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
                 )
 
             return redirect('success_page')
-        students = form.cleaned_data['classroom'].child.all() if 'classroom' in form.cleaned_data else []
+        students = form.cleaned_data['classroom'].child.filter(
+            id__in=Register_admin.objects.filter(school=request.user.school).values_list('child_admin_id',
+                                                                                         flat=True)) if 'classroom' in form.cleaned_data else []
         return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
                       {'form': form, 'students': students})
 
@@ -206,7 +209,7 @@ class GetStudentsView(View):
         classroom_id = request.GET.get('classroom_id')
         if classroom_id:
             classroom = get_object_or_404(Classroom, id=classroom_id, school=request.user.school)
-            students = classroom.child_set.filter(
+            students = classroom.child.filter(
                 id__in=Register_admin.objects.filter(school=request.user.school).values_list('child_admin_id',
                                                                                              flat=True))
             html = render_to_string('students_list/students_list.html', {'students': students})
