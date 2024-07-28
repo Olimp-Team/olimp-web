@@ -1,5 +1,5 @@
 # users/views.py
-
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -14,6 +14,7 @@ from .forms import NewChildForm
 from .mixins import AdminRequiredMixin
 from main.models import *
 from classroom.models import *
+
 
 class AuthLogin(View):
     def get(self, request):
@@ -142,14 +143,42 @@ class AdminListView(AdminRequiredMixin, View):
         return render(request, 'admin_list.html', context)
 
 
-# @login_required
-# def update_telegram_id(request):
-#     if request.method == 'POST':
-#         form = TelegramIDForm(request.POST, instance=request.user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('profile')  # Или куда хотите перенаправить после сохранения
-#     else:
-#         form = TelegramIDForm(instance=request.user)
-#
-#     return render(request, 'update_telegram_id.html', {'form': form})
+class EditTeacherView(AdminRequiredMixin, View):
+    def get(self, request, pk):
+        teacher = get_object_or_404(User, pk=pk, is_teacher=True, school=request.user.school)
+        form = UserForm(instance=teacher)
+        return render(request, 'edit_teacher.html', {'form': form, 'teacher': teacher})
+
+    def post(self, request, pk):
+        teacher = get_object_or_404(User, pk=pk, is_teacher=True, school=request.user.school)
+        form = UserForm(request.POST, instance=teacher)
+        if form.is_valid():
+            form.save()
+            return redirect('teacher_list')
+        return render(request, 'edit_teacher.html', {'form': form, 'teacher': teacher})
+
+
+class EditAdminView(AdminRequiredMixin, View):
+    def get(self, request, pk):
+        admin = get_object_or_404(User, pk=pk, is_admin=True, school=request.user.school)
+        form = UserForm(instance=admin)
+        return render(request, 'edit_admin.html', {'form': form, 'admin': admin})
+
+    def post(self, request, pk):
+        admin = get_object_or_404(User, pk=pk, is_admin=True, school=request.user.school)
+        form = UserForm(request.POST, instance=admin)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_list')
+        return render(request, 'edit_admin.html', {'form': form, 'admin': admin})
+
+
+class DeleteUserView(AdminRequiredMixin, View):
+    def post(self, request, pk):
+        user = get_object_or_404(User, pk=pk, school=request.user.school)
+        user.delete()
+        if user.is_teacher:
+            return redirect('teacher_list')
+        elif user.is_admin:
+            return redirect('admin_list')
+        return HttpResponseForbidden()

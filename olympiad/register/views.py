@@ -1,13 +1,18 @@
 # register/views.py
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponseForbidden, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from main.models import *
 from register.models import *
 from django.views.generic import *
 from users.models import User
 from users.mixins import AdminRequiredMixin, ChildRequiredMixin, TeacherRequiredMixin
 from .form import *
+from classroom.models import *
 
 
 class RegisterPage(ChildRequiredMixin, View):
@@ -307,14 +312,59 @@ class RegisterListClassroom(AdminRequiredMixin, View):
             grouped_registers = {}
             for register in registers:
                 classroom = register.child_admin.classroom
+                student = register.child_admin
                 if classroom not in grouped_registers:
-                    grouped_registers[classroom] = []
-                grouped_registers[classroom].append(register)
+                    grouped_registers[classroom] = {}
+                if student not in grouped_registers[classroom]:
+                    grouped_registers[classroom][student] = []
+                grouped_registers[classroom][student].append(register)
 
-            context = {
-                'grouped_registers': grouped_registers
-            }
+            context = {'grouped_registers': grouped_registers}
             return render(request, 'applications-from-classroom-teachers/register_classroom_admin.html', context)
+        else:
+            return HttpResponseForbidden()
+
+    def post(self, request):
+        register_id = request.POST.get('register_id')
+        register = get_object_or_404(Register_admin, id=register_id, school=request.user.school)
+        register.is_deleted = True
+        register.save()
+        return redirect('register:applications-from-classroom-teachers')
+
+
+class AddRegister(LoginRequiredMixin, View):
+    def get(self, request):
+        if request.user.is_admin:
+            classrooms = Classroom.objects.filter(school=request.user.school)
+            context = {
+                'classrooms': classrooms,
+            }
+            return render(request, 'add_register.html', context)
+        else:
+            return HttpResponseForbidden()
+
+    @transaction.atomic
+    def post(self, request):
+        if request.user.is_admin:
+            classroom_id = request.POST.get('classroom')
+            student_id = request.POST.get('student')
+            olympiad_id = request.POST.get('olympiad')
+
+            if not classroom_id or not student_id or not olympiad_id:
+                return HttpResponseForbidden("Missing data")
+
+            classroom = get_object_or_404(Classroom, id=classroom_id, school=request.user.school)
+            student = get_object_or_404(User, id=student_id, classroom=classroom)
+            olympiad = get_object_or_404(Olympiad, id=olympiad_id)
+
+            Register_admin.objects.create(
+                child_admin=student,
+                Olympiad_admin=olympiad,
+                teacher_admin=classroom.teacher,
+                school=request.user.school
+            )
+
+            return redirect('register:applications-from-classroom-teachers')
         else:
             return HttpResponseForbidden()
 
@@ -344,11 +394,32 @@ class TeacherRecommendationsView(TeacherRequiredMixin, View):
         return HttpResponseForbidden()
 
 
-class GetOlympiadsForStudent(View):
-    def get(self, request, *args, **kwargs):
+class GetStudentsForClassroomView(LoginRequiredMixin, View):
+    def get(self, request):
+        classroom_id = request.GET.get('classroom_id')
+        if classroom_id:
+            students = User.objects.filter(classroom__id=classroom_id, is_child=True, school=request.user.school)
+            students_data = [{'id': student.id, 'name': student.get_full_name()} for student in students]
+            return JsonResponse({'students': students_data})
+        else:
+            return JsonResponse({'students': []})
+
+
+class GetOlympiadsForStudentView(LoginRequiredMixin, View):
+    def get(self, request):
         student_id = request.GET.get('student_id')
-        student = get_object_or_404(User, pk=student_id, school=request.user.school)
-        school_stage = get_object_or_404(Stage, name='Школьный')
-        olympiads = Olympiad.objects.filter(class_olympiad=student.classroom.number, stage=school_stage)
-        olympiads_data = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
-        return JsonResponse({'olympiads': olympiads_data})
+        if student_id:
+            student = get_object_or_404(User, pk=student_id, is_child=True, school=request.user.school)
+            olympiads = Olympiad.objects.filter(class_olympiad=student.classroom.number)
+            olympiads_data = [
+                {
+                    'id': olympiad.id,
+                    'name': olympiad.name,
+                    'stage': olympiad.stage.name,
+                    'class_olympiad': olympiad.class_olympiad
+                }
+                for olympiad in olympiads
+            ]
+            return JsonResponse({'olympiads': olympiads_data})
+        else:
+            return JsonResponse({'olympiads': []})
