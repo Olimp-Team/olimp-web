@@ -246,7 +246,7 @@ class AddRecommendation(TeacherRequiredMixin, View):
     def post(self, request):
         if request.user.is_teacher:
             recommended_to = request.user
-            child_ids = request.POST.get('child')
+            child_ids = request.POST.getlist('child')
             olympiad_id = request.POST.get('olympiad')
 
             if not child_ids or not olympiad_id:
@@ -274,6 +274,11 @@ class AddRecommendation(TeacherRequiredMixin, View):
             return HttpResponseForbidden()
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+
 class GetOlympiadsForStudent(View):
     def get(self, request):
         student_id = request.GET.get('student_id')
@@ -284,11 +289,12 @@ class GetOlympiadsForStudent(View):
                 {
                     'id': olympiad.id,
                     'name': olympiad.name,
-                    'stage': olympiad.stage.name,
-                    'class_olympiad': olympiad.class_olympiad
+                    'stage': olympiad.stage.name if olympiad.stage else 'Этап не указан',
+                    'class_olympiad': olympiad.class_olympiad if olympiad.class_olympiad else 'Класс не указан'
                 }
                 for olympiad in olympiads
             ]
+            logger.debug('Olympiads data: %s', olympiads_data)
             return JsonResponse({'olympiads': olympiads_data})
         else:
             return JsonResponse({'olympiads': []})
