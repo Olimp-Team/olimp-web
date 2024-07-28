@@ -1,8 +1,6 @@
 {% extends 'base_olimp.html' %}
-
 {% load static %}
 {% block content %}
-
 <div class="container mx-auto p-6 max-w-4xl bg-white shadow-md rounded-lg">
     <h1 class="text-3xl font-bold mb-6 text-center">Список администраторов</h1>
     <div class="flex justify-end mb-4">
@@ -12,9 +10,17 @@
     </div>
     <ul class="list-disc list-inside">
         {% for admin in admins %}
-            <li class="mb-2">{{ admin.first_name }} {{ admin.last_name }} ({{ admin.username }})</li>
+            <li class="mb-2 flex justify-between items-center">
+                <span>{{ admin.first_name }} {{ admin.last_name }} ({{ admin.username }})</span>
+                <div>
+                    <a href="{% url 'users:edit_admin' admin.id %}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Редактировать</a>
+                    <form method="post" action="{% url 'users:delete_user' admin.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ml-2">Удалить</button>
+                    </form>
+                </div>
+            </li>
         {% endfor %}
     </ul>
 </div>
-
 {% endblock %}

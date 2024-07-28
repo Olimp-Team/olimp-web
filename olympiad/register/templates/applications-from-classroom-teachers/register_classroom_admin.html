@@ -1,29 +1,59 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
+    <style>
+        .small-delete-button {
+            padding: 2px 5px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+        }
+    </style>
     <link rel="shortcut-icon" href="{% static 'applications-from-classroom-teachers/img/shortcuticon.png' %}">
     <link rel="icon" href="{% static 'applications-from-classroom-teachers/img/logoolimp.jpg' %}">
 
     <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
         <div class="flex justify-between mb-4">
-            <a href="{% url 'docs:zayvki_export_excel' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Скачать все заявки</a>
-            <a href="{% url 'docs:download_applications_zip' %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Скачать все согласия (ZIP)</a>
+            <a href="{% url 'register:add_register' %}"
+               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Добавить заявку</a>
+            <a href="{% url 'docs:zayvki_export_excel' %}"
+               class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Скачать все заявки</a>
+            <a href="{% url 'docs:download_applications_zip' %}"
+               class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Скачать все согласия (ZIP)</a>
         </div>
 
         <div class="space-y-6">
-            {% for classroom, registers in grouped_registers.items %}
+            {% for classroom, students in grouped_registers.items %}
                 <div class="bg-gray-100 p-4 rounded-lg shadow-inner">
-                    <h2 class="text-xl font-bold mb-2">{{ classroom.teacher.get_full_name }} - {{ classroom.number }} {{ classroom.letter }}</h2>
-                    <a href="{% url 'docs:excel_classroom' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 inline-block">Скачать excel файл</a>
+                    <h2 class="text-xl font-bold mb-2">{{ classroom.teacher.get_full_name }}
+                        - {{ classroom.number }} {{ classroom.letter }}</h2>
+                    <a href="{% url 'docs:excel_classroom' classroom.id %}"
+                       class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 inline-block">Скачать
+                        excel файл</a>
                     <ul class="space-y-2">
                         <li class="flex justify-between bg-gray-200 p-2 rounded-lg">
                             <div class="text-gray-700 font-bold">Ученик</div>
-                            <div class="text-gray-700 font-bold">Олимпиада</div>
+                            <div class="text-gray-700 font-bold">Олимпиады</div>
                         </li>
-                        {% for register in registers %}
-                            <li class="flex justify-between bg-white p-2 rounded-lg shadow">
-                                <div class="text-gray-700">{{ register.child_admin }}</div>
-                                <div class="text-gray-700">{{ register.Olympiad_admin.name }}</div>
+                        {% for student, registers in students.items %}
+                            <li class="bg-white p-2 rounded-lg shadow">
+                                <div class="text-gray-700 font-bold">{{ student.get_full_name }}</div>
+                                <ul class="list-disc list-inside">
+                                    {% for register in registers %}
+                                        <li>
+                                            {{ register.Olympiad_admin.name }}
+                                            <form method="post"
+                                                  action="{% url 'register:applications-from-classroom-teachers' %}"
+                                                  class="inline-block">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="register_id" value="{{ register.id }}">
+                                                <button type="submit"
+                                                        class="bg-red-500 text-white small-delete-button hover:bg-red-600">
+                                                    Удалить
+                                                </button>
+                                            </form>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </li>
                         {% endfor %}
                     </ul>

@@ -1,20 +1,10 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from raiting_system.models import *
 
 
 class Result(models.Model):
-    """Модель результатов учеников
-        Иваницкий Илья Олегович
-        ВСОШ по Русскому языку
-        50/100 баллов
-        Участник
-        1.03.24"""
-
-    class Meta:
-        verbose_name_plural = 'Резльтаты олимпиад'
-        verbose_name = 'Результат олимпиады'
-
     PARTICIPANT = 'У'
     PRIZE = 'ПР'
     WINNER = 'ПОБД'
@@ -22,17 +12,63 @@ class Result(models.Model):
         (PARTICIPANT, 'Участник'),
         (PRIZE, 'Призер'),
         (WINNER, 'Победитель')
-
     ]
-    info_children = models.ForeignKey(to="users.User", on_delete=models.CASCADE,
-                                      verbose_name='Информация об ученике', blank=True, null=True)
-    info_olympiad = models.ForeignKey(to='main.Olympiad', on_delete=models.CASCADE,
-                                      verbose_name='Информация об олимпиаде', blank=True, null=True)
-    points = models.IntegerField(verbose_name='Количество намбранных очков', blank=True, null=True)
+
+    info_children = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Информация об ученике')
+    info_olympiad = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE, verbose_name='Информация об олимпиаде',
+                                      unique=True)
+    points = models.IntegerField(verbose_name='Количество набранных очков')
     status_result = models.CharField(verbose_name='Статус результата', max_length=256, choices=STATUSRES,
-                                     default=PARTICIPANT, blank=True, null=True)
-    advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап', blank=True, null=True)
-    date_added = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_result')
+                                     default=PARTICIPANT)
+    advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап')
+    date_added = models.DateTimeField(auto_now_add=True)
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа')
+
     def __str__(self):
         return f'{self.info_children} - {self.info_olympiad} - {self.points}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.update_user_rating()
+
+    def update_user_rating(self):
+        points = 0
+        medal_type = None
+        if self.info_olympiad.stage.name == 'Школьный':
+            if self.status_result == self.WINNER:
+                points = 100
+                medal_type = Medal.SILVER
+            elif self.status_result == self.PRIZE:
+                points = 50
+                medal_type = Medal.BRONZE
+        elif self.info_olympiad.stage.name == 'Городской':
+            if self.status_result == self.WINNER:
+                points = 450
+                medal_type = Medal.PLATINUM
+            elif self.status_result == self.PRIZE:
+                points = 300
+                medal_type = Medal.GOLD
+        elif self.info_olympiad.stage.name == 'Региональный':
+            if self.status_result == self.WINNER:
+                points = 1000
+                medal_type = Medal.RUBY
+            elif self.status_result == self.PRIZE:
+                points = 450
+                medal_type = Medal.PLATINUM
+        elif self.info_olympiad.stage.name == 'Заключительный':
+            if self.status_result == self.WINNER:
+                points = 6000
+                medal_type = Medal.PERSONAL
+            elif self.status_result == self.PRIZE:
+                points = 3000
+                medal_type = Medal.DIAMOND
+
+        rating, created = Rating.objects.get_or_create(user=self.info_children)
+        rating.update_points(points)
+
+        if medal_type:
+            Medal.objects.create(
+                type=medal_type,
+                olympiad=self.info_olympiad,
+                user=self.info_children
+            )

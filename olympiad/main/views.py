@@ -5,6 +5,7 @@ from django.views.generic import *
 from result.models import *
 from .forms import *
 from .filters import *
+from raiting_system.models import *
 
 
 def page_not_found(request, exception):
@@ -17,8 +18,50 @@ class HomePageView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Получение последних 10 результатов для текущего пользователя
-        recent_results = Result.objects.filter(info_children=self.request.user, school=self.request.user.school).order_by('-date_added')[:10]
+        recent_results = Result.objects.filter(info_children=self.request.user,
+                                               school=self.request.user.school).order_by('-date_added')[:10]
         context['recent_results'] = recent_results
+
+        # Получение рейтинга пользователя
+        user_rating = Rating.objects.filter(user=self.request.user).first()
+        context['user_rating'] = user_rating
+
+        # Расчеты для лиг
+        points = user_rating.points if user_rating else 0
+        if points <= 150:
+            league = 'Бронзовая лига'
+            points_to_next = 151 - points
+        elif points <= 500:
+            league = 'Серебряная лига'
+            points_to_next = 501 - points
+        elif points <= 1000:
+            league = 'Золотая лига'
+            points_to_next = 1001 - points
+        elif points <= 2000:
+            league = 'Платиновая лига'
+            points_to_next = 2001 - points
+        elif points <= 3500:
+            league = 'Рубиновая лига'
+            points_to_next = 3501 - points
+        else:
+            league = 'Алмазная лига'
+            points_to_next = 0
+
+        context['league'] = league
+        context['points_to_next'] = points_to_next
+
+        # Получение медалей пользователя
+        user_medals = Medal.objects.filter(user=self.request.user)
+        context['user_medals'] = user_medals
+
+        # Получение именных медалей пользователя
+        user_personal_medals = PersonalMedal.objects.filter(user=self.request.user)
+        context['user_personal_medals'] = user_personal_medals
+
+        # Получение олимпиад
+        olympiads = Olympiad.objects.filter().order_by('date')
+        context['olympiads'] = olympiads
+
         return context
 
 

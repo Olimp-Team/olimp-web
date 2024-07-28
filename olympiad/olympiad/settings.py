@@ -67,7 +67,8 @@ INSTALLED_APPS = [
     'image_cropping',
     'imagekit',
     'easy_thumbnails',
-    'school'
+    'school',
+    'raiting_system'
 
 ]
 USE_TZ = False

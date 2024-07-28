@@ -3,6 +3,7 @@ from django import forms
 from users.models import User
 from main.models import *
 from school.models import *
+from classroom.models import *
 import base64
 from django.core.files.base import ContentFile
 
@@ -45,18 +46,6 @@ class UserProfileForm(UserChangeForm):
     class Meta:
         model = User
         fields = ('image', 'username', 'email', 'birth_date', 'gender')
-
-    # def save(self, commit=True):
-    #     user = super().save(commit=False)
-    #     image_data = self.cleaned_data.get('image')
-    #     if image_data:
-    #         format, imgstr = image_data.split(';base64,')
-    #         ext = format.split('/')[-1]
-    #         data = ContentFile(base64.b64decode(imgstr), name=f'{self.instance.username}.{ext}')
-    #         user.image = data
-    #     if commit:
-    #         user.save()
-    #     return user
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -269,4 +258,22 @@ class TelegramIDForm(forms.ModelForm):
         fields = ['telegram_id']
         widgets = {
             'telegram_id': forms.TextInput(attrs={'placeholder': 'Введите ваш Telegram ID'}),
+        }
+
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-input mt-1 block w-full'}))
+
+    class Meta:
+        model = User
+        fields = ['last_name', 'first_name', 'surname', 'username', 'password', 'email', 'school', 'birth_date', 'gender']
+        widgets = {
+            'last_name': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'surname': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'username': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'school': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'birth_date': forms.DateInput(attrs={'class': 'form-input mt-1 block w-full', 'type': 'date'}),
+            'gender': forms.Select(attrs={'class': 'form-select mt-1 block w-full'}),
         }

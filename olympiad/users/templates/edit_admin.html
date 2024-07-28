@@ -1,0 +1,27 @@
+{% extends 'base_olimp.html' %}
+{% load static %}
+{% block content %}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-bold mb-6 text-center">Редактировать {{ admin.first_name }} {{ admin.last_name }}</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                    <p class="text-gray-600 text-xs italic">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                    <p class="text-red-500 text-xs italic">{{ field.errors }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Сохранить изменения
+        </button>
+    </form>
+</div>
+{% endblock %}

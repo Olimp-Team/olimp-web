@@ -1,72 +1,76 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-    <div class="container mx-auto p-6 max-w-4xl bg-white shadow-md rounded-lg">
-        <h1 class="text-3xl font-bold mb-6 text-center">Добавить рекомендацию</h1>
-        <form method="post" class="space-y-4">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="recommended_to" class="block text-sm font-medium text-gray-700">Отправитель:</label>
-                <select name="recommended_to" id="recommended_to" class="block w-full mt-1 p-2 border rounded" disabled>
-                    <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
-                </select>
-            </div>
+<div class="container mx-auto p-6 max-w-4xl bg-white shadow-md rounded-lg">
+    <h1 class="text-3xl font-bold mb-6 text-center">Добавить рекомендацию</h1>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="recommended_to" class="block text-sm font-medium text-gray-700">Отправитель:</label>
+            <select name="recommended_to" id="recommended_to" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" disabled>
+                <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="child" class="block text-sm font-medium text-gray-700">Ученик:</label>
-                <select name="child" id="child" class="block w-full mt-1 p-2 border rounded">
-                    <option value="">Выберите ученика</option>
-                    {% for student in students %}
-                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+        <div class="form-group">
+            <label for="child" class="">Ученики:</label>
+            <select name="child" id="child" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" multiple="multiple">
+                <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" value="">Выберите учеников</option>
+                {% for student in students %}
+                    <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner"  value="{{ student.id }}">{{ student.last_name }} {{ student.first_name }} {{ student.surname }} - {{ student.classroom.number }}{{ student.classroom.letter }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-            <div class="form-group">
-                <label for="olympiad" class="block text-sm font-medium text-gray-700">Олимпиада:</label>
-                <select name="olympiad" id="olympiad" class="block w-full mt-1 p-2 border rounded">
-                    <option value="">Сначала выберите ученика</option>
-                </select>
-            </div>
+        <div class="form-group">
+            <label for="olympiad" class="block text-sm font-medium text-gray-700">Олимпиада:</label>
+            <select name="olympiad" id="olympiad" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
+                <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" value="">Сначала выберите учеников</option>
+            </select>
+        </div>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Добавить рекомендацию
-            </button>
-        </form>
-    </div>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Добавить рекомендацию
+        </button>
+    </form>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-    <script>
-        $(document).ready(function () {
-            $('#child, #olympiad').select2({
-                width: '100%'
-            });
-
-            $('#child').on('change', function () {
-                const childId = $(this).val();
-                if (childId) {
-                    $.ajax({
-                        url: '{% url "register:get_olympiads_for_student" %}',
-                        data: {'student_id': childId},
-                        success: function (data) {
-                            const olympiadSelect = $('#olympiad');
-                            olympiadSelect.empty().append(new Option('Выберите олимпиаду', ''));
-                            data.olympiads.forEach(olympiad => {
-                                olympiadSelect.append(
-                                    new Option(
-                                        `${olympiad.name} - ${olympiad.stage} - Класс ${olympiad.class_olympiad}`,
-                                        olympiad.id
-                                    )
-                                );
-                            });
-                        }
-                    });
-                } else {
-                    $('#olympiad').empty().append(new Option('Сначала выберите ученика', ''));
-                }
-            });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
+<script>
+    $(document).ready(function () {
+        $('#child, #olympiad').select2({
+            width: '100%'
         });
-    </script>
+
+        $('#child').on('change', function () {
+            const childIds = $(this).val();
+            if (childIds.length > 0) {
+                $.ajax({
+                    url: '{% url "register:get_olympiads_for_student" %}',
+                    data: {'student_id': childIds[0]},  // Assume all selected students are in the same class
+                    success: function (data) {
+                        const olympiadSelect = $('#olympiad');
+                        olympiadSelect.empty().append(new Option('Выберите олимпиаду', ''));
+                        console.log('Olympiads data:', data);
+                        data.olympiads.forEach(olympiad => {
+                            olympiadSelect.append(
+                                new Option(
+                                    `${olympiad.name} - ${olympiad.stage || 'Этап не указан'} - Класс ${olympiad.class_olympiad || 'Класс не указан'}`,
+                                    olympiad.id
+                                )
+                            );
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching olympiads:', error);
+                    }
+                });
+            } else {
+                $('#olympiad').empty().append(new Option('Сначала выберите учеников', ''));
+            }
+        });
+    });
+</script>
 {% endblock %}

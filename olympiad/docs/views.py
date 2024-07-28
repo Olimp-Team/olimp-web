@@ -11,7 +11,7 @@ from main.models import *
 from register.models import *
 from result.models import *
 from users.models import *
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UploadFileForm
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
@@ -25,112 +25,94 @@ from openpyxl import Workbook
 
 class ExcelClassroom(AdminRequiredMixin, View):
     def get(self, request, Classroom_id):
-        if request.user.is_admin:
-            queryset = Register_admin.objects.filter(
-                child_admin__classroom__id=Classroom_id, is_deleted=False, school=request.user.school)
-
-            data_classroom = [
-                [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
-                 _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
-                 _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
-                 _("Английский язык (4, 5-6, 7-8, 9-11)"),
-                 _("География (5, 6, 7, 8, 9, 10-11)"),
-                 _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"),
-                 _("История (5, 6, 7, 8, 9, 10-11)"),
-                 _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"),
-                 _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
-                 _("Обществознание (5, 6, 7, 8, 9, 10, 11 )"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"),
-                 _("Право (9, 10, 11)"), _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"),
-                 _("Технология (5-6, 7-8, 9, 10-11)"), _("Физика (5, 6)"),
-                 _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
-                 _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
-                 _("НШ: окружающий мир (4)"), _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"),
-                 _("Кол-во заявлений"),
-                 ],
-            ]
-
-            student_data = {}
-
-            for obj in queryset:
-                student_id = obj.child_admin.id
-                if student_id not in student_data:
-                    student_data[student_id] = {
-                        "last_name": obj.child_admin.last_name,
-                        "first_name": obj.child_admin.first_name,
-                        "surname": obj.child_admin.surname,
-                        "gender": obj.child_admin.gender,
-                        "birth_date": obj.child_admin.birth_date,
-                        "class_number": obj.child_admin.classroom.number,
-                        "class_letter": obj.child_admin.classroom.letter,
-                        "subjects": {
-                            "Английский язык": 0,
-                            "География": 0,
-                            "Информатика": 0,
-                            "Искусство (МХК)": 0,
-                            "История": 0,
-                            "Литература": 0,
-                            "Музыка": 0,
-                            "Немецкий язык": 0,
-                            "Обществознание": 0,
-                            "ОБЖ": 0,
-                            "Право": 0,
-                            "Психология": 0,
-                            "Русский язык": 0,
-                            "Технология": 0,
-                            "Физика": 0,
-                            "Физическая культура": 0,
-                            "Французский язык": 0,
-                            "Экология": 0,
-                            "Экономика": 0,
-                            "НШ: литературное чтение": 0,
-                            "НШ: окружающий мир (4)": 0,
-                            "НШ: русский язык (4)": 0,
-                        }
-                    }
-
-                student_data[student_id]["subjects"][obj.Olympiad_admin.subject.name] = 1
-
-            for student_id, student_info in student_data.items():
-                subjects = student_info["subjects"]
-                data_classroom.append([
-                    student_id,
-                    student_info["last_name"],
-                    student_info["first_name"],
-                    student_info["surname"],
-                    student_info["gender"],
-                    student_info["birth_date"],
-                    'РФ',
-                    '',
-                    'МАОУ «МЛ № 1»',
-                    student_info["class_number"],
-                    student_info["class_letter"],
-                    subjects["Английский язык"],
-                    subjects["География"],
-                    subjects["Информатика"],
-                    subjects["Искусство (МХК)"],
-                    subjects["История"],
-                    subjects["Литература"],
-                    subjects["Музыка"],
-                    subjects["Немецкий язык"],
-                    subjects["Обществознание"],
-                    subjects["ОБЖ"],
-                    subjects["Право"],
-                    subjects["Психология"],
-                    subjects["Русский язык"],
-                    subjects["Технология"],
-                    subjects["Физика"],
-                    subjects["Физическая культура"],
-                    subjects["Французский язык"],
-                    subjects["Экология"],
-                    subjects["Экономика"],
-                    subjects["НШ: литературное чтение"],
-                    subjects["НШ: окружающий мир (4)"],
-                    subjects["НШ: русский язык (4)"],
-                ])
-
-            return self.generate_excel_response(data_classroom, 'register_classroom')
-        else:
+        if not request.user.is_admin:
             return HttpResponseForbidden()
+
+        classroom = get_object_or_404(Classroom, id=Classroom_id, school=request.user.school)
+        queryset = Register_admin.objects.filter(
+            child_admin__classroom__id=Classroom_id, is_deleted=False, school=request.user.school)
+
+        data_classroom = [
+            [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
+             _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
+             _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
+             _("Английский язык (4, 5-6, 7-8, 9-11)"), _("География (5, 6, 7, 8, 9, 10-11)"),
+             _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"), _("История (5, 6, 7, 8, 9, 10-11)"),
+             _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"), _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
+             _("Обществознание (5, 6, 7, 8, 9, 10, 11)"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"), _("Право (9, 10, 11)"),
+             _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"), _("Технология (5-6, 7-8, 9, 10-11)"),
+             _("Физика (5, 6)"), _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
+             _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
+             _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"), _("НШ: математика (4)"),
+             _("Математика (5, 6, 7, 8, 9, 10, 11)"), _("Кол-во заявлений")],
+        ]
+
+        student_data = {}
+
+        for obj in queryset:
+            student_id = obj.child_admin.id
+            if student_id not in student_data:
+                student_data[student_id] = {
+                    "last_name": obj.child_admin.last_name,
+                    "first_name": obj.child_admin.first_name,
+                    "surname": obj.child_admin.surname,
+                    "gender": obj.child_admin.gender,
+                    "birth_date": obj.child_admin.birth_date,
+                    "class_number": obj.child_admin.classroom.number,
+                    "class_letter": obj.child_admin.classroom.letter,
+                    "subjects": {subject: 0 for subject in [
+                        "Английский язык", "География", "Информатика", "Искусство (МХК)", "История", "Литература",
+                        "Музыка", "Немецкий язык", "Обществознание", "ОБЖ", "Право", "Психология", "Русский язык",
+                        "Технология", "Физика", "Физическая культура", "Французский язык", "Экология", "Экономика",
+                        "НШ: литературное чтение", "НШ: окружающий мир (4)", "НШ: русский язык (4)",
+                        "НШ: математика (4)",
+                        "Математика"
+                    ]}
+                }
+
+            student_data[student_id]["subjects"][obj.Olympiad_admin.subject.name] = 1
+
+        for student_id, student_info in student_data.items():
+            subjects = student_info["subjects"]
+            data_classroom.append([
+                student_id,
+                student_info["last_name"],
+                student_info["first_name"],
+                student_info["surname"],
+                student_info["gender"],
+                student_info["birth_date"],
+                'РФ',
+                '',
+                'МАОУ «МЛ № 1»',
+                student_info["class_number"],
+                student_info["class_letter"],
+                subjects["Английский язык"],
+                subjects["География"],
+                subjects["Информатика"],
+                subjects["Искусство (МХК)"],
+                subjects["История"],
+                subjects["Литература"],
+                subjects["Музыка"],
+                subjects["Немецкий язык"],
+                subjects["Обществознание"],
+                subjects["ОБЖ"],
+                subjects["Право"],
+                subjects["Психология"],
+                subjects["Русский язык"],
+                subjects["Технология"],
+                subjects["Физика"],
+                subjects["Физическая культура"],
+                subjects["Французский язык"],
+                subjects["Экология"],
+                subjects["Экономика"],
+                subjects["НШ: литературное чтение"],
+                subjects["НШ: окружающий мир (4)"],
+                subjects["НШ: русский язык (4)"],
+                subjects["НШ: математика (4)"],
+                subjects["Математика"],
+            ])
+
+        return self.generate_excel_response(data_classroom, f'Zayvki {classroom.number}{classroom.letter} classa')
 
     def generate_excel_response(self, data, filename):
         wb = Workbook()
@@ -140,116 +122,99 @@ class ExcelClassroom(AdminRequiredMixin, View):
             ws.append(row)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = f'attachment; filename={filename}.xlsx'
+        response['Content-Disposition'] = f'attachment; filename="{filename}.xlsx"'
         wb.save(response)
         return response
 
 
 class ExcelAll(AdminRequiredMixin, View):
     def get(self, request):
-        if request.user.is_admin:
-            queryset = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
-            data_all = [
-                [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
-                 _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
-                 _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
-                 _("Английский язык (4, 5-6, 7-8, 9-11)"),
-                 _("География (5, 6, 7, 8, 9, 10-11)"),
-                 _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"),
-                 _("История (5, 6, 7, 8, 9, 10-11)"),
-                 _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"),
-                 _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
-                 _("Обществознание (5, 6, 7, 8, 9, 10, 11 )"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"),
-                 _("Право (9, 10, 11)"), _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"),
-                 _("Технология (5-6, 7-8, 9, 10-11)"), _("Физика (5, 6)"),
-                 _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
-                 _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
-                 _("НШ: окружающий мир (4)"), _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"),
-                 _("Кол-во заявлений"), ],
-            ]
-
-            student_data = {}
-
-            for obj in queryset:
-                student_id = obj.child_admin.id
-                if student_id not in student_data:
-                    student_data[student_id] = {
-                        "last_name": obj.child_admin.last_name,
-                        "first_name": obj.child_admin.first_name,
-                        "surname": obj.child_admin.surname,
-                        "gender": obj.child_admin.gender,
-                        "birth_date": obj.child_admin.birth_date,
-                        "class_number": obj.child_admin.classroom.number,
-                        "class_letter": obj.child_admin.classroom.letter,
-                        "subjects": {
-                            "Английский язык": 0,
-                            "География": 0,
-                            "Информатика": 0,
-                            "Искусство (МХК)": 0,
-                            "История": 0,
-                            "Литература": 0,
-                            "Музыка": 0,
-                            "Немецкий язык": 0,
-                            "Обществознание": 0,
-                            "ОБЖ": 0,
-                            "Право": 0,
-                            "Психология": 0,
-                            "Русский язык": 0,
-                            "Технология": 0,
-                            "Физика": 0,
-                            "Физическая культура": 0,
-                            "Французский язык": 0,
-                            "Экология": 0,
-                            "Экономика": 0,
-                            "НШ: литературное чтение": 0,
-                            "НШ: окружающий мир (4)": 0,
-                            "НШ: русский язык (4)": 0,
-                        }
-                    }
-
-                student_data[student_id]["subjects"][obj.Olympiad_admin.subject.name] = 1
-
-            for student_id, student_info in student_data.items():
-                subjects = student_info["subjects"]
-                data_all.append([
-                    student_id,
-                    student_info["last_name"],
-                    student_info["first_name"],
-                    student_info["surname"],
-                    student_info["gender"],
-                    student_info["birth_date"],
-                    'РФ',
-                    '',
-                    'МАОУ «МЛ № 1»',
-                    student_info["class_number"],
-                    student_info["class_letter"],
-                    subjects["Английский язык"],
-                    subjects["География"],
-                    subjects["Информатика"],
-                    subjects["Искусство (МХК)"],
-                    subjects["История"],
-                    subjects["Литература"],
-                    subjects["Музыка"],
-                    subjects["Немецкий язык"],
-                    subjects["Обществознание"],
-                    subjects["ОБЖ"],
-                    subjects["Право"],
-                    subjects["Психология"],
-                    subjects["Русский язык"],
-                    subjects["Технология"],
-                    subjects["Физика"],
-                    subjects["Физическая культура"],
-                    subjects["Французский язык"],
-                    subjects["Экология"],
-                    subjects["Экономика"],
-                    subjects["НШ: литературное чтение"],
-                    subjects["НШ: окружающий мир (4)"],
-                    subjects["НШ: русский язык (4)"],
-                ])
-
-            return self.generate_excel_response(data_all, 'register_all')
-        else:
+        if not request.user.is_admin:
             return HttpResponseForbidden()
+
+        queryset = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
+
+        data_all = [
+            [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
+             _("Статус наличия гражданства"), _("Участник с ОВЗ"), _("Краткое наименование ОУ"),
+             _("Класс, в котором учится участник"), _("Буква класса, в котором учится участник"),
+             _("Английский язык (4, 5-6, 7-8, 9-11)"), _("География (5, 6, 7, 8, 9, 10-11)"),
+             _("Информатика (3, 4)"), _("Искусство (МХК) (5, 6, 7, 8, 9, 10, 11)"), _("История (5, 6, 7, 8, 9, 10-11)"),
+             _("Литература (5, 6, 7, 8, 9, 10, 11)"), _("Музыка (5, 6, 7, 8)"), _("Немецкий язык (4, 5-6, 7-8, 9-11)"),
+             _("Обществознание (5, 6, 7, 8, 9, 10, 11)"), _("ОБЖ (5, 6, 7, 8, 9, 10-11)"), _("Право (9, 10, 11)"),
+             _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"), _("Технология (5-6, 7-8, 9, 10-11)"),
+             _("Физика (5, 6)"), _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
+             _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
+             _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"), _("НШ: математика (4)"),
+             _("Математика (5, 6, 7, 8, 9, 10, 11)"), _("Кол-во заявлений")],
+        ]
+
+        student_data = {}
+
+        for obj in queryset:
+            student_id = obj.child_admin.id
+            if student_id not in student_data:
+                student_data[student_id] = {
+                    "last_name": obj.child_admin.last_name,
+                    "first_name": obj.child_admin.first_name,
+                    "surname": obj.child_admin.surname,
+                    "gender": obj.child_admin.gender,
+                    "birth_date": obj.child_admin.birth_date,
+                    "class_number": obj.child_admin.classroom.number,
+                    "class_letter": obj.child_admin.classroom.letter,
+                    "subjects": {subject: 0 for subject in [
+                        "Английский язык", "География", "Информатика", "Искусство (МХК)", "История", "Литература",
+                        "Музыка", "Немецкий язык", "Обществознание", "ОБЖ", "Право", "Психология", "Русский язык",
+                        "Технология", "Физика", "Физическая культура", "Французский язык", "Экология", "Экономика",
+                        "НШ: литературное чтение", "НШ: окружающий мир (4)", "НШ: русский язык (4)",
+                        "НШ: математика (4)",
+                        "Математика"
+                    ]}
+                }
+
+            student_data[student_id]["subjects"][obj.Olympiad_admin.subject.name] = 1
+
+        for student_id, student_info in student_data.items():
+            subjects = student_info["subjects"]
+            data_all.append([
+                student_id,
+                student_info["last_name"],
+                student_info["first_name"],
+                student_info["surname"],
+                student_info["gender"],
+                student_info["birth_date"],
+                'РФ',
+                '',
+                'МАОУ «МЛ № 1»',
+                student_info["class_number"],
+                student_info["class_letter"],
+                subjects["Английский язык"],
+                subjects["География"],
+                subjects["Информатика"],
+                subjects["Искусство (МХК)"],
+                subjects["История"],
+                subjects["Литература"],
+                subjects["Музыка"],
+                subjects["Немецкий язык"],
+                subjects["Обществознание"],
+                subjects["ОБЖ"],
+                subjects["Право"],
+                subjects["Психология"],
+                subjects["Русский язык"],
+                subjects["Технология"],
+                subjects["Физика"],
+                subjects["Физическая культура"],
+                subjects["Французский язык"],
+                subjects["Экология"],
+                subjects["Экономика"],
+                subjects["НШ: литературное чтение"],
+                subjects["НШ: окружающий мир (4)"],
+                subjects["НШ: русский язык (4)"],
+                subjects["НШ: математика (4)"],
+                subjects["Математика"],
+            ])
+
+        return self.generate_excel_response(data_all, f'Baza {request.user.school.name}')
 
     def generate_excel_response(self, data, filename):
         wb = Workbook()
@@ -259,7 +224,7 @@ class ExcelAll(AdminRequiredMixin, View):
             ws.append(row)
 
         response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = f'attachment; filename={filename}.xlsx'
+        response['Content-Disposition'] = f'attachment; filename="{filename}.xlsx"'
         wb.save(response)
         return response
 
@@ -377,6 +342,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         start_date = self.request.GET.get('start-date')
         end_date = self.request.GET.get('end-date')
         class_filter = self.request.GET.get('class')
+        parallel_filter = self.request.GET.get('parallel')
         subject_filter = self.request.GET.get('subject')
         student_filter = self.request.GET.get('student')
         olympiad_filter = self.request.GET.get('olympiad')
@@ -391,6 +357,8 @@ class DashboardView(AdminRequiredMixin, ListView):
             queryset = queryset.filter(date_added__range=[start_date, end_date])
         if class_filter:
             queryset = queryset.filter(info_children__classroom__id=class_filter)
+        if parallel_filter:
+            queryset = queryset.filter(info_children__classroom__number=parallel_filter)
         if subject_filter:
             queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
         if student_filter:
@@ -405,11 +373,12 @@ class DashboardView(AdminRequiredMixin, ListView):
 
         # Получение зарегистрированных олимпиад из Register_admin
         olympiad_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('Olympiad_admin',
-                                                                                             flat=True)
+                                                                                                  flat=True)
         context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids)
+
         # Получение классов, зарегистрированных в Register_admin
-        class_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('child_admin__classroom__id',
-                                                                                          flat=True).distinct()
+        class_ids = Register_admin.objects.filter(school=self.request.user.school).values_list(
+            'child_admin__classroom__id', flat=True).distinct()
         context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=self.request.user.school).order_by(
             'number', 'letter')
 
@@ -417,20 +386,25 @@ class DashboardView(AdminRequiredMixin, ListView):
 
         # Получение учеников, зарегистрированных в Register_admin
         student_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('child_admin',
-                                                                                            flat=True).distinct()
-        context['students'] = User.objects.filter(id__in=student_ids, school=self.request.user.school).order_by('last_name',
-                                                                                                           'first_name')
+                                                                                                 flat=True).distinct()
+        context['students'] = User.objects.filter(id__in=student_ids, school=self.request.user.school).order_by(
+            'last_name', 'first_name')
+
+        # Получение всех параллелей классов
+        context['parallels'] = Classroom.objects.filter(school=self.request.user.school).values_list('number',flat=True).distinct().order_by('number')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
         context['winners_count'] = queryset.filter(status_result=Result.WINNER, school=self.request.user.school).count()
-        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE, school=self.request.user.school).count()
+        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE,
+                                                        school=self.request.user.school).count()
         context['participants_count'] = queryset.count()
 
         # Передача текущих значений фильтров в контекст
         context['start_date'] = self.request.GET.get('start-date', '')
         context['end_date'] = self.request.GET.get('end-date', '')
         context['class_filter'] = self.request.GET.get('class', '')
+        context['parallel_filter'] = self.request.GET.get('parallel', '')
         context['subject_filter'] = self.request.GET.get('subject', '')
         context['student_filter'] = self.request.GET.get('student', '')
         context['olympiad_filter'] = self.request.GET.get('olympiad', '')
