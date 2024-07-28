@@ -16,6 +16,9 @@ urlpatterns = [
     path('create/teacher/', CreateTeacher.as_view(), name='CreateTeacher'),
     path('teachers/', TeacherListView.as_view(), name='teacher_list'),
     path('admins/', AdminListView.as_view(), name='admin_list'),
+    path('teachers/edit/<int:pk>/', EditTeacherView.as_view(), name='edit_teacher'),
+    path('admins/edit/<int:pk>/', EditAdminView.as_view(), name='edit_admin'),
+    path('users/delete/<int:pk>/', DeleteUserView.as_view(), name='delete_user'),
     path('password_reset/', auth_views.PasswordResetView.as_view(
         template_name='auth/password_reset.html',
         success_url=reverse_lazy('users:password_reset_done'),

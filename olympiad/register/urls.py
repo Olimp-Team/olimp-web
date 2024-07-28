@@ -14,7 +14,6 @@ urlpatterns = [
     path('delete/<int:Olympiad_id>/<int:student_id>/', RegisterDeleteTeacher.as_view(),
          name='register_delete_teacher'),
     path('teacher/recommendations/', TeacherRecommendationsView.as_view(), name='teacher_recommendations'),
-    path('get-olympiads-for-student/', GetOlympiadsForStudent.as_view(), name='get_olympiads_for_student'),
     path('add-recommendation/', AddRecommendation.as_view(), name='add_recommendation'),
     # path('process-recommendation/', ProcessRecommendation.as_view(), name='process_recommendation'),
     path('register/accept_recommendation/<int:recommendation_id>/', accept_recommendation,
@@ -24,4 +23,7 @@ urlpatterns = [
     path('applications/classroom/teachers/', RegisterListClassroom.as_view(),
          name='applications-from-classroom-teachers'),
     path('get-olympiads-for-student/', GetOlympiadsForStudent.as_view(), name='get_olympiads_for_student'),
+    path('add_register/', AddRegister.as_view(), name='add_register'),
+    path('get-students-for-classroom/', GetStudentsForClassroomView.as_view(), name='get_students_for_classroom'),
+    path('get-olympiads-for-student/', GetOlympiadsForStudentView.as_view(), name='get_olympiads_for_student'),
 ]

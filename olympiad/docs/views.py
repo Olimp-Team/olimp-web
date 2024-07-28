@@ -342,6 +342,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         start_date = self.request.GET.get('start-date')
         end_date = self.request.GET.get('end-date')
         class_filter = self.request.GET.get('class')
+        parallel_filter = self.request.GET.get('parallel')
         subject_filter = self.request.GET.get('subject')
         student_filter = self.request.GET.get('student')
         olympiad_filter = self.request.GET.get('olympiad')
@@ -356,6 +357,8 @@ class DashboardView(AdminRequiredMixin, ListView):
             queryset = queryset.filter(date_added__range=[start_date, end_date])
         if class_filter:
             queryset = queryset.filter(info_children__classroom__id=class_filter)
+        if parallel_filter:
+            queryset = queryset.filter(info_children__classroom__number=parallel_filter)
         if subject_filter:
             queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
         if student_filter:
@@ -372,10 +375,10 @@ class DashboardView(AdminRequiredMixin, ListView):
         olympiad_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('Olympiad_admin',
                                                                                                   flat=True)
         context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids)
+
         # Получение классов, зарегистрированных в Register_admin
         class_ids = Register_admin.objects.filter(school=self.request.user.school).values_list(
-            'child_admin__classroom__id',
-            flat=True).distinct()
+            'child_admin__classroom__id', flat=True).distinct()
         context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=self.request.user.school).order_by(
             'number', 'letter')
 
@@ -385,8 +388,10 @@ class DashboardView(AdminRequiredMixin, ListView):
         student_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('child_admin',
                                                                                                  flat=True).distinct()
         context['students'] = User.objects.filter(id__in=student_ids, school=self.request.user.school).order_by(
-            'last_name',
-            'first_name')
+            'last_name', 'first_name')
+
+        # Получение всех параллелей классов
+        context['parallels'] = Classroom.objects.filter(school=self.request.user.school).values_list('number',flat=True).distinct().order_by('number')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
@@ -399,6 +404,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         context['start_date'] = self.request.GET.get('start-date', '')
         context['end_date'] = self.request.GET.get('end-date', '')
         context['class_filter'] = self.request.GET.get('class', '')
+        context['parallel_filter'] = self.request.GET.get('parallel', '')
         context['subject_filter'] = self.request.GET.get('subject', '')
         context['student_filter'] = self.request.GET.get('student', '')
         context['olympiad_filter'] = self.request.GET.get('olympiad', '')

@@ -58,6 +58,10 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         user_personal_medals = PersonalMedal.objects.filter(user=self.request.user)
         context['user_personal_medals'] = user_personal_medals
 
+        # Получение олимпиад
+        olympiads = Olympiad.objects.filter().order_by('date')
+        context['olympiads'] = olympiads
+
         return context
 
 

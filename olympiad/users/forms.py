@@ -259,3 +259,21 @@ class TelegramIDForm(forms.ModelForm):
         widgets = {
             'telegram_id': forms.TextInput(attrs={'placeholder': 'Введите ваш Telegram ID'}),
         }
+
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-input mt-1 block w-full'}))
+
+    class Meta:
+        model = User
+        fields = ['last_name', 'first_name', 'surname', 'username', 'password', 'email', 'school', 'birth_date', 'gender']
+        widgets = {
+            'last_name': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'surname': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'username': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'school': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'birth_date': forms.DateInput(attrs={'class': 'form-input mt-1 block w-full', 'type': 'date'}),
+            'gender': forms.Select(attrs={'class': 'form-select mt-1 block w-full'}),
+        }

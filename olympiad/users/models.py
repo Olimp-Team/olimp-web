@@ -32,7 +32,7 @@ class User(AbstractUser):
         "Отчество пользователя (при наличии)", max_length=256, blank=True, null=True
     )
     birth_date = models.DateField('Дата рождения', blank=True, null=True)
-    gender = models.CharField("Пол учителя", max_length=2, choices=GENDER_CHOICES)
+    gender = models.CharField("Пол", max_length=2, choices=GENDER_CHOICES)
     telegram_id = models.CharField(max_length=64, blank=True, null=True, verbose_name="Telegram ID")
 
     is_teacher = models.BooleanField("Учитель", default=False, blank=True, null=True)

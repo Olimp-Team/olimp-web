@@ -1,0 +1,80 @@
+{% extends 'base_olimp.html' %}
+{% load static %}
+{% block content %}
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Добавить заявку</h2>
+        <form method="post" id="registerForm" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label for="classroom" class="block text-gray-700">Класс</label>
+                <select id="classroom" name="classroom" class="w-full p-2 border border-gray-300 rounded mt-1">
+                    <option value="">Выберите класс</option>
+                    {% for classroom in classrooms %}
+                        <option value="{{ classroom.id }}">{{ classroom.number }}{{ classroom.letter }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="student" class="block text-gray-700">Ученик</label>
+                <select id="student" name="student" class="w-full p-2 border border-gray-300 rounded mt-1">
+                    <option value="">Сначала выберите класс</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="olympiad" class="block text-gray-700">Олимпиада</label>
+                <select id="olympiad" name="olympiad" class="w-full p-2 border border-gray-300 rounded mt-1">
+                    <option value="">Сначала выберите ученика</option>
+                </select>
+            </div>
+
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+                Добавить заявку
+            </button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#classroom').change(function () {
+                var classroomId = $(this).val();
+                if (classroomId) {
+                    $.ajax({
+                        url: '{% url "register:get_students_for_classroom" %}',
+                        data: {'classroom_id': classroomId},
+                        success: function (data) {
+                            var studentSelect = $('#student');
+                            studentSelect.empty().append(new Option('Выберите ученика', ''));
+                            data.students.forEach(function (student) {
+                                studentSelect.append(new Option(student.name, student.id));
+                            });
+                        }
+                    });
+                } else {
+                    $('#student').empty().append(new Option('Сначала выберите класс', ''));
+                    $('#olympiad').empty().append(new Option('Сначала выберите ученика', ''));
+                }
+            });
+
+            $('#student').change(function () {
+                var studentId = $(this).val();
+                if (studentId) {
+                    $.ajax({
+                        url: '{% url "register:get_olympiads_for_student" %}',
+                        data: {'student_id': studentId},
+                        success: function (data) {
+                            var olympiadSelect = $('#olympiad');
+                            olympiadSelect.empty().append(new Option('Выберите олимпиаду', ''));
+                            data.olympiads.forEach(function (olympiad) {
+                                olympiadSelect.append(new Option(`${olympiad.name} - ${olympiad.stage} - ${olympiad.class_olympiad}`, olympiad.id));
+                            });
+                        }
+                    });
+                } else {
+                    $('#olympiad').empty().append(new Option('Сначала выберите ученика', ''));
+                }
+            });
+        });
+    </script>
+{% endblock %}
