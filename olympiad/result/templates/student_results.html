@@ -7,19 +7,19 @@
         <table class="min-w-full bg-white border border-gray-300">
             <thead class="bg-gray-800 text-white">
                 <tr>
-                    <th class="py-2 px-4 border-b">Олимпиада</th>
-                    <th class="py-2 px-4 border-b">Очки</th>
-                    <th class="py-2 px-4 border-b">Статус</th>
-                    <th class="py-2 px-4 border-b">Дата</th>
+                    <th class="py-2 px-4 border-b text-center">Олимпиада</th>
+                    <th class="py-2 px-4 border-b text-center">Очки</th>
+                    <th class="py-2 px-4 border-b text-center">Статус</th>
+                    <th class="py-2 px-4 border-b text-center">Дата</th>
                 </tr>
             </thead>
             <tbody class="text-gray-700">
                 {% for result in results %}
                 <tr>
-                    <td class="py-2 px-4 border-b">{{ result.info_olympiad.name }}</td>
-                    <td class="py-2 px-4 border-b">{{ result.points }}</td>
-                    <td class="py-2 px-4 border-b">{{ result.get_status_result_display }}</td>
-                    <td class="py-2 px-4 border-b">{{ result.date_added|date:"d.m.Y" }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ result.info_olympiad.name }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ result.points }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ result.get_status_result_display }}</td>
+                    <td class="py-2 px-4 border-b text-center">{{ result.date_added|date:"d.m.Y" }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

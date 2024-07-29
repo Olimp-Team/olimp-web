@@ -1,6 +1,8 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
+{% load form_filters %}
 {% block head_olimp %}
+
     <noscript>
         <link src="https://code.jquery.com/jquery-3.6.0.min.js">
     </noscript>
@@ -16,50 +18,53 @@
             <div class="classroom">
                 <h1 class="text-xl font-bold mb-2">Класс:</h1>
                 <div class="cl">
-                    {{ filter.form.classroom }}
+                    {{ filter.form.classroom|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
                 </div>
             </div>
             <div class="olympiad">
                 <h1 class="text-xl font-bold mb-2">Олимпиада:</h1>
                 <div class="ol">
-                    {{ filter.form.olympiad }}
+                    {{ filter.form.olympiad|add_class:"focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" }}
                 </div>
             </div>
-            <div class="text-center">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Фильтровать</button>
+            <div class="text-left">
+                <button type="submit" class="bg-blue-500 text-white mb-5 px-9 py-2 rounded hover:bg-blue-600">Фильтровать</button>
             </div>
         </form>
 
-        {% if user.is_admin %}
+        {% if user.is_admin %}<div class="importblock flex flex-row gap-3">
             <form method="post" enctype="multipart/form-data" action="{% url 'result:import_results' %}"
-                  class="input-file space-y-6 mt-6">
-                <div class="importblock">
+                  class="input-file text-center">
+
                     {% csrf_token %}
                     <input type="file" name="excel_file" accept=".xlsx" id="file-input" class="hidden">
-                    <label for="file-input" class="block bg-gray-200 text-gray-700 px-4 py-2 rounded cursor-pointer">Выберите файл</label>
-                    <div class="text-center">
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">
+
+                    <label for="file-input" class="bg-blue-500 text-white px-7 pb-2.5 pt-2 rounded hover:bg-blue-600 mb-3 mr-3">Выберите файл</label>
+
+
+
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                             Импортировать результаты
                         </button>
-                    </div>
-                </div>
+
+
             </form>
 
-            <form method="get" action="{% url 'result:export_results' %}" class="space-y-6 mt-6">
-                <div class="text-center">
+            <form method="get" action="{% url 'result:export_results' %}" class="">
+
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Экспортировать результаты</button>
-                </div>
+
             </form>
 
-            <div class="text-center mt-6 space-x-4">
+
                 <a href="{% url 'result:add_result_class' %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты классу</a>
-                <a href="{% url 'result:add_result' %}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Добавить результаты ученику</a>
+                <a href="{% url 'result:add_result' %}" class="bg-indigo-500 text-white px-4 py-2  rounded hover:bg-indigo-600">Добавить результаты ученику</a>
             </div>
         {% endif %}
 
         <div class="overflow-x-auto mt-6">
             <table class="min-w-full bg-white">
-                <thead class="bg-gray-800 text-white">
+                <thead class="bg-gray-800 text-white rounded-xl">
                 <tr>
                     <th class="w-1/6 py-2">Ученик</th>
                     <th class="w-1/6 py-2">Класс</th>
@@ -72,12 +77,12 @@
                 <tbody class="text-gray-700">
                 {% for result in filter.qs %}
                     <tr>
-                        <td class="border px-4 py-2">{{ result.info_children.get_full_name }}</td>
-                        <td class="border px-4 py-2">{{ result.info_children.classroom }}</td>
-                        <td class="border px-4 py-2">{{ result.info_olympiad.name }} - {{ result.info_olympiad.stage }} - {{ result.info_olympiad.class_olympiad }} - {{ result.info_olympiad.subject }}</td>
-                        <td class="border px-4 py-2">{{ result.points }}</td>
-                        <td class="border px-4 py-2">{{ result.get_status_result_display }}</td>
-                        <td class="border px-4 py-2">{{ result.date_added }}</td>
+                        <td class="border px-4 py-2 text-center">{{ result.info_children.get_full_name }}</td>
+                        <td class="border px-4 py-2 text-center">{{ result.info_children.classroom }}</td>
+                        <td class="border px-4 py-2 text-center">{{ result.info_olympiad.name }} - {{ result.info_olympiad.stage }} - {{ result.info_olympiad.classroom }} - {{ result.info_olympiad.subject }}</td>
+                        <td class="border px-4 py-2 text-center">{{ result.points }}</td>
+                        <td class="border px-4 py-2 text-center">{{ result.get_status_result_display }}</td>
+                        <td class="border px-4 py-2 text-center">{{ result.date_added }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

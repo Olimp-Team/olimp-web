@@ -7,25 +7,25 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="recommended_to" class="block text-sm font-medium text-gray-700">Отправитель:</label>
-            <select name="recommended_to" id="recommended_to" class="block w-full mt-1 p-2 border rounded" disabled>
+            <select name="recommended_to" id="recommended_to" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" disabled>
                 <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="child" class="block text-sm font-medium text-gray-700">Ученики:</label>
-            <select name="child" id="child" class="block w-full mt-1 p-2 border rounded" multiple="multiple">
-                <option value="">Выберите учеников</option>
+            <label for="child" class="">Ученики:</label>
+            <select name="child" id="child" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" multiple="multiple">
+                <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" value="">Выберите учеников</option>
                 {% for student in students %}
-                    <option value="{{ student.id }}">{{ student.last_name }} {{ student.first_name }} {{ student.surname }} - {{ student.classroom.number }}{{ student.classroom.letter }}</option>
+                    <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner"  value="{{ student.id }}">{{ student.last_name }} {{ student.first_name }} {{ student.surname }} - {{ student.classroom.number }}{{ student.classroom.letter }}</option>
                 {% endfor %}
             </select>
         </div>
 
         <div class="form-group">
             <label for="olympiad" class="block text-sm font-medium text-gray-700">Олимпиада:</label>
-            <select name="olympiad" id="olympiad" class="block w-full mt-1 p-2 border rounded">
-                <option value="">Сначала выберите учеников</option>
+            <select name="olympiad" id="olympiad" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
+                <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" value="">Сначала выберите учеников</option>
             </select>
         </div>
 
