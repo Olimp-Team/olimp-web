@@ -2,14 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from users.views import start_page
+from users.views import StartPage
 from main.views import page_not_found
 
 urlpatterns = [
-
     path('admin/', admin.site.urls),
-    # Пока нет главной страницы перенаправление на страницу входа
-    path('', start_page.as_view(), name='start_page'),
+    # Пока нет главной страницы, перенаправление на страницу входа
+    path('', StartPage.as_view(), name='start_page'),
     # Главное приложение
     path('main/', include('main.urls', namespace='main')),
     path('docs/', include('docs.urls', namespace='docs')),
@@ -25,7 +24,9 @@ urlpatterns = [
     path('chat/', include('chat.urls')),
 ]
 
+# Обработка медиафайлов в режиме отладки
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# Обработка ошибки 404
 handler404 = page_not_found

@@ -3,11 +3,14 @@ from django.contrib.auth.models import AbstractUser
 from image_cropping import ImageRatioField
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-from school.models import *
-from classroom.models import *
+from school.models import School
+from classroom.models import Classroom
 
 
 class User(AbstractUser):
+    """
+    Расширенная модель пользователя, включающая дополнительные поля для различных ролей и информации о пользователе.
+    """
     MALE = 'M'
     FEMALE = 'F'
 
@@ -44,7 +47,7 @@ class User(AbstractUser):
     classroom_guide = models.ForeignKey('classroom.Classroom', related_name='classroom_teachers', blank=True,
                                         on_delete=models.CASCADE, null=True)
     subject = models.ManyToManyField(to="main.Subject", verbose_name="Какой предмет ведёт учитель",
-                                     blank=True, max_length=256)
+                                     blank=True)
     post_job_teacher = models.ManyToManyField(to="main.Post", verbose_name="Должность учителя",
                                               blank=True)
 
@@ -54,6 +57,9 @@ class User(AbstractUser):
                                blank=True, null=True)
 
     def __str__(self):
+        """
+        Возвращает строковое представление пользователя в зависимости от его роли.
+        """
         if self.is_teacher:
             return f"Учитель: {self.last_name} {self.first_name} {self.surname}"
         elif self.is_admin:
@@ -61,16 +67,25 @@ class User(AbstractUser):
         elif self.is_child:
             return f"{self.last_name} {self.first_name} {self.surname}"
         else:
-            return f"Неизвстная роль: {self.last_name} {self.first_name} {self.surname}"
+            return f"Неизвестная роль: {self.last_name} {self.first_name} {self.surname}"
 
     def get_full_name(self):
-        full_name = "%s %s %s" % (self.last_name, self.first_name, self.surname)
+        """
+        Возвращает полное имя пользователя.
+        """
+        full_name = f"{self.last_name} {self.first_name} {self.surname}"
         return full_name.strip()
 
     @staticmethod
     def get_teachers():
+        """
+        Возвращает QuerySet всех пользователей с ролью учителя.
+        """
         return User.objects.filter(is_teacher=True)
 
     @staticmethod
     def get_children():
+        """
+        Возвращает QuerySet всех пользователей с ролью ученика.
+        """
         return User.objects.filter(is_child=True)

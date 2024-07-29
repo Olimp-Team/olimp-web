@@ -1,28 +1,31 @@
-# users/views.py
-from django.http import HttpResponseForbidden
-from django.shortcuts import render, HttpResponseRedirect, get_object_or_404, redirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .forms import *
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import update_session_auth_hash, views as auth_views
 from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import NewChildForm
+from .forms import (
+    UserLoginForm,
+    NewAdminForm,
+    NewChildForm,
+    NewTeacherForm,
+    UserForm
+)
 from .mixins import AdminRequiredMixin
-from main.models import *
-from classroom.models import *
+from classroom.models import Classroom
+from users.models import User
 
 
 class AuthLogin(View):
+    """Представление для входа пользователей."""
     def get(self, request):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('main:home'))
         form = UserLoginForm()
-        context = {'form': form}
-        return render(request, "auth/auth 2.html", context)
+        return render(request, "auth/auth 2.html", {'form': form})
 
     def post(self, request):
         form = UserLoginForm(data=request.POST)
@@ -33,50 +36,46 @@ class AuthLogin(View):
             user = auth.authenticate(username=username, password=password)
             if user and user.school == school:
                 auth.login(request, user)
-                remember_me = request.POST.get('remember_me', None)
-                if remember_me:
-                    request.session.set_expiry(1209600)  # 2 недели
-                else:
-                    request.session.set_expiry(0)  # Закрыть сессию после закрытия браузера
+                request.session.set_expiry(1209600 if request.POST.get('remember_me') else 0)
                 return HttpResponseRedirect(reverse('main:home'))
-        context = {'form': form}
-        return render(request, "auth/auth 2.html", context)
+        return render(request, "auth/auth 2.html", {'form': form})
 
 
-class start_page(View):
+class StartPage(View):
+    """Представление для главной страницы сайта."""
     def get(self, request):
         return render(request, 'start_page/start_page.html')
 
 
 @login_required
 def logout(request):
-    """Модель представления для выхода"""
+    """Выход из системы."""
     auth.logout(request)
     return HttpResponseRedirect(reverse('users:login'))
 
 
 class PasswordChange(View):
+    """Представление для изменения пароля."""
     def get(self, request):
         form = PasswordChangeForm(request.user)
-        context = {'form': form}
-        return render(request, 'password_change/password_change.html', context)
+        return render(request, 'password_change/password_change.html', {'form': form})
 
     def post(self, request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Пароль сменен успешно')
+            messages.success(request, 'Пароль успешно изменен.')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print(form.errors)
+        messages.error(request, 'Ошибка изменения пароля.')
+        return render(request, 'password_change/password_change.html', {'form': form})
 
 
 class CreateAdmin(AdminRequiredMixin, View):
+    """Представление для создания администратора."""
     def get(self, request):
         form = NewAdminForm()
-        context = {'form': form}
-        return render(request, 'add_admin/add_admin.html', context)
+        return render(request, 'add_admin/add_admin.html', {'form': form})
 
     def post(self, request):
         form = NewAdminForm(data=request.POST)
@@ -86,15 +85,14 @@ class CreateAdmin(AdminRequiredMixin, View):
             admin.school = request.user.school
             admin.save()
             return HttpResponseRedirect(reverse('users:admin_list'))
-        context = {'form': form}
-        return render(request, 'add_admin/add_admin.html', context)
+        return render(request, 'add_admin/add_admin.html', {'form': form})
 
 
 class CreateChild(AdminRequiredMixin, View):
+    """Представление для создания ученика."""
     def get(self, request):
         form = NewChildForm()
-        context = {'form': form}
-        return render(request, 'add_students/add_students.html', context)
+        return render(request, 'add_students/add_students.html', {'form': form})
 
     def post(self, request):
         form = NewChildForm(data=request.POST)
@@ -104,17 +102,16 @@ class CreateChild(AdminRequiredMixin, View):
             child.school = request.user.school
             child.save()
             classroom = form.cleaned_data['classroom']
-            Classroom.objects.get(id=classroom.id).child.add(child)
+            classroom.child.add(child)
             return HttpResponseRedirect(reverse('classroom:list_classroom'))
-        context = {'form': form}
-        return render(request, 'add_students/add_students.html', context)
+        return render(request, 'add_students/add_students.html', {'form': form})
 
 
 class CreateTeacher(AdminRequiredMixin, View):
+    """Представление для создания учителя."""
     def get(self, request):
         form = NewTeacherForm()
-        context = {'form': form}
-        return render(request, 'add_teacher/add_teacher.html', context)
+        return render(request, 'add_teacher/add_teacher.html', {'form': form})
 
     def post(self, request):
         form = NewTeacherForm(data=request.POST)
@@ -123,27 +120,27 @@ class CreateTeacher(AdminRequiredMixin, View):
             teacher.is_teacher = True
             teacher.school = request.user.school
             teacher.save()
-            form.save_m2m()  # Ensure M2M fields are saved
+            form.save_m2m()  # Сохраняем связи M2M
             return HttpResponseRedirect(reverse('users:teacher_list'))
-        context = {'form': form}
-        return render(request, 'add_teacher/add_teacher.html', context)
+        return render(request, 'add_teacher/add_teacher.html', {'form': form})
 
 
 class TeacherListView(AdminRequiredMixin, View):
+    """Представление для списка учителей."""
     def get(self, request):
         teachers = User.objects.filter(is_teacher=True, school=request.user.school)
-        context = {'teachers': teachers}
-        return render(request, 'teacher_list.html', context)
+        return render(request, 'teacher_list.html', {'teachers': teachers})
 
 
 class AdminListView(AdminRequiredMixin, View):
+    """Представление для списка администраторов."""
     def get(self, request):
         admins = User.objects.filter(is_admin=True, school=request.user.school)
-        context = {'admins': admins}
-        return render(request, 'admin_list.html', context)
+        return render(request, 'admin_list.html', {'admins': admins})
 
 
 class EditTeacherView(AdminRequiredMixin, View):
+    """Представление для редактирования учителя."""
     def get(self, request, pk):
         teacher = get_object_or_404(User, pk=pk, is_teacher=True, school=request.user.school)
         form = UserForm(instance=teacher)
@@ -154,11 +151,12 @@ class EditTeacherView(AdminRequiredMixin, View):
         form = UserForm(request.POST, instance=teacher)
         if form.is_valid():
             form.save()
-            return redirect('teacher_list')
+            return redirect('users:teacher_list')
         return render(request, 'edit_teacher.html', {'form': form, 'teacher': teacher})
 
 
 class EditAdminView(AdminRequiredMixin, View):
+    """Представление для редактирования администратора."""
     def get(self, request, pk):
         admin = get_object_or_404(User, pk=pk, is_admin=True, school=request.user.school)
         form = UserForm(instance=admin)
@@ -169,16 +167,17 @@ class EditAdminView(AdminRequiredMixin, View):
         form = UserForm(request.POST, instance=admin)
         if form.is_valid():
             form.save()
-            return redirect('admin_list')
+            return redirect('users:admin_list')
         return render(request, 'edit_admin.html', {'form': form, 'admin': admin})
 
 
 class DeleteUserView(AdminRequiredMixin, View):
+    """Представление для удаления пользователя."""
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk, school=request.user.school)
         user.delete()
         if user.is_teacher:
-            return redirect('teacher_list')
+            return redirect('users:teacher_list')
         elif user.is_admin:
-            return redirect('admin_list')
+            return redirect('users:admin_list')
         return HttpResponseForbidden()

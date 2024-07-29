@@ -1,31 +1,26 @@
-# result/views.py
-
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.views.generic import ListView
 from django_filters.views import FilterView
 from .models import Result
 from .filters import ResultFilter
-from .forms import OlympiadResultForm
+from .forms import OlympiadResultForm, OlympiadResultClassForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from main.models import *
-from users.models import *
-from result.models import *
-from register.models import *
-from .forms import OlympiadResultClassForm
+from main.models import Olympiad
 from users.models import User
+from register.models import RegisterAdmin
 from users.mixins import AdminRequiredMixin
-from django.http import JsonResponse
 from django.template.loader import render_to_string
-from classroom.models import *
-from django.utils.timezone import make_naive
+from classroom.models import Classroom
 import io
 import pandas as pd
 
 
 class ExportResultsView(View):
+    """Представление для экспорта результатов олимпиад в Excel файл"""
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_admin:
             return HttpResponseForbidden()
@@ -54,13 +49,14 @@ class ExportResultsView(View):
             df.to_excel(writer, index=False, sheet_name='Results')
 
         buffer.seek(0)
-        response = HttpResponse(buffer,
-                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=results.xlsx'
         return response
 
 
 class ImportResultsView(View):
+    """Представление для импорта результатов олимпиад из Excel файла"""
+
     def get(self, request, *args, **kwargs):
         if not request.user.is_admin:
             return HttpResponseForbidden()
@@ -122,6 +118,8 @@ class ImportResultsView(View):
 
 
 class ResultListView(ListView):
+    """Представление для отображения списка результатов олимпиад"""
+
     model = Result
     template_name = 'result/result.html'
     context_object_name = 'results'
@@ -139,6 +137,8 @@ class ResultListView(ListView):
 
 
 class OlympiadResultCreateView(View):
+    """Представление для создания результата олимпиады"""
+
     def get(self, request):
         form = OlympiadResultForm()
         return render(request, 'olympiad_result_list/olympiad_result_form.html', {'form': form})
@@ -164,20 +164,23 @@ class OlympiadResultCreateView(View):
 
 
 class GetOlympiadsView(View):
+    """Представление для получения списка олимпиад, на которые зарегистрирован ученик"""
+
     def get(self, request):
         student_id = request.GET.get('student_id')
-        olympiad_ids = Register_admin.objects.filter(child_admin_id=student_id, school=request.user.school).values_list(
-            'Olympiad_admin_id', flat=True)
+        olympiad_ids = RegisterAdmin.objects.filter(child_admin_id=student_id, school=request.user.school).values_list(
+            'olympiad_admin_id', flat=True)
         olympiads = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
         olympiad_list = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
         return JsonResponse(olympiad_list, safe=False)
 
 
 class OlympiadResultClassCreateView(AdminRequiredMixin, View):
+    """Представление для создания результатов олимпиад для всего класса"""
+
     def get(self, request):
         form = OlympiadResultClassForm()
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
-                      {'form': form, 'students': []})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': []})
 
     def post(self, request):
         form = OlympiadResultClassForm(request.POST)
@@ -198,26 +201,28 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
 
             return redirect('success_page')
         students = form.cleaned_data['classroom'].child.filter(
-            id__in=Register_admin.objects.filter(school=request.user.school).values_list('child_admin_id',
+            id__in=RegisterAdmin.objects.filter(school=request.user.school).values_list('child_admin_id',
                                                                                          flat=True)) if 'classroom' in form.cleaned_data else []
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
-                      {'form': form, 'students': students})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': students})
 
 
 class GetStudentsView(View):
+    """Представление для получения списка учеников класса по AJAX запросу"""
+
     def get(self, request):
         classroom_id = request.GET.get('classroom_id')
         if classroom_id:
             classroom = get_object_or_404(Classroom, id=classroom_id, school=request.user.school)
             students = classroom.child.filter(
-                id__in=Register_admin.objects.filter(school=request.user.school).values_list('child_admin_id',
-                                                                                             flat=True))
+                id__in=RegisterAdmin.objects.filter(school=request.user.school).values_list('child_admin_id', flat=True))
             html = render_to_string('students_list/students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
 
 
 class StudentResultListView(LoginRequiredMixin, ListView):
+    """Представление для отображения списка результатов конкретного ученика"""
+
     model = Result
     template_name = 'student_results.html'
     context_object_name = 'results'

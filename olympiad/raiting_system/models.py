@@ -5,6 +5,7 @@ from school.models import School
 
 
 class League(models.Model):
+    """Модель лиги с диапазоном очков и типами лиг"""
     BRONZE = 'Бронзовая лига'
     SILVER = 'Серебряная лига'
     GOLD = 'Золотая лига'
@@ -32,6 +33,7 @@ class League(models.Model):
 
     @staticmethod
     def get_league_for_points(points):
+        """Возвращает тип лиги в зависимости от количества очков"""
         if points <= 150:
             return League.BRONZE
         elif points <= 500:
@@ -47,6 +49,7 @@ class League(models.Model):
 
 
 class Medal(models.Model):
+    """Модель медали, связанная с пользователем и олимпиадой"""
     BRONZE = 'Бронзовая'
     SILVER = 'Серебряная'
     GOLD = 'Золотая'
@@ -64,6 +67,7 @@ class Medal(models.Model):
         (RUBY, 'Рубиновая'),
         (PERSONAL, 'Именная'),
     ]
+
     type = models.CharField('Тип медали', max_length=20, choices=MEDAL_TYPES)
     olympiad = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -73,6 +77,7 @@ class Medal(models.Model):
 
 
 class Rating(models.Model):
+    """Модель рейтинга пользователя с очками и лигой"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
     points = models.IntegerField('Очки', default=0)
     league = models.CharField('Лига', max_length=20, choices=League.LEAGUE_TYPES, blank=True, null=True)
@@ -81,12 +86,14 @@ class Rating(models.Model):
         return f'{self.user} - {self.points} очков - {self.league}'
 
     def update_points(self, additional_points):
+        """Обновляет очки пользователя и пересчитывает его лигу"""
         self.points += additional_points
         self.league = League.get_league_for_points(self.points)
         self.save()
 
 
 class PersonalMedal(models.Model):
+    """Модель именной медали, связанная с пользователем"""
     name = models.CharField('Название медали', max_length=256)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_awarded = models.DateField(auto_now_add=True)

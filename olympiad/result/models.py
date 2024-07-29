@@ -1,13 +1,17 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from raiting_system.models import *
+from raiting_system.models import Rating, Medal
 
 
 class Result(models.Model):
+    """
+    Модель для хранения результатов олимпиад.
+    """
     PARTICIPANT = 'У'
     PRIZE = 'ПР'
     WINNER = 'ПОБД'
+
     STATUSRES = [
         (PARTICIPANT, 'Участник'),
         (PRIZE, 'Призер'),
@@ -28,12 +32,19 @@ class Result(models.Model):
         return f'{self.info_children} - {self.info_olympiad} - {self.points}'
 
     def save(self, *args, **kwargs):
+        """
+        Переопределение метода save для обновления рейтинга пользователя после сохранения результата.
+        """
         super().save(*args, **kwargs)
         self.update_user_rating()
 
     def update_user_rating(self):
+        """
+        Обновление рейтинга пользователя в зависимости от статуса и этапа олимпиады.
+        """
         points = 0
         medal_type = None
+
         if self.info_olympiad.stage.name == 'Школьный':
             if self.status_result == self.WINNER:
                 points = 100

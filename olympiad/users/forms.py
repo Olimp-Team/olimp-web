@@ -1,14 +1,15 @@
-from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, UserCreationForm, PasswordResetForm
 from users.models import User
-from main.models import *
-from school.models import *
-from classroom.models import *
+from main.models import Subject, Post, Category, LevelOlympiad, Stage
+from school.models import School
+from classroom.models import Classroom
 import base64
 from django.core.files.base import ContentFile
 
 
 class UserLoginForm(AuthenticationForm):
+    """Форма для входа пользователя"""
     username = forms.CharField(widget=forms.TextInput(attrs={
         'id': "login",
         'name': "login",
@@ -38,6 +39,7 @@ class UserLoginForm(AuthenticationForm):
 
 
 class UserProfileForm(UserChangeForm):
+    """Форма профиля пользователя"""
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': "Введите имя пользователя"}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': "Введите свою почту"}))
     birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
@@ -54,11 +56,11 @@ class UserProfileForm(UserChangeForm):
 
 
 class NewChildForm(forms.ModelForm):
+    """Форма для создания нового ученика"""
     class Meta:
         model = User
         fields = (
-            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password',
-            'gender'
+            'username', 'first_name', 'last_name', 'surname', 'birth_date', 'is_child', 'classroom', 'password', 'gender'
         )
 
     username = forms.CharField(widget=forms.TextInput(attrs={
@@ -107,6 +109,7 @@ class NewChildForm(forms.ModelForm):
 
 
 class NewTeacherForm(forms.ModelForm):
+    """Форма для создания нового учителя"""
     subject = forms.ModelMultipleChoiceField(
         queryset=Subject.objects.all(),
         widget=forms.CheckboxSelectMultiple,
@@ -172,6 +175,7 @@ class NewTeacherForm(forms.ModelForm):
 
 
 class NewAdminForm(forms.ModelForm):
+    """Форма для создания нового администратора"""
     class Meta:
         model = User
         fields = (
@@ -218,41 +222,41 @@ class NewAdminForm(forms.ModelForm):
 
 
 class NewOlympiadForm(UserCreationForm):
+    """Форма для создания новой олимпиады"""
     class Meta:
         model = Classroom
         fields = ('name', 'description', 'category', 'level', 'stage', 'subject', 'class_olympiad')
 
     name = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+        'placeholder': "Введите название олимпиады"
     }))
-    description = forms.CharField(widget=forms.TextInput(attrs={
-        # 'type': "input" пример
+    description = forms.CharField(widget=forms.Textarea(attrs={
+        'placeholder': "Введите описание олимпиады"
     }))
-    category = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), widget=forms.Select(attrs={
+        'placeholder': "Выберите категорию олимпиады"
     }))
-    level = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    level = forms.ModelChoiceField(queryset=LevelOlympiad.objects.all(), widget=forms.Select(attrs={
+        'placeholder': "Выберите уровень олимпиады"
     }))
-    stage = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    stage = forms.ModelChoiceField(queryset=Stage.objects.all(), widget=forms.Select(attrs={
+        'placeholder': "Выберите этап олимпиады"
     }))
-    subject = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    subject = forms.ModelChoiceField(queryset=Subject.objects.all(), widget=forms.Select(attrs={
+        'placeholder': "Выберите предмет олимпиады"
     }))
-    class_olympiad = forms.MultipleChoiceField(widget=forms.TextInput(attrs={  # УЗНАТЬ МЕТОД ФОРМЫ
-        # 'type': "input" пример
+    class_olympiad = forms.IntegerField(widget=forms.NumberInput(attrs={
+        'placeholder': "Введите класс олимпиады"
     }))
-
-
-from django.contrib.auth.forms import PasswordResetForm
 
 
 class CustomPasswordResetForm(PasswordResetForm):
+    """Форма для сброса пароля"""
     email = forms.EmailField(max_length=254, required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
 
 class TelegramIDForm(forms.ModelForm):
+    """Форма для ввода Telegram ID"""
     class Meta:
         model = User
         fields = ['telegram_id']
@@ -262,6 +266,7 @@ class TelegramIDForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
+    """Форма для пользователя"""
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-input mt-1 block w-full'}))
 
     class Meta:
@@ -273,7 +278,7 @@ class UserForm(forms.ModelForm):
             'surname': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
             'username': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
             'email': forms.EmailInput(attrs={'class': 'form-input mt-1 block w-full'}),
-            'school': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'school': forms.Select(attrs={'class': 'form-input mt-1 block w-full'}),
             'birth_date': forms.DateInput(attrs={'class': 'form-input mt-1 block w-full', 'type': 'date'}),
             'gender': forms.Select(attrs={'class': 'form-select mt-1 block w-full'}),
         }
