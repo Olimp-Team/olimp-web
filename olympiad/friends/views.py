@@ -16,61 +16,60 @@ from users.forms import UserProfileForm
 
 @login_required
 def add_friend(request, user_id):
+    """Добавление друга."""
     other_user = get_object_or_404(User, id=user_id)
     existing_request = FriendshipRequest.objects.filter(from_user=request.user, to_user=other_user).first()
 
     if existing_request:
-        # Обработать случай, когда запрос уже существует
+        # Запрос уже существует
         messages.warning(request, 'Вы уже отправили запрос на добавление в друзья этому пользователю.')
-        return redirect('users:profile', user_id=user_id)
-
-    try:
-        Friend.objects.add_friend(
-            request.user,  # Отправитель запроса
-            other_user,  # Получатель запроса
-            message='Привет! Давай дружить!'
-        )
-        messages.success(request, 'Запрос на добавление в друзья отправлен.')
-    except AlreadyExistsError:
-        messages.warning(request, 'Вы уже отправили запрос на добавление в друзья этому пользователю.')
+    else:
+        try:
+            Friend.objects.add_friend(
+                request.user,  # Отправитель запроса
+                other_user,  # Получатель запроса
+                message='Привет! Давай дружить!'
+            )
+            messages.success(request, 'Запрос на добавление в друзья отправлен.')
+        except AlreadyExistsError:
+            messages.warning(request, 'Вы уже отправили запрос на добавление в друзья этому пользователю.')
 
     return redirect('users:profile', user_id=user_id)
 
 
 @login_required
 def accept_friend_request(request, request_id):
-    """Принятие запроса на добавление в друзья"""
-    friend_request = FriendshipRequest.objects.get(id=request_id)
+    """Принятие запроса на добавление в друзья."""
+    friend_request = get_object_or_404(FriendshipRequest, id=request_id, to_user=request.user)
     friend_request.accept()
     return redirect('friends:view_friend_requests')
 
 
 @login_required
 def reject_friend_request(request, request_id):
-    """Отклонение запроса на добавление в друзья"""
-    friend_request = FriendshipRequest.objects.get(id=request_id)
+    """Отклонение запроса на добавление в друзья."""
+    friend_request = get_object_or_404(FriendshipRequest, id=request_id, to_user=request.user)
     friend_request.reject()
     return redirect('friends:friend_requests')
 
 
 @login_required
 def view_friends(request):
-    """Просмотр списка друзей"""
+    """Просмотр списка друзей."""
     friends = Friend.objects.friends(request.user)
-    context = {'friends': friends}
-    return render(request, 'friends_list.html', context)
+    return render(request, 'friends_list.html', {'friends': friends})
 
 
 @login_required
 def view_friend_requests(request):
-    """Просмотр списка входящих запросов в друзья"""
+    """Просмотр списка входящих запросов в друзья."""
     friend_requests = FriendshipRequest.objects.filter(to_user=request.user)
-    context = {'friend_requests': friend_requests}
-    return render(request, 'friend_requests.html', context)
+    return render(request, 'friend_requests.html', {'friend_requests': friend_requests})
 
 
 @login_required
 def search_friends(request):
+    """Поиск друзей."""
     query = request.GET.get('q', '')
     users = User.objects.filter(username__icontains=query).exclude(id=request.user.id)
     friends = Friend.objects.friends(request.user)
@@ -86,6 +85,8 @@ def search_friends(request):
 
 
 class ProfileView(LoginRequiredMixin, View):
+    """Просмотр и редактирование профиля пользователя."""
+
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         form = UserProfileForm(instance=user) if request.user == user else None
@@ -95,7 +96,7 @@ class ProfileView(LoginRequiredMixin, View):
     def post(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
         if request.user != user:
-            return redirect(reverse('profile', kwargs={'user_id': user.id}))
+            return redirect(reverse('users:profile', kwargs={'user_id': user.id}))
 
         form = UserProfileForm(instance=user, data=request.POST, files=request.FILES)
         if form.is_valid():
@@ -107,6 +108,7 @@ class ProfileView(LoginRequiredMixin, View):
 
 @csrf_exempt
 def save_cropped_image(request):
+    """Сохранение обрезанного изображения профиля."""
     if request.method == 'POST' and request.user.is_authenticated:
         image_data = request.POST.get('image')
         if image_data:
@@ -119,6 +121,5 @@ def save_cropped_image(request):
             user.save()
 
             return JsonResponse({'status': 'success', 'url': user.image.url})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'No image data found.'})
+        return JsonResponse({'status': 'error', 'message': 'No image data found.'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request.'})

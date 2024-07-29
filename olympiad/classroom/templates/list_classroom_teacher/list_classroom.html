@@ -3,7 +3,7 @@
 {% block content %}
     <div class="flex justify-between mb-4">
         <div class="flex space-x-4">
-            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:TeacherClassroomGuide' %}?graduated=0">Текущие классы</a>
+            <a class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" href="{% url 'classroom:teacher_classroom_guide' %}?graduated=0">Текущие классы</a>
         </div>
     </div>
 
@@ -22,7 +22,7 @@
                     <div class="mt-2">Год выпуска: {{ classroom.graduation_year }}</div>
                 {% endif %}
                 <div class="mt-4 flex space-x-2">
-                    <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Посмотреть участников</a>
+                    <a href="{% url 'classroom:children_list_teacher' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Посмотреть участников</a>
                 </div>
             </div>
         {% endfor %}

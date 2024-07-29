@@ -1,29 +1,36 @@
+import logging
 import os
-import pymorphy3
-import zipfile
 import tempfile
+import zipfile
+
 import pandas as pd
-from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponseBadRequest
-from django.urls import reverse
-from django.views.generic import View, ListView
-from django.utils.translation import gettext as _
-from main.models import *
-from register.models import *
-from result.models import *
-from users.models import *
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UploadFileForm
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
-from users.mixins import AdminRequiredMixin
-from django.http import HttpResponse
+import pymorphy3
 from django.db import transaction
+from django.http import HttpResponseForbidden, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.translation import gettext as _
+from django.views import View
+from django.views.generic import ListView
 from openpyxl import Workbook
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
+
+from classroom.models import *
+from main.models import *
+from register.models import RegisterAdmin, RegisterSend
+from result.models import *
+from users.mixins import AdminRequiredMixin
+from users.models import User
+from .forms import UploadFileForm
+
+logger = logging.getLogger(__name__)
 
 
 class ExcelClassroom(AdminRequiredMixin, View):
+    """Создание Excel файла с данными о классах"""
+
     def get(self, request, Classroom_id):
         if not request.user.is_admin:
             return HttpResponseForbidden()
@@ -64,8 +71,7 @@ class ExcelClassroom(AdminRequiredMixin, View):
                         "Английский язык", "География", "Информатика", "Искусство (МХК)", "История", "Литература",
                         "Музыка", "Немецкий язык", "Обществознание", "ОБЖ", "Право", "Психология", "Русский язык",
                         "Технология", "Физика", "Физическая культура", "Французский язык", "Экология", "Экономика",
-                        "НШ: литературное чтение", "НШ: окружающий мир (4)", "НШ: русский язык (4)",
-                        "НШ: математика (4)",
+                        "НШ: литературное чтение", "НШ: окружающий мир", "НШ: русский язык", "НШ: математика",
                         "Математика"
                     ]}
                 }
@@ -106,15 +112,16 @@ class ExcelClassroom(AdminRequiredMixin, View):
                 subjects["Экология"],
                 subjects["Экономика"],
                 subjects["НШ: литературное чтение"],
-                subjects["НШ: окружающий мир (4)"],
-                subjects["НШ: русский язык (4)"],
-                subjects["НШ: математика (4)"],
+                subjects["НШ: окружающий мир"],
+                subjects["НШ: русский язык"],
+                subjects["НШ: математика"],
                 subjects["Математика"],
             ])
 
         return self.generate_excel_response(data_classroom, f'Zayvki {classroom.number}{classroom.letter} classa')
 
     def generate_excel_response(self, data, filename):
+        """Генерация Excel файла и отправка в ответе"""
         wb = Workbook()
         ws = wb.active
 
@@ -128,6 +135,8 @@ class ExcelClassroom(AdminRequiredMixin, View):
 
 
 class ExcelAll(AdminRequiredMixin, View):
+    """Создание Excel файла со всеми данными"""
+
     def get(self, request):
         if not request.user.is_admin:
             return HttpResponseForbidden()
@@ -145,7 +154,7 @@ class ExcelAll(AdminRequiredMixin, View):
              _("Психология (7-11)"), _("Русский язык (5, 6, 7, 8, 9, 10, 11)"), _("Технология (5-6, 7-8, 9, 10-11)"),
              _("Физика (5, 6)"), _("Физическая культура (5-6, 7-8, 9-11)"), _("Французский язык (4, 5-6, 7-8, 9-11)"),
              _("Экология (7, 8, 9, 10, 11)"), _("Экономика (7-9, 10-11)"), _("НШ: литературное чтение (4)"),
-             _("НШ: окружающий мир (4)"), _("НШ: русский язык (4)"), _("НШ: математика (4)"),
+             _("НШ: окружающий мир"), _("НШ: русский язык"), _("НШ: математика"),
              _("Математика (5, 6, 7, 8, 9, 10, 11)"), _("Кол-во заявлений")],
         ]
 
@@ -166,8 +175,7 @@ class ExcelAll(AdminRequiredMixin, View):
                         "Английский язык", "География", "Информатика", "Искусство (МХК)", "История", "Литература",
                         "Музыка", "Немецкий язык", "Обществознание", "ОБЖ", "Право", "Психология", "Русский язык",
                         "Технология", "Физика", "Физическая культура", "Французский язык", "Экология", "Экономика",
-                        "НШ: литературное чтение", "НШ: окружающий мир (4)", "НШ: русский язык (4)",
-                        "НШ: математика (4)",
+                        "НШ: литературное чтение", "НШ: окружающий мир", "НШ: русский язык", "НШ: математика",
                         "Математика"
                     ]}
                 }
@@ -208,15 +216,16 @@ class ExcelAll(AdminRequiredMixin, View):
                 subjects["Экология"],
                 subjects["Экономика"],
                 subjects["НШ: литературное чтение"],
-                subjects["НШ: окружающий мир (4)"],
-                subjects["НШ: русский язык (4)"],
-                subjects["НШ: математика (4)"],
+                subjects["НШ: окружающий мир"],
+                subjects["НШ: русский язык"],
+                subjects["НШ: математика"],
                 subjects["Математика"],
             ])
 
         return self.generate_excel_response(data_all, f'Baza {request.user.school.name}')
 
     def generate_excel_response(self, data, filename):
+        """Генерация Excel файла и отправка в ответе"""
         wb = Workbook()
         ws = wb.active
 
@@ -229,12 +238,9 @@ class ExcelAll(AdminRequiredMixin, View):
         return response
 
 
-import logging
-
-logger = logging.getLogger(__name__)
-
-
 class ImportUsersView(View):
+    """Импорт пользователей из файла"""
+
     def get(self, request):
         form = UploadFileForm()
         return render(request, 'upload.html', {'form': form})
@@ -246,12 +252,13 @@ class ImportUsersView(View):
             try:
                 import_data(file, request.user.school)
             except Exception as e:
-                print(f"Error importing data: {e}")
+                logger.error(f"Error importing data: {e}")
             return redirect('docs:success_import')
         return render(request, 'upload.html', {'form': form})
 
 
 def import_data(file, school):
+    """Функция для импорта данных из файла в базу данных"""
     df = pd.read_excel(file)
 
     with transaction.atomic():
@@ -307,7 +314,7 @@ def import_data(file, school):
                             subject_obj = Subject.objects.get(name=subject.strip())
                             user.subject.add(subject_obj)
                         except Subject.DoesNotExist:
-                            print(f"Subject '{subject}' does not exist.")
+                            logger.warning(f"Subject '{subject}' does not exist.")
                             pass  # Если предмет не найден, пропускаем
 
                 if pd.notna(row['должности']):  # должности
@@ -317,26 +324,29 @@ def import_data(file, school):
                             post_obj = Post.objects.get(name=post.strip())
                             user.post_job_teacher.add(post_obj)
                         except Post.DoesNotExist:
-                            print(f"Post '{post}' does not exist.")
+                            logger.warning(f"Post '{post}' does not exist.")
                             pass  # Если должность не найдена, пропускаем
             except Exception as e:
-                print(f"Error processing row {index}: {e}")
+                logger.error(f"Error processing row {index}: {e}")
                 continue
 
 
 def parse_classroom(classroom_str):
+    """Парсинг строки класса для получения номера и буквы"""
     number = ''.join(filter(str.isdigit, classroom_str))
     letter = ''.join(filter(str.isalpha, classroom_str))
     return number, letter
 
 
 class DashboardView(AdminRequiredMixin, ListView):
+    """Представление для отображения панели администратора"""
+
     model = Result
     template_name = 'dashboard.html'
     context_object_name = 'results'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(school=self.request.user.school)
 
         # Фильтры
         start_date = self.request.GET.get('start-date')
@@ -351,7 +361,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         if start_date:
             start_date = datetime.strptime(start_date, '%d-%m-%Y').strftime('%Y-%m-%d')
         if end_date:
-            end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
+            end_date = datetime.strptime(end_date, '%d-%м-%Y').strftime('%Y-%м-%d')
 
         if start_date and end_date:
             queryset = queryset.filter(date_added__range=[start_date, end_date])
@@ -391,13 +401,12 @@ class DashboardView(AdminRequiredMixin, ListView):
             'last_name', 'first_name')
 
         # Получение всех параллелей классов
-        context['parallels'] = Classroom.objects.filter(school=self.request.user.school).values_list('number',flat=True).distinct().order_by('number')
+        context['parallels'] = Classroom.objects.filter(school=self.request.user.school).values_list('number', flat=True).distinct().order_by('number')
 
         # Подсчет победителей, призеров и участников
         queryset = self.get_queryset()
-        context['winners_count'] = queryset.filter(status_result=Result.WINNER, school=self.request.user.school).count()
-        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE,
-                                                        school=self.request.user.school).count()
+        context['winners_count'] = queryset.filter(status_result=Result.WINNER).count()
+        context['prizewinners_count'] = queryset.filter(status_result=Result.PRIZE).count()
         context['participants_count'] = queryset.count()
 
         # Передача текущих значений фильтров в контекст
@@ -413,6 +422,7 @@ class DashboardView(AdminRequiredMixin, ListView):
 
 
 class ExportExcelView(View):
+    """Экспорт результатов в Excel файл"""
 
     def get(self, request, *args, **kwargs):
         # Фильтры
@@ -429,23 +439,22 @@ class ExportExcelView(View):
         if end_date:
             end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
 
-        queryset = Result.objects.all()
+        queryset = Result.objects.filter(school=request.user.school)
 
         if start_date and end_date:
-            queryset = queryset.filter(date_added__range=[start_date, end_date], school=request.user.school)
+            queryset = queryset.filter(date_added__range=[start_date, end_date])
         if class_filter:
-            queryset = queryset.filter(info_children__classroom__id=class_filter, school=request.user.school)
+            queryset = queryset.filter(info_children__classroom__id=class_filter)
         if subject_filter:
-            queryset = queryset.filter(info_olympiad__subject__id=subject_filter, school=request.user.school)
+            queryset = queryset.filter(info_olympiad__subject__id=subject_filter)
         if student_filter:
-            queryset = queryset.filter(info_children__id=student_filter, school=request.user.school)
+            queryset = queryset.filter(info_children__id=student_filter)
         if olympiad_filter:
-            queryset = queryset.filter(info_olympiad__id=olympiad_filter, school=request.user.school)
+            queryset = queryset.filter(info_olympiad__id=olympiad_filter)
 
         # Фильтрация по зарегистрированным олимпиадам
-        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin',
-                                                                                             flat=True)
-        queryset = queryset.filter(info_olympiad__id__in=olympiad_ids, school=request.user.school)
+        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin', flat=True)
+        queryset = queryset.filter(info_olympiad__id__in=olympiad_ids)
 
         # Создание DataFrame
         data = []
@@ -471,6 +480,7 @@ class ExportExcelView(View):
 
 
 def create_pdf_for_student(student, olympiads, output_path):
+    """Создание PDF файла для студента"""
     font_path = os.path.join('static', 'fonts', 'timesnewromanpsmt.ttf')
     if not os.path.exists(font_path):
         raise FileNotFoundError(f"Font file not found: {font_path}")
@@ -547,7 +557,9 @@ def create_pdf_for_student(student, olympiads, output_path):
     pdf_canvas.save()
 
 
-class create_zip_archive(View):
+class CreateZipArchive(View):
+    """Создание ZIP архива с PDF файлами заявлений"""
+
     def get(self, request):
         if not request.user.is_admin:
             return HttpResponseForbidden()
@@ -587,7 +599,9 @@ class create_zip_archive(View):
             return response
 
 
-class create_zip_archive_for_teacher(View):
+class CreateZipArchiveForTeacher(View):
+    """Создание ZIP архива с PDF файлами заявлений для учителя"""
+
     def get(self, request):
         if not request.user.is_teacher:
             return HttpResponseForbidden()
@@ -597,13 +611,11 @@ class create_zip_archive_for_teacher(View):
                 teacher = request.user
                 classroom = teacher.classroom_guide
 
-                # Убедимся, что classroom существует и имеет связанных учеников
                 if classroom is None:
                     return HttpResponseBadRequest("Класс не найден для текущего учителя")
 
-                # Найти все заявки учеников класса, которым руководит текущий учитель
                 registers = Register_send.objects.filter(
-                    child_send__classroom=request.user.classroom_guide, is_deleted=False, school=request.user.school)
+                    child_send__classroom=classroom, is_deleted=False, school=request.user.school)
 
                 classes = {}
 
@@ -637,12 +649,9 @@ class create_zip_archive_for_teacher(View):
             return response
 
 
-logger = logging.getLogger(__name__)
-
-logger = logging.getLogger(__name__)
-
-
 class ImportOlympiadsView(View):
+    """Импорт олимпиад из файла"""
+
     def post(self, request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():

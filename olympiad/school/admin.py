@@ -3,5 +3,12 @@ from school.models import School
 
 
 @admin.register(School)
-class School(admin.ModelAdmin):
-    pass
+class SchoolAdminModel(admin.ModelAdmin):
+    """
+    Административная панель для модели School.
+    """
+    list_display = ('name', 'address', 'contact_email', 'contact_phone')  # Поля, отображаемые в списке объектов
+    search_fields = ('name', 'address', 'contact_email', 'contact_phone')  # Поля, доступные для поиска
+
+
+

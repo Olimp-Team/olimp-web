@@ -12,7 +12,7 @@ class SubjectAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(categories)
+@admin.register(Category)
 class СategoryAdmin(admin.ModelAdmin):
     """Модель категорий олимпиад в панеле администратора"""
     list_display = ('id', 'name',)
@@ -20,7 +20,7 @@ class СategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 
-@admin.register(Level_olympiad)
+@admin.register(LevelOlympiad)
 class Level_olympiadAdmin(admin.ModelAdmin):
     """Модель уровней олимпиад в панеле администратора"""
     list_display = ('id', 'name',)
