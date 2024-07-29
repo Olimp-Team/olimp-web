@@ -40,7 +40,7 @@
                                 <ul class="list-disc list-inside">
                                     {% for register in registers %}
                                         <li>
-                                            {{ register.Olympiad_admin.name }}
+                                            {{ register.olympiad_admin.name }}
                                             <form method="post"
                                                   action="{% url 'register:applications-from-classroom-teachers' %}"
                                                   class="inline-block">

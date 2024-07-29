@@ -13,7 +13,7 @@ urlpatterns = [
     path('basket/student/', BasketStudentApp.as_view(), name='basket-student-applications'),
 
     # Отправка заявки
-    path('send/', RegisterSend.as_view(), name='register_send'),
+    path('send/', RegisterSendChild.as_view(), name='register_send'),
     path('send/teacher/', RegisterSendTeacher.as_view(), name='register_send_teacher'),
 
     # Список заявок студентов

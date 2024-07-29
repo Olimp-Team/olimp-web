@@ -32,8 +32,8 @@
                     <li class="flex justify-between items-center bg-gray-100 p-4 rounded-lg mb-4">
                         <div class="nameid w-1/12">{{ register.id }}</div>
                         <div class="namefio w-2/12">{{ register.child.last_name }} {{ register.child.first_name }} {{ register.child.surname }}</div>
-                        <div class="olimps w-2/12">{{ register.Olympiad.name }}</div>
-                        <div class="namestage w-2/12">{{ register.Olympiad.stage }}</div>
+                        <div class="olimps w-2/12">{{ register.olympiad.name }}</div>
+                        <div class="namestage w-2/12">{{ register.olympiad.stage }}</div>
                         <div class="namegender w-1/12">{{ register.child.gender }}</div>
                         <div class="namedate w-2/12">{{ register.child.birth_date }}</div>
                         <a class="buttonedit bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
@@ -60,7 +60,7 @@
 {#                {% if recommendation.status == 'pending' %}#}
                     <tr class="bg-gray-100">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ recommendation.child.last_name }} {{ recommendation.child.first_name }} {{ recommendation.child.surname }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ recommendation.Olympiad.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ recommendation.olympiad.name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ recommendation.recommended_by.first_name }} {{ recommendation.recommended_by.last_name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                             <form method="post" action="{% url 'register:accept_recommendation' recommendation.id %}" style="display:inline;">
@@ -94,8 +94,8 @@
             {% for register in register_sends %}
                 <tr class="bg-gray-100">
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-center">{{ register.child_send.last_name }} {{ register.child_send.first_name }} {{ register.child_send.surname }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-center">{{ register.Olympiad_send.name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-center">{{ register.Olympiad_send.stage }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-center">{{ register.olympiad_send.name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-center">{{ register.olympiad_send.stage }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 text-center">
                         {% if register.is_deleted %}
                             <span class="text-red-500">Удалено учителем</span>

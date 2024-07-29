@@ -36,7 +36,7 @@ class ExcelClassroom(AdminRequiredMixin, View):
             return HttpResponseForbidden()
 
         classroom = get_object_or_404(Classroom, id=Classroom_id, school=request.user.school)
-        queryset = Register_admin.objects.filter(
+        queryset = RegisterAdmin.objects.filter(
             child_admin__classroom__id=Classroom_id, is_deleted=False, school=request.user.school)
 
         data_classroom = [
@@ -76,7 +76,7 @@ class ExcelClassroom(AdminRequiredMixin, View):
                     ]}
                 }
 
-            student_data[student_id]["subjects"][obj.Olympiad_admin.subject.name] = 1
+            student_data[student_id]["subjects"][obj.olympiad_admin.subject.name] = 1
 
         for student_id, student_info in student_data.items():
             subjects = student_info["subjects"]
@@ -141,7 +141,7 @@ class ExcelAll(AdminRequiredMixin, View):
         if not request.user.is_admin:
             return HttpResponseForbidden()
 
-        queryset = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
+        queryset = RegisterAdmin.objects.filter(is_deleted=False, school=request.user.school)
 
         data_all = [
             [_("№"), _("Фамилия"), _("Имя"), _("Отчество"), _("Пол"), _("Дата рождения (формат 01.08.98)"),
@@ -180,7 +180,7 @@ class ExcelAll(AdminRequiredMixin, View):
                     ]}
                 }
 
-            student_data[student_id]["subjects"][obj.Olympiad_admin.subject.name] = 1
+            student_data[student_id]["subjects"][obj.olympiad_admin.subject.name] = 1
 
         for student_id, student_info in student_data.items():
             subjects = student_info["subjects"]
@@ -382,20 +382,20 @@ class DashboardView(AdminRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         # Получение зарегистрированных олимпиад из Register_admin
-        olympiad_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('Olympiad_admin',
+        olympiad_ids = RegisterAdmin.objects.filter(school=self.request.user.school).values_list('olympiad_admin',
                                                                                                   flat=True)
         context['olympiads'] = Olympiad.objects.filter(id__in=olympiad_ids)
 
         # Получение классов, зарегистрированных в Register_admin
-        class_ids = Register_admin.objects.filter(school=self.request.user.school).values_list(
+        class_ids = RegisterAdmin.objects.filter(school=self.request.user.school).values_list(
             'child_admin__classroom__id', flat=True).distinct()
         context['classrooms'] = Classroom.objects.filter(id__in=class_ids, school=self.request.user.school).order_by(
             'number', 'letter')
 
         context['subjects'] = Subject.objects.filter()
 
-        # Получение учеников, зарегистрированных в Register_admin
-        student_ids = Register_admin.objects.filter(school=self.request.user.school).values_list('child_admin',
+        # Получение учеников, зарегистрированных в RegisterAdmin
+        student_ids = RegisterAdmin.objects.filter(school=self.request.user.school).values_list('child_admin',
                                                                                                  flat=True).distinct()
         context['students'] = User.objects.filter(id__in=student_ids, school=self.request.user.school).order_by(
             'last_name', 'first_name')
@@ -453,7 +453,7 @@ class ExportExcelView(View):
             queryset = queryset.filter(info_olympiad__id=olympiad_filter)
 
         # Фильтрация по зарегистрированным олимпиадам
-        olympiad_ids = Register_admin.objects.filter(school=request.user.school).values_list('Olympiad_admin', flat=True)
+        olympiad_ids = RegisterAdmin.objects.filter(school=request.user.school).values_list('olympiad_admin', flat=True)
         queryset = queryset.filter(info_olympiad__id__in=olympiad_ids)
 
         # Создание DataFrame
@@ -566,12 +566,12 @@ class CreateZipArchive(View):
 
         with tempfile.TemporaryDirectory() as temp_dir:
             with tempfile.NamedTemporaryFile(delete=False, suffix='.zip') as temp_zip:
-                registers = Register_admin.objects.filter(is_deleted=False, school=request.user.school)
+                registers = RegisterAdmin.objects.filter(is_deleted=False, school=request.user.school)
                 classes = {}
 
                 for register in registers:
                     student = register.child_admin
-                    olympiad = register.Olympiad_admin
+                    olympiad = register.olympiad_admin
                     class_name = f'{student.classroom.number}{student.classroom.letter}'
                     if class_name not in classes:
                         classes[class_name] = {}
@@ -614,14 +614,14 @@ class CreateZipArchiveForTeacher(View):
                 if classroom is None:
                     return HttpResponseBadRequest("Класс не найден для текущего учителя")
 
-                registers = Register_send.objects.filter(
+                registers = RegisterSend.objects.filter(
                     child_send__classroom=classroom, is_deleted=False, school=request.user.school)
 
                 classes = {}
 
                 for register in registers:
                     student = register.child_send
-                    olympiad = register.Olympiad_send
+                    olympiad = register.olympiad_send
                     class_name = f'{student.classroom.number}{student.classroom.letter}'
                     if class_name not in classes:
                         classes[class_name] = {}
