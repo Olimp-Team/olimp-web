@@ -1,26 +1,94 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-<div class="container mx-auto p-6 max-w-4xl bg-white shadow-md rounded-lg">
-    <h1 class="text-3xl font-bold mb-6 text-center">Список учителей</h1>
-    <div class="flex justify-end mb-4">
-        <a href="{% url 'users:CreateTeacher' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Создать учителя
-        </a>
+    <div class="mb-4">
+        <h1 class="text-3xl font-bold">Список учителей</h1>
+
+
+    <div class="relative flex mb-4 text-right float-right">
+        <a class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600" href="{% url 'users:CreateTeacher' %}">Добавить учителя</a>
     </div>
-    <ul class="list-disc list-inside">
-        {% for teacher in teachers %}
-            <li class="mb-2 flex justify-between items-center">
-                <span>{{ teacher.first_name }} {{ teacher.last_name }} ({{ teacher.username }})</span>
-                <div>
-                    <a href="{% url 'users:edit_teacher' teacher.id %}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Редактировать</a>
-                    <form method="post" action="{% url 'users:delete_user' teacher.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded ml-2">Удалить</button>
-                    </form>
-                </div>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+    </div>
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg mt-16">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider ">
+                    ID
+                </th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ФИО
+                </th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Пол
+                </th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Дата рождения
+                </th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Действия
+                </th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            {% for teacher in teachers %}
+                <tr class="{% if teacher.is_expelled %}bg-gray-300{% endif %}">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        {{ teacher.id }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        {{ teacher.last_name }} {{ teacher.first_name }} {{ teacher.surname }}
+                        {% if teacher.is_expelled %}
+                            <span class="text-red-500">(Исключен)</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        {{ teacher.gender }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        {{ teacher.birth_date }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                        {% if not teacher.is_expelled %}
+                            <button onclick="openModal('{{ teacher.id }}')" class="text-white border-2 h-8 w-32 rounded-lg bg-yellow-300 font-medium hover:inner-shadow hover:bg-white hover:text-yellow-300 border-yellow-300 transition duration-500">Редактировать</button>
+                        {% else %}
+                            <form method="post" action="{% url 'classroom:child_reinstate_admin' teacher.id %}">
+                                {% csrf_token %}
+{#                                <button type="submit" class="text-green-600 hover:text-green-900">Восстановить</button>#}
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="expelModal" class="fixed inset-0 flex items-center justify-center bg-gray-600 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg">
+            <h2 class="text-xl mb-4">Вы уверены, что хотите исключить этого ученика?</h2>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="bg-gray-300 text-black px-4 py-2 rounded mr-2">Отмена</button>
+                <form id="expelForm" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded">Исключить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(teacherId) {
+            const modal = document.getElementById('expelModal');
+            const form = document.getElementById('expelForm');
+            form.action = `{% url 'classroom:child_expel_admin' '0' %}`.replace('0', teacherId);
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('expelModal');
+            modal.classList.add('hidden');
+        }
+    </script>
 {% endblock %}
