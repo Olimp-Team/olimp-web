@@ -5,6 +5,7 @@ from register.models import RegisterAdmin
 from result.models import Result
 from classroom.models import Classroom
 
+
 class ResultFilter(django_filters.FilterSet):
     """
     Фильтр для результатов олимпиад с возможностью фильтрации по классу и олимпиаде.

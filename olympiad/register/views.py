@@ -434,7 +434,7 @@ def accept_recommendation(request, recommendation_id):
     Register.objects.update_or_create(
         teacher=recommendation.recommended_by,
         child=recommendation.child,
-        Olympiad=recommendation.Olympiad,
+        olympiad=recommendation.olympiad,
         defaults={
             'status_send': False,
             'is_deleted': False,
