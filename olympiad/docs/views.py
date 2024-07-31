@@ -361,7 +361,7 @@ class DashboardView(AdminRequiredMixin, ListView):
         if start_date:
             start_date = datetime.strptime(start_date, '%d-%m-%Y').strftime('%Y-%m-%d')
         if end_date:
-            end_date = datetime.strptime(end_date, '%d-%м-%Y').strftime('%Y-%м-%d')
+            end_date = datetime.strptime(end_date, '%d-%m-%Y').strftime('%Y-%m-%d')
 
         if start_date and end_date:
             queryset = queryset.filter(date_added__range=[start_date, end_date])
