@@ -25,7 +25,7 @@
                     <div class="mt-2">Год выпуска: {{ classroom.graduation_year }}</div>
                 {% endif %}
                 <div class="mt-4 flex space-x-2">
-                    <a href="{% url 'classroom:student-applications-admin' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Посмотреть участников</a>
+                    <a href="{% url 'classroom:student_applications_admin' classroom.id %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Посмотреть участников</a>
                     <a href="{% url 'classroom:classroom_update' classroom.pk %}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Изменить</a>
                     <a href="{% url 'classroom:classroom_delete' classroom.pk %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Удалить</a>
                 </div>
