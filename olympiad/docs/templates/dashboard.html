@@ -34,18 +34,18 @@
                 <div>
                     <label for="start-date" class="block text-gray-700">Начальная дата</label>
                     <input type="text" id="start-date" name="start-date" value="{{ start_date }}"
-                           class="w-full p-2 border border-gray-300 rounded mt-1">
+                           class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                 </div>
 
                 <div>
                     <label for="end-date" class="block text-gray-700">Конечная дата</label>
                     <input type="text" id="end-date" name="end-date" value="{{ end_date }}"
-                           class="w-full p-2 border border-gray-300 rounded mt-1">
+                           class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                 </div>
 
                 <div>
                     <label for="class" class="block text-gray-700">Класс</label>
-                    <select id="class" name="class" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
+                    <select id="class" name="class" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                         <option value="">Выберите класс</option>
                         {% for class in classrooms %}
                             <option value="{{ class.id }}"
@@ -58,7 +58,7 @@
 
                 <div>
                     <label for="parallel" class="block text-gray-700">Параллель</label>
-                    <select id="parallel" name="parallel" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
+                    <select id="parallel" name="parallel" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                         <option value="">Выберите параллель</option>
                         {% for parallel in parallels %}
                             <option value="{{ parallel }}"
@@ -71,7 +71,7 @@
 
                 <div>
                     <label for="subject" class="block text-gray-700">Предмет</label>
-                    <select id="subject" name="subject" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
+                    <select id="subject" name="subject" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                         <option value="">Выберите предмет</option>
                         {% for subject in subjects %}
                             <option value="{{ subject.id }}"
@@ -84,7 +84,7 @@
 
                 <div>
                     <label for="student" class="block text-gray-700">Ученик</label>
-                    <select id="student" name="student" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
+                    <select id="student" name="student" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                         <option value="">Выберите ученика</option>
                         {% for user in students %}
                             <option value="{{ user.id }}"
@@ -97,7 +97,7 @@
 
                 <div>
                     <label for="olympiad" class="block text-gray-700">Олимпиада</label>
-                    <select id="olympiad" name="olympiad" class="select2 w-full p-2 border border-gray-300 rounded mt-1">
+                    <select id="olympiad" name="olympiad" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                         <option value="">Выберите олимпиаду</option>
                         {% for olympiad in olympiads %}
                             <option value="{{ olympiad.id }}"
@@ -126,28 +126,28 @@
         <p>Победителей: {{ winners_count }}</p>
         <p>Призеров: {{ prizewinners_count }}</p>
         <p>Участников: {{ participants_count }}</p>
-        <table class="min-w-full bg-white">
-            <thead>
+        <table class="min-w-full bg-white divide-y divide-gray-200 mt-5">
+            <thead class="bg-gray-50">
             <tr>
-                <th class="py-2">Ученик</th>
-                <th class="py-2">Олимпиада</th>
-                <th class="py-2">Предмет</th>
-                <th class="py-2">Класс</th>
-                <th class="py-2">Очки</th>
-                <th class="py-2">Статус</th>
-                <th class="py-2">Дата</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Ученик</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Олимпиада</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Предмет</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Класс</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Очки</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Статус</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">Дата</th>
             </tr>
             </thead>
             <tbody>
             {% for result in results %}
                 <tr>
-                    <td class="py-2">{{ result.info_children.get_full_name }}</td>
-                    <td class="py-2">{{ result.info_olympiad.name }}</td>
-                    <td class="py-2">{{ result.info_olympiad.subject.name }}</td>
-                    <td class="py-2">{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
-                    <td class="py-2">{{ result.points }}</td>
-                    <td class="py-2">{{ result.get_status_result_display }}</td>
-                    <td class="py-2">{{ result.date_added|date:"d-m-Y" }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.info_children.get_full_name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.info_olympiad.name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.info_olympiad.subject.name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.info_children.classroom.number }} {{ result.info_children.classroom.letter }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.points }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.get_status_result_display }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.date_added|date:"d-m-Y" }}</td>
                 </tr>
             {% endfor %}
             </tbody>

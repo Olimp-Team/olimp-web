@@ -109,19 +109,19 @@
         <table class="min-w-full bg-white divide-y divide-gray-200">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Олимпиада</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Баллы</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Олимпиада</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Баллы</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Статус</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Дата</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 {% for result in recent_results %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.info_olympiad.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.points }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.get_status_result_display }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ result.date_added }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.info_olympiad.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.points }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.get_status_result_display }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ result.date_added }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
