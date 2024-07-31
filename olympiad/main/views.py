@@ -26,7 +26,8 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
 
         # Получение последних 10 результатов для текущего пользователя
-        recent_results = Result.objects.filter(info_children=self.request.user, school=self.request.user.school).order_by('-date_added')[:10]
+        recent_results = Result.objects.filter(info_children=self.request.user,
+                                               school=self.request.user.school).order_by('-date_added')[:10]
         context['recent_results'] = recent_results
 
         # Получение рейтинга пользователя
@@ -95,6 +96,7 @@ class OlympiadListView(ListView):
     model = Olympiad
     template_name = 'list_olympiad/list_olympiad.html'
     context_object_name = 'olympiads'
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()

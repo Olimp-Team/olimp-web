@@ -33,13 +33,20 @@ class ExportResultsView(View):
             user = result.info_children
             classroom = user.classroom
             olympiad = result.info_olympiad
+
+            # Преобразуем дату добавления в строку без временной зоны
+            date_added = result.date_added
+            if date_added.tzinfo is not None:
+                date_added = date_added.astimezone(None)
+            date_str = date_added.strftime('%Y-%m-%d')  # Форматирование даты в строку
+
             data.append({
                 'ФИО': user.get_full_name(),
                 'Класс': f"{classroom.number} {classroom.letter}" if classroom else 'Нет данных',
                 'Название олимпиады': olympiad.name,
                 'Количество очков': result.points,
                 'Статус результата': result.get_status_result_display(),
-                'Дата добавления': result.date_added
+                'Дата добавления': date_str  # Используем строку вместо объекта datetime
             })
 
         df = pd.DataFrame(data)
@@ -49,7 +56,8 @@ class ExportResultsView(View):
             df.to_excel(writer, index=False, sheet_name='Results')
 
         buffer.seek(0)
-        response = HttpResponse(buffer, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response = HttpResponse(buffer,
+                                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=results.xlsx'
         return response
 
@@ -163,24 +171,13 @@ class OlympiadResultCreateView(View):
         return render(request, 'olympiad_result_list/olympiad_result_form.html', {'form': form})
 
 
-class GetOlympiadsView(View):
-    """Представление для получения списка олимпиад, на которые зарегистрирован ученик"""
-
-    def get(self, request):
-        student_id = request.GET.get('student_id')
-        olympiad_ids = RegisterAdmin.objects.filter(child_admin_id=student_id, school=request.user.school).values_list(
-            'olympiad_admin_id', flat=True)
-        olympiads = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
-        olympiad_list = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
-        return JsonResponse(olympiad_list, safe=False)
-
-
 class OlympiadResultClassCreateView(AdminRequiredMixin, View):
     """Представление для создания результатов олимпиад для всего класса"""
 
     def get(self, request):
         form = OlympiadResultClassForm()
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': []})
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
+                      {'form': form, 'students': []})
 
     def post(self, request):
         form = OlympiadResultClassForm(request.POST)
@@ -202,8 +199,9 @@ class OlympiadResultClassCreateView(AdminRequiredMixin, View):
             return redirect('success_page')
         students = form.cleaned_data['classroom'].child.filter(
             id__in=RegisterAdmin.objects.filter(school=request.user.school).values_list('child_admin_id',
-                                                                                         flat=True)) if 'classroom' in form.cleaned_data else []
-        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html', {'form': form, 'students': students})
+                                                                                        flat=True)) if 'classroom' in form.cleaned_data else []
+        return render(request, 'olympiad_result_class_form/olympiad_result_class_form.html',
+                      {'form': form, 'students': students})
 
 
 class GetStudentsView(View):
@@ -214,10 +212,23 @@ class GetStudentsView(View):
         if classroom_id:
             classroom = get_object_or_404(Classroom, id=classroom_id, school=request.user.school)
             students = classroom.child.filter(
-                id__in=RegisterAdmin.objects.filter(school=request.user.school).values_list('child_admin_id', flat=True))
+                id__in=RegisterAdmin.objects.filter(school=request.user.school).values_list('child_admin_id',
+                                                                                            flat=True))
             html = render_to_string('students_list/students_list.html', {'students': students})
             return JsonResponse({'html': html})
         return JsonResponse({'html': ''})
+
+
+class GetOlympiadsView(View):
+    """Представление для получения списка олимпиад, на которые зарегистрирован ученик"""
+
+    def get(self, request):
+        student_id = request.GET.get('student_id')
+        olympiad_ids = RegisterAdmin.objects.filter(child_admin_id=student_id, school=request.user.school).values_list(
+            'olympiad_admin_id', flat=True)
+        olympiads = Olympiad.objects.filter(id__in=olympiad_ids, school=request.user.school)
+        olympiad_list = [{'id': olympiad.id, 'name': olympiad.name} for olympiad in olympiads]
+        return JsonResponse(olympiad_list, safe=False)
 
 
 class StudentResultListView(LoginRequiredMixin, ListView):

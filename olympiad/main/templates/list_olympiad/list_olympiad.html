@@ -13,12 +13,12 @@
             <div>
                 <label class="block text-gray-700">Дата проведения:</label>
                 <input type="date" name="date" value="{{ filterset.form.date.value }}"
-                       class="w-full p-2 border border-gray-300 rounded mt-1">
+                       class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
             </div>
 
             <div>
                 <label class="block text-gray-700">Категория олимпиады:</label>
-                <select name="category" class="w-full p-2 border border-gray-300 rounded mt-1">
+                <select name="category" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
                     {% for choice in filterset.form.category.field.choices %}
                         <option value="{{ choice.0 }}"
                                 {% if choice.0 == filterset.form.category.value %}selected{% endif %}>
@@ -31,7 +31,7 @@
             <div>
                 <label class="block text-gray-700">Название этапа:</label>
                 <input type="text" name="stage" value="{{ filterset.form.stage.value }}"
-                       class="w-full p-2 border border-gray-300 rounded mt-1">
+                       class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 bg-gray-100 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
             </div>
 
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Фильтровать
@@ -50,19 +50,19 @@
             <table class="min-w-full bg-white divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase  tracking-wider">
                         Название
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Категория
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Этап</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Этап</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Уровень
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Дата
                         проведения
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Действия
                     </th>
                 </tr>
@@ -70,12 +70,12 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                 {% for olympiad in olympiads %}
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ olympiad.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ olympiad.category }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ olympiad.stage }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ olympiad.level }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ olympiad.date }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ olympiad.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ olympiad.category }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ olympiad.stage }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ olympiad.level }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ olympiad.date }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                             <a href="{% url 'main:olympiad_update' olympiad.pk %}"
                                class="text-blue-500 hover:underline"><i class="fas fa-edit"></i></a>
                             <a href="{% url 'main:olympiad_delete' olympiad.pk %}"
@@ -83,6 +83,23 @@
                         </td>
                     </tr>
                 {% endfor %}
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
                 </tbody>
             </table>
         </div>

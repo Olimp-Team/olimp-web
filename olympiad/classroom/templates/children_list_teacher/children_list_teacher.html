@@ -3,51 +3,47 @@
 {% block content %}
     <div class="mb-4">
         <h1 class="text-3xl font-bold">Список учеников</h1>
-        <h2 class="text-xl text-gray-600">Класс: {{ classroom.number }}{{ classroom.letter }}</h2>
-    </div>
-
-    <div class="flex justify-between mb-4">
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Список участников</button>
+        <h2 class="text-xl text-gray-600">Класс: {{ classroom.number }} {{ classroom.letter }}</h2>
     </div>
 
     <div class="overflow-x-auto bg-white shadow-md rounded-lg">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                     ID
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                     ФИО
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                     Пол
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                     Дата рождения
                 </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th class="px-6 py-3  text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
                     Действия
                 </th>
             </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-            {% for child in child %}
+            {% for child in children %}
                 <tr>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                         {{ child.id }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                         {{ child.last_name }} {{ child.first_name }} {{ child.surname }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                         {{ child.gender }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                         {{ child.birth_date }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-{#Кнопка изменить#}
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                    <button type="submit" class="transition duration-500 bg-yellow-300 border-2 border-yellow-300 hover:bg-white hover:text-yellow-300 text-white px-4 py-2 rounded">Редактировать</button>
                     </td>
                 </tr>
             {% endfor %}

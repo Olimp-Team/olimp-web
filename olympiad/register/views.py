@@ -82,7 +82,7 @@ class RegisterDelete(ChildRequiredMixin, View):
             return HttpResponseForbidden()
 
 
-class RegisterSend(ChildRequiredMixin, View):
+class RegisterSendChild(ChildRequiredMixin, View):
     """Отправка заявок на олимпиады для учеников"""
 
     def get(self, request):
@@ -93,7 +93,7 @@ class RegisterSend(ChildRequiredMixin, View):
                 RegisterSend.objects.update_or_create(
                     teacher_send=entry.teacher,
                     child_send=entry.child,
-                    Olympiad_send=entry.Olympiad,
+                    olympiad_send=entry.olympiad,
                     school=request.user.school,
                     defaults={'status_send': False, 'is_deleted': False, 'status_teacher': False, 'status_admin': False}
                 )
@@ -143,7 +143,7 @@ class ChildRegisterList(TeacherRequiredMixin, View):
             for register in reg:
                 if register.child_send not in student_olympiads:
                     student_olympiads[register.child_send] = []
-                student_olympiads[register.child_send].append(register.Olympiad_send)
+                student_olympiads[register.child_send].append(register.olympiad_send)
 
             sent_applications = RegisterSend.objects.filter(
                 teacher_send__classroom_guide=classroom_guide,
@@ -156,7 +156,7 @@ class ChildRegisterList(TeacherRequiredMixin, View):
             for application in sent_applications:
                 if application.child_send not in sent_applications_dict:
                     sent_applications_dict[application.child_send] = []
-                sent_applications_dict[application.child_send].append(application.Olympiad_send)
+                sent_applications_dict[application.child_send].append(application.olympiad_send)
 
             context = {
                 'student_olympiads': student_olympiads,
@@ -176,11 +176,11 @@ class RegisterDeleteTeacher(TeacherRequiredMixin, View):
     def post(self, request, Olympiad_id, student_id):
         if request.user.is_teacher:
             try:
-                register_send = get_object_or_404(RegisterSend, Olympiad_send_id=Olympiad_id, child_send_id=student_id,
+                register_send = get_object_or_404(RegisterSend, olympiad_send_id=Olympiad_id, child_send_id=student_id,
                                                   school=request.user.school)
                 register_send.delete()
 
-                register = get_object_or_404(Register, Olympiad_id=Olympiad_id, child_id=student_id,
+                register = get_object_or_404(Register, olympiad_id=Olympiad_id, child_id=student_id,
                                              school=request.user.school)
                 register.delete()
 
@@ -188,7 +188,7 @@ class RegisterDeleteTeacher(TeacherRequiredMixin, View):
                     user=request.user,
                     action='Удаление заявки',
                     school=request.user.school,
-                    object_name=f'Заявка ученика {register.child.get_full_name()} на олимпиаду {register.Olympiad.name}'
+                    object_name=f'Заявка ученика {register.child.get_full_name()} на олимпиаду {register.olympiad.name}'
                 )
 
                 return HttpResponseRedirect(request.META['HTTP_REFERER'])
@@ -214,7 +214,7 @@ class RegisterSendTeacher(TeacherRequiredMixin, View):
                 RegisterAdmin.objects.update_or_create(
                     teacher_admin=register.teacher_send,
                     child_admin=register.child_send,
-                    Olympiad_admin=register.Olympiad_send,
+                    olympiad_admin=register.olympiad_send,
                     defaults={'status_teacher': True, 'status_admin': False, 'is_deleted': register.is_deleted,
                               'school': request.user.school}
                 )
@@ -255,7 +255,7 @@ class AddRecommendation(TeacherRequiredMixin, View):
                     recommended_by=request.user,
                     recommended_to=recommended_to,
                     child=child,
-                    Olympiad=olympiad,
+                    olympiad=olympiad,
                     school=request.user.school
                 )
                 AuditLog.objects.create(
@@ -329,7 +329,7 @@ class AddRegister(LoginRequiredMixin, View):
 
             RegisterAdmin.objects.create(
                 child_admin=student,
-                Olympiad_admin=olympiad,
+                olympiad_admin=olympiad,
                 teacher_admin=classroom.teacher,
                 school=request.user.school
             )
@@ -434,7 +434,7 @@ def accept_recommendation(request, recommendation_id):
     Register.objects.update_or_create(
         teacher=recommendation.recommended_by,
         child=recommendation.child,
-        Olympiad=recommendation.Olympiad,
+        olympiad=recommendation.olympiad,
         defaults={
             'status_send': False,
             'is_deleted': False,

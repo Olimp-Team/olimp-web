@@ -40,6 +40,7 @@ class RegisterSend(models.Model):
     class Meta:
         unique_together = ('teacher_send', 'child_send', 'olympiad_send')
 
+
     def __str__(self):
         return f'Статус учителя: {self.status_teacher}'
 

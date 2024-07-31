@@ -1,5 +1,6 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
+
 {% block content %}
     <style>
         .small-delete-button {
@@ -30,24 +31,20 @@
                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4 inline-block">Скачать
                         excel файл</a>
                     <ul class="space-y-2">
-                        <li class="flex justify-between bg-gray-200 p-2 rounded-lg">
-                            <div class="text-gray-700 font-bold">Ученик</div>
-                            <div class="text-gray-700 font-bold">Олимпиады</div>
-                        </li>
                         {% for student, registers in students.items %}
-                            <li class="bg-white p-2 rounded-lg shadow">
+                            <li class="relative bg-white p-2 rounded-lg shadow">
                                 <div class="text-gray-700 font-bold">{{ student.get_full_name }}</div>
                                 <ul class="list-disc list-inside">
                                     {% for register in registers %}
                                         <li>
-                                            {{ register.Olympiad_admin.name }}
+                                            {{ register.olympiad_admin.name}}
                                             <form method="post"
                                                   action="{% url 'register:applications-from-classroom-teachers' %}"
                                                   class="inline-block">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="register_id" value="{{ register.id }}">
                                                 <button type="submit"
-                                                        class="bg-red-500 text-white small-delete-button hover:bg-red-600">
+                                                        class="absolute right-5 -mt-4 bg-red-500 text-white small-delete-button hover:bg-red-600">
                                                     Удалить
                                                 </button>
                                             </form>
