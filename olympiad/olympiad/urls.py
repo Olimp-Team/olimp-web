@@ -7,6 +7,7 @@ from main.views import page_not_found
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('silk/', include('silk.urls', namespace='silk')),
     # Пока нет главной страницы, перенаправление на страницу входа
     path('', StartPage.as_view(), name='start_page'),
     # Главное приложение

@@ -12,7 +12,8 @@ from .forms import (
     NewAdminForm,
     NewChildForm,
     NewTeacherForm,
-    UserForm
+    UserForm, CustomPasswordResetForm,
+
 )
 from .mixins import AdminRequiredMixin
 from classroom.models import Classroom
@@ -21,6 +22,7 @@ from users.models import User
 
 class AuthLogin(View):
     """Представление для входа пользователей."""
+
     def get(self, request):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('main:home'))
@@ -43,6 +45,7 @@ class AuthLogin(View):
 
 class StartPage(View):
     """Представление для главной страницы сайта."""
+
     def get(self, request):
         return render(request, 'start_page/start_page.html')
 
@@ -56,12 +59,13 @@ def logout(request):
 
 class PasswordChange(View):
     """Представление для изменения пароля."""
+
     def get(self, request):
-        form = PasswordChangeForm(request.user)
+        form = CustomPasswordResetForm(request.user)
         return render(request, 'password_change/password_change.html', {'form': form})
 
     def post(self, request):
-        form = PasswordChangeForm(request.user, request.POST)
+        form = CustomPasswordResetForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
@@ -73,6 +77,7 @@ class PasswordChange(View):
 
 class CreateAdmin(AdminRequiredMixin, View):
     """Представление для создания администратора."""
+
     def get(self, request):
         form = NewAdminForm()
         return render(request, 'add_admin/add_admin.html', {'form': form})
@@ -90,6 +95,7 @@ class CreateAdmin(AdminRequiredMixin, View):
 
 class CreateChild(AdminRequiredMixin, View):
     """Представление для создания ученика."""
+
     def get(self, request):
         form = NewChildForm()
         return render(request, 'add_students/add_students.html', {'form': form})
@@ -109,6 +115,7 @@ class CreateChild(AdminRequiredMixin, View):
 
 class CreateTeacher(AdminRequiredMixin, View):
     """Представление для создания учителя."""
+
     def get(self, request):
         form = NewTeacherForm()
         return render(request, 'add_teacher/add_teacher.html', {'form': form})
@@ -127,6 +134,7 @@ class CreateTeacher(AdminRequiredMixin, View):
 
 class TeacherListView(AdminRequiredMixin, View):
     """Представление для списка учителей."""
+
     def get(self, request):
         teachers = User.objects.filter(is_teacher=True, school=request.user.school)
         return render(request, 'teacher_list.html', {'teachers': teachers})
@@ -134,6 +142,7 @@ class TeacherListView(AdminRequiredMixin, View):
 
 class AdminListView(AdminRequiredMixin, View):
     """Представление для списка администраторов."""
+
     def get(self, request):
         admins = User.objects.filter(is_admin=True, school=request.user.school)
         return render(request, 'admin_list.html', {'admins': admins})
@@ -141,6 +150,7 @@ class AdminListView(AdminRequiredMixin, View):
 
 class EditTeacherView(AdminRequiredMixin, View):
     """Представление для редактирования учителя."""
+
     def get(self, request, pk):
         teacher = get_object_or_404(User, pk=pk, is_teacher=True, school=request.user.school)
         form = UserForm(instance=teacher)
@@ -157,6 +167,7 @@ class EditTeacherView(AdminRequiredMixin, View):
 
 class EditAdminView(AdminRequiredMixin, View):
     """Представление для редактирования администратора."""
+
     def get(self, request, pk):
         admin = get_object_or_404(User, pk=pk, is_admin=True, school=request.user.school)
         form = UserForm(instance=admin)
@@ -173,6 +184,7 @@ class EditAdminView(AdminRequiredMixin, View):
 
 class DeleteUserView(AdminRequiredMixin, View):
     """Представление для удаления пользователя."""
+
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk, school=request.user.school)
         user.delete()
