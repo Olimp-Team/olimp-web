@@ -12,6 +12,11 @@ urlpatterns = [
     path('export-results/', ExportResultsView.as_view(), name='export_results'),
     path('student/results/', StudentResultListView.as_view(), name='student_results'),
     path('get_olympiads/', GetOlympiadsView.as_view(), name='get_olympiads'),
+
+    ### test
+    path('create/', ResultCreateView.as_view(), name='result_create'),
+    path('ajax/load-students/', load_students, name='ajax_load_students'),
+    path('ajax/load-olympiads/', load_olympiads, name='ajax_load_olympiads'),
 ]
 
 # Описание каждого пути:

@@ -1,10 +1,11 @@
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django_filters.views import FilterView
 from .models import Result
 from .filters import ResultFilter
-from .forms import OlympiadResultForm, OlympiadResultClassForm
+from .forms import OlympiadResultForm, OlympiadResultClassForm, ResultForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,6 +17,7 @@ from django.template.loader import render_to_string
 from classroom.models import Classroom
 import io
 import pandas as pd
+from django.views.generic.edit import CreateView
 
 
 class ExportResultsView(View):
@@ -240,3 +242,25 @@ class StudentResultListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Result.objects.filter(info_children=self.request.user, info_children__school=self.request.user.school)
+
+
+### Test create result
+
+class ResultCreateView(CreateView):
+    model = Result
+    form_class = ResultForm
+    template_name = 'create_result/result_form.html'
+    success_url = reverse_lazy('result_list')  # Поменяйте на нужный URL после создания результата
+
+
+def load_students(request):
+    classroom_id = request.GET.get('classroom_id')
+    students = User.objects.filter(classroom_id=classroom_id, is_child=True).order_by('last_name')
+    html = render_to_string('create_result/student_dropdown_list_options.html', {'students': students})
+    return HttpResponse(html)
+
+def load_olympiads(request):
+    classroom_id = request.GET.get('classroom_id')
+    olympiads = Olympiad.objects.filter(class_olympiad=classroom_id).order_by('name')
+    html = render_to_string('create_result/olympiad_dropdown_list_options.html', {'olympiads': olympiads})
+    return HttpResponse(html)
