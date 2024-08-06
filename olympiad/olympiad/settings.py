@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'school',
     'raiting_system',
+    'silk',
 ]
 
 # Настройки обработки миниатюр
@@ -107,6 +108,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'silk.middleware.SilkyMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
