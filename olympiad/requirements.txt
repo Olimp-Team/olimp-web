@@ -32,3 +32,4 @@ easy-thumbnails
 asyncio
 python-telegram-bot
 django-excel-response2
+django-silk
