@@ -1,0 +1,77 @@
+{% extends "base_olimp.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">Создание нового результата</h2>
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    <div class="space-y-2">
+        {{ form.non_field_errors }}
+        <div>
+            {{ form.classroom.label_tag }}<br>
+            {{ form.classroom }}
+        </div>
+        <div>
+            {{ form.info_children.label_tag }}<br>
+            {{ form.info_children }}
+        </div>
+        <div>
+            {{ form.info_olympiad.label_tag }}<br>
+            {{ form.info_olympiad }}
+        </div>
+        <div>
+            {{ form.points.label_tag }}<br>
+            {{ form.points }}
+        </div>
+        <div>
+            {{ form.status_result.label_tag }}<br>
+            {{ form.status_result }}
+        </div>
+        <div>
+            {{ form.advanced.label_tag }}<br>
+            {{ form.advanced }}
+        </div>
+        <div>
+            {{ form.school.label_tag }}<br>
+            {{ form.school }}
+        </div>
+    </div>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Сохранить</button>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+
+        $('#id_classroom').change(function() {
+            var url = '{% url "result:ajax_load_students" %}';
+            var classroomId = $(this).val();
+            
+            $.ajax({
+                url: url,
+                data: {
+                    'classroom_id': classroomId
+                },
+                success: function(data) {
+                    $("#id_info_children").html(data);
+                    $('#id_info_children').trigger('change');
+                }
+            });
+        });
+
+        $('#id_info_children').change(function() {
+            var url = '{% url "result:ajax_load_olympiads" %}';
+            var studentId = $(this).val();
+            
+            $.ajax({
+                url: url,
+                data: {
+                    'student_id': studentId
+                },
+                success: function(data) {
+                    $("#id_info_olympiad").html(data);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

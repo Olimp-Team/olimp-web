@@ -63,3 +63,46 @@ class OlympiadResultClassForm(forms.Form):
         widget=forms.Select(attrs={'class': 'status-select'}),
         label='Статус'
     )
+
+
+### TEST
+
+
+class ResultForm(forms.ModelForm):
+    classroom = forms.ModelChoiceField(queryset=Classroom.objects.all(), required=False,
+                                       widget=forms.Select(attrs={'class': 'select2'}))
+
+    class Meta:
+        model = Result
+        fields = ['classroom', 'info_children', 'info_olympiad', 'points', 'status_result', 'advanced', 'school']
+        widgets = {
+            'info_children': forms.Select(attrs={'class': 'select2'}),
+            'info_olympiad': forms.Select(attrs={'class': 'select2'}),
+            'points': forms.NumberInput(attrs={'class': 'input', 'placeholder': 'Количество очков'}),
+            'status_result': forms.Select(attrs={'class': 'input'}),
+            'advanced': forms.CheckboxInput(attrs={'class': 'input'}),
+            'school': forms.Select(attrs={'class': 'select2'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['info_children'].queryset = User.objects.none()
+        self.fields['info_olympiad'].queryset = Olympiad.objects.none()
+
+        if 'classroom' in self.data:
+            try:
+                classroom_id = int(self.data.get('classroom'))
+                self.fields['info_children'].queryset = User.objects.filter(classroom_id=classroom_id,
+                                                                            is_child=True).order_by('last_name')
+            except (ValueError, TypeError):
+                pass
+
+        if 'info_children' in self.data:
+            try:
+                user_id = int(self.data.get('info_children'))
+                self.fields['info_olympiad'].queryset = Olympiad.objects.filter(
+                    class_olympiad__exact=self.fields['classroom'].queryset.first().number).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['info_olympiad'].queryset = self.instance.info_children.olympiad_set.order_by('name')
