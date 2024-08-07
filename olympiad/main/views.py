@@ -76,6 +76,7 @@ class AuditLogView(LoginRequiredMixin, ListView):
     """
     Представление для отображения журнала аудита.
     """
+    paginate_by = 5
     model = AuditLog
     template_name = 'audit_log/audit_log.html'
     context_object_name = 'audit_logs'
