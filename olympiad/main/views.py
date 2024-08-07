@@ -1,5 +1,6 @@
 from django.http import HttpResponseNotFound
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from result.models import Result
@@ -9,11 +10,20 @@ from .filters import OlympiadFilter
 from .models import AuditLog, Olympiad
 
 
+def bad_request(request, exception):
+    return render(request, 'errors/errore400.html', status=400)
+
+
+def permission_denied(request, exception):
+    return render(request, 'errors/errore403.html', status=403)
+
+
 def page_not_found(request, exception):
-    """
-    Обработчик ошибки 404.
-    """
-    return HttpResponseNotFound('К сожалению, страница не найдена.')
+    return render(request, 'errors/errore404.html', status=404)
+
+
+def server_error(request):
+    return render(request, 'errors/errore500.html', status=500)
 
 
 class HomePageView(LoginRequiredMixin, TemplateView):

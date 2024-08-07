@@ -1,5 +1,6 @@
 # Default ignored files
 /shelf/
+/olympiad/db.sqlite3
 /workspace.xml
 # Editor-based HTTP Client requests
 /httpRequests/
