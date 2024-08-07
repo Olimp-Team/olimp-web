@@ -8,45 +8,84 @@
     <form action="" method="post" enctype="multipart/form-data" class="space-y-4">
         {% csrf_token %}
         <div class="space-y-4">
+
+            <!-- Отображение общих ошибок формы -->
+            {% if form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Ошибки:</strong>
+                <span class="block sm:inline">{{ form.non_field_errors }}</span>
+            </div>
+            {% endif %}
+
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="last_name">Фамилия</label>
                 {{ form.last_name|add_class:"block w-full p-2 border rounded" }}
+                {% if form.last_name.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.last_name.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="first_name">Имя</label>
                 {{ form.first_name|add_class:"block w-full p-2 border rounded" }}
+                {% if form.first_name.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.first_name.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="surname">Отчество</label>
                 {{ form.surname|add_class:"block w-full p-2 border rounded" }}
+                {% if form.surname.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.surname.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="birth_date">Дата рождения</label>
                 {{ form.birth_date|add_class:"block w-full p-2 border rounded" }}
+                {% if form.birth_date.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.birth_date.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="gender">Пол</label>
                 {{ form.gender|add_class:"block w-full p-2 border rounded" }}
+                {% if form.gender.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.gender.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="subject">Какие предметы преподает</label>
                 {{ form.subject|add_class:"block w-full p-2 border rounded" }}
+                {% if form.subject.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.subject.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="post_job_teacher">Должность</label>
                 {{ form.post_job_teacher|add_class:"block w-full p-2 border rounded" }}
+                {% if form.post_job_teacher.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.post_job_teacher.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="classroom_guide">Классное руководство</label>
                 {{ form.classroom_guide|add_class:"block w-full p-2 border rounded" }}
+                {% if form.classroom_guide.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.classroom_guide.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="username">Логин</label>
                 {{ form.username|add_class:"block w-full p-2 border rounded" }}
+                {% if form.username.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.username.errors }}</p>
+                {% endif %}
             </div>
             <div>
                 <label class="block text-gray-700 font-bold mb-2" for="password">Пароль</label>
                 {{ form.password|add_class:"block w-full p-2 border rounded" }}
+                {% if form.password.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.password.errors }}</p>
+                {% endif %}
             </div>
             {% if form.errors %}
             <div class="text-red-500 mt-2">{{ form.errors }}</div>
