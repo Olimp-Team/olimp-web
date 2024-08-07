@@ -239,11 +239,14 @@ DEFAULT_FILE_STORAGE = 'olympiad.custom_storages.MediaStorage'
 
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+STATIC_URL = '/static/'
 
-# Статические файлы (CSS, JavaScript, изображения)
+# Укажите путь к директории, где находятся статические файлы
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Статические файлы (CSS, JavaScript, изображения)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Идентификатор сайта
