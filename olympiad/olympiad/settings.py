@@ -86,7 +86,7 @@ INSTALLED_APPS = [
     'storages',
     'image_cropping',
     'imagekit',
-    'easy_thumbnails',
+    # 'easy_thumbnails',
     'school',
     'raiting_system',
     'silk',
@@ -244,7 +244,7 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = 'staticfiles/'
+
 # Статические файлы (CSS, JavaScript, изображения)
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
