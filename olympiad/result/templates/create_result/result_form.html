@@ -1,42 +1,72 @@
 {% extends "base_olimp.html" %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-4">Создание нового результата</h2>
-<form method="post" class="space-y-4">
-    {% csrf_token %}
-    <div class="space-y-2">
-        {{ form.non_field_errors }}
-        <div>
-            {{ form.classroom.label_tag }}<br>
-            {{ form.classroom }}
+<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-bold mb-4">Создание нового результата</h2>
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="space-y-2">
+            <!-- Отображение общих ошибок формы -->
+            {% if form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Ошибки:</strong>
+                <span class="block sm:inline">{{ form.non_field_errors }}</span>
+            </div>
+            {% endif %}
+
+            <div>
+                {{ form.classroom.label_tag }}<br>
+                {{ form.classroom|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.classroom.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.classroom.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.info_children.label_tag }}<br>
+                {{ form.info_children|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.info_children.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.info_children.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.info_olympiad.label_tag }}<br>
+                {{ form.info_olympiad|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.info_olympiad.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.info_olympiad.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.points.label_tag }}<br>
+                {{ form.points|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.points.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.points.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.status_result.label_tag }}<br>
+                {{ form.status_result|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.status_result.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.status_result.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.advanced.label_tag }}<br>
+                {{ form.advanced|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.advanced.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.advanced.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.school.label_tag }}<br>
+                {{ form.school|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.school.errors %}
+                <p class="text-red-500 text-xs italic">{{ form.school.errors }}</p>
+                {% endif %}
+            </div>
         </div>
-        <div>
-            {{ form.info_children.label_tag }}<br>
-            {{ form.info_children }}
-        </div>
-        <div>
-            {{ form.info_olympiad.label_tag }}<br>
-            {{ form.info_olympiad }}
-        </div>
-        <div>
-            {{ form.points.label_tag }}<br>
-            {{ form.points }}
-        </div>
-        <div>
-            {{ form.status_result.label_tag }}<br>
-            {{ form.status_result }}
-        </div>
-        <div>
-            {{ form.advanced.label_tag }}<br>
-            {{ form.advanced }}
-        </div>
-        <div>
-            {{ form.school.label_tag }}<br>
-            {{ form.school }}
-        </div>
-    </div>
-    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Сохранить</button>
-</form>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Сохранить</button>
+    </form>
+</div>
 
 <script>
     $(document).ready(function() {

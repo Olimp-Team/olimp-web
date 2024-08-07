@@ -97,7 +97,7 @@ class OlympiadListView(ListView):
     model = Olympiad
     template_name = 'list_olympiad/list_olympiad.html'
     context_object_name = 'olympiads'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()

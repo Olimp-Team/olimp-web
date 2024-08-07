@@ -4,18 +4,13 @@ from register.models import RegisterAdmin
 from result.models import Result
 from main.models import Olympiad
 
-class ExcelUploadForm(forms.Form):
-    """
-    Форма для загрузки Excel файла.
-    Используется для импорта данных из Excel в систему.
-    """
-    excel_file = forms.FileField(label='Загрузить Excel файл')
 
 class OlympiadForm(forms.ModelForm):
     """
     Форма для создания и редактирования олимпиады.
     Использует модель Olympiad и включает все ее поля.
     """
+
     class Meta:
         model = Olympiad
         fields = '__all__'

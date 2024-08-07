@@ -5,6 +5,15 @@
     <h1 class="text-2xl font-bold mb-4 text-center">Создать/Изменить учебный класс</h1>
     <form method="post" class="space-y-4">
         {% csrf_token %}
+
+        <!-- Отображение общих ошибок формы -->
+        {% if form.non_field_errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Ошибки:</strong>
+            <span class="block sm:inline">{{ form.non_field_errors }}</span>
+        </div>
+        {% endif %}
+
         <div class="grid grid-cols-3 gap-4">
             <!-- Общий список учеников -->
             <div>
@@ -33,22 +42,37 @@
         <div>
             <label for="id_number" class="block text-sm font-medium text-gray-700">Цифра</label>
             {{ form.number|add_class:"block w-full mt-1 p-2 border rounded" }}
+            {% if form.number.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.number.errors }}</p>
+            {% endif %}
         </div>
         <div>
             <label for="id_letter" class="block text-sm font-medium text-gray-700">Буква</label>
             {{ form.letter|add_class:"block w-full mt-1 p-2 border rounded" }}
+            {% if form.letter.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.letter.errors }}</p>
+            {% endif %}
         </div>
         <div>
             <label for="id_teacher" class="block text-sm font-medium text-gray-700">Классный руководитель</label>
             {{ form.teacher|add_class:"block w-full mt-1 p-2 border rounded" }}
+            {% if form.teacher.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.teacher.errors }}</p>
+            {% endif %}
         </div>
         <div class="flex items-center space-x-4">
             <label for="id_is_graduated" class="text-sm font-medium text-gray-700">Выпустился</label>
             {{ form.is_graduated|add_class:"form-checkbox h-4 w-4 text-blue-600 transition duration-150 ease-in-out" }}
+            {% if form.is_graduated.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.is_graduated.errors }}</p>
+            {% endif %}
         </div>
         <div>
             <label for="id_graduation_year" class="block text-sm font-medium text-gray-700">Год выпуска</label>
             {{ form.graduation_year|add_class:"block w-full mt-1 p-2 border rounded" }}
+            {% if form.graduation_year.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.graduation_year.errors }}</p>
+            {% endif %}
         </div>
         <div class="text-center">
             <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
