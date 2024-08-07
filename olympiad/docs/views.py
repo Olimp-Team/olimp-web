@@ -658,8 +658,8 @@ class ImportOlympiadsView(View):
             excel_file = request.FILES['file']
             df = pd.read_excel(excel_file)
             for index, row in df.iterrows():
-                category, _ = categories.objects.get_or_create(name=row['Категория олимпиады'])
-                level, _ = Level_olympiad.objects.get_or_create(name=row['Название уровня'])
+                category, _ = Category.objects.get_or_create(name=row['Категория олимпиады'])
+                level, _ = LevelOlympiad.objects.get_or_create(name=row['Название уровня'])
                 stage, _ = Stage.objects.get_or_create(name=row['Название этапа'])
                 subject, _ = Subject.objects.get_or_create(name=row['Название школьного предмета'])
                 Olympiad.objects.create(

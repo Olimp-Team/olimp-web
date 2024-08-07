@@ -2,51 +2,90 @@
 {% load form_filters %}
 {% load static %}
 {% block content %}
-<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h1 class="text-2xl font-bold mb-4">Создать/Изменить олимпиаду</h1>
-    <form method="post" class="space-y-4">
-        {% csrf_token %}
-        <div>
-            <label for="id_name" class="block text-gray-700">Название олимпиады:</label>
-            {{ form.name|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_description" class="block text-gray-700">Описание олимпиады:</label>
-            {{ form.description|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_category" class="block text-gray-700">Категория олимпиады:</label>
-            {{ form.category|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_level" class="block text-gray-700">Название уровня:</label>
-            {{ form.level|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_stage" class="block text-gray-700">Название этапа:</label>
-            {{ form.stage|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_subject" class="block text-gray-700">Название школьного предмета:</label>
-            {{ form.subject|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_class_olympiad" class="block text-gray-700">Класс олимпиады:</label>
-            {{ form.class_olympiad|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_date" class="block text-gray-700">Дата проведения:</label>
-            {{ form.date|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <div>
-            <label for="id_time" class="block text-gray-700">Время проведения:</label>
-            {{ form.time }} {# |add_class:"w-full p-2 border border-gray-300 rounded mt-1" #}
-        </div>
-        <div>
-            <label for="id_location" class="block text-gray-700">Место проведения олимпиады:</label>
-            {{ form.location|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
-        </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
-    </form>
-</div>
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <h1 class="text-2xl font-bold mb-4">Создать/Изменить олимпиаду</h1>
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Отображение общих ошибок формы -->
+            {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Ошибки:</strong>
+                    <span class="block sm:inline">{{ form.non_field_errors }}</span>
+                </div>
+            {% endif %}
+
+            <div>
+                <label for="id_name" class="block text-gray-700">Название олимпиады:</label>
+                {{ form.name|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.name.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.name.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_description" class="block text-gray-700">Описание олимпиады:</label>
+                {{ form.description|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.description.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.description.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_category" class="block text-gray-700">Категория олимпиады:</label>
+                {{ form.category|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.category.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.category.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_level" class="block text-gray-700">Название уровня:</label>
+                {{ form.level|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.level.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.level.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_stage" class="block text-gray-700">Название этапа:</label>
+                {{ form.stage|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.stage.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.stage.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_subject" class="block text-gray-700">Название школьного предмета:</label>
+                {{ form.subject|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.subject.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.subject.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_class_olympiad" class="block text-gray-700">Класс олимпиады:</label>
+                {{ form.class_olympiad|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.class_olympiad.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.class_olympiad.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_date" class="block text-gray-700">Дата проведения:</label>
+                {{ form.date|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.date.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.date.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_time" class="block text-gray-700">Время проведения:</label>
+                {{ form.time }} {# |add_class:"w-full p-2 border border-gray-300 rounded mt-1" #}
+                {% if form.time.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.time.errors }}</p>
+                {% endif %}
+            </div>
+            <div>
+                <label for="id_location" class="block text-gray-700">Место проведения олимпиады:</label>
+                {{ form.location|add_class:"w-full p-2 border border-gray-300 rounded mt-1" }}
+                {% if form.location.errors %}
+                    <p class="text-red-500 text-xs italic">{{ form.location.errors }}</p>
+                {% endif %}
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Сохранить</button>
+        </form>
+    </div>
 {% endblock %}

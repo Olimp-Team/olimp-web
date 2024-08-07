@@ -259,6 +259,7 @@ def load_students(request):
     html = render_to_string('create_result/student_dropdown_list_options.html', {'students': students})
     return HttpResponse(html)
 
+
 def load_olympiads(request):
     classroom_id = request.GET.get('classroom_id')
     olympiads = Olympiad.objects.filter(class_olympiad=classroom_id).order_by('name')

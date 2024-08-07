@@ -5,28 +5,46 @@
     <h1 class="text-3xl font-bold mb-6 text-center">Добавить рекомендацию</h1>
     <form method="post" class="space-y-4">
         {% csrf_token %}
+
+        <!-- Отображение общих ошибок формы -->
+        {% if form.non_field_errors %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Ошибки:</strong>
+            <span class="block sm:inline">{{ form.non_field_errors }}</span>
+        </div>
+        {% endif %}
+
         <div class="form-group">
             <label for="recommended_to" class="block text-sm font-medium text-gray-700">Отправитель:</label>
             <select name="recommended_to" id="recommended_to" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" disabled>
                 <option value="{{ user.id }}">{{ user.first_name }} {{ user.last_name }}</option>
             </select>
+            {% if form.recommended_to.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.recommended_to.errors }}</p>
+            {% endif %}
         </div>
 
         <div class="form-group">
-            <label for="child" class="">Ученики:</label>
+            <label for="child" class="block text-sm font-medium text-gray-700">Ученики:</label>
             <select name="child" id="child" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" multiple="multiple">
-                <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" value="">Выберите учеников</option>
+                <option value="">Выберите учеников</option>
                 {% for student in students %}
-                    <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner"  value="{{ student.id }}">{{ student.last_name }} {{ student.first_name }} {{ student.surname }} - {{ student.classroom.number }}{{ student.classroom.letter }}</option>
+                    <option value="{{ student.id }}">{{ student.last_name }} {{ student.first_name }} {{ student.surname }} - {{ student.classroom.number }}{{ student.classroom.letter }}</option>
                 {% endfor %}
             </select>
+            {% if form.child.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.child.errors }}</p>
+            {% endif %}
         </div>
 
         <div class="form-group">
             <label for="olympiad" class="block text-sm font-medium text-gray-700">Олимпиада:</label>
             <select name="olympiad" id="olympiad" class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner">
-                <option class="focus:outline-none focus:bg-gray-200 transition duration-500 h-9 pl-3 mt-1 block w-full rounded-md border-gray-300 shadow-inner" value="">Сначала выберите учеников</option>
+                <option value="">Сначала выберите учеников</option>
             </select>
+            {% if form.olympiad.errors %}
+            <p class="text-red-500 text-xs italic">{{ form.olympiad.errors }}</p>
+            {% endif %}
         </div>
 
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -53,7 +71,6 @@
                     success: function (data) {
                         const olympiadSelect = $('#olympiad');
                         olympiadSelect.empty().append(new Option('Выберите олимпиаду', ''));
-                        console.log('Olympiads data:', data);
                         data.olympiads.forEach(olympiad => {
                             olympiadSelect.append(
                                 new Option(

@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class AuditLog(models.Model):
     """
     Модель для ведения журнала аудита действий пользователей.
@@ -8,10 +9,12 @@ class AuditLog(models.Model):
     action = models.CharField(max_length=256, verbose_name='Действие')
     object_name = models.CharField(max_length=256, verbose_name='Объект')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='Время действия')
-    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа', related_name='school_audit')
+    school = models.ForeignKey('school.School', on_delete=models.CASCADE, verbose_name='Школа',
+                               related_name='school_audit')
 
     def __str__(self):
         return f'{self.user} - {self.action} - {self.object_name}'
+
 
 class Subject(models.Model):
     """
@@ -27,6 +30,7 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
+
 class Category(models.Model):
     """
     Модель категорий олимпиад. Пример: ВСОШ.
@@ -40,6 +44,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class LevelOlympiad(models.Model):
     """
@@ -55,6 +60,7 @@ class LevelOlympiad(models.Model):
     def __str__(self):
         return self.name
 
+
 class Stage(models.Model):
     """
     Модель этапов олимпиад. Пример: Школьный.
@@ -69,6 +75,7 @@ class Stage(models.Model):
     def __str__(self):
         return self.name
 
+
 class Post(models.Model):
     """
     Модель должностей персонала школы. Пример: Учитель.
@@ -82,6 +89,7 @@ class Post(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Olympiad(models.Model):
     """
