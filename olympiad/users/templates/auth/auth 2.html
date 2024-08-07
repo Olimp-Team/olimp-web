@@ -9,13 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet"/>
 </head>
 <body class="animated-bg flex items-center justify-center min-h-screen">
 <div class="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-lg">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <img class="mx-auto h-10 w-auto" src="{% static 'homepage/img/logoolimp.svg' %}" alt="Your Company">
-        <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Войдите в свою учетную запись</h2>
+        <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Войдите в свою учетную
+            запись</h2>
     </div>
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
         <form class="space-y-6" action="{% url 'users:login' %}" method="post">
@@ -47,58 +48,32 @@
                 <div class="flex items-center justify-between mt-7">
                     <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Пароль</label>
                     <div class="text-sm">
-                        <a href="{% url 'users:password_reset' %}" class="font-semibold text-indigo-600 hover:text-indigo-500">Забыли пароль?</a>
-
-
+                        <a href="{% url 'users:password_reset' %}"
+                           class="font-semibold text-indigo-600 hover:text-indigo-500">Забыли пароль?</a>
                     </div>
                 </div>
-                <div class="mt-2 relative -z-1 mb-10">
-{#                    {{ form.password|add_class:"block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }}#}
-                    <style>
-                            input[type=password]::-ms-reveal,
-                            input[type=password]::-ms-clear
-                            {
-                                display: none;
-                            }
-
-                    </style>
-
+                <div class="mt-2">
+                    {{ form.password|add_class:"block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" }}
                     {% if form.password.errors %}
                         <p class="text-red-500 text-xs mt-2">{{ form.password.errors }}</p>
                     {% endif %}
-                <form method="post">
-                    <i class="far fa-eye mr-3 absolute right-1 top-3.5" id="togglePassword" style=" cursor: pointer;"></i>
-                    <input type="password" name="password" autocomplete="current-password" required="" class="block w-full rounded-md border border-gray-300 py-2 px-3 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" id="password">
-
-</form>
-                <script>
-                    const togglePassword = document.querySelector('#togglePassword');
-  const password = document.querySelector('#password');
-
-  togglePassword.addEventListener('click', function (e) {
-    // toggle the type attribute
-    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-    password.setAttribute('type', type);
-    // toggle the eye slash icon
-    this.classList.toggle('fa-eye-slash');
-});
-                </script>
-                </div>
-            </div>
-            <div>
-                <button type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2">
-                    Вход
-                </button>
-            </div>
         </form>
     </div>
+</div>
+<div>
+    <button type="submit"
+            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2">
+        Вход
+    </button>
+</div>
+</form>
+</div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.select2').select2({
             placeholder: 'Выберите школу',
             allowClear: true
