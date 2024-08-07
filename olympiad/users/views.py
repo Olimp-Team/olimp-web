@@ -134,7 +134,7 @@ class CreateTeacher(AdminRequiredMixin, View):
 
 class TeacherListView(AdminRequiredMixin, View):
     """Представление для списка учителей."""
-
+    paginate_by = 5
     def get(self, request):
         teachers = User.objects.filter(is_teacher=True, school=request.user.school)
         return render(request, 'teacher_list.html', {'teachers': teachers})
@@ -142,7 +142,7 @@ class TeacherListView(AdminRequiredMixin, View):
 
 class AdminListView(AdminRequiredMixin, View):
     """Представление для списка администраторов."""
-
+    paginate_by = 5
     def get(self, request):
         admins = User.objects.filter(is_admin=True, school=request.user.school)
         return render(request, 'admin_list.html', {'admins': admins})

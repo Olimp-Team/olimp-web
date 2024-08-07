@@ -1,19 +1,27 @@
 {% extends 'base_olimp.html' %}
 {% load static %}
 {% block content %}
-<div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-bold mb-4">Журнал действий сотрудников</h2>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+    <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Журнал действий сотрудников</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Сотрудник</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Действие</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Объект</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Дата</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                        Сотрудник
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                        Действие
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                        Объект
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider text-center">
+                        Дата
+                    </th>
                 </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
                 {% for log in audit_logs %}
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ log.user.get_full_name }}</td>
@@ -22,8 +30,25 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ log.timestamp }}</td>
                     </tr>
                 {% endfor %}
-            </tbody>
-        </table>
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a href="?page=1">&laquo; first</a>
+                            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+
+                        {% if page_obj.has_next %}
+                            <a href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 {% endblock %}
