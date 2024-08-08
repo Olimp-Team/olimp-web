@@ -1,8 +1,17 @@
 # Используем официальный образ Python
 FROM python:3.12
-COPY . /app
+
 # Устанавливаем рабочую директорию
 WORKDIR /app
+
+# Копируем зависимости проекта
+COPY requirements.txt /app/
+
+# Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
-ENTRYPOINT ["python"]
-CMD ["bash", "-c", "cd olympiad && python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && python -m daphne -b 0.0.0.0 -p 8000 olympiad.asgi:application "]
+
+# Копируем проект
+COPY . /app/
+EXPOSE 8000
+# Выполняем миграции и запускаем сервер
+CMD ["bash", "-c", " python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && python -m daphne -b 0.0.0.0 -p 8000 olympiad.asgi:application "]
