@@ -172,26 +172,26 @@ CHANNEL_LAYERS = {
 }
 
 # Настройки базы данных
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'olimp_olympiad',
-#         'USER': 'gen_user',
-#         'PASSWORD': "Q/-*PaDx}9OJG#",
-#         'HOST': '147.45.236.124',
-#         'PORT': '3306',
-#         'TEST': {
-#             'NAME': 'test_olimp_olympiad',  # Укажите имя тестовой базы данных
-#             'MIRROR': 'default',  # Зеркалирование основной базы данных
-#         },
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'olimp_olympiad',
+        'USER': 'gen_user',
+        'PASSWORD': ",.4&EHcZZ)zSt;",
+        'HOST': '147.45.250.130',
+        'PORT': '3306',
+        'TEST': {
+            'NAME': 'test_olimp_olympiad',  # Укажите имя тестовой базы данных
+            'MIRROR': 'default',  # Зеркалирование основной базы данных
+        },
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 # Валидация паролей
 AUTH_PASSWORD_VALIDATORS = [
     {
