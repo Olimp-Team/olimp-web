@@ -11,6 +11,8 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - mynetwork
 
   web:
     build: .
@@ -27,6 +29,11 @@ services:
       DATABASE_PASSWORD: yourpassword
       DATABASE_HOST: db
       DATABASE_PORT: 5432
+    networks:
+      - mynetwork
 
 volumes:
   db-data:
+
+networks:
+  mynetwork:

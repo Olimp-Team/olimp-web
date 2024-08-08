@@ -189,13 +189,14 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME', 'yourdatabase'),
-        'USER': os.getenv('DATABASE_USER', 'youruser'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'yourpassword'),
-        'HOST': os.getenv('DATABASE_HOST', 'db'),
-        'PORT': os.getenv('DATABASE_PORT', '5432'),
+        'NAME': 'yourdatabase',
+        'USER': 'youruser',
+        'PASSWORD': 'yourpassword',
+        'HOST': 'db',  # Имя хоста должно совпадать с именем сервиса в docker-compose.yml
+        'PORT': '5432',
     }
 }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
