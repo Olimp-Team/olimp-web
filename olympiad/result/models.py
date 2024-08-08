@@ -20,7 +20,7 @@ class Result(models.Model):
 
     info_children = models.ForeignKey('users.User', on_delete=models.CASCADE, verbose_name='Информация об ученике')
     info_olympiad = models.ForeignKey('main.Olympiad', on_delete=models.CASCADE, verbose_name='Информация об олимпиаде')
-    points = models.IntegerField(verbose_name='Количество набранных очков')
+    points = models.PositiveIntegerField(verbose_name='Количество набранных очков', blank=True, null=True)
     status_result = models.CharField(verbose_name='Статус результата', max_length=256, choices=STATUSRES,
                                      default=PARTICIPANT)
     advanced = models.BooleanField(default=False, verbose_name='Прошел на следующий этап')
