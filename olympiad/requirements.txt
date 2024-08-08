@@ -28,7 +28,7 @@ django-storages
 boto3
 django-image-cropping
 django-imagekit
-
+psycopg2-binary
 asyncio
 python-telegram-bot
 django-excel-response2

@@ -172,18 +172,28 @@ CHANNEL_LAYERS = {
 }
 
 # Настройки базы данных
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'olimp_olympiad',
+#         'USER': 'gen_user',
+#         'PASSWORD': ",.4&EHcZZ)zSt;",
+#         'HOST': '147.45.250.130',
+#         'PORT': '3306',
+#         'TEST': {
+#             'NAME': 'test_olimp_olympiad',  # Укажите имя тестовой базы данных
+#             'MIRROR': 'default',  # Зеркалирование основной базы данных
+#         },
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'olimp_olympiad',
-        'USER': 'gen_user',
-        'PASSWORD': ",.4&EHcZZ)zSt;",
-        'HOST': '147.45.250.130',
-        'PORT': '3306',
-        'TEST': {
-            'NAME': 'test_olimp_olympiad',  # Укажите имя тестовой базы данных
-            'MIRROR': 'default',  # Зеркалирование основной базы данных
-        },
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DATABASE_NAME', 'yourdatabase'),
+        'USER': os.getenv('DATABASE_USER', 'youruser'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'yourpassword'),
+        'HOST': os.getenv('DATABASE_HOST', 'db'),
+        'PORT': os.getenv('DATABASE_PORT', '5432'),
     }
 }
 # DATABASES = {
